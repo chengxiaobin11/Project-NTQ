@@ -1,0 +1,2513 @@
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE USERCOMMONNVRAMSYSTEM
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\UserCommonNVRamSystem.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\User Common Function\Code\UserCommonNVRamSystem.c LARGE OPTIMIZE(
+                    -9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\S
+                    -ystem\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFun
+                    -ction\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Sc
+                    -aler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Li
+                    -b\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Head
+                    -er;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factor
+                    -y\Header;.\User\RTD Factory\Code) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(
+                    -.\Output\RL6449_Project\UserCommonNVRamSystem.lst) TABS(2) OBJECT(.\Output\RL6449_Project\UserCommonNVRamSystem.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : UserCommonNVRamSystem.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #define __USER_COMMON_NVRAM_SYSTEM__
+  18          
+  19          #include "UserCommonInclude.h"
+*** WARNING C320 IN LINE 911 OF \Workdir\workdir\RTD_HEIHONG_OSD_20260316\Kernel\Common\Project_Config_Check.h: "NOTE: _
+             -WRITE_HDCP_TO_SYSTEM_EEPROM _ON!!"
+*** WARNING C320 IN LINE 915 OF \Workdir\workdir\RTD_HEIHONG_OSD_20260316\Kernel\Common\Project_Config_Check.h: "NOTE: _
+             -WRITE_EDID_TO_SYSTEM_EEPROM _ON!!"
+  20          
+  21          //****************************************************************************
+  22          // DEFINITIONS / MACROS
+  23          //****************************************************************************
+  24          #define _EEPROM_READ_SIZE                           24
+  25          #define _EEPROM_TIMEOUT_LIMIT                       50
+  26          
+  27          #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+  28          #warning "NOTE: _WRITE_HDCP_TO_SYSTEM_EEPROM _ON!!"
+*** WARNING C320 IN LINE 28 OF Kernel\User Common Function\Code\UserCommonNVRamSystem.c: "NOTE: _WRITE_HDCP_TO_SYSTEM_EE
+             -PROM _ON!!"
+  29          #endif
+  30          
+  31          //****************************************************************************
+  32          // STRUCT / TYPE / ENUM DEFINITTIONS
+  33          //****************************************************************************
+  34          
+  35          //****************************************************************************
+  36          // CODE TABLES
+  37          //****************************************************************************
+  38          #ifdef _CUSTOM_SYSTEM_DEFAULT_DATA
+              StructSystemDataType code g_stSystemDefaultData = _CUSTOM_SYSTEM_DEFAULT_DATA;
+              #else
+  41          StructSystemDataType code g_stSystemDefaultData =
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 2   
+
+  42          {
+  43              0x00,                              // Mode Slot Index
+  44              _DCLK_SPREAD_RANGE,                // SSC
+  45              _DP_EDID_1080P,                    // DP EDID Select
+  46          
+  47              0x02,                              // HDMIHotPlugSupportTime
+  48              _ON,                               // HDMIHotPlugSupport
+  49              _DP_AUX_ADJR_DEFAULT_VALUE,        // DPAuxAdjrSetting
+  50          
+  51          
+  52              _ON,                               // DPHotPlugDCOffHigh
+  53              _ON,                               // DPAuxDiffMode
+  54              _D0_DP_MAIN_LINK_LANES,            // BYTE b3D0DpLanes;
+  55              _D1_DP_MAIN_LINK_LANES,            // BYTE b3D1DpLanes;
+  56          
+  57              _D2_DP_MAIN_LINK_LANES,            // BYTE b3D2DpLanes;
+  58              _D6_DP_MAIN_LINK_LANES,            // BYTE b3D6DpLanes;
+  59              _ON,                               // Monitor Flag
+  60              _TRUE,                             // BYTE b1DigitalColorInfoChangeReset;
+  61          
+  62              _INPUT_PORT_SEARCH_PRI_0,          // Search Port
+  63              0,                                 // BYTE b3EdidD0 : 3;
+  64              0,                                 // BYTE b3EdidD1 : 3;
+  65              0,                                 // BYTE b3EdidD2 : 3;
+  66              0,                                 // BYTE b3EdidD3 : 3;
+  67          
+  68              0,                                 // BYTE b3EdidD4 : 3;
+  69              0,                                 // BYTE b3EdidD5 : 3;
+  70              0,                                 // BYTE b3EdidD6 : 3;
+  71              _SOURCE_SWITCH_AUTO_IN_GROUP,      // Source Scan Type
+  72              _FALSE,                            // Eizo DP Illegal Idle Pattern Check Support
+  73          #if(_SOURCE_BACKGROUND_DETECT_SUPPORT == _ON)
+                  _SOURCE_BG_SWITCH_AUTO_WITHOUT_GROUP, // Source Bg Scan Type
+              #endif
+  76          #if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+                  _ON,                               // HP User Auto Search
+              #endif
+  79          
+  80              75,                                // BYTE ucDpIrqTime_10us; (unit : 10us)
+  81          };
+  82          #endif
+  83          
+  84          #if(_VGA_SUPPORT == _ON)
+              code StructAdcDataType g_stADCRgbDefaultData =
+              {
+                  _ADC_RGB_DEFAULT_PGA_VALUE,
+                  {  _ADC_RGB_DEFAULT_RED_GAIN,   _ADC_RGB_DEFAULT_GREEN_GAIN,   _ADC_RGB_DEFAULT_BLUE_GAIN}, // Gain MS
+             -B
+                  {                       0x00,                          0x00,                         0x00}, // Gain LS
+             -B
+                  {_ADC_RGB_DEFAULT_RED_OFFSET, _ADC_RGB_DEFAULT_GREEN_OFFSET, _ADC_RGB_DEFAULT_BLUE_OFFSET}, // Offset 
+             -MSB
+                  {                       0x00,                          0x00,                         0x00}, // Offset 
+             -LSB
+              };
+              
+              
+              #if(_YPBPR_SUPPORT == _ON)
+              code StructAdcDataType g_stADCYpbprDefaultData =
+              {
+                  _ADC_YPBPR_DEFAULT_PGA_VALUE,
+                  {_ADC_YPBPR_DEFAULT_PR_GAIN,     _ADC_YPBPR_DEFAULT_Y_GAIN,   _ADC_YPBPR_DEFAULT_PB_GAIN}, // Gain MSB
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 3   
+
+                  {                       0x00,                         0x00,                         0x00}, // Gain LSB
+                  {_ADC_YPBPR_DEFAULT_PR_OFFSET, _ADC_YPBPR_DEFAULT_Y_OFFSET, _ADC_YPBPR_DEFAULT_PB_OFFSET}, // Offset M
+             -SB
+                  {                       0x00,                         0x00,                         0x00}, // Offset L
+             -SB
+              };
+              #endif
+              
+              #endif  // End of #if(_VGA_SUPPORT == _ON)
+ 107          
+ 108          //****************************************************************************
+ 109          // VARIABLE DECLARATIONS
+ 110          //****************************************************************************
+ 111          StructSystemDataType g_stSystemData;
+ 112          
+ 113          #if(_VGA_SUPPORT == _ON)
+              StructVGAModeUserDataType g_stVGAModeUserData;
+              StructAdcDataType g_stAdcData;
+              #endif
+ 117          
+ 118          //****************************************************************************
+ 119          // FUNCTION DECLARATIONS
+ 120          //****************************************************************************
+ 121          BYTE UserCommonNVRamGetSystemData(EnumSystemDataItemDataType enumDataType);
+ 122          void UserCommonNVRamSetSystemData(EnumSystemDataItemDataType enumDataType, BYTE ucValue);
+ 123          
+ 124          #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+              bit UserCommonEepromIICRead(BYTE ucSlaveAddr, DWORD ulSubAddr, BYTE ucSubAddrLength, DWORD ulLength, BYTE 
+             -*pucReadArray, BYTE ucSWIICStatus, BYTE ucHwIICPinNum);
+              bit UserCommonEepromIICWrite(BYTE ucSlaveAddr, DWORD ulSubAddr, BYTE ucSubAddrLength, DWORD ulLength, BYTE
+             - *pucWriteArray, BYTE ucSWIICStatus, BYTE ucHwIICPinNum, EnumEepromWriteSize enumWriteSize);
+              #endif
+ 128          
+ 129          #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+              bit UserCommonEepromRead(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              bit UserCommonEepromWrite(WORD usSubAddr, WORD usLength, BYTE *pucWriteArray);
+              void UserCommonEepromSaveSystemData(void);
+              void UserCommonEepromLoadSystemData(void);
+              void UserCommonEepromRestoreSystemData(void);
+              
+              #if(_VGA_SUPPORT == _ON)
+              void UserCommonEepromLoadModeUserData(BYTE ucSlotIndex);
+              void UserCommonEepromSaveModeUserData(void);
+              BYTE UserCommonEepromLoadModeUserModeNumberData(BYTE ucSlotIndex);
+              void UserCommonEepromRestoreModeUserData(void);
+              BYTE UserCommonEepromVGAFifoModeIndexOffsetInc(BYTE ucStep);
+              BYTE UserCommonEepromGetMaxFifoGroupCnt(void);
+              void UserCommonEepromLoadADCSetting(EnumColorSpace enumColorFormat);
+              void UserCommonEepromSaveADCSetting(EnumColorSpace enumColorFormat);
+              void UserCommonEepromRestoreADCSetting(void);
+              #endif
+              
+              #else // Else of #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+ 149          bit UserCommonFlashLoadItem(EnumFlashItemIDType enumItemID, BYTE *pucData, BYTE ucLength);
+ 150          BYTE UserCommonFlashCalculateCheckSumData(BYTE *pucData, BYTE ucLength);
+ 151          bit UserCommonFlashSaveItem(EnumFlashItemIDType enumItemID, BYTE *pucData, BYTE ucLength);
+ 152          void UserCommonFlashSaveSystemData(void);
+ 153          void UserCommonFlashLoadSystemData(void);
+ 154          void UserCommonFlashRestoreSystemData(void);
+ 155          
+ 156          #if(_VGA_SUPPORT == _ON)
+              void UserCommonFlashLoadModeUserData(BYTE ucSlotIndex);
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 4   
+
+              void UserCommonFlashSaveModeUserData(void);
+              BYTE UserCommonFlashLoadModeUserModeNumberData(BYTE ucSlotIndex);
+              void UserCommonFlashRestoreModeUserData(void);
+              BYTE UserCommonFlashVGAFifoModeIndexOffsetInc(BYTE ucStep);
+              BYTE UserCommonFlashGetMaxFifoGroupCnt(void);
+              void UserCommonFlashLoadADCSetting(EnumColorSpace enumColorFormat);
+              void UserCommonFlashSaveADCSetting(EnumColorSpace enumColorFormat);
+              void UserCommonFlashRestoreADCSetting(void);
+              #endif
+ 167          
+ 168          #endif // End of #elif(_SYSTEM_EEPROM_EMULATION_SUPPORT == _ON)
+ 169          
+ 170          // EDID
+ 171          #if((_WRITE_EDID_TO_SYSTEM_EEPROM == _ON) &&\
+ 172              ((_A0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 173               (_D0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 174               (_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 175               (_D2_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 176               (_D3_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 177               (_D4_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 178               (_D5_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 179               (_D0_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 180               (_D1_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 181               (_D2_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 182               (_D3_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 183               (_D4_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+ 184               (_D5_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM)))
+              void UserCommonEepromRestoreEDID(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+              #endif
+ 187          
+ 188          #if((_WRITE_EDID_TO_SYSTEM_EEPROM == _ON) &&\
+ 189              ((_A0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 190               (_D0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 191               (_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 192               (_D2_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 193               (_D3_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 194               (_D4_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 195               (_D5_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 196               (_D0_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 197               (_D1_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 198               (_D2_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 199               (_D3_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 200               (_D4_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+ 201               (_D5_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH)))
+ 202          void UserCommonFlashRestoreEDID(WORD usAddr, BYTE ucLength, BYTE *pucBuf);
+ 203          #endif
+ 204          
+ 205          // HDCP
+ 206          #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 207          #if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+              void UserCommonEepromGetHDCPKeyBKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonEepromRestoreHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              void UserCommonEepromGetTxHDCPKeyAKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+              void UserCommonEepromGetTxHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonEepromRestoreTxHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 5   
+
+              #endif
+              #endif // End of #if(_DP_TX_SUPPORT == _ON)
+              
+              #elif(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_FLASH)
+              void UserCommonFlashGetHDCPKeyBKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+              void UserCommonFlashGetHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonFlashRestoreHDCP1P4(WORD usAddr, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              void UserCommonFlashGetTxHDCPKeyAKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+              void UserCommonFlashGetTxHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonFlashRestoreTxHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              #endif // End of #if(_DP_TX_SUPPORT == _ON)
+              
+              #endif // End of #if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+ 240          
+ 241          #if(_HDCP_2_2_SUPPORT == _ON)
+ 242          #if(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+              void UserCommonEepromGetHdcp2Certrx(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHdcp2RSAKPriv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHdcp2RSARRModN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHdcp2RSANpinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHdcp2RSADkey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetHdcp2LCKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonEepromRestoreHDCP2(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              void UserCommonEepromGetTxHdcp2RRMODN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetTxHdcp2DcpLlcN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetTxHdcp2EKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonEepromGetTxHdcp2NPinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              void UserCommonEepromRestoreTxHDCP2(WORD usOffset, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              #endif
+              
+              #elif(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_FLASH)
+ 265          void UserCommonFlashGetHdcp2Certrx(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 266          void UserCommonFlashGetHdcp2RSAKPriv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 267          void UserCommonFlashGetHdcp2RSARRModN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 268          void UserCommonFlashGetHdcp2RSANpinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 269          void UserCommonFlashGetHdcp2RSADkey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 270          void UserCommonFlashGetHdcp2LCKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+ 271          
+ 272          #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+ 273          void UserCommonFlashRestoreHDCP2(WORD usAddr, BYTE ucLength, BYTE *pucBuf);
+ 274          #endif
+ 275          
+ 276          #if(_DP_TX_SUPPORT == _ON)
+              void UserCommonFlashGetTxHdcp2RRMODN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonFlashGetTxHdcp2DcpLlcN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonFlashGetTxHdcp2EKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              void UserCommonFlashGetTxHdcp2NPinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 6   
+
+              void UserCommonFlashRestoreTxHDCP2(WORD usAddr, BYTE ucLength, BYTE *pucBuf);
+              #endif
+              #endif
+ 285          #endif // End of #if(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+ 286          #endif // End of #if(_HDCP_2_2_SUPPORT == _ON)
+ 287          
+ 288          #endif // End of #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 289          
+ 290          
+ 291          #if(_FLASH_WRITE_FUNCTION_SUPPORT == _ON)
+ 292          bit UserCommonFlashErasePage(BYTE ucBank, BYTE ucPage);
+ 293          bit UserCommonFlashWrite(BYTE ucBank, WORD usAddr, WORD usLength, BYTE *pucData);
+ 294          #endif
+ 295          
+ 296          #if(_FLASH_READ_FUNCTION_SUPPORT == _ON)
+ 297          bit UserCommonFlashRead(BYTE ucBank, WORD usAddr, WORD usLength, BYTE *pucData);
+ 298          #endif
+ 299          
+ 300          #if(_FLASH_WR_PROTECT == _ON)
+              void UserCommonFlashWRProtect(void);
+              #endif
+ 303          
+ 304          //****************************************************************************
+ 305          // FUNCTION DEFINITIONS
+ 306          //****************************************************************************
+ 307          //--------------------------------------------------
+ 308          // Description  : Get System Data Info
+ 309          // Input Value  : enumDataType --> Data Type in StructSystemData
+ 310          // Output Value : ucValue --> Value of the Input Data Type
+ 311          //--------------------------------------------------
+ 312          BYTE UserCommonNVRamGetSystemData(EnumSystemDataItemDataType enumDataType)
+ 313          {
+ 314   1          BYTE ucValue = 0;
+ 315   1      
+ 316   1          switch(enumDataType)
+ 317   1          {
+ 318   2              case _MONITOR_POWER_STATUS:
+ 319   2                  ucValue = (bit)(g_stSystemData.b1PowerStatus);
+ 320   2                  break;
+ 321   2      
+ 322   2              case _SEARCH_PORT:
+ 323   2                  ucValue = g_stSystemData.b4SearchPort;
+ 324   2                  break;
+ 325   2      
+ 326   2              case _SOURCE_SCAN_TYPE:
+ 327   2                  ucValue = g_stSystemData.b4SourceScanType;
+ 328   2                  break;
+ 329   2      
+ 330   2      #if(_SOURCE_BACKGROUND_DETECT_SUPPORT == _ON)
+                      case _SOURCE_BG_SCAN_TYPE:
+                          ucValue = g_stSystemData.b1SourceBgScanType;
+                          break;
+              #endif
+ 335   2      
+ 336   2      #if(_VGA_SUPPORT == _ON)
+                      case _MODE_SLOT_INDEX:
+                          ucValue = g_stSystemData.ucModeSlotIndex;
+                          break;
+              #endif
+ 341   2              case _SSC:
+ 342   2                  ucValue = g_stSystemData.ucSSC;
+ 343   2                  break;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 7   
+
+ 344   2      
+ 345   2              case _DP_HOT_PLUG_DC_OFF_HIGH:
+ 346   2                  ucValue = g_stSystemData.b1DPHotPlugDCOffHigh;
+ 347   2                  break;
+ 348   2      
+ 349   2              case _HDMI_HOT_PLUG_SUPPORT:
+ 350   2      #if((_DIGITAL_PORT_SUPPORT == _ON) &&\
+ 351   2          ((_HDMI_FREESYNC_SUPPORT == _ON) || (_TMDS_HDCP_2_2_SUPPORT == _ON)))
+ 352   2                  ucValue = _TRUE;
+ 353   2      #else
+                          ucValue = g_stSystemData.b1HDMIHotPlugSupport;
+              #endif
+ 356   2                  break;
+ 357   2      
+ 358   2              case _HDMI_HOT_PLUG_SUPPORT_TIME:
+ 359   2                  ucValue = g_stSystemData.b4HDMIHotPlugSupportTime;
+ 360   2                  break;
+ 361   2      
+ 362   2              case _DP_AUX_DIFF_MODE:
+ 363   2                  ucValue = g_stSystemData.b1DPAuxDiffMode;
+ 364   2                  break;
+ 365   2      
+ 366   2      #if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+                      case _SOURCE_HP_AUTO_SEARCH:
+                          ucValue = g_stSystemData.b1SourceHPAutoSearch;
+                          break;
+              #endif
+ 371   2              case _DP_EDID_SELECT:
+ 372   2                  ucValue = g_stSystemData.ucDPEDIDSelect;
+ 373   2                  break;
+ 374   2      
+ 375   2              case _DP_AUX_ADJR_SETTING:
+ 376   2                  ucValue = g_stSystemData.b4DPAuxAdjrSetting;
+ 377   2                  break;
+ 378   2      
+ 379   2      #if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+                      case _DP_D0_LANES:
+                          ucValue = g_stSystemData.b3D0DpLanes;
+                          break;
+              #endif
+ 384   2      #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+ 385   2              case _DP_D1_LANES:
+ 386   2                  ucValue = g_stSystemData.b3D1DpLanes;
+ 387   2                  break;
+ 388   2      #endif
+ 389   2      #if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+                      case _DP_D2_LANES:
+                          ucValue = g_stSystemData.b3D2DpLanes;
+                          break;
+              #endif
+ 394   2      #if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+                      case _DP_D6_LANES:
+                          ucValue = g_stSystemData.b3D6DpLanes;
+                          break;
+              #endif
+ 399   2      
+ 400   2              case _COLORIMETRY_SEAMLESS_CHANGE:
+ 401   2                  ucValue = g_stSystemData.b1ColorSeamlessChange;
+ 402   2                  break;
+ 403   2              case _EDID_D0_SELECT:
+ 404   2                  ucValue = g_stSystemData.b3EdidD0;
+ 405   2                  break;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 8   
+
+ 406   2              case _EDID_D1_SELECT:
+ 407   2                  ucValue = g_stSystemData.b3EdidD1;
+ 408   2                  break;
+ 409   2              case _EDID_D2_SELECT:
+ 410   2                  ucValue = g_stSystemData.b3EdidD2;
+ 411   2                  break;
+ 412   2              case _EDID_D3_SELECT:
+ 413   2                  ucValue = g_stSystemData.b3EdidD3;
+ 414   2                  break;
+ 415   2              case _EDID_D4_SELECT:
+ 416   2                  ucValue = g_stSystemData.b3EdidD4;
+ 417   2                  break;
+ 418   2              case _EDID_D5_SELECT:
+ 419   2                  ucValue = g_stSystemData.b3EdidD5;
+ 420   2                  break;
+ 421   2              case _EDID_D6_SELECT:
+ 422   2                  ucValue = g_stSystemData.b3EdidD6;
+ 423   2                  break;
+ 424   2              case _DP_IRQ_TIME:
+ 425   2                  ucValue = g_stSystemData.ucDpIrqTime_10us;
+ 426   2                  break;
+ 427   2              case _DP_ILLEGAL_IDLE_PATTERN_CHECK:
+ 428   2                  ucValue = g_stSystemData.b1DPIllegalIdlePatternCheck;
+ 429   2                  break;
+ 430   2      
+ 431   2              default:
+ 432   2                  break;
+ 433   2          }
+ 434   1      
+ 435   1          return ucValue;
+ 436   1      }
+ 437          
+ 438          //--------------------------------------------------
+ 439          // Description  : Set System Data Info
+ 440          // Input Value  : ucDataType --> Data Type in StructSystemData
+ 441          //                  ucValue --> Value to be set for the Input Data Type
+ 442          // Output Value : None
+ 443          //--------------------------------------------------
+ 444          void UserCommonNVRamSetSystemData(EnumSystemDataItemDataType enumDataType, BYTE ucValue)
+ 445          {
+ 446   1          switch(enumDataType)
+ 447   1          {
+ 448   2              case _MONITOR_POWER_STATUS:
+ 449   2      
+ 450   2      #if(_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+                          if(UserInterfaceGetFakePowerOffStatus() != _USER_FORCE_FAKE_POWER_OFF)
+                          {
+                              g_stD0DataExchange.unionDataExchangeItem.stPowerStatus.b1PowerStatus = (bit)ucValue;
+                              SET_DATA_EXCHANGE_EVENT_MESSAGE(_DATA_EXCHAGNE_CMD_POWER_STATUS);
+                          }
+              #endif
+ 457   2      
+ 458   2                  g_stSystemData.b1PowerStatus = (bit)ucValue;
+ 459   2                  break;
+ 460   2      
+ 461   2              case _SEARCH_PORT:
+ 462   2                  g_stSystemData.b4SearchPort = ucValue;
+ 463   2                  break;
+ 464   2      
+ 465   2              case _SOURCE_SCAN_TYPE:
+ 466   2      
+ 467   2                  if(ucValue == _SOURCE_SWITCH_DELL_HOTKEY_FIXED)
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 9   
+
+ 468   2                  {
+ 469   3                      ucValue = _SOURCE_SWITCH_FIXED_PORT;
+ 470   3                  }
+ 471   2                  else if(ucValue == _SOURCE_SWITCH_DELL_HOTKEY_AUTO)
+ 472   2                  {
+ 473   3                      ucValue = _SOURCE_SWITCH_AUTO_IN_GROUP;
+ 474   3                  }
+ 475   2      
+ 476   2                  g_stSystemData.b4SourceScanType = ucValue;
+ 477   2      
+ 478   2                  break;
+ 479   2      
+ 480   2      #if(_SOURCE_BACKGROUND_DETECT_SUPPORT == _ON)
+                      case _SOURCE_BG_SCAN_TYPE:
+                          g_stSystemData.b1SourceBgScanType = ucValue;
+                          break;
+              #endif
+ 485   2      
+ 486   2      #if(_VGA_SUPPORT == _ON)
+                      case _MODE_SLOT_INDEX:
+                          g_stSystemData.ucModeSlotIndex = ucValue;
+                          break;
+              #endif
+ 491   2              case _SSC:
+ 492   2                  g_stSystemData.ucSSC = ucValue;
+ 493   2                  break;
+ 494   2      
+ 495   2              case _DP_HOT_PLUG_DC_OFF_HIGH:
+ 496   2      
+ 497   2      #if(_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+                          g_stD0DataExchange.unionDataExchangeItem.stDcoffHpdMode.b1DPHotPlugDCOffHigh = ucValue;
+                          SET_DATA_EXCHANGE_EVENT_MESSAGE(_DATA_EXCHAGNE_CMD_DCOFF_HPD_MODE);
+              #endif
+ 501   2      
+ 502   2                  g_stSystemData.b1DPHotPlugDCOffHigh = ucValue;
+ 503   2      
+ 504   2      #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 505   2                  if(g_stSystemData.b1DPHotPlugDCOffHigh == _TRUE)
+ 506   2                  {
+ 507   3                      SET_DP_DC_OFF_HPD_HIGH();
+ 508   3                  }
+ 509   2                  else
+ 510   2                  {
+ 511   3                      CLR_DP_DC_OFF_HPD_HIGH();
+ 512   3                  }
+ 513   2      #endif
+ 514   2                  break;
+ 515   2      
+ 516   2              case _HDMI_HOT_PLUG_SUPPORT:
+ 517   2      
+ 518   2                  g_stSystemData.b1HDMIHotPlugSupport = ucValue;
+ 519   2      
+ 520   2      #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 521   2      #if((_HDMI_FREESYNC_SUPPORT == _ON) && (_TMDS_HDCP_2_2_SUPPORT == _ON))
+                          SET_HDMI_HOTPLUG_TOGGLE();
+              #else
+ 524   2                  if(g_stSystemData.b1HDMIHotPlugSupport == _TRUE)
+ 525   2                  {
+ 526   3                      SET_HDMI_HOTPLUG_TOGGLE();
+ 527   3                  }
+ 528   2                  else
+ 529   2                  {
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 10  
+
+ 530   3                      CLR_HDMI_HOTPLUG_TOGGLE();
+ 531   3                  }
+ 532   2      #endif
+ 533   2      #endif
+ 534   2                  break;
+ 535   2      
+ 536   2              case _HDMI_HOT_PLUG_SUPPORT_TIME:
+ 537   2      
+ 538   2                  g_stSystemData.b4HDMIHotPlugSupportTime = ucValue;
+ 539   2      
+ 540   2      #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 541   2                  SET_HDMI_HOTPLUG_TIME(g_stSystemData.b4HDMIHotPlugSupportTime);
+ 542   2      #endif
+ 543   2                  break;
+ 544   2      
+ 545   2              case _DP_AUX_DIFF_MODE:
+ 546   2      
+ 547   2      #if(_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+                          g_stD0DataExchange.unionDataExchangeItem.stAuxDiffMode.b1DPAuxDiffMode = ucValue;
+                          SET_DATA_EXCHANGE_EVENT_MESSAGE(_DATA_EXCHAGNE_CMD_AUX_DIFF_MODE);
+              #endif
+ 551   2      
+ 552   2      #if(_HW_DP_AUX_SINGLE_ENDED_MODE_SUPPORT == _TRUE)
+ 553   2                  g_stSystemData.b1DPAuxDiffMode = ucValue;
+ 554   2      #else
+                          g_stSystemData.b1DPAuxDiffMode = _TRUE;
+              #endif
+ 557   2      
+ 558   2      #if(_DP_SUPPORT == _ON)
+ 559   2                  if(g_stSystemData.b1DPAuxDiffMode == _TRUE)
+ 560   2                  {
+ 561   3                      SET_DP_AUX_DIFF_MODE();
+ 562   3                  }
+ 563   2                  else
+ 564   2                  {
+ 565   3                      CLR_DP_AUX_DIFF_MODE();
+ 566   3                  }
+ 567   2      #endif
+ 568   2                  break;
+ 569   2      
+ 570   2              case _DP_AUX_ADJR_SETTING:
+ 571   2      
+ 572   2      #if(_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+                          g_stD0DataExchange.unionDataExchangeItem.stAuxAdjr.b4DPAuxAdjrSetting = ucValue;
+                          SET_DATA_EXCHANGE_EVENT_MESSAGE(_DATA_EXCHAGNE_CMD_AUX_ADJR_MODE);
+              #endif
+ 576   2      
+ 577   2                  g_stSystemData.b4DPAuxAdjrSetting = ucValue;
+ 578   2      
+ 579   2      #if(_DP_SUPPORT == _ON)
+ 580   2                  SET_DP_AUX_ADJR_SETTING(g_stSystemData.b4DPAuxAdjrSetting);
+ 581   2      #endif
+ 582   2                  break;
+ 583   2      
+ 584   2      #if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+                      case _SOURCE_HP_AUTO_SEARCH:
+                          g_stSystemData.b1SourceHPAutoSearch = ucValue;
+                          break;
+              #endif
+ 589   2      
+ 590   2              case _DP_EDID_SELECT:
+ 591   2                  g_stSystemData.ucDPEDIDSelect = ucValue;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 11  
+
+ 592   2      
+ 593   2                  g_stSystemData.b3EdidD0 = ucValue;
+ 594   2                  g_stSystemData.b3EdidD1 = ucValue;
+ 595   2                  g_stSystemData.b3EdidD2 = ucValue;
+ 596   2                  g_stSystemData.b3EdidD6 = ucValue;
+ 597   2                  break;
+ 598   2      
+ 599   2      #if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+                      case _DP_D0_LANES:
+                          g_stSystemData.b3D0DpLanes = ucValue;
+                          break;
+              #endif
+ 604   2      #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+ 605   2              case _DP_D1_LANES:
+ 606   2                  g_stSystemData.b3D1DpLanes = ucValue;
+ 607   2                  break;
+ 608   2      #endif
+ 609   2      #if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+                      case _DP_D2_LANES:
+                          g_stSystemData.b3D2DpLanes = ucValue;
+                          break;
+              #endif
+ 614   2      #if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+                      case _DP_D6_LANES:
+                          g_stSystemData.b3D6DpLanes = ucValue;
+                          break;
+              #endif
+ 619   2      
+ 620   2              case _COLORIMETRY_SEAMLESS_CHANGE:
+ 621   2                  g_stSystemData.b1ColorSeamlessChange = ucValue;
+ 622   2      
+ 623   2      #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 624   2      #if(_COLORIMETRY_SEAMLESS_CHANGE_SUPPORT == _ON)
+                          if(ucValue == _ON)
+                          {
+                              CLR_DIGITAL_COLOR_INFO_CHANGE_RESET();
+                          }
+                          else
+              #endif
+ 631   2                  {
+ 632   3                      SET_DIGITAL_COLOR_INFO_CHANGE_RESET();
+ 633   3                  }
+ 634   2      #endif
+ 635   2                  break;
+ 636   2      
+ 637   2              case _EDID_D0_SELECT:
+ 638   2                  g_stSystemData.b3EdidD0 = ucValue;
+ 639   2                  break;
+ 640   2              case _EDID_D1_SELECT:
+ 641   2                  g_stSystemData.b3EdidD1 = ucValue;
+ 642   2                  break;
+ 643   2              case _EDID_D2_SELECT:
+ 644   2                  g_stSystemData.b3EdidD2 = ucValue;
+ 645   2                  break;
+ 646   2              case _EDID_D3_SELECT:
+ 647   2                  g_stSystemData.b3EdidD3 = ucValue;
+ 648   2                  break;
+ 649   2              case _EDID_D4_SELECT:
+ 650   2                  g_stSystemData.b3EdidD4 = ucValue;
+ 651   2                  break;
+ 652   2              case _EDID_D5_SELECT:
+ 653   2                  g_stSystemData.b3EdidD5 = ucValue;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 12  
+
+ 654   2                  break;
+ 655   2              case _EDID_D6_SELECT:
+ 656   2                  g_stSystemData.b3EdidD6 = ucValue;
+ 657   2                  break;
+ 658   2      
+ 659   2              case _DP_IRQ_TIME:
+ 660   2      
+ 661   2      #if(_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+                          g_stD0DataExchange.unionDataExchangeItem.stIrqTime.ucDpIrqTime_10us = ucValue;
+                          SET_DATA_EXCHANGE_EVENT_MESSAGE(_DATA_EXCHAGNE_CMD_DP_IRQ_TIME);
+              #endif
+ 665   2      
+ 666   2                  g_stSystemData.ucDpIrqTime_10us = ucValue;
+ 667   2      
+ 668   2      #if(_DP_SUPPORT == _ON)
+ 669   2                  SET_DP_IRQ_TIME_10US(g_stSystemData.ucDpIrqTime_10us);
+ 670   2      #endif
+ 671   2      
+ 672   2                  break;
+ 673   2      
+ 674   2              case _DP_ILLEGAL_IDLE_PATTERN_CHECK:
+ 675   2                  g_stSystemData.b1DPIllegalIdlePatternCheck = ucValue;
+ 676   2      
+ 677   2      #if(_DP_SUPPORT == _ON)
+ 678   2      
+ 679   2      #if(_DP_ILLEGAL_IDLE_PATTERN_CHECK_SUPPORT == _ON)
+                          if(g_stSystemData.b1DPIllegalIdlePatternCheck == _ON)
+                          {
+                              SET_DP_ILLEGAL_IDLE_PATTERN_CHECK();
+                          }
+                          else
+              #endif
+ 686   2                  {
+ 687   3                      CLR_DP_ILLEGAL_IDLE_PATTERN_CHECK();
+ 688   3                  }
+ 689   2      
+ 690   2      #endif
+ 691   2                  break;
+ 692   2      
+ 693   2              default:
+ 694   2                  break;
+ 695   2          }
+ 696   1      }
+ 697          
+ 698          #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+              //--------------------------------------------------
+              // Description  : Read data to the External EEPROM by IIC
+              // Input Value  : usSubAddr    --> Start address of selected device
+              //                usLength     --> Numbers of data we want to read
+              //                pReadArray   --> Result array
+              //                ucIICStatus   --> SW IIC Applications
+              //                ucHwIICPinNum --> HW IIC Pin Used
+              // Output Value : Reading result (Fail/Success)
+              //--------------------------------------------------
+              bit UserCommonEepromIICRead(BYTE ucSlaveAddr, DWORD ulSubAddr, BYTE ucSubAddrLength, DWORD ulLength, BYTE 
+             -*pucReadArray, BYTE ucSWIICStatus, BYTE ucHwIICPinNum)
+              {
+                  BYTE ucSlaveAddress = ucSlaveAddr;
+                  BYTE ucDataCnt = 0;
+              
+                  ucSWIICStatus = ucSWIICStatus;
+              
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 13  
+
+                  while(ulLength > 0)
+                  {
+                      if(ucSubAddrLength == 1)
+                      {
+                          ucSlaveAddress = ucSlaveAddr + (BYTE)((ulSubAddr & 0xFF00) >> 7);
+                      }
+                      else if(ucSubAddrLength == 2)
+                      {
+                          ucSlaveAddress = ucSlaveAddr + (BYTE)((ulSubAddr & 0x00FF0000) >> 15);
+                      }
+              
+                      // Receive 24 bytes each time
+                      ucDataCnt = _EEPROM_READ_SIZE;
+              
+                      // Check if more than 24 bytes are needed to be received
+                      if(ulLength > ucDataCnt)
+                      {
+                          ulLength -= ucDataCnt;
+                      }
+                      else
+                      {
+                          ucDataCnt = ulLength;
+                          ulLength = 0;
+                      }
+              
+                      // Execute Hardware IIC Read Command
+                      if(ucHwIICPinNum == _SW_IIC_PIN_GPIO)
+                      {
+              #if(_SW_IIC_SUPPORT == _ON)
+                          SET_SW_IIC_STATUS(ucSWIICStatus);
+              
+                          if(ScalerMcuIICRead(ucSlaveAddress, ucSubAddrLength, (WORD)ulSubAddr, ucDataCnt, pucReadArray)
+             - == _FAIL)
+                          {
+                              return _FAIL;
+                          }
+              #endif // End of #if(_SW_IIC_SUPPORT == _ON)
+              
+                      }
+                      else if(ucHwIICPinNum != _NO_IIC_PIN)
+                      {
+              #if(_HW_IIC_SUPPORT == _ON)
+                          if(ScalerMcuHwIICRead(ucSlaveAddress, ucSubAddrLength, (WORD)ulSubAddr, ucDataCnt, pucReadArra
+             -y, ucHwIICPinNum) == _FAIL)
+                          {
+                              return _FAIL;
+                          }
+              #endif // End of #if(_HW_IIC_SUPPORT == _ON)
+              
+                      }
+              
+                      // Increase data location
+                      pucReadArray += ucDataCnt;
+              
+                      // Increment Sub-Addr for next Read
+                      ulSubAddr += ucDataCnt;
+                  }
+              
+                  return _SUCCESS;
+              }
+              
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 14  
+
+              // Description  : Write data to the System EEPROM by IIC
+              // Input Value  : usSubAddr    --> Start address of selected device
+              //                usLength     --> Numbers of data we want to write
+              //                pReadArray   --> Result array
+              //                ucIICStatus   --> SW IIC Applications
+              //                ucHwIICPinNum --> HW IIC Pin Used
+              //                enumWriteSize --> 8 or 16 or 32
+              // Output Value : Reading result (Fail/Success)
+              //--------------------------------------------------
+              #pragma save
+              #pragma OT(8)
+              bit UserCommonEepromIICWrite(BYTE ucSlaveAddr, DWORD ulSubAddr, BYTE ucSubAddrLength, DWORD ulLength, BYTE
+             - *pucWriteArray, BYTE ucSWIICStatus, BYTE ucHwIICPinNum, EnumEepromWriteSize enumWriteSize)
+              {
+                  BYTE ucSlaveAddress = ucSlaveAddr;
+                  BYTE ucDataCnt = 0;
+                  BYTE ucTimeOutCnt = _EEPROM_TIMEOUT_LIMIT;
+                  BYTE pucTempData[32];
+              
+                  ucSWIICStatus = ucSWIICStatus;
+              
+                  if(ulLength <= 0)
+                  {
+                      return _FAIL;
+                  }
+              
+                  while(ulLength > 0)
+                  {
+                      if(ucSubAddrLength == 1)
+                      {
+                          ucSlaveAddress = ucSlaveAddr + (BYTE)((ulSubAddr & 0xFF00) >> 7);
+                      }
+                      else if(ucSubAddrLength == 2)
+                      {
+                          ucSlaveAddress = ucSlaveAddr + (BYTE)((ulSubAddr & 0x00FF0000) >> 15);
+                      }
+              
+                      // Transmit 8, 16 or 32 bytes each time
+                      ucDataCnt = enumWriteSize;
+              
+                      // Check if more than 8, 16 or 32 bytes are needed to be transmitted
+                      if(enumWriteSize == _WRITE_SIZE_32)
+                      {
+                          if(((ulSubAddr & 0x001F) + ulLength - 1) >= enumWriteSize)
+                          {
+                              ucDataCnt = enumWriteSize - (ulSubAddr & 0x001F);
+                          }
+                      }
+                      else if(enumWriteSize == _WRITE_SIZE_16)
+                      {
+                          if(((ulSubAddr & 0x000F) + ulLength - 1) >= enumWriteSize)
+                          {
+                              ucDataCnt = enumWriteSize - (ulSubAddr & 0x000F);
+                          }
+                      }
+                      else if(enumWriteSize == _WRITE_SIZE_8)
+                      {
+                          if(((ulSubAddr & 0x0007) + ulLength - 1) >= enumWriteSize)
+                          {
+                              ucDataCnt = enumWriteSize - (ulSubAddr & 0x0007);
+                          }
+                      }
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 15  
+
+              
+                      if(ulLength > ucDataCnt)
+                      {
+                          ulLength -= ucDataCnt;
+                      }
+                      else
+                      {
+                          ucDataCnt = ulLength;
+                          ulLength = 0;
+                      }
+              
+                      // Save the data to be transfered to pData to ensure the data is saved in XDATA SPACE
+                      memcpy(pucTempData, pucWriteArray, ucDataCnt);
+              
+                      // Increase data location
+                      pucWriteArray += ucDataCnt;
+              
+                      // Disable EEPROM Write Protect
+                      PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_DISABLE);
+              
+                      // Execute Hardware IIC Write Command
+                      if(ucHwIICPinNum == _SW_IIC_PIN_GPIO)
+                      {
+              #if(_SW_IIC_SUPPORT == _ON)
+                          SET_SW_IIC_STATUS(ucSWIICStatus);
+              
+                          if(ScalerMcuIICWrite(ucSlaveAddress, ucSubAddrLength, (WORD)ulSubAddr, ucDataCnt, pucTempData)
+             - == _FAIL)
+                          {
+                              // Enable EEPROM Write Protect
+                              PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_ENABLE);
+              
+                              return _FAIL;
+                          }
+              #endif // End of #if(_SW_IIC_SUPPORT == _ON)
+              
+                      }
+                      else if(ucHwIICPinNum != _NO_IIC_PIN)
+                      {
+              #if(_HW_IIC_SUPPORT == _ON)
+                          if(ScalerMcuHwIICWrite(ucSlaveAddress, ucSubAddrLength, (WORD)ulSubAddr, ucDataCnt, pucTempDat
+             -a, ucHwIICPinNum) == _FAIL)
+                          {
+                              // Enable EEPROM Write Protect
+                              PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_ENABLE);
+              
+                              return _FAIL;
+                          }
+              #endif // End of #if(_HW_IIC_SUPPORT == _ON)
+              
+                      }
+              
+                      // Increment Sub-Addr for next Write
+                      ulSubAddr += ucDataCnt;
+              
+                      // Need to delay until internal write cycle is finished
+                      if(ucHwIICPinNum == _SW_IIC_PIN_GPIO)
+                      {
+              #if(_SW_IIC_SUPPORT == _ON)
+                          SET_SW_IIC_STATUS(ucSWIICStatus);
+              
+                          while(ScalerMcuIICWritePolling(ucSlaveAddress) == _FAIL)
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 16  
+
+                          {
+                              ucTimeOutCnt--;
+              
+                              ScalerDelay5us();
+              
+                              if(ucTimeOutCnt == 0x00)
+                              {
+                                  // Enable EEPROM Write Protect
+                                  PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_ENABLE);
+              
+                                  return _FAIL;
+                              }
+                          }
+              #endif // End of #if(_SW_IIC_SUPPORT == _ON)
+              
+                      }
+                      else if(ucHwIICPinNum != _NO_IIC_PIN)
+                      {
+              #if(_HW_IIC_SUPPORT == _ON)
+                          while(ScalerMcuHwIICWritePolling(ucSlaveAddress, ucSubAddrLength, ucHwIICPinNum) == _FAIL)
+                          {
+                              ucTimeOutCnt--;
+              
+                              ScalerDelay5us();
+              
+                              if(ucTimeOutCnt == 0x00)
+                              {
+                                  // Enable EEPROM Write Protect
+                                  PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_ENABLE);
+              
+                                  return _FAIL;
+                              }
+                          }
+              #endif // End of #if(_HW_IIC_SUPPORT == _ON)
+              
+                      }
+              
+                      ucTimeOutCnt = _EEPROM_TIMEOUT_LIMIT;
+              
+                      // Enable EEPROM Write Protect
+                      PCB_EEPROM_WRITE_PROTECT(_EEPROM_WP_ENABLE);
+                  }
+              
+                  return _SUCCESS;
+              }
+              #pragma restore
+              
+              #endif // End of #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON)
+ 944          
+ 945          #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+              //--------------------------------------------------
+              // Description  : Read data to the System EEPROM by IIC
+              // Input Value  : usLength     --> Numbers of data we want to read
+              //                pReadArray   --> Result array
+              // Output Value : Reading result (Fail/Success)
+              //--------------------------------------------------
+              bit UserCommonEepromRead(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  usSubAddr = usSubAddr;
+                  usLength = usLength;
+                  pucReadArray = pucReadArray;
+              
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 17  
+
+              #if(_USER_SYSTEM_EEPROM_CUSTOMIZATION == _ON)
+                  if(UserInterfaceSystemEepromReadCustomProc(usSubAddr, usLength, pucReadArray) == _FAIL)
+                  {
+                      return _FAIL;
+                  }
+              
+                  return _SUCCESS;
+              #endif
+              
+                  // Execute Hardware IIC Read Command
+              #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+              #if(_EEPROM_TYPE == _EEPROM_24LC16)
+                  if(UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, usSubAddr, 1, usLength, pucReadArray, _IIC_SYS_EEPRO
+             -M, _PCB_SYS_EEPROM_IIC) == _FAIL)
+              #elif(_EEPROM_TYPE == _EEPROM_24WC64)
+                  if(UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, usSubAddr, 2, usLength, pucReadArray, _IIC_SYS_EEPRO
+             -M, _PCB_SYS_EEPROM_IIC) == _FAIL)
+              #endif
+              
+                  {
+                      return _FAIL;
+                  }
+              
+              #elif(_PCB_SYS_EEPROM_IIC != _NO_IIC_PIN)   // Else of #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+              #if(_EEPROM_TYPE == _EEPROM_24LC16)
+                  if(UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, usSubAddr, 1, usLength, pucReadArray, 0x00, _PCB_SYS
+             -_EEPROM_IIC) == _FAIL)
+              #elif(_EEPROM_TYPE == _EEPROM_24WC64)
+                  if(UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, usSubAddr, 2, usLength, pucReadArray, 0x00, _PCB_SYS
+             -_EEPROM_IIC) == _FAIL)
+              #endif
+              
+                  {
+                      return _FAIL;
+                  }
+              #endif  // End of #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+                  return _SUCCESS;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Write data to the System EEPROM by IIC
+              // Input Value  : usSubAddr    --> Start address of selected device
+              //                usLength     --> Numbers of data we want to read
+              //                pReadArray   --> Result array
+              // Output Value : Reading result (Fail/Success)
+              //--------------------------------------------------
+              #pragma save
+              #pragma OT(8)
+              bit UserCommonEepromWrite(WORD usSubAddr, WORD usLength, BYTE *pucWriteArray)
+              {
+                  usSubAddr = usSubAddr;
+                  usLength = usLength;
+                  pucWriteArray = pucWriteArray;
+              
+              #if(_USER_SYSTEM_EEPROM_CUSTOMIZATION == _ON)
+                  if(UserInterfaceSystemEepromWriteCustomProc(usSubAddr, usLength, pucWriteArray) == _FAIL)
+                  {
+                      return _FAIL;
+                  }
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 18  
+
+              
+                  return _SUCCESS;
+              #endif
+              
+                  // Execute Hardware IIC Write Command
+              #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+              #if(_EEPROM_TYPE == _EEPROM_24LC16)
+                  if(UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, usSubAddr, 1, usLength, pucWriteArray, _IIC_SYS_EEP
+             -ROM, _PCB_SYS_EEPROM_IIC, _WRITE_SIZE_16) == _FAIL)
+              #elif(_EEPROM_TYPE == _EEPROM_24WC64)
+                  if(UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, usSubAddr, 2, usLength, pucWriteArray, _IIC_SYS_EEP
+             -ROM, _PCB_SYS_EEPROM_IIC, _WRITE_SIZE_32) == _FAIL)
+              #endif
+              
+                  {
+                      return _FAIL;
+                  }
+              
+              #elif(_PCB_SYS_EEPROM_IIC != _NO_IIC_PIN)   // Else of #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+              #if(_EEPROM_TYPE == _EEPROM_24LC16)
+                  if(UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, usSubAddr, 1, usLength, pucWriteArray, 0x00, _PCB_S
+             -YS_EEPROM_IIC, _WRITE_SIZE_16) == _FAIL)
+              #elif(_EEPROM_TYPE == _EEPROM_24WC64)
+                  if(UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, usSubAddr, 2, usLength, pucWriteArray, 0x00, _PCB_S
+             -YS_EEPROM_IIC, _WRITE_SIZE_32) == _FAIL)
+              #endif
+                  {
+                      return _FAIL;
+                  }
+              #endif  // End of #if(_PCB_SYS_EEPROM_IIC == _SW_IIC_PIN_GPIO)
+              
+                  return _SUCCESS;
+              }
+              #pragma restore
+              
+              //--------------------------------------------------
+              // Description  : Save system data to EEPROM
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromSaveSystemData(void)
+              {
+                  if(UserInterfaceGetNVRamDataStatus(_CHECK_SYSTEM_DATA_SAVE) == _FAIL)
+                  {
+                      return;
+                  }
+              
+                  UserCommonEepromWrite(_SYSTEM_DATA_ADDRESS, sizeof(StructSystemDataType), (BYTE *)(&g_stSystemData));
+              }
+              
+              //--------------------------------------------------
+              // Description  : Load system data from EEPROM
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromLoadSystemData(void)
+              {
+                  UserCommonEepromRead(_SYSTEM_DATA_ADDRESS, sizeof(StructSystemDataType), (BYTE *)(&g_stSystemData));
+              
+                  UserInterfaceGetNVRamDataStatus(_CHECK_SYSTEM_DATA_LOAD);
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 19  
+
+              }
+              
+              //--------------------------------------------------
+              // Description  : Restore default system data
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreSystemData(void)
+              {
+                  g_stSystemData = g_stSystemDefaultData;
+                  UserCommonEepromSaveSystemData();
+              }
+              
+              #if(_VGA_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Load mode user data from EEPROM
+              // Input Value  : ucSlotIndex
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromLoadModeUserData(BYTE ucSlotIndex)
+              {
+                  UserCommonEepromRead(_MODE_USER_DATA_ADDRESS + (ucSlotIndex % _MODE_SLOT_AMOUNT) * sizeof(StructVGAMod
+             -eUserDataType),
+                                       sizeof(StructVGAModeUserDataType),
+                                       (BYTE *)(&g_stVGAModeUserData));
+              
+                  UserInterfaceGetNVRamDataStatus(_CHECK_MODE_USER_DATA_LOAD);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Save mode user data to EEPROM
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromSaveModeUserData(void)
+              {
+                  BYTE ucFIFOInx = 0;
+                  BYTE ucSlotIndex = UserCommonEepromGetMaxFifoGroupCnt() + 1;
+              
+                  if(UserInterfaceGetNVRamDataStatus(_CHECK_MODE_USER_DATA_SAVE) == _FAIL)
+                  {
+                      return;
+                  }
+              
+                  for(ucFIFOInx = 0; ucFIFOInx < UserCommonEepromGetMaxFifoGroupCnt(); ucFIFOInx++)
+                  {
+                      if(UserCommonEepromLoadModeUserModeNumberData(ucFIFOInx) == g_stVGAModeUserData.ucModeNumber)
+                      {
+                          ucSlotIndex = ucFIFOInx;
+                          break;
+                      }
+                  }
+              
+                  if(ucSlotIndex == (UserCommonEepromGetMaxFifoGroupCnt() + 1))
+                  {
+                      // Add FIFO mode index number by step
+                      ucSlotIndex = UserCommonEepromVGAFifoModeIndexOffsetInc(1);
+                  }
+              
+                  UserCommonEepromWrite(_MODE_USER_DATA_ADDRESS + (ucSlotIndex % _MODE_SLOT_AMOUNT) * sizeof(StructVGAMo
+             -deUserDataType),
+                                        sizeof(StructVGAModeUserDataType),
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 20  
+
+                                        (BYTE *)(&g_stVGAModeUserData));
+              }
+              
+              //--------------------------------------------------
+              // Description  : Load mode user Mode Number data from EEPROM
+              // Input Value  : ucSlotIndex
+              // Output Value : Mode Number
+              //--------------------------------------------------
+              BYTE UserCommonEepromLoadModeUserModeNumberData(BYTE ucSlotIndex)
+              {
+                  BYTE ucModeNumber = 0xFF;
+              
+                  UserCommonEepromRead(_MODE_USER_DATA_ADDRESS + (ucSlotIndex % _MODE_SLOT_AMOUNT) * sizeof(StructVGAMod
+             -eUserDataType) + 1,
+                                       1, &ucModeNumber);
+              
+                  return ucModeNumber;
+              }
+              //--------------------------------------------------
+              // Description  : Restore default mode user data
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreModeUserData(void)
+              {
+                  StructVGAModeUserDataType stVGAModeUserData;
+              
+                  // g_stVGAModeUserData will be clear
+                  memset(&stVGAModeUserData, 0xFF, sizeof(StructVGAModeUserDataType));
+              
+                  for(g_stSystemData.ucModeSlotIndex = 0; g_stSystemData.ucModeSlotIndex < _MODE_SLOT_AMOUNT; g_stSystem
+             -Data.ucModeSlotIndex++)
+                  {
+                      UserCommonEepromWrite(_MODE_USER_DATA_ADDRESS + (g_stSystemData.ucModeSlotIndex * sizeof(StructVGA
+             -ModeUserDataType)),
+                                            sizeof(StructVGAModeUserDataType), (BYTE *)(&stVGAModeUserData));
+                  }
+              
+                  g_stSystemData.ucModeSlotIndex = 0;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Increase VGA Fifo mode index
+              // Input Value  : None
+              // Output Value : FIFO Mode Current Index
+              //--------------------------------------------------
+              BYTE UserCommonEepromVGAFifoModeIndexOffsetInc(BYTE ucStep)
+              {
+                  StructVGAModeUserDataType stVGAModeUserData;
+                  BYTE ucMNumber = 0xFF;
+                  BYTE ucInx = 0;
+              
+                  // g_stVGAModeUserData will be clear
+                  memset(&stVGAModeUserData, 0xFF, sizeof(StructVGAModeUserDataType));
+              
+                  for(ucInx = 0; ucInx < _MODE_SLOT_AMOUNT; ucInx++)
+                  {
+                      g_stSystemData.ucModeSlotIndex = (g_stSystemData.ucModeSlotIndex + ucStep) % _MODE_SLOT_AMOUNT;
+              
+                      ucMNumber = UserCommonEepromLoadModeUserModeNumberData(g_stSystemData.ucModeSlotIndex);
+              
+                      if(UserCommonModeSearchCheckPresetModeTable(ucMNumber) == _TRUE)
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 21  
+
+                      {
+                          UserCommonEepromRead(_MODE_USER_DATA_ADDRESS + (g_stSystemData.ucModeSlotIndex) * sizeof(Struc
+             -tVGAModeUserDataType),
+                                               1, (BYTE *)(&stVGAModeUserData));
+              
+                          if(stVGAModeUserData.b1IsPresetMode == _PRESET_MODE_TYPE)
+                          {
+                              DebugMessageAnalog("4. Match presetmode", ucMNumber);
+              
+                              continue;
+                          }
+                          else
+                          {
+                              break;
+                          }
+                      }
+                      else
+                      {
+                          break;
+                      }
+                  }
+              
+                  return g_stSystemData.ucModeSlotIndex;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get VGA FIFO Mode Maximum No.
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              BYTE UserCommonEepromGetMaxFifoGroupCnt(void)
+              {
+                  return _MODE_SLOT_AMOUNT;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Load adc settings from EEPROM
+              // Input Value  : ucADCConfig
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromLoadADCSetting(EnumColorSpace enumColorFormat)
+              {
+                  if(enumColorFormat == _COLOR_SPACE_RGB)
+                  {
+                      UserCommonEepromRead(_ADC_SETTING_ADDRESS, sizeof(StructAdcDataType),
+                                           &g_stAdcData.ucAdcPGA);
+                  }
+              #if(_YPBPR_SUPPORT == _ON)
+                  else if(enumColorFormat == _COLOR_SPACE_YPBPR)
+                  {
+                      UserCommonEepromRead(_ADC_SETTING_ADDRESS + sizeof(StructAdcDataType),
+                                           sizeof(StructAdcDataType),
+                                           &g_stAdcData.ucAdcPGA);
+                  }
+              #endif
+              
+                  UserInterfaceGetNVRamDataStatus(_CHECK_ADC_LOAD);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Save adc settings to EEPROM
+              // Input Value  : ucADCConfig
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 22  
+
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromSaveADCSetting(EnumColorSpace enumColorFormat)
+              {
+                  if(UserInterfaceGetNVRamDataStatus(_CHECK_ADC_SAVE) == _FAIL)
+                  {
+                      return;
+                  }
+              
+                  if(enumColorFormat == _COLOR_SPACE_RGB)
+                  {
+                      UserCommonEepromWrite(_ADC_SETTING_ADDRESS, sizeof(StructAdcDataType),
+                                            &g_stAdcData.ucAdcPGA);
+                  }
+              #if(_YPBPR_SUPPORT == _ON)
+                  else if(enumColorFormat == _COLOR_SPACE_YPBPR)
+                  {
+                      UserCommonEepromWrite(_ADC_SETTING_ADDRESS + sizeof(StructAdcDataType),
+                                            sizeof(StructAdcDataType),
+                                            &g_stAdcData.ucAdcPGA);
+                  }
+              #endif
+              }
+              
+              //--------------------------------------------------
+              // Description  : Restore default adc settings
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreADCSetting(void)
+              {
+                  g_stAdcData = g_stADCRgbDefaultData;
+              
+                  UserCommonEepromSaveADCSetting(_COLOR_SPACE_RGB);
+              
+              #if(_YPBPR_SUPPORT == _ON)
+                  g_stAdcData = g_stADCYpbprDefaultData;
+                  UserCommonEepromSaveADCSetting(_COLOR_SPACE_YPBPR);
+              #endif
+              }
+              #endif // End of #if(_VGA_SUPPORT == _ON)
+              
+              
+              #else // Else of #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+1298          
+1299          //--------------------------------------------------
+1300          // Description  : Load one iterm from flash
+1301          // Input Value  : enumItemID: flash item id
+1302          //                pucData: buf to save data loaded
+1303          //                ucLength: buf length
+1304          // Output Value : return _TRUE if load success, else return _FALSE
+1305          //--------------------------------------------------
+1306          bit UserCommonFlashLoadItem(EnumFlashItemIDType enumItemID, BYTE *pucData, BYTE ucLength)
+1307          {
+1308   1          BYTE ucCnt = 0;
+1309   1          BYTE ucItemChecksum = 0;
+1310   1          WORD usAddrIndex = 0;
+1311   1          WORD usPageAddr = 0;
+1312   1          WORD usItemAddr = 0;
+1313   1          BYTE pucDataArry[_DATA_ITEM_LENGTH] = {0};
+1314   1          BYTE ucPageID = HIBYTE(enumItemID);
+1315   1      
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 23  
+
+1316   1          if(ucLength > (_DATA_ITEM_LENGTH - 2))
+1317   1          {
+1318   2              return _FALSE;
+1319   2          }
+1320   1      
+1321   1          usPageAddr = g_pucFlashPageArr[ucPageID] * _FLASH_PAGE_SIZE;
+1322   1      
+1323   1          // Find the data item which item index is ucIndex in the ucPage page from bottom to top
+1324   1          for(usAddrIndex = g_pusFlashAddrArr[ucPageID]; usAddrIndex > 0; usAddrIndex--)
+1325   1          {
+1326   2              usItemAddr = (usAddrIndex - 1) * _DATA_ITEM_LENGTH;
+1327   2      
+1328   2              // If data item index matches
+1329   2              UserCommonFlashRead(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + usItemAddr, 1, pucDataArry);
+1330   2              if(pucDataArry[0] == LOBYTE(enumItemID))
+1331   2              {
+1332   3                  ucItemChecksum = 0;
+1333   3      
+1334   3                  // Calculate the checksum of the data item
+1335   3                  UserCommonFlashRead(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + usItemAddr, _DATA_ITEM_L
+             -ENGTH, pucDataArry);
+1336   3                  for(ucCnt = 0; ucCnt < (_DATA_ITEM_LENGTH - 1); ucCnt++)
+1337   3                  {
+1338   4                      ucItemChecksum = ucItemChecksum ^ pucDataArry[ucCnt];
+1339   4                  }
+1340   3      
+1341   3                  // Check checksum value matches or not
+1342   3                  if(pucDataArry[_DATA_ITEM_LENGTH - 1] != ucItemChecksum)
+1343   3                  {
+1344   4                      return _FALSE;
+1345   4                  }
+1346   3      
+1347   3                  // Load the found data item to the buffer
+1348   3                  memcpy(pucData, pucDataArry + 1, ucLength);
+1349   3      
+1350   3                  return _TRUE;
+1351   3              }
+1352   2          }
+1353   1      
+1354   1          return _FALSE;
+1355   1      }
+1356          
+1357          
+1358          
+1359          //--------------------------------------------------
+1360          // Description  : Calculate item data or page info checksum
+1361          // Input Value  : pucData: buf to item data or page info data
+1362          //                ucLength: buf length
+1363          // Output Value : checksum value
+1364          //--------------------------------------------------
+1365          BYTE UserCommonFlashCalculateCheckSumData(BYTE *pucData, BYTE ucLength)
+1366          {
+1367   1          BYTE ucIndex = 0;
+1368   1          BYTE ucResult = 0;
+1369   1          BYTE ucData = 0;
+1370   1      
+1371   1          bit bDataBit0 = 0;
+1372   1          bit bDataBit1 = 0;
+1373   1          bit bDataBit2 = 0;
+1374   1          bit bDataBit3 = 0;
+1375   1          bit bDataBit4 = 0;
+1376   1          bit bDataBit5 = 0;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 24  
+
+1377   1          bit bDataBit6 = 0;
+1378   1          bit bDataBit7 = 0;
+1379   1      
+1380   1          bit bTempCRC0 = 0;
+1381   1          bit bTempCRC1 = 0;
+1382   1          bit bTempCRC2 = 0;
+1383   1          bit bTempCRC3 = 0;
+1384   1          bit bTempCRC4 = 0;
+1385   1          bit bTempCRC5 = 0;
+1386   1          bit bTempCRC6 = 0;
+1387   1          bit bTempCRC7 = 0;
+1388   1      
+1389   1          bit bLastCRC0 = 0;
+1390   1          bit bLastCRC1 = 0;
+1391   1          bit bLastCRC2 = 0;
+1392   1          bit bLastCRC3 = 0;
+1393   1          bit bLastCRC4 = 0;
+1394   1          bit bLastCRC5 = 0;
+1395   1          bit bLastCRC6 = 0;
+1396   1          bit bLastCRC7 = 0;
+1397   1      
+1398   1          for(ucIndex = 0; ucIndex < ucLength; ucIndex++)
+1399   1          {
+1400   2              ucData = pucData[ucIndex];
+1401   2              bDataBit0 = (bit)(ucData & _BIT0);
+1402   2              bDataBit1 = (bit)(ucData & _BIT1);
+1403   2              bDataBit2 = (bit)(ucData & _BIT2);
+1404   2              bDataBit3 = (bit)(ucData & _BIT3);
+1405   2              bDataBit4 = (bit)(ucData & _BIT4);
+1406   2              bDataBit5 = (bit)(ucData & _BIT5);
+1407   2              bDataBit6 = (bit)(ucData & _BIT6);
+1408   2              bDataBit7 = (bit)(ucData & _BIT7);
+1409   2      
+1410   2              bTempCRC0 = bDataBit7 ^ bDataBit6 ^ bDataBit0 ^ bLastCRC7 ^ bLastCRC6 ^ bLastCRC0;
+1411   2              bTempCRC1 = bDataBit6 ^ bDataBit1 ^ bDataBit0 ^ bLastCRC6 ^ bLastCRC1 ^ bLastCRC0;
+1412   2              bTempCRC2 = bDataBit6 ^ bDataBit2 ^ bDataBit1 ^ bDataBit0 ^ bLastCRC6 ^ bLastCRC2 ^ bLastCRC1 ^ bL
+             -astCRC0;
+1413   2              bTempCRC3 = bDataBit7 ^ bDataBit3 ^ bDataBit2 ^ bDataBit1 ^ bLastCRC7 ^ bLastCRC3 ^ bLastCRC2 ^ bL
+             -astCRC1;
+1414   2              bTempCRC4 = bDataBit4 ^ bDataBit3 ^ bDataBit2 ^ bLastCRC4 ^ bLastCRC3 ^ bLastCRC2;
+1415   2              bTempCRC5 = bDataBit5 ^ bDataBit4 ^ bDataBit3 ^ bLastCRC5 ^ bLastCRC4 ^ bLastCRC3;
+1416   2              bTempCRC6 = bDataBit6 ^ bDataBit5 ^ bDataBit4 ^ bLastCRC6 ^ bLastCRC5 ^ bLastCRC4;
+1417   2              bTempCRC7 = bDataBit7 ^ bDataBit6 ^ bDataBit5 ^ bLastCRC7 ^ bLastCRC6 ^ bLastCRC5;
+1418   2      
+1419   2              bLastCRC0 = bTempCRC0;
+1420   2              bLastCRC1 = bTempCRC1;
+1421   2              bLastCRC2 = bTempCRC2;
+1422   2              bLastCRC3 = bTempCRC3;
+1423   2              bLastCRC4 = bTempCRC4;
+1424   2              bLastCRC5 = bTempCRC5;
+1425   2              bLastCRC6 = bTempCRC6;
+1426   2              bLastCRC7 = bTempCRC7;
+1427   2          }
+1428   1      
+1429   1          ucResult = (((BYTE)bLastCRC0) + (((BYTE)bLastCRC1) << 1) + (((BYTE)bLastCRC2) << 2) + (((BYTE)bLastCRC
+             -3) << 3) + (((BYTE)bLastCRC4) << 4) + (((BYTE)bLastCRC5) << 5) + (((BYTE)bLastCRC6) << 6) + (((BYTE)bLastCRC7) << 7));
+1430   1      
+1431   1          return ucResult;
+1432   1      }
+1433          
+1434          //--------------------------------------------------
+1435          // Description  : Save one iterm to flash
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 25  
+
+1436          // Input Value  : enumItemID: flash item id
+1437          //                pucData: data to save
+1438          //                ucLength: buf length
+1439          // Output Value : return _TRUE if save success, else return _FALSE
+1440          //--------------------------------------------------
+1441          #pragma save
+1442          #pragma OT(8)
+1443          bit UserCommonFlashSaveItem(EnumFlashItemIDType enumItemID, BYTE *pucData, BYTE ucLength)
+1444          {
+1445   1          bit bNeedSave = _TRUE;
+1446   1          BYTE ucItemIndex = 0;
+1447   1          BYTE ucChecksum = 0;
+1448   1          WORD usAddrIndex = 0;
+1449   1          WORD usPageAddr = 0;
+1450   1          WORD usItemAddr = 0;
+1451   1          BYTE pucDataArry[_DATA_ITEM_LENGTH] = {0};
+1452   1          BYTE pucWholeItem[_DATA_ITEM_LENGTH] = {0};
+1453   1          BYTE ucPageID = HIBYTE(enumItemID);
+1454   1      
+1455   1          if(ucLength > (_DATA_ITEM_LENGTH - 2))
+1456   1          {
+1457   2              return _FALSE;
+1458   2          }
+1459   1      
+1460   1          usPageAddr = g_pucFlashPageArr[ucPageID] * _FLASH_PAGE_SIZE;
+1461   1      
+1462   1          // Check all saved items
+1463   1          for(usAddrIndex = g_pusFlashAddrArr[ucPageID]; usAddrIndex > 0; usAddrIndex--)
+1464   1          {
+1465   2              usItemAddr = (usAddrIndex - 1) * _DATA_ITEM_LENGTH;
+1466   2      
+1467   2              // Check item ID index and item checksum to make sure that this item which has the same ID index i
+             -s valid
+1468   2              UserCommonFlashRead(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + usItemAddr, 1, pucDataArry);
+1469   2              if(pucDataArry[0] == LOBYTE(enumItemID))
+1470   2              {
+1471   3                  ucChecksum = 0;
+1472   3      
+1473   3                  // Calculate the item checksum
+1474   3                  UserCommonFlashRead(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + usItemAddr, _DATA_ITEM_L
+             -ENGTH, pucDataArry);
+1475   3                  for(ucItemIndex = 0; ucItemIndex < (_DATA_ITEM_LENGTH - 1); ucItemIndex++)
+1476   3                  {
+1477   4                      ucChecksum = ucChecksum ^ pucDataArry[ucItemIndex];
+1478   4                  }
+1479   3      
+1480   3                  // Compare the calculate checksum and flash data
+1481   3                  if(ucChecksum == pucDataArry[_DATA_ITEM_LENGTH - 1])
+1482   3                  {
+1483   4                      // Check data item in buffer is equal to the existed data item in page or not
+1484   4                      for(ucItemIndex = 0; ucItemIndex < ucLength; ucItemIndex++)
+1485   4                      {
+1486   5                          if(pucDataArry[ucItemIndex + 1] != pucData[ucItemIndex])
+1487   5                          {
+1488   6                              break;
+1489   6                          }
+1490   5                      }
+1491   4      
+1492   4                      // Same item has been saved last time
+1493   4                      if(ucItemIndex >= ucLength)
+1494   4                      {
+1495   5                          bNeedSave = _FALSE;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 26  
+
+1496   5                      }
+1497   4      
+1498   4                      break;
+1499   4                  }
+1500   3              }
+1501   2          }
+1502   1      
+1503   1          // Same item is saved last time, do not need save again here
+1504   1          if(bNeedSave == _FALSE)
+1505   1          {
+1506   2              return _TRUE;
+1507   2          }
+1508   1      
+1509   1          // Get the whole item
+1510   1          memset(pucWholeItem, 0xFFU, _DATA_ITEM_LENGTH);
+1511   1          pucWholeItem[0] = LOBYTE(enumItemID);
+1512   1          memcpy(pucWholeItem + 1, pucData, ucLength);
+1513   1          pucWholeItem[15] = 0x00;
+1514   1      
+1515   1          for(ucItemIndex = 0; ucItemIndex < 15; ucItemIndex++)
+1516   1          {
+1517   2              pucWholeItem[15] ^= pucWholeItem[ucItemIndex];
+1518   2          }
+1519   1      
+1520   1          // Find an available Item space address which is 0xFF for Item all fields
+1521   1          // Use this mechanism to avoid save Item to the wrong address which update data exception happens
+1522   1          for(usAddrIndex = g_pusFlashAddrArr[ucPageID]; usAddrIndex <= ((_FLASH_PAGE_SIZE - _PAGE_INFO_LENGTH) 
+             -/ _DATA_ITEM_LENGTH); usAddrIndex++)
+1523   1          {
+1524   2              if(usAddrIndex == ((_FLASH_PAGE_SIZE - _PAGE_INFO_LENGTH) / _DATA_ITEM_LENGTH))
+1525   2              {
+1526   3                  RTDFlashMoveData(ucPageID, pucWholeItem);
+1527   3                  return _TRUE;
+1528   3              }
+1529   2      
+1530   2              usItemAddr = usAddrIndex * _DATA_ITEM_LENGTH;
+1531   2      
+1532   2              UserCommonFlashRead(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + usItemAddr, _DATA_ITEM_LENGT
+             -H, pucDataArry);
+1533   2              for(ucItemIndex = 0; ucItemIndex < _DATA_ITEM_LENGTH; ucItemIndex++)
+1534   2              {
+1535   3                  if((pucDataArry[ucItemIndex]) != 0xFF)
+1536   3                  {
+1537   4                      break;
+1538   4                  }
+1539   3              }
+1540   2      
+1541   2              if(ucItemIndex >= _DATA_ITEM_LENGTH)
+1542   2              {
+1543   3                  g_pusFlashAddrArr[ucPageID] = usAddrIndex;
+1544   3                  break;
+1545   3              }
+1546   2          }
+1547   1      
+1548   1          // Write item data
+1549   1          UserCommonFlashWrite(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + g_pusFlashAddrArr[ucPageID] * _
+             -DATA_ITEM_LENGTH, _DATA_ITEM_LENGTH - 1, pucWholeItem);
+1550   1          // Write checksum
+1551   1          UserCommonFlashWrite(_SYSTEM_EEPROM_EMULATION_FLASH_BANK, usPageAddr + g_pusFlashAddrArr[ucPageID] * _
+             -DATA_ITEM_LENGTH + _DATA_ITEM_LENGTH - 1, 1, pucWholeItem + _DATA_ITEM_LENGTH - 1);
+1552   1      
+1553   1          g_pusFlashAddrArr[ucPageID]++;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 27  
+
+1554   1      
+1555   1          return _TRUE;
+1556   1      }
+1557          
+1558          #pragma restore
+1559          
+1560          //--------------------------------------------------
+1561          // Description  : Save system data to flash
+1562          // Input Value  : None
+1563          // Output Value : None
+1564          //--------------------------------------------------
+1565          void UserCommonFlashSaveSystemData(void)
+1566          {
+1567   1          UserCommonFlashSaveItem(_FLASH_ITEMID_SYSTEM_DATA, (BYTE *)(&g_stSystemData), sizeof(StructSystemDataT
+             -ype));
+1568   1      }
+1569          
+1570          //--------------------------------------------------
+1571          // Description  : Load system data to flash
+1572          // Input Value  : None
+1573          // Output Value : None
+1574          //--------------------------------------------------
+1575          void UserCommonFlashLoadSystemData(void)
+1576          {
+1577   1          if(UserCommonFlashLoadItem(_FLASH_ITEMID_SYSTEM_DATA, pData, sizeof(StructSystemDataType)) == _TRUE)
+1578   1          {
+1579   2              memcpy(&g_stSystemData, pData, sizeof(StructSystemDataType));
+1580   2          }
+1581   1          else
+1582   1          {
+1583   2              g_stSystemData = g_stSystemDefaultData;
+1584   2          }
+1585   1      }
+1586          
+1587          //--------------------------------------------------
+1588          // Description  : Restore system data to flash
+1589          // Input Value  : None
+1590          // Output Value : None
+1591          //--------------------------------------------------
+1592          void UserCommonFlashRestoreSystemData(void)
+1593          {
+1594   1          g_stSystemData = g_stSystemDefaultData;
+1595   1      
+1596   1          if(UserCommonFlashLoadItem(_FLASH_ITEMID_SYSTEM_DATA, pData, 1) == _TRUE)
+1597   1          {
+1598   2              UserCommonFlashSaveSystemData();
+1599   2          }
+1600   1      }
+1601          
+1602          #if(_VGA_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Save mode data to flash
+              // Input Value  : ucSlotIndex
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashLoadModeUserData(BYTE ucSlotIndex)
+              {
+                  ucSlotIndex = ucSlotIndex % _MODE_SLOT_AMOUNT;
+              
+                  if(UserCommonFlashLoadItem(_FLASH_ITEMID_MODE_USER_DATA + ucSlotIndex, pData, sizeof(StructVGAModeUser
+             -DataType)) == _TRUE)
+                  {
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 28  
+
+                      memcpy(&g_stVGAModeUserData, pData, sizeof(StructVGAModeUserDataType));
+                  }
+                  else
+                  {
+                      memset(&g_stVGAModeUserData, 0xFF, sizeof(StructVGAModeUserDataType));
+                  }
+              }
+              
+              //--------------------------------------------------
+              // Description  : Save mode data to flash
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashSaveModeUserData(void)
+              {
+                  BYTE ucFifoIndex = 0;
+                  BYTE ucSlotIndex = 0;
+              
+                  for(ucFifoIndex = 0; ucFifoIndex < UserCommonFlashGetMaxFifoGroupCnt(); ucFifoIndex++)
+                  {
+                      if(UserCommonFlashLoadModeUserModeNumberData(ucFifoIndex) == g_stVGAModeUserData.ucModeNumber)
+                      {
+                          ucSlotIndex = ucFifoIndex;
+                          break;
+                      }
+                  }
+              
+                  if(ucFifoIndex >= UserCommonFlashGetMaxFifoGroupCnt())
+                  {
+                      ucSlotIndex = UserCommonFlashVGAFifoModeIndexOffsetInc(1);
+                  }
+              
+                  // Save mode user data
+                  UserCommonFlashSaveItem(_FLASH_ITEMID_MODE_USER_DATA + ucSlotIndex, (BYTE *)(&g_stVGAModeUserData), si
+             -zeof(StructVGAModeUserDataType));
+              }
+              
+              //--------------------------------------------------
+              // Description  : Load mode data to flash
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              BYTE UserCommonFlashLoadModeUserModeNumberData(BYTE ucSlotIndex)
+              {
+                  BYTE ucModeNumber = 0xFF;
+                  StructVGAModeUserDataType stVGAModeUserData;
+                  memset(&stVGAModeUserData, 0, sizeof(StructVGAModeUserDataType));
+              
+                  if(UserCommonFlashLoadItem(_FLASH_ITEMID_MODE_USER_DATA + ucSlotIndex, (BYTE *)(&stVGAModeUserData), s
+             -izeof(StructVGAModeUserDataType)) == _TRUE)
+                  {
+                      ucModeNumber = stVGAModeUserData.ucModeNumber;
+                  }
+              
+                  return ucModeNumber;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Restore mode data to flash
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 29  
+
+              void UserCommonFlashRestoreModeUserData(void)
+              {
+                  StructVGAModeUserDataType stVGAModeUserData = {0};
+              
+                  // Default mode user data is all 0xFF
+                  for(g_stSystemData.ucModeSlotIndex = 0; g_stSystemData.ucModeSlotIndex < _MODE_SLOT_AMOUNT; g_stSystem
+             -Data.ucModeSlotIndex++)
+                  {
+                      if(UserCommonFlashLoadItem(_FLASH_ITEMID_MODE_USER_DATA + g_stSystemData.ucModeSlotIndex, pData, 1
+             -) == _TRUE)
+                      {
+                          memset(&stVGAModeUserData, 0xFF, _DATA_ITEM_LENGTH - 2);
+                          UserCommonFlashSaveItem(_FLASH_ITEMID_MODE_USER_DATA + g_stSystemData.ucModeSlotIndex, (BYTE *
+             -)(&stVGAModeUserData), sizeof(StructVGAModeUserDataType));
+                      }
+                  }
+              
+                  // Restore slot index
+                  g_stSystemData.ucModeSlotIndex = 0;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Increase mode index offset for VGA fifo
+              // Input Value  : step
+              // Output Value : mode fifo
+              //--------------------------------------------------
+              BYTE UserCommonFlashVGAFifoModeIndexOffsetInc(BYTE ucStep)
+              {
+                  BYTE ucMNumber = 0xFF;
+                  BYTE ucInx = 0;
+                  StructVGAModeUserDataType stVGAModeUserData;
+                  memset(&stVGAModeUserData, 0xFF, sizeof(StructVGAModeUserDataType));
+              
+                  for(ucInx = 0; ucInx < _MODE_SLOT_AMOUNT; ucInx++)
+                  {
+                      g_stSystemData.ucModeSlotIndex = (g_stSystemData.ucModeSlotIndex + ucStep) % _MODE_SLOT_AMOUNT;
+              
+                      ucMNumber = UserCommonFlashLoadModeUserModeNumberData(g_stSystemData.ucModeSlotIndex);
+              
+                      if(UserCommonModeSearchCheckPresetModeTable(ucMNumber) == _TRUE)
+                      {
+                          if(UserCommonFlashLoadItem(_FLASH_ITEMID_MODE_USER_DATA + g_stSystemData.ucModeSlotIndex, (BYT
+             -E *)(&stVGAModeUserData), sizeof(StructVGAModeUserDataType)) == _TRUE)
+                          {
+                              if((stVGAModeUserData.b1IsPresetMode == _PRESET_MODE_TYPE))
+                              {
+                                  DebugMessageAnalog("4. Match presetmode", ucMNumber);
+                                  continue;
+                              }
+                              else
+                              {
+                                  break;
+                              }
+                          }
+                      }
+                      else
+                      {
+                          break;
+                      }
+                  }
+              
+                  return g_stSystemData.ucModeSlotIndex;
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 30  
+
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get max fifo count
+              // Input Value  : None
+              // Output Value : slot amount
+              //--------------------------------------------------
+              BYTE UserCommonFlashGetMaxFifoGroupCnt(void)
+              {
+                  return _MODE_SLOT_AMOUNT;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Load VGA setting
+              // Input Value  : color format
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashLoadADCSetting(EnumColorSpace enumColorFormat)
+              {
+                  if(enumColorFormat == _COLOR_SPACE_RGB)
+                  {
+                      if(UserCommonFlashLoadItem(_FLASH_ITEMID_VGA_ADC_DATA, pData, sizeof(StructAdcDataType)) == _TRUE)
+                      {
+                          memcpy(&g_stAdcData, pData, sizeof(StructAdcDataType));
+                      }
+                      else
+                      {
+                          g_stAdcData = g_stADCRgbDefaultData;
+                      }
+                  }
+              #if(_YPBPR_SUPPORT == _ON)
+                  else if(enumColorFormat == _COLOR_SPACE_YPBPR)
+                  {
+                      if(UserCommonFlashLoadItem(_FLASH_ITEMID_YPBPR_ADC_DATA, pData, sizeof(StructAdcDataType)) == _TRU
+             -E)
+                      {
+                          memcpy(&g_stAdcData, pData, sizeof(StructAdcDataType));
+                      }
+                      else
+                      {
+                          g_stAdcData = g_stADCYpbprDefaultData;
+                      }
+                  }
+              #endif
+              
+                  UserInterfaceGetNVRamDataStatus(_CHECK_ADC_LOAD);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Save VGA setting
+              // Input Value  : color format
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashSaveADCSetting(EnumColorSpace enumColorFormat)
+              {
+                  if(UserInterfaceGetNVRamDataStatus(_CHECK_ADC_SAVE) == _FAIL)
+                  {
+                      return;
+                  }
+              
+                  if(enumColorFormat == _COLOR_SPACE_RGB)
+                  {
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 31  
+
+                      UserCommonFlashSaveItem(_FLASH_ITEMID_VGA_ADC_DATA, (BYTE *)(&g_stAdcData), sizeof(StructAdcDataTy
+             -pe));
+                  }
+              #if(_YPBPR_SUPPORT == _ON)
+                  else if(enumColorFormat == _COLOR_SPACE_YPBPR)
+                  {
+                      UserCommonFlashSaveItem(_FLASH_ITEMID_YPBPR_ADC_DATA, (BYTE *)(&g_stAdcData), sizeof(StructAdcData
+             -Type));
+                  }
+              #endif
+              }
+              
+              //--------------------------------------------------
+              // Description  : Restore VGA setting
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashRestoreADCSetting(void)
+              {
+                  g_stAdcData = g_stADCRgbDefaultData;
+              
+                  if(UserCommonFlashLoadItem(_FLASH_ITEMID_VGA_ADC_DATA, pData, 1) == _TRUE)
+                  {
+                      UserCommonFlashSaveADCSetting(_COLOR_SPACE_RGB);
+                  }
+              
+              #if(_YPBPR_SUPPORT == _ON)
+                  g_stAdcData = g_stADCYpbprDefaultData;
+              
+                  if(UserCommonFlashLoadItem(_FLASH_ITEMID_YPBPR_ADC_DATA, pData, 1) == _TRUE)
+                  {
+                      UserCommonFlashSaveADCSetting(_COLOR_SPACE_YPBPR);
+                  }
+              #endif
+              }
+              #endif // End of #if(_VGA_SUPPORT == _ON)
+1827          
+1828          #endif // End of #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+1829          
+1830          
+1831          #if((_WRITE_EDID_TO_SYSTEM_EEPROM == _ON) &&\
+1832              ((_A0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1833               (_D0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1834               (_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1835               (_D2_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1836               (_D3_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1837               (_D4_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1838               (_D5_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1839               (_D0_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1840               (_D1_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1841               (_D2_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1842               (_D3_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1843               (_D4_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) ||\
+1844               (_D5_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM)))
+              //--------------------------------------------------
+              // Description  : Restore EDID EEPROM
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreEDID(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonEepromWrite(usOffset, ucLength, pucBuf);
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 32  
+
+              }
+              #endif
+1855          
+1856          
+1857          #if((_WRITE_EDID_TO_SYSTEM_EEPROM == _ON) &&\
+1858              ((_A0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1859               (_D0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1860               (_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1861               (_D2_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1862               (_D3_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1863               (_D4_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1864               (_D5_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1865               (_D0_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1866               (_D1_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1867               (_D2_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1868               (_D3_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1869               (_D4_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH) ||\
+1870               (_D5_MHL_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH)))
+1871          //--------------------------------------------------
+1872          // Description  : Restore EDID EEPROM
+1873          // Input Value  : None
+1874          // Output Value : None
+1875          //--------------------------------------------------
+1876          void UserCommonFlashRestoreEDID(WORD usAddr, BYTE ucLength, BYTE *pucBuf)
+1877          {
+1878   1          UserCommonFlashWrite(_EDID_FLASH_BANK, usAddr, ucLength, pucBuf);
+1879   1      }
+1880          #endif
+1881          
+1882          
+1883          #if(_DIGITAL_PORT_SUPPORT == _ON)
+1884          #if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+              //--------------------------------------------------
+              // Description  : Get HDCP Bksv
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHDCPKeyBKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_1_4_KEY_ADDRESS_EEPROM + ucSubAddr), ucLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_1_4_KEY_ADDRESS_EEPROM + 5 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonEepromWrite(_RX_HDCP_1_4_KEY_ADDRESS_EEPROM + usOffset, ucLength, pucBuf);
+              }
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 33  
+
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Get HDCP Aksv
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHDCPKeyAKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_1_4_KEY_ADDRESS_EEPROM + ucSubAddr), ucLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get TxHDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_1_4_KEY_ADDRESS_EEPROM + 5 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreTxHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonEepromWrite(_TX_HDCP_1_4_KEY_ADDRESS_EEPROM + usOffset, ucLength, pucBuf);
+              }
+              #endif // End of #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              #endif // End of #if(_DP_TX_SUPPORT == _ON)
+              
+              #elif(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_FLASH)
+              //--------------------------------------------------
+              // Description  : Get HDCP Bksv
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetHDCPKeyBKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_RX_HDCP_1_4_KEY_FLASH_BANK, (_RX_HDCP_1_4_KEY_ADDRESS_FLASH + ucSubAddr), ucLengt
+             -h, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_RX_HDCP_1_4_KEY_FLASH_BANK, (_RX_HDCP_1_4_KEY_ADDRESS_FLASH + 5 + (usSubAddr)), u
+             -sLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP 1.4 Key
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 34  
+
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashRestoreHDCP1P4(WORD usAddr, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonFlashWrite(_RX_HDCP_1_4_KEY_FLASH_BANK, _RX_HDCP_1_4_KEY_ADDRESS_FLASH + usAddr, ucLength, p
+             -ucBuf);
+              }
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Get HDCP Aksv
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHDCPKeyAKsv(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_1_4_KEY_FLASH_BANK, (_TX_HDCP_1_4_KEY_ADDRESS_FLASH + ucSubAddr), ucLengt
+             -h, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get TxHDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHDCPKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_1_4_KEY_FLASH_BANK, (_TX_HDCP_1_4_KEY_ADDRESS_FLASH + 5 + (usSubAddr)), u
+             -sLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashRestoreTxHDCP1P4(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonFlashWrite(_TX_HDCP_1_4_KEY_FLASH_BANK, _TX_HDCP_1_4_KEY_ADDRESS_FLASH + usOffset, ucLength,
+             - pucBuf);
+              }
+              #endif // End of #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              #endif // End of #if(_DP_TX_SUPPORT == _ON)
+              #endif // End of #if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+2018          
+2019          #if(_HDCP_2_2_SUPPORT == _ON)
+2020          #if(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2Certrx(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 35  
+
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2RSAKPriv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + 522 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2RSARRModN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + 842 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2RSANpinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + 970 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2RSADkey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + 974 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetHdcp2LCKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + 1102 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreHDCP2(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonEepromWrite(_RX_HDCP_2_2_KEY_ADDRESS_EEPROM + usOffset, ucLength, pucBuf);
+              }
+              #endif
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 36  
+
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHdcp2RRMODN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_2_2_KEY_ADDRESS_EEPROM + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHdcp2DcpLlcN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_2_2_KEY_ADDRESS_EEPROM + 384 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHdcp2EKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_2_2_KEY_ADDRESS_EEPROM + 772 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromGetTxHdcp2NPinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonEepromRead((_TX_HDCP_2_2_KEY_ADDRESS_EEPROM + 768 + (usSubAddr)), usLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP Key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonEepromRestoreTxHDCP2(WORD usOffset, BYTE ucLength, BYTE *pucBuf)
+              {
+                  UserCommonEepromWrite(_TX_HDCP_2_2_KEY_ADDRESS_EEPROM + usOffset, ucLength, pucBuf);
+              }
+              #endif // End of #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              
+              #endif
+              
+              #elif(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_FLASH)
+2149          //--------------------------------------------------
+2150          // Description  : Get HDCP By User Defined Method
+2151          // Input Value  : None
+2152          // Output Value : None
+2153          //--------------------------------------------------
+2154          void UserCommonFlashGetHdcp2Certrx(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2155          {
+2156   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + (usSubAddr)), usLen
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 37  
+
+             -gth, pucReadArray);
+2157   1      }
+2158          
+2159          //--------------------------------------------------
+2160          // Description  : Get HDCP By User Defined Method
+2161          // Input Value  : None
+2162          // Output Value : None
+2163          //--------------------------------------------------
+2164          void UserCommonFlashGetHdcp2RSAKPriv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2165          {
+2166   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + 522 + (usSubAddr)),
+             - usLength, pucReadArray);
+2167   1      }
+2168          
+2169          //--------------------------------------------------
+2170          // Description  : Get HDCP By User Defined Method
+2171          // Input Value  : None
+2172          // Output Value : None
+2173          //--------------------------------------------------
+2174          void UserCommonFlashGetHdcp2RSARRModN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2175          {
+2176   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + 842 + (usSubAddr)),
+             - usLength, pucReadArray);
+2177   1      }
+2178          
+2179          //--------------------------------------------------
+2180          // Description  : Get HDCP By User Defined Method
+2181          // Input Value  : None
+2182          // Output Value : None
+2183          //--------------------------------------------------
+2184          void UserCommonFlashGetHdcp2RSANpinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2185          {
+2186   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + 970 + (usSubAddr)),
+             - usLength, pucReadArray);
+2187   1      }
+2188          
+2189          //--------------------------------------------------
+2190          // Description  : Get HDCP By User Defined Method
+2191          // Input Value  : None
+2192          // Output Value : None
+2193          //--------------------------------------------------
+2194          void UserCommonFlashGetHdcp2RSADkey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2195          {
+2196   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + 974 + (usSubAddr)),
+             - usLength, pucReadArray);
+2197   1      }
+2198          
+2199          //--------------------------------------------------
+2200          // Description  : Get HDCP By User Defined Method
+2201          // Input Value  : None
+2202          // Output Value : None
+2203          //--------------------------------------------------
+2204          void UserCommonFlashGetHdcp2LCKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+2205          {
+2206   1          UserCommonFlashRead(_RX_HDCP_2_2_KEY_FLASH_BANK, (_RX_HDCP_2_2_KEY_ADDRESS_FLASH + 1102 + (usSubAddr))
+             -, usLength, pucReadArray);
+2207   1      }
+2208          
+2209          #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+2210          //--------------------------------------------------
+2211          // Description  : Restore HDCP 2.0 key
+2212          // Input Value  : None
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 38  
+
+2213          // Output Value : None
+2214          //--------------------------------------------------
+2215          void UserCommonFlashRestoreHDCP2(WORD usAddr, BYTE ucLength, BYTE *pucBuf)
+2216          {
+2217   1          UserCommonFlashWrite(_RX_HDCP_2_2_KEY_FLASH_BANK, _RX_HDCP_2_2_KEY_ADDRESS_FLASH + usAddr, ucLength, p
+             -ucBuf);
+2218   1      }
+2219          #endif
+2220          
+2221          #if(_DP_TX_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHdcp2RRMODN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_2_2_KEY_FLASH_BANK, (_TX_HDCP_2_2_KEY_ADDRESS_FLASH + (usSubAddr)), usLen
+             -gth, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHdcp2DcpLlcN(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_2_2_KEY_FLASH_BANK, (_TX_HDCP_2_2_KEY_ADDRESS_FLASH + 384 + (usSubAddr)),
+             - usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHdcp2EKey(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_2_2_KEY_FLASH_BANK, (_TX_HDCP_2_2_KEY_ADDRESS_FLASH + 772 + (usSubAddr)),
+             - usLength, pucReadArray);
+              }
+              
+              //--------------------------------------------------
+              // Description  : Get HDCP By User Defined Method
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashGetTxHdcp2NPinv(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+              {
+                  UserCommonFlashRead(_TX_HDCP_2_2_KEY_FLASH_BANK, (_TX_HDCP_2_2_KEY_ADDRESS_FLASH + 768 + (usSubAddr)),
+             - usLength, pucReadArray);
+              }
+              
+              #if(_WRITE_HDCP_TO_SYSTEM_EEPROM == _ON)
+              //--------------------------------------------------
+              // Description  : Restore HDCP 2.0 key
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserCommonFlashRestoreTxHDCP2(WORD usAddr, BYTE ucLength, BYTE *pucBuf)
+              {
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 39  
+
+                  UserCommonFlashWrite(_TX_HDCP_2_2_KEY_FLASH_BANK, _TX_HDCP_2_2_KEY_ADDRESS_FLASH + usAddr, ucLength, p
+             -ucBuf);
+              }
+              #endif
+              #endif
+2274          #endif // End of #if(_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_SYSTEM_EEPROM)
+2275          #endif // End of #if(_HDCP_2_2_SUPPORT == _ON)
+2276          
+2277          #endif // End of #if(_DIGITAL_PORT_SUPPORT == _ON)
+2278          
+2279          
+2280          #if(_FLASH_WRITE_FUNCTION_SUPPORT == _ON)
+2281          //--------------------------------------------------
+2282          // Description  : Erase page
+2283          // Input Value  : ucBank: bank index
+2284          //                ucPage: page index (0 ~ 15)
+2285          // Output Value : _TRUE for erase success and _FALSE for erase fail
+2286          //--------------------------------------------------
+2287          bit UserCommonFlashErasePage(BYTE ucBank, BYTE ucPage)
+2288          {
+2289   1          return ScalerFlashErasePage(ucBank, ucPage);
+2290   1      }
+2291          
+2292          //--------------------------------------------------
+2293          // Description  : Save data to flash
+2294          // Input Value  : ucBank: bank index
+2295          //                usAddr: address in ucBank
+2296          //                ucLength: the data length to save
+2297          //                pucData: data buffer to save
+2298          // Output Value : _TRUE for save success and _FALSE for save fail
+2299          //--------------------------------------------------
+2300          bit UserCommonFlashWrite(BYTE ucBank, WORD usAddr, WORD usLength, BYTE *pucData)
+2301          {
+2302   1          return ScalerFlashWrite(ucBank, usAddr, usLength, pucData);
+2303   1      }
+2304          #endif // End of #if(_FLASH_WRITE_FUNCTION_SUPPORT == _ON)
+2305          
+2306          #if(_FLASH_READ_FUNCTION_SUPPORT == _ON)
+2307          //--------------------------------------------------
+2308          // Description  : Load data from flash
+2309          // Input Value  : ucBank: bank index
+2310          //                usAddr: address in ucBank
+2311          //                ucLength: the data length to load
+2312          //                pucData: data buffer to save the load data
+2313          // Output Value : _TRUE for load success and _FALSE for load fail
+2314          //--------------------------------------------------
+2315          bit UserCommonFlashRead(BYTE ucBank, WORD usAddr, WORD usLength, BYTE *pucData)
+2316          {
+2317   1          return ScalerFlashRead(ucBank, usAddr, usLength, pucData);
+2318   1      }
+2319          #endif // End of #if(_FLASH_READ_FUNCTION_SUPPORT == _ON)
+2320          
+2321          #if(_FLASH_WR_PROTECT == _ON)
+              //--------------------------------------------------
+              // Description  : Set SR to protect flash
+              // Input Value  : None
+              // Output Value : Return _TURE if succeed, else return _FALSE
+              //--------------------------------------------------
+              void UserCommonFlashWRProtect(void)
+              {
+                  ScalerFlashWRProtect();
+              }
+C51 COMPILER V9.60.0.0   USERCOMMONNVRAMSYSTEM                                             04/23/2026 13:55:03 PAGE 40  
+
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3220    ----
+   CONSTANT SIZE    =     60    ----
+   XDATA SIZE       =     12     148
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----      25
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1857 @@
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SCALERAUDIO
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\ScalerAudio.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\Scaler\ScalerFunction\Code\ScalerAudio.c LARGE OPTIMIZE(9,SPEED) 
+                    -INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Hea
+                    -der;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\Lib
+                    -\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL64
+                    -49_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Header;
+                    -.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User
+                    -\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header)
+                    - DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\ScalerAud
+                    -io.lst) TABS(2) OBJECT(.\Output\RL6449_Project\ScalerAudio.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : ScalerAudio.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #define __SCALER_AUDIO__
+  18          
+  19          #include "ScalerFunctionInclude.h"
+  20          
+  21          #if(_AUDIO_SUPPORT == _ON)
+  22          
+  23          //****************************************************************************
+  24          // DEFINITIONS / MACROS
+  25          //****************************************************************************
+  26          
+  27          
+  28          //****************************************************************************
+  29          // STRUCT / TYPE / ENUM DEFINITTIONS
+  30          //****************************************************************************
+  31          
+  32          
+  33          //****************************************************************************
+  34          // CODE TABLES
+  35          //****************************************************************************
+  36          
+  37          
+  38          //****************************************************************************
+  39          // VARIABLE DECLARATIONS
+  40          //****************************************************************************
+  41          
+  42          #if(_EMBEDDED_DAC_SUPPORT == _ON)
+  43          StructAudioDACInfo g_stAudioDACInfo;
+  44          #endif
+  45          
+  46          bit g_bAudioDVCMuteCtrlStatus;
+  47          
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 2   
+
+  48          //****************************************************************************
+  49          // FUNCTION DECLARATIONS
+  50          //****************************************************************************
+  51          void ScalerAudioInitial(void);
+  52          void ScalerAudioDigitalAdjustVolume(WORD usVolume);
+  53          void ScalerAudioMuteProc(bit bMute, WORD usVolume);
+  54          void ScalerAudioDigitalVolumeMute(bit bMute, WORD usVolume);
+  55          void ScalerAudioDisable(void);
+  56          void ScalerAudioInputPortSwitch(EnumAudioInputPort enumAudioInput);
+  57          BYTE ScalerAudioGetDigitalAudioPort(EnumAudioOutputType enumAudioOutput);
+  58          EnumAudioSamplingFreqPacket ScalerAudioGetSamplingFreqPacket(EnumAudioSamplingFreqType enumSamplingFreqTyp
+             -e);
+  59          WORD ScalerAudioGetUserSamplingFreqDCode(EnumInputPortType enumPortType, EnumAudioSamplingFreqType enumAud
+             -ioFreq);
+  60          BYTE ScalerAudioGetUserSamplingFreqSCode(EnumInputPortType enumPortType, EnumAudioSamplingFreqType enumAud
+             -ioFreq);
+  61          WORD ScalerAudioGetUserSamplingFreqDCode_EXINT0(EnumInputPortType enumPortType, EnumAudioSamplingFreqType 
+             -enumAudioFreq);
+  62          BYTE ScalerAudioGetUserSamplingFreqSCode_EXINT0(EnumInputPortType enumPortType, EnumAudioSamplingFreqType 
+             -enumAudioFreq);
+  63          
+  64          #if(_HDMI_SUPPORT == _ON)
+  65          BYTE ScalerAudioChannelOutputSel(BYTE ucCa);
+  66          #endif
+  67          
+  68          #if(_LINE_IN_SUPPORT == _ON)
+  69          #if(_HW_DIGITAL_PORT_COMBO_PHY_TYPE != _DIGITAL_PORT_COMBO_PHY_NONE)
+              
+              #if(_DP_SUPPORT == _ON)
+              BYTE ScalerAudioGetDigitalAudioPort_EXINT0(EnumAudioOutputType enumAudioOutput);
+              #endif
+              
+              EnumAudioInputSource ScalerAudioGetInputSource_EXINT0(void);
+              #endif
+  77          
+  78          EnumAudioInputSource ScalerAudioGetInputSource(void);
+  79          #endif
+  80          
+  81          #if(_EMBEDDED_DAC_SUPPORT == _ON)
+  82          void ScalerAudioDACInitial(void);
+  83          void ScalerAudioDACOutputSwitch(EnumAudioDACOutput enumDACOutput);
+  84          void ScalerAudioDACSetState(EnumAudioDACState enumTargetState);
+  85          EnumAudioDACState ScalerAudioDACGetState(void);
+  86          bit ScalerAudioDACGetStateChange(void);
+  87          void ScalerAudioDACClrStateChange(void);
+  88          void ScalerAudioDACSetVcmReady(bit bReady);
+  89          void ScalerAudioDACNormalToDepop(void);
+  90          void ScalerAudioDACDepopToNormal(void);
+  91          void ScalerAudioDACOutputEnable(void);
+  92          EnumAudioDACOutput ScalerAudioDACGetOutput(void);
+  93          void ScalerAudioDACSetOutputGain(EnumAudioDACOutput enumOutputType, EnumAudioDacOutputGain enumOutputGain)
+             -;
+  94          #endif
+  95          
+  96          void ScalerAudioDVCInitial(void);
+  97          void ScalerAudioDVCVolumeAdjustType(bit bAdjustType);
+  98          void ScalerAudioDVCAdjustVolume(WORD usVolume);
+  99          void ScalerAudioDVCVolumeMute(bit bMute, WORD usVolume);
+ 100          void ScalerAudioDVCSetMuteZCDTimeout(bit bMute, WORD usVolume, bit bAdjustType);
+ 101          void ScalerAudioDVCSetVolumeZCDTimeout(WORD usVolume);
+ 102          bit ScalerAudioDVCGetVolumeMuteStatus(void);
+ 103          void ScalerAudioDVCResetProc(void);
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 3   
+
+ 104          
+ 105          #if(_DIGITAL_AUDIO_OUTPUT_ADJUST_VOLUME_SUPPORT == _ON)
+              void ScalerAudioSpdifChannelStatusProc(EnumAudioInputSource enumAudioSource, BYTE ucInputPort);
+              void ScalerAudioSpdifCheckIfSamplingFrequencyChange(BYTE ucInputPort);
+              #endif
+ 109          
+ 110          //****************************************************************************
+ 111          // FUNCTION DEFINITIONS
+ 112          //****************************************************************************
+ 113          //--------------------------------------------------
+ 114          // Description  : Audio Initial
+ 115          // Input Value  : None
+ 116          // Output Value : None
+ 117          //--------------------------------------------------
+ 118          void ScalerAudioInitial(void)
+ 119          {
+ 120   1          ScalerAudioDigitalAudioInitial();
+ 121   1      
+ 122   1          ScalerAudioDVCInitial();
+ 123   1      }
+ 124          
+ 125          //--------------------------------------------------
+ 126          // Description  : Adjust Digital volume
+ 127          // Input Value  : ucVolume
+ 128          // Output Value : None
+ 129          //--------------------------------------------------
+ 130          void ScalerAudioDigitalAdjustVolume(WORD usVolume)
+ 131          {
+ 132   1          ScalerAudioDVCSetVolumeZCDTimeout(usVolume);
+ 133   1      
+ 134   1          ScalerAudioDVCAdjustVolume(usVolume);
+ 135   1      }
+ 136          
+ 137          //--------------------------------------------------
+ 138          // Description  : Audio Mute proc
+ 139          // Input Value  : bMute, usVolume
+ 140          // Output Value : None
+ 141          //--------------------------------------------------
+ 142          void ScalerAudioMuteProc(bit bMute, WORD usVolume)
+ 143          {
+ 144   1          ScalerAudioDigitalVolumeMute(bMute, usVolume);
+ 145   1      }
+ 146          
+ 147          //--------------------------------------------------
+ 148          // Description  : Smooth adjust digital volume for mute/unmute
+ 149          // Input Value  : bMute
+ 150          // Output Value : None
+ 151          //--------------------------------------------------
+ 152          void ScalerAudioDigitalVolumeMute(bit bMute, WORD usVolume)
+ 153          {
+ 154   1          ScalerAudioDVCVolumeMute(bMute, usVolume);
+ 155   1      }
+ 156          
+ 157          //--------------------------------------------------
+ 158          // Description  : Transfer depop mode to Normal mode
+ 159          // Input Value  : None
+ 160          // Output Value : None
+ 161          //--------------------------------------------------
+ 162          void ScalerAudioDisable(void)
+ 163          {
+ 164   1      #if(_EMBEDDED_DAC_SUPPORT == _ON)
+ 165   1      
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 4   
+
+ 166   1          ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_AUDIO_DAC_WAIT_VCM_INITIAL);
+ 167   1          ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_AUDIO_DAC_WAIT_DEPOP_TO_NORMAL);
+ 168   1          ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_AUDIO_DAC_WAIT_VCM_CHARGE);
+ 169   1      
+ 170   1          ScalerAudioDACNormalToDepop();
+ 171   1      
+ 172   1          ScalerAudioDACSetVcmReady(_OFF);
+ 173   1      
+ 174   1          // Power Down Depop CLK
+ 175   1          ScalerSetBit(P6_D4_DA_CLK_CTRL, ~_BIT4, 0x00);
+ 176   1      
+ 177   1          // Power Down DAC
+ 178   1          ScalerSetByte(P6_C0_REG_DAC_POWER0, 0x00);
+ 179   1          ScalerSetBit(P6_C1_REG_DAC_POWER1, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), 0x00);
+ 180   1      
+ 181   1          SET_AUDIO_DAC_STATE(_AUDIO_DAC_OFF);
+ 182   1      
+ 183   1      #endif
+ 184   1      
+ 185   1      #if(_LINE_IN_SUPPORT == _ON)
+ 186   1      
+ 187   1      #if(_HW_AUDIO_LINE_IN_AFE_POWER_TYPE == _ADC_AFE_POWER_CONTROL_GEN_1)
+                  // Power Down ADC
+                  ScalerSetBit(P6_B0_REG_ADC_POWER, ~_BIT7, 0x00);
+              #else
+ 191   1          // Power Down ADC
+ 192   1          ScalerSetBit(P6_B0_REG_ADC_POWER, ~(_BIT7 | _BIT6), 0x00);
+ 193   1      #endif
+ 194   1      
+ 195   1          // Power Down Input Buffer and Mbias
+ 196   1          ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT2 | _BIT1 | _BIT0), 0x00);
+ 197   1      #endif
+ 198   1      
+ 199   1          // Disable DVC counter for power saving
+ 200   1          ScalerSetBit(P8_A0_DVC_EN, ~_BIT6, _BIT6);
+ 201   1      
+ 202   1          // Power Down DPLL
+ 203   1          ScalerAudioDisableAudioPLL();
+ 204   1      }
+ 205          
+ 206          //--------------------------------------------------
+ 207          // Description  : Switch Audio Input Port For Each Audio Output
+ 208          // Input Value  : ucAudioOutput, ucAudioInput
+ 209          // Output Value : None
+ 210          //--------------------------------------------------
+ 211          void ScalerAudioInputPortSwitch(EnumAudioInputPort enumAudioInput)
+ 212          {
+ 213   1          // Set DAC Input
+ 214   1          ScalerSetBit(P6F_01_MUX_DA_DVC_IN, ~(_BIT2 | _BIT1 | _BIT0), enumAudioInput);
+ 215   1      
+ 216   1      #if(_DIGITAL_AUDIO_OUTPUT_ADJUST_VOLUME_SUPPORT == _OFF)
+ 217   1          // Set IIS Input
+ 218   1          ScalerSetBit(P6F_00_MUX_DIG_OUT, ~(_BIT6 | _BIT5 | _BIT4), (enumAudioInput << 4));
+ 219   1      
+ 220   1          // Set SPDIF Input
+ 221   1          ScalerSetBit(P6F_00_MUX_DIG_OUT, ~(_BIT2 | _BIT1 | _BIT0), enumAudioInput);
+ 222   1      #endif
+ 223   1      
+ 224   1      #if(_DP_TX_SUPPORT == _ON)
+              #if(_LINE_IN_AUDIO_DP_TX_CLONE_SUPPORT == _ON)
+                  // Set DP Tx Input
+                  ScalerSetBit(P6F_02_MUX_DP_I2S_IN, ~(_BIT2 | _BIT1 | _BIT0), enumAudioInput);
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 5   
+
+              #endif
+              #endif
+ 230   1      }
+ 231          
+ 232          //--------------------------------------------------
+ 233          // Description  : Get Current Audio Port For Output Type
+ 234          // Input Value  : None
+ 235          // Output Value : audio port
+ 236          //--------------------------------------------------
+ 237          BYTE ScalerAudioGetDigitalAudioPort(EnumAudioOutputType enumAudioOutput)
+ 238          {
+ 239   1          switch(enumAudioOutput)
+ 240   1          {
+ 241   2              case _AUDIO_DAC_OUT:
+ 242   2      
+ 243   2                  return (ScalerGetBit(P6F_01_MUX_DA_DVC_IN, (_BIT2 | _BIT1 | _BIT0)));
+ 244   2      
+ 245   2              case _AUDIO_I2S_OUT:
+ 246   2      
+ 247   2                  return (ScalerGetBit(P6F_00_MUX_DIG_OUT, (_BIT6 | _BIT5 | _BIT4)) >> 4);
+ 248   2      
+ 249   2              case _AUDIO_SPDIF_OUT:
+ 250   2      
+ 251   2                  return (ScalerGetBit(P6F_00_MUX_DIG_OUT, (_BIT2 | _BIT1 | _BIT0)));
+ 252   2      
+ 253   2      #if(_DP_TX_SUPPORT == _ON)
+                      case _AUDIO_DPTX_OUT:
+              
+                          return (ScalerGetBit(P6F_02_MUX_DP_I2S_IN, (_BIT2 | _BIT1 | _BIT0)));
+              #endif
+ 258   2      
+ 259   2              default:
+ 260   2                  break;
+ 261   2          }
+ 262   1      
+ 263   1          return _AUDIO_FROM_D0_PORT;
+ 264   1      }
+ 265          
+ 266          //--------------------------------------------------
+ 267          // Description  : Get Audio Sampling Freq Packet
+ 268          // Input Value  : EnumAudioSamplingFreqType
+ 269          // Output Value : EnumAudioSamplingFreqPacket
+ 270          //--------------------------------------------------
+ 271          EnumAudioSamplingFreqPacket ScalerAudioGetSamplingFreqPacket(EnumAudioSamplingFreqType enumSamplingFreqTyp
+             -e)
+ 272          {
+ 273   1          switch(enumSamplingFreqType)
+ 274   1          {
+ 275   2              case _AUDIO_FREQ_32K:
+ 276   2                  return _AUDIO_FREQ_PACKET_32K;
+ 277   2      
+ 278   2              case _AUDIO_FREQ_44_1K:
+ 279   2                  return _AUDIO_FREQ_PACKET_44_1K;
+ 280   2      
+ 281   2              case _AUDIO_FREQ_48K:
+ 282   2                  return _AUDIO_FREQ_PACKET_48K;
+ 283   2      
+ 284   2              case _AUDIO_FREQ_64K:
+ 285   2                  return _AUDIO_FREQ_PACKET_64K;
+ 286   2      
+ 287   2              case _AUDIO_FREQ_88_2K:
+ 288   2                  return _AUDIO_FREQ_PACKET_88_2K;
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 6   
+
+ 289   2      
+ 290   2              case _AUDIO_FREQ_96K:
+ 291   2                  return _AUDIO_FREQ_PACKET_96K;
+ 292   2      
+ 293   2              case _AUDIO_FREQ_128K:
+ 294   2                  return _AUDIO_FREQ_PACKET_128K;
+ 295   2      
+ 296   2      #if(_HW_HDMI_AUDIO_AFD_MODE_FOR_176P4_192 == _AUDIO_AFD_FW_MODE)
+                      case _AUDIO_FREQ_176_4K:
+                      case _AUDIO_FREQ_192K:
+              
+                          if(GET_REG_D0_MAC_SWITCH_TO_HDMI() == _TRUE)
+                          {
+                              ScalerSetDataPortBit(P2_C9_HDMI_AP, _P2_CA_PT_8C_PORT_PAGE2_AUDIO_FREQ_RESULT_M, ~_BIT4, _
+             -BIT4);
+              
+                              ScalerGetDataPortByte(P2_C9_HDMI_AP, _P2_CA_PT_8C_PORT_PAGE2_AUDIO_FREQ_RESULT_M, 2, &pDat
+             -a[2], _AUTOINC);
+              
+                              if((PDATA_WORD(1) & 0xFFF) < 0x171)
+                              {
+                                  DebugMessageAudio("Fs = 176.4kHz", (PDATA_WORD(1) & 0xFFF));
+                                  return _AUDIO_FREQ_PACKET_176_4K;
+                              }
+                              else
+                              {
+                                  DebugMessageAudio("Fs = 192kHz", (PDATA_WORD(1) & 0xFFF));
+                                  return _AUDIO_FREQ_PACKET_192K;
+                              }
+                          }
+                          else
+                          {
+                              if(enumSamplingFreqType == _AUDIO_FREQ_176_4K)
+                              {
+                                  return _AUDIO_FREQ_PACKET_176_4K;
+                              }
+                              else
+                              {
+                                  return _AUDIO_FREQ_PACKET_192K;
+                              }
+                          }
+              #else
+ 329   2              case _AUDIO_FREQ_176_4K:
+ 330   2                  return _AUDIO_FREQ_PACKET_176_4K;
+ 331   2      
+ 332   2              case _AUDIO_FREQ_192K:
+ 333   2                  return _AUDIO_FREQ_PACKET_192K;
+ 334   2      #endif
+ 335   2      
+ 336   2              default:
+ 337   2                  break;
+ 338   2          }
+ 339   1      
+ 340   1          return _AUDIO_FREQ_PACKET_NO_AUDIO;
+ 341   1      }
+ 342          
+ 343          //--------------------------------------------------
+ 344          // Description  : Get User Define D Code of Audio Sampling Freq
+ 345          // Input Value  : EnumPortType
+ 346          // Input Value  : EnumAudioSamplingFreqType
+ 347          // Output Value : NF Code
+ 348          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 7   
+
+ 349          WORD ScalerAudioGetUserSamplingFreqDCode(EnumInputPortType enumPortType, EnumAudioSamplingFreqType enumAud
+             -ioFreq)
+ 350          {
+ 351   1          WORD usDCode = 0x00;
+ 352   1      
+ 353   1          switch(enumAudioFreq)
+ 354   1          {
+ 355   2              case _AUDIO_FREQ_32K:
+ 356   2              case _AUDIO_FREQ_64K:
+ 357   2              case _AUDIO_FREQ_128K:
+ 358   2              case _AUDIO_FREQ_256K:
+ 359   2              case _AUDIO_FREQ_512K:
+ 360   2      
+ 361   2                  if(enumPortType == _PORT_DP)
+ 362   2                  {
+ 363   3                      usDCode = _DP_SAMPLING_FREQ_32K_GROUP_D_CODE;
+ 364   3                  }
+ 365   2                  else if(enumPortType == _PORT_HDMI)
+ 366   2                  {
+ 367   3                      usDCode = _HDMI_SAMPLING_FREQ_32K_GROUP_D_CODE;
+ 368   3                  }
+ 369   2      
+ 370   2                  break;
+ 371   2      
+ 372   2              case _AUDIO_FREQ_44_1K:
+ 373   2              case _AUDIO_FREQ_88_2K:
+ 374   2              case _AUDIO_FREQ_176_4K:
+ 375   2              case _AUDIO_FREQ_352_8K:
+ 376   2              case _AUDIO_FREQ_705_6K:
+ 377   2      
+ 378   2                  if(enumPortType == _PORT_DP)
+ 379   2                  {
+ 380   3                      usDCode = _DP_SAMPLING_FREQ_44K_GROUP_D_CODE;
+ 381   3                  }
+ 382   2                  else if(enumPortType == _PORT_HDMI)
+ 383   2                  {
+ 384   3                      usDCode = _HDMI_SAMPLING_FREQ_44K_GROUP_D_CODE;
+ 385   3                  }
+ 386   2      
+ 387   2                  break;
+ 388   2      
+ 389   2              case _AUDIO_FREQ_48K:
+ 390   2              case _AUDIO_FREQ_96K:
+ 391   2              case _AUDIO_FREQ_192K:
+ 392   2              case _AUDIO_FREQ_384K:
+ 393   2              case _AUDIO_FREQ_768K:
+ 394   2      
+ 395   2                  if(enumPortType == _PORT_DP)
+ 396   2                  {
+ 397   3                      usDCode = _DP_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 398   3                  }
+ 399   2                  else if(enumPortType == _PORT_HDMI)
+ 400   2                  {
+ 401   3                      usDCode = _HDMI_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 402   3                  }
+ 403   2      
+ 404   2                  break;
+ 405   2      
+ 406   2              case _AUDIO_FREQ_NO_AUDIO:
+ 407   2              default:
+ 408   2      
+ 409   2                  if(enumPortType == _PORT_DP)
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 8   
+
+ 410   2                  {
+ 411   3                      usDCode = _DP_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 412   3                  }
+ 413   2                  else if(enumPortType == _PORT_HDMI)
+ 414   2                  {
+ 415   3                      usDCode = _HDMI_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 416   3                  }
+ 417   2      
+ 418   2                  break;
+ 419   2          }
+ 420   1      
+ 421   1          return usDCode;
+ 422   1      }
+ 423          
+ 424          //--------------------------------------------------
+ 425          // Description  : Get User Define S Code of Audio Sampling Freq
+ 426          // Input Value  : EnumPortType
+ 427          // Input Value  : EnumAudioSamplingFreqType
+ 428          // Output Value : NF Code
+ 429          //--------------------------------------------------
+ 430          BYTE ScalerAudioGetUserSamplingFreqSCode(EnumInputPortType enumPortType, EnumAudioSamplingFreqType enumAud
+             -ioFreq)
+ 431          {
+ 432   1          BYTE ucSCode = 0x00;
+ 433   1      
+ 434   1          switch(enumAudioFreq)
+ 435   1          {
+ 436   2              case _AUDIO_FREQ_32K:
+ 437   2      
+ 438   2                  if(enumPortType == _PORT_DP)
+ 439   2                  {
+ 440   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE;
+ 441   3                  }
+ 442   2                  else if(enumPortType == _PORT_HDMI)
+ 443   2                  {
+ 444   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE;
+ 445   3                  }
+ 446   2      
+ 447   2                  break;
+ 448   2      
+ 449   2              case _AUDIO_FREQ_44_1K:
+ 450   2      
+ 451   2                  if(enumPortType == _PORT_DP)
+ 452   2                  {
+ 453   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE;
+ 454   3                  }
+ 455   2                  else if(enumPortType == _PORT_HDMI)
+ 456   2                  {
+ 457   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE;
+ 458   3                  }
+ 459   2                  break;
+ 460   2      
+ 461   2              case _AUDIO_FREQ_48K:
+ 462   2      
+ 463   2                  if(enumPortType == _PORT_DP)
+ 464   2                  {
+ 465   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 466   3                  }
+ 467   2                  else if(enumPortType == _PORT_HDMI)
+ 468   2                  {
+ 469   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 470   3                  }
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 9   
+
+ 471   2      
+ 472   2                  break;
+ 473   2      
+ 474   2              case _AUDIO_FREQ_64K:
+ 475   2      
+ 476   2                  if(enumPortType == _PORT_DP)
+ 477   2                  {
+ 478   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 1;
+ 479   3                  }
+ 480   2                  else if(enumPortType == _PORT_HDMI)
+ 481   2                  {
+ 482   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 1;
+ 483   3                  }
+ 484   2      
+ 485   2                  break;
+ 486   2      
+ 487   2              case _AUDIO_FREQ_88_2K:
+ 488   2      
+ 489   2                  if(enumPortType == _PORT_DP)
+ 490   2                  {
+ 491   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 1;
+ 492   3                  }
+ 493   2                  else if(enumPortType == _PORT_HDMI)
+ 494   2                  {
+ 495   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 1;
+ 496   3                  }
+ 497   2      
+ 498   2                  break;
+ 499   2      
+ 500   2              case _AUDIO_FREQ_96K:
+ 501   2      
+ 502   2                  if(enumPortType == _PORT_DP)
+ 503   2                  {
+ 504   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 1;
+ 505   3                  }
+ 506   2                  else if(enumPortType == _PORT_HDMI)
+ 507   2                  {
+ 508   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 1;
+ 509   3                  }
+ 510   2      
+ 511   2                  break;
+ 512   2      
+ 513   2              case _AUDIO_FREQ_128K:
+ 514   2      
+ 515   2                  if(enumPortType == _PORT_DP)
+ 516   2                  {
+ 517   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 2;
+ 518   3                  }
+ 519   2                  else if(enumPortType == _PORT_HDMI)
+ 520   2                  {
+ 521   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 2;
+ 522   3                  }
+ 523   2      
+ 524   2                  break;
+ 525   2      
+ 526   2              case _AUDIO_FREQ_176_4K:
+ 527   2      
+ 528   2                  if(enumPortType == _PORT_DP)
+ 529   2                  {
+ 530   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 2;
+ 531   3                  }
+ 532   2                  else if(enumPortType == _PORT_HDMI)
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 10  
+
+ 533   2                  {
+ 534   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 2;
+ 535   3                  }
+ 536   2      
+ 537   2                  break;
+ 538   2      
+ 539   2              case _AUDIO_FREQ_192K:
+ 540   2      
+ 541   2                  if(enumPortType == _PORT_DP)
+ 542   2                  {
+ 543   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 2;
+ 544   3                  }
+ 545   2                  else if(enumPortType == _PORT_HDMI)
+ 546   2                  {
+ 547   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 2;
+ 548   3                  }
+ 549   2      
+ 550   2                  break;
+ 551   2      
+ 552   2              case _AUDIO_FREQ_256K:
+ 553   2      
+ 554   2                  if(enumPortType == _PORT_DP)
+ 555   2                  {
+ 556   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 3;
+ 557   3                  }
+ 558   2                  else if(enumPortType == _PORT_HDMI)
+ 559   2                  {
+ 560   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 3;
+ 561   3                  }
+ 562   2      
+ 563   2                  break;
+ 564   2      
+ 565   2              case _AUDIO_FREQ_352_8K:
+ 566   2      
+ 567   2                  if(enumPortType == _PORT_DP)
+ 568   2                  {
+ 569   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 3;
+ 570   3                  }
+ 571   2                  else if(enumPortType == _PORT_HDMI)
+ 572   2                  {
+ 573   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 3;
+ 574   3                  }
+ 575   2      
+ 576   2                  break;
+ 577   2      
+ 578   2              case _AUDIO_FREQ_384K:
+ 579   2      
+ 580   2                  if(enumPortType == _PORT_DP)
+ 581   2                  {
+ 582   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 3;
+ 583   3                  }
+ 584   2                  else if(enumPortType == _PORT_HDMI)
+ 585   2                  {
+ 586   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 3;
+ 587   3                  }
+ 588   2      
+ 589   2                  break;
+ 590   2      
+ 591   2              case _AUDIO_FREQ_512K:
+ 592   2      
+ 593   2                  if(enumPortType == _PORT_DP)
+ 594   2                  {
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 11  
+
+ 595   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 4;
+ 596   3                  }
+ 597   2                  else if(enumPortType == _PORT_HDMI)
+ 598   2                  {
+ 599   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 4;
+ 600   3                  }
+ 601   2      
+ 602   2                  break;
+ 603   2      
+ 604   2              case _AUDIO_FREQ_705_6K:
+ 605   2      
+ 606   2                  if(enumPortType == _PORT_DP)
+ 607   2                  {
+ 608   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 4;
+ 609   3                  }
+ 610   2                  else if(enumPortType == _PORT_HDMI)
+ 611   2                  {
+ 612   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 4;
+ 613   3                  }
+ 614   2      
+ 615   2                  break;
+ 616   2      
+ 617   2              case _AUDIO_FREQ_768K:
+ 618   2      
+ 619   2                  if(enumPortType == _PORT_DP)
+ 620   2                  {
+ 621   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 4;
+ 622   3                  }
+ 623   2                  else if(enumPortType == _PORT_HDMI)
+ 624   2                  {
+ 625   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 4;
+ 626   3                  }
+ 627   2      
+ 628   2                  break;
+ 629   2      
+ 630   2              case _AUDIO_FREQ_NO_AUDIO:
+ 631   2              default:
+ 632   2      
+ 633   2                  if(enumPortType == _PORT_DP)
+ 634   2                  {
+ 635   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 636   3                  }
+ 637   2                  else if(enumPortType == _PORT_HDMI)
+ 638   2                  {
+ 639   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 640   3                  }
+ 641   2      
+ 642   2                  break;
+ 643   2          }
+ 644   1      
+ 645   1          return ucSCode;
+ 646   1      }
+ 647          
+ 648          //--------------------------------------------------
+ 649          // Description  : Get User Define D Code of Audio Sampling Freq
+ 650          // Input Value  : EnumPortType
+ 651          // Input Value  : EnumAudioSamplingFreqType
+ 652          // Output Value : NF Code
+ 653          //--------------------------------------------------
+ 654          WORD ScalerAudioGetUserSamplingFreqDCode_EXINT0(EnumInputPortType enumPortType, EnumAudioSamplingFreqType 
+             -enumAudioFreq) using 1
+ 655          {
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 12  
+
+ 656   1          WORD usDCode = 0x00;
+ 657   1      
+ 658   1          switch(enumAudioFreq)
+ 659   1          {
+ 660   2              case _AUDIO_FREQ_32K:
+ 661   2              case _AUDIO_FREQ_64K:
+ 662   2              case _AUDIO_FREQ_128K:
+ 663   2              case _AUDIO_FREQ_256K:
+ 664   2              case _AUDIO_FREQ_512K:
+ 665   2      
+ 666   2                  if(enumPortType == _PORT_DP)
+ 667   2                  {
+ 668   3                      usDCode = _DP_SAMPLING_FREQ_32K_GROUP_D_CODE;
+ 669   3                  }
+ 670   2                  else if(enumPortType == _PORT_HDMI)
+ 671   2                  {
+ 672   3                      usDCode = _HDMI_SAMPLING_FREQ_32K_GROUP_D_CODE;
+ 673   3                  }
+ 674   2      
+ 675   2                  break;
+ 676   2      
+ 677   2              case _AUDIO_FREQ_44_1K:
+ 678   2              case _AUDIO_FREQ_88_2K:
+ 679   2              case _AUDIO_FREQ_176_4K:
+ 680   2              case _AUDIO_FREQ_352_8K:
+ 681   2              case _AUDIO_FREQ_705_6K:
+ 682   2      
+ 683   2                  if(enumPortType == _PORT_DP)
+ 684   2                  {
+ 685   3                      usDCode = _DP_SAMPLING_FREQ_44K_GROUP_D_CODE;
+ 686   3                  }
+ 687   2                  else if(enumPortType == _PORT_HDMI)
+ 688   2                  {
+ 689   3                      usDCode = _HDMI_SAMPLING_FREQ_44K_GROUP_D_CODE;
+ 690   3                  }
+ 691   2      
+ 692   2                  break;
+ 693   2      
+ 694   2              case _AUDIO_FREQ_48K:
+ 695   2              case _AUDIO_FREQ_96K:
+ 696   2              case _AUDIO_FREQ_192K:
+ 697   2              case _AUDIO_FREQ_384K:
+ 698   2              case _AUDIO_FREQ_768K:
+ 699   2      
+ 700   2                  if(enumPortType == _PORT_DP)
+ 701   2                  {
+ 702   3                      usDCode = _DP_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 703   3                  }
+ 704   2                  else if(enumPortType == _PORT_HDMI)
+ 705   2                  {
+ 706   3                      usDCode = _HDMI_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 707   3                  }
+ 708   2      
+ 709   2                  break;
+ 710   2      
+ 711   2              case _AUDIO_FREQ_NO_AUDIO:
+ 712   2              default:
+ 713   2      
+ 714   2                  if(enumPortType == _PORT_DP)
+ 715   2                  {
+ 716   3                      usDCode = _DP_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 717   3                  }
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 13  
+
+ 718   2                  else if(enumPortType == _PORT_HDMI)
+ 719   2                  {
+ 720   3                      usDCode = _HDMI_SAMPLING_FREQ_48K_GROUP_D_CODE;
+ 721   3                  }
+ 722   2      
+ 723   2                  break;
+ 724   2          }
+ 725   1      
+ 726   1          return usDCode;
+ 727   1      }
+ 728          
+ 729          //--------------------------------------------------
+ 730          // Description  : Get User Define S Code of Audio Sampling Freq
+ 731          // Input Value  : EnumPortType
+ 732          // Input Value  : EnumAudioSamplingFreqType
+ 733          // Output Value : NF Code
+ 734          //--------------------------------------------------
+ 735          BYTE ScalerAudioGetUserSamplingFreqSCode_EXINT0(EnumInputPortType enumPortType, EnumAudioSamplingFreqType 
+             -enumAudioFreq) using 1
+ 736          {
+ 737   1          BYTE ucSCode = 0x00;
+ 738   1      
+ 739   1          switch(enumAudioFreq)
+ 740   1          {
+ 741   2              case _AUDIO_FREQ_32K:
+ 742   2      
+ 743   2                  if(enumPortType == _PORT_DP)
+ 744   2                  {
+ 745   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE;
+ 746   3                  }
+ 747   2                  else if(enumPortType == _PORT_HDMI)
+ 748   2                  {
+ 749   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE;
+ 750   3                  }
+ 751   2      
+ 752   2                  break;
+ 753   2      
+ 754   2              case _AUDIO_FREQ_44_1K:
+ 755   2      
+ 756   2                  if(enumPortType == _PORT_DP)
+ 757   2                  {
+ 758   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE;
+ 759   3                  }
+ 760   2                  else if(enumPortType == _PORT_HDMI)
+ 761   2                  {
+ 762   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE;
+ 763   3                  }
+ 764   2                  break;
+ 765   2      
+ 766   2              case _AUDIO_FREQ_48K:
+ 767   2      
+ 768   2                  if(enumPortType == _PORT_DP)
+ 769   2                  {
+ 770   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 771   3                  }
+ 772   2                  else if(enumPortType == _PORT_HDMI)
+ 773   2                  {
+ 774   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 775   3                  }
+ 776   2      
+ 777   2                  break;
+ 778   2      
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 14  
+
+ 779   2              case _AUDIO_FREQ_64K:
+ 780   2      
+ 781   2                  if(enumPortType == _PORT_DP)
+ 782   2                  {
+ 783   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 1;
+ 784   3                  }
+ 785   2                  else if(enumPortType == _PORT_HDMI)
+ 786   2                  {
+ 787   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 1;
+ 788   3                  }
+ 789   2      
+ 790   2                  break;
+ 791   2      
+ 792   2              case _AUDIO_FREQ_88_2K:
+ 793   2      
+ 794   2                  if(enumPortType == _PORT_DP)
+ 795   2                  {
+ 796   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 1;
+ 797   3                  }
+ 798   2                  else if(enumPortType == _PORT_HDMI)
+ 799   2                  {
+ 800   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 1;
+ 801   3                  }
+ 802   2      
+ 803   2                  break;
+ 804   2      
+ 805   2              case _AUDIO_FREQ_96K:
+ 806   2      
+ 807   2                  if(enumPortType == _PORT_DP)
+ 808   2                  {
+ 809   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 1;
+ 810   3                  }
+ 811   2                  else if(enumPortType == _PORT_HDMI)
+ 812   2                  {
+ 813   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 1;
+ 814   3                  }
+ 815   2      
+ 816   2                  break;
+ 817   2      
+ 818   2              case _AUDIO_FREQ_128K:
+ 819   2      
+ 820   2                  if(enumPortType == _PORT_DP)
+ 821   2                  {
+ 822   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 2;
+ 823   3                  }
+ 824   2                  else if(enumPortType == _PORT_HDMI)
+ 825   2                  {
+ 826   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 2;
+ 827   3                  }
+ 828   2      
+ 829   2                  break;
+ 830   2      
+ 831   2              case _AUDIO_FREQ_176_4K:
+ 832   2      
+ 833   2                  if(enumPortType == _PORT_DP)
+ 834   2                  {
+ 835   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 2;
+ 836   3                  }
+ 837   2                  else if(enumPortType == _PORT_HDMI)
+ 838   2                  {
+ 839   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 2;
+ 840   3                  }
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 15  
+
+ 841   2      
+ 842   2                  break;
+ 843   2      
+ 844   2              case _AUDIO_FREQ_192K:
+ 845   2      
+ 846   2                  if(enumPortType == _PORT_DP)
+ 847   2                  {
+ 848   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 2;
+ 849   3                  }
+ 850   2                  else if(enumPortType == _PORT_HDMI)
+ 851   2                  {
+ 852   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 2;
+ 853   3                  }
+ 854   2      
+ 855   2                  break;
+ 856   2      
+ 857   2              case _AUDIO_FREQ_256K:
+ 858   2      
+ 859   2                  if(enumPortType == _PORT_DP)
+ 860   2                  {
+ 861   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 3;
+ 862   3                  }
+ 863   2                  else if(enumPortType == _PORT_HDMI)
+ 864   2                  {
+ 865   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 3;
+ 866   3                  }
+ 867   2      
+ 868   2                  break;
+ 869   2      
+ 870   2              case _AUDIO_FREQ_352_8K:
+ 871   2      
+ 872   2                  if(enumPortType == _PORT_DP)
+ 873   2                  {
+ 874   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 3;
+ 875   3                  }
+ 876   2                  else if(enumPortType == _PORT_HDMI)
+ 877   2                  {
+ 878   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 3;
+ 879   3                  }
+ 880   2      
+ 881   2                  break;
+ 882   2      
+ 883   2              case _AUDIO_FREQ_384K:
+ 884   2      
+ 885   2                  if(enumPortType == _PORT_DP)
+ 886   2                  {
+ 887   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 3;
+ 888   3                  }
+ 889   2                  else if(enumPortType == _PORT_HDMI)
+ 890   2                  {
+ 891   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 3;
+ 892   3                  }
+ 893   2      
+ 894   2                  break;
+ 895   2      
+ 896   2              case _AUDIO_FREQ_512K:
+ 897   2      
+ 898   2                  if(enumPortType == _PORT_DP)
+ 899   2                  {
+ 900   3                      ucSCode = _DP_SAMPLING_FREQ_32K_GROUP_S_CODE >> 4;
+ 901   3                  }
+ 902   2                  else if(enumPortType == _PORT_HDMI)
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 16  
+
+ 903   2                  {
+ 904   3                      ucSCode = _HDMI_SAMPLING_FREQ_32K_GROUP_S_CODE >> 4;
+ 905   3                  }
+ 906   2      
+ 907   2                  break;
+ 908   2      
+ 909   2              case _AUDIO_FREQ_705_6K:
+ 910   2      
+ 911   2                  if(enumPortType == _PORT_DP)
+ 912   2                  {
+ 913   3                      ucSCode = _DP_SAMPLING_FREQ_44K_GROUP_S_CODE >> 4;
+ 914   3                  }
+ 915   2                  else if(enumPortType == _PORT_HDMI)
+ 916   2                  {
+ 917   3                      ucSCode = _HDMI_SAMPLING_FREQ_44K_GROUP_S_CODE >> 4;
+ 918   3                  }
+ 919   2      
+ 920   2                  break;
+ 921   2      
+ 922   2              case _AUDIO_FREQ_768K:
+ 923   2      
+ 924   2                  if(enumPortType == _PORT_DP)
+ 925   2                  {
+ 926   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE >> 4;
+ 927   3                  }
+ 928   2                  else if(enumPortType == _PORT_HDMI)
+ 929   2                  {
+ 930   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE >> 4;
+ 931   3                  }
+ 932   2      
+ 933   2                  break;
+ 934   2      
+ 935   2              case _AUDIO_FREQ_NO_AUDIO:
+ 936   2              default:
+ 937   2      
+ 938   2                  if(enumPortType == _PORT_DP)
+ 939   2                  {
+ 940   3                      ucSCode = _DP_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 941   3                  }
+ 942   2                  else if(enumPortType == _PORT_HDMI)
+ 943   2                  {
+ 944   3                      ucSCode = _HDMI_SAMPLING_FREQ_48K_GROUP_S_CODE;
+ 945   3                  }
+ 946   2      
+ 947   2                  break;
+ 948   2          }
+ 949   1      
+ 950   1          return ucSCode;
+ 951   1      }
+ 952          
+ 953          #if(_HDMI_SUPPORT == _ON)
+ 954          //--------------------------------------------------
+ 955          // Description  : SPDIF/IIS Output By Channel Allocation
+ 956          // Input Value  : Channel Allocation
+ 957          // Output Value : Which channel need active
+ 958          //--------------------------------------------------
+ 959          BYTE ScalerAudioChannelOutputSel(BYTE ucCa)
+ 960          {
+ 961   1          // ucRseult[0/1/2/3] = SPDIF/IIS Lane 4/3/2/1
+ 962   1          BYTE ucResult = 0x0F;
+ 963   1      
+ 964   1          switch(ucCa)
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 17  
+
+ 965   1          {
+ 966   2              case 0x01:
+ 967   2              case 0x02:
+ 968   2              case 0x03:
+ 969   2      
+ 970   2                  // Lane1,2
+ 971   2                  ucResult = 0x03;
+ 972   2                  break;
+ 973   2      
+ 974   2              case 0x04:
+ 975   2              case 0x08:
+ 976   2      
+ 977   2                  // Lane1,3
+ 978   2                  ucResult = 0x05;
+ 979   2                  break;
+ 980   2      
+ 981   2              case 0x05:
+ 982   2              case 0x06:
+ 983   2              case 0x07:
+ 984   2              case 0x09:
+ 985   2              case 0x0A:
+ 986   2              case 0x0B:
+ 987   2      
+ 988   2                  // Lane1,2,3
+ 989   2                  ucResult = 0x07;
+ 990   2                  break;
+ 991   2      
+ 992   2              case 0x14:
+ 993   2      
+ 994   2                  // Lane1,4
+ 995   2                  ucResult = 0x09;
+ 996   2                  break;
+ 997   2      
+ 998   2              case 0x15:
+ 999   2              case 0x16:
+1000   2              case 0x17:
+1001   2      
+1002   2                  // Lane1,2,4
+1003   2                  ucResult = 0x0B;
+1004   2                  break;
+1005   2      
+1006   2              case 0x0C:
+1007   2              case 0x10:
+1008   2              case 0x18:
+1009   2              case 0x1C:
+1010   2              case 0x24:
+1011   2              case 0x26:
+1012   2      
+1013   2                  // Lane1,3,4
+1014   2                  ucResult = 0x0D;
+1015   2                  break;
+1016   2      
+1017   2              case 0x0D:
+1018   2              case 0x0E:
+1019   2              case 0x0F:
+1020   2              case 0x11:
+1021   2              case 0x12:
+1022   2              case 0x13:
+1023   2              case 0x19:
+1024   2              case 0x1A:
+1025   2              case 0x1B:
+1026   2              case 0x1D:
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 18  
+
+1027   2              case 0x1E:
+1028   2              case 0x1F:
+1029   2              case 0x20:
+1030   2              case 0x21:
+1031   2              case 0x22:
+1032   2              case 0x23:
+1033   2              case 0x25:
+1034   2              case 0x27:
+1035   2              case 0x28:
+1036   2              case 0x29:
+1037   2              case 0x2A:
+1038   2              case 0x2B:
+1039   2              case 0x2C:
+1040   2              case 0x2D:
+1041   2              case 0x2E:
+1042   2              case 0x2F:
+1043   2              case 0x30:
+1044   2              case 0x31:
+1045   2      
+1046   2                  // Lane1,2,3,4
+1047   2                  ucResult = 0x0F;
+1048   2                  break;
+1049   2      
+1050   2              default:
+1051   2                  break;
+1052   2          }
+1053   1      
+1054   1          return ucResult;
+1055   1      }
+1056          #endif
+1057          
+1058          #if(_LINE_IN_SUPPORT == _ON)
+1059          #if(_HW_DIGITAL_PORT_COMBO_PHY_TYPE != _DIGITAL_PORT_COMBO_PHY_NONE)
+              #if(_DP_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Get Current Audio Port For Output Type
+              // Input Value  : None
+              // Output Value : audio port
+              //--------------------------------------------------
+              BYTE ScalerAudioGetDigitalAudioPort_EXINT0(EnumAudioOutputType enumAudioOutput) using 1
+              {
+                  switch(enumAudioOutput)
+                  {
+                      case _AUDIO_DAC_OUT:
+              
+                          return (ScalerGetBit_EXINT(P6F_01_MUX_DA_DVC_IN, (_BIT2 | _BIT1 | _BIT0)));
+              
+                      case _AUDIO_I2S_OUT:
+              
+                          return (ScalerGetBit_EXINT(P6F_00_MUX_DIG_OUT, (_BIT6 | _BIT5 | _BIT4)) >> 4);
+              
+                      case _AUDIO_SPDIF_OUT:
+              
+                          return (ScalerGetBit_EXINT(P6F_00_MUX_DIG_OUT, (_BIT2 | _BIT1 | _BIT0)));
+              
+              #if(_DP_TX_SUPPORT == _ON)
+                      case _AUDIO_DPTX_OUT:
+              
+                          return (ScalerGetBit_EXINT(P6F_02_MUX_DP_I2S_IN, (_BIT2 | _BIT1 | _BIT0)));
+              #endif
+              
+                      default:
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 19  
+
+                          break;
+                  }
+              
+                  return _AUDIO_FROM_D0_PORT;
+              }
+              #endif
+              
+              //--------------------------------------------------
+              // Description  : Get Current DAC Input Source
+              // Input Value  : None
+              // Output Value : _LINE_IN_AUDIO/ _DIGITAL_AUDIO
+              //--------------------------------------------------
+              EnumAudioInputSource ScalerAudioGetInputSource_EXINT0(void) using 1
+              {
+                  return ((ScalerGetBit_EXINT(P6_D1_DA_MUTE, _BIT3) == 0x00) ? _DIGITAL_AUDIO : _LINE_IN_AUDIO);
+              }
+              #endif
+1106          
+1107          //--------------------------------------------------
+1108          // Description  : Get Current DAC Input Source
+1109          // Input Value  : None
+1110          // Output Value : _LINE_IN_AUDIO/ _DIGITAL_AUDIO
+1111          //--------------------------------------------------
+1112          EnumAudioInputSource ScalerAudioGetInputSource(void)
+1113          {
+1114   1          return ((ScalerGetBit(P6_D1_DA_MUTE, _BIT3) == 0x00) ? _DIGITAL_AUDIO : _LINE_IN_AUDIO);
+1115   1      }
+1116          #endif
+1117          
+1118          #if(_EMBEDDED_DAC_SUPPORT == _ON)
+1119          //--------------------------------------------------
+1120          // Description  : Initial Audio DAC
+1121          // Input Value  : None
+1122          // Output Value : None
+1123          //--------------------------------------------------
+1124          void ScalerAudioDACInitial(void)
+1125          {
+1126   1          ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT7 | _BIT6 | _BIT3 | _BIT1 | _BIT0), (_BIT7 | _BIT6 | _BIT3 | 
+             -_BIT1 | _BIT0));
+1127   1      
+1128   1      #if(_DAC_SPEAKER_OUTPUT_SUPPORT == _ON)
+1129   1          // Power On for Line Out Power
+1130   1          ScalerSetBit(P6_C0_REG_DAC_POWER0, ~_BIT5, _BIT5);
+1131   1      #else
+                  // Power OFF for Line Out Power
+                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~_BIT5, 0x00);
+              #endif
+1135   1      
+1136   1      #if(_DAC_HP_OUTPUT_SUPPORT == _ON)
+1137   1          // Power On for HeadFone Power
+1138   1          ScalerSetBit(P6_C0_REG_DAC_POWER0, ~_BIT4, _BIT4);
+1139   1      #else
+                  // Power OFF for HeadFone Power
+                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~_BIT4, 0x00);
+              #endif
+1143   1      
+1144   1          // Set DAC Clock Divider, Enable Depop Clock and Set Depop Clock
+1145   1          ScalerSetByte(P6_D4_DA_CLK_CTRL, 0x12);
+1146   1      
+1147   1          // Power On Depop Circuit and Set Vcm Voltage as 1.65V
+1148   1          ScalerSetByte(P6_C1_REG_DAC_POWER1, 0xF1);
+1149   1      
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 20  
+
+1150   1          // Set DAC Dither Function
+1151   1          ScalerSetBit(P6_D0_DA_CTRL, ~(_BIT5 | _BIT4), (_DAC_DITHER_FUNCTION_LEVEL << 4));
+1152   1      
+1153   1          // Mute DAC and Set DAC Clock Source
+1154   1          ScalerSetBit(P6_D1_DA_MUTE, ~(_BIT7 | _BIT6 | _BIT3), 0x00);
+1155   1      
+1156   1          // Set DAC Volume Of L Ch
+1157   1          ScalerSetByte(P6_D2_DA_GAIN_L, 0x57);
+1158   1      
+1159   1          // Set DAC Volume Of R Ch
+1160   1          ScalerSetByte(P6_D3_DA_GAIN_R, 0x57);
+1161   1      
+1162   1          // Set Double Buffer
+1163   1          ScalerSetBit(P6_D2_DA_GAIN_L, ~_BIT7, _BIT7);
+1164   1      
+1165   1      #if(_DAC_SPEAKER_OUTPUT_SWAP == _OFF)
+                  // Set Speaker L/R Output
+                  ScalerSetBit(P6_E0_REG_MUX_ANA_OUT, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), 0x00);
+              #else
+1169   1          // Swap Speaker L/R Output
+1170   1          ScalerSetBit(P6_E0_REG_MUX_ANA_OUT, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), (_BIT6 | _BIT4));
+1171   1      #endif
+1172   1      
+1173   1      #if(_DAC_HP_OUTPUT_SWAP == _OFF)
+                  // Set Headphone L/R Output
+                  ScalerSetBit(P6_E0_REG_MUX_ANA_OUT, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              #else
+1177   1          // Swap Headphone L/R Output
+1178   1          ScalerSetBit(P6_E0_REG_MUX_ANA_OUT, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT2 | _BIT0));
+1179   1      #endif
+1180   1      }
+1181          
+1182          //--------------------------------------------------
+1183          // Description  : Switch audio output (AOUT / HPOut)
+1184          // Input Value  : enumDACOutput
+1185          // Output Value : None
+1186          //--------------------------------------------------
+1187          void ScalerAudioDACOutputSwitch(EnumAudioDACOutput enumDACOutput)
+1188          {
+1189   1          switch(enumDACOutput)
+1190   1          {
+1191   2      #if((_DAC_SPEAKER_OUTPUT_SUPPORT == _ON) && (_DAC_HP_OUTPUT_SUPPORT == _ON))
+1192   2              case _AUDIO_DAC_OUTPUT_BOTH:
+1193   2      
+1194   2                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT5 | _BIT4), (_BIT5 | _BIT4));
+1195   2                  break;
+1196   2      #endif
+1197   2      
+1198   2      #if(_DAC_SPEAKER_OUTPUT_SUPPORT == _ON)
+1199   2              case _AUDIO_DAC_OUTPUT_SPEAKER:
+1200   2      
+1201   2                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT5 | _BIT4), _BIT5);
+1202   2                  break;
+1203   2      #endif
+1204   2      
+1205   2      #if(_DAC_HP_OUTPUT_SUPPORT == _ON)
+1206   2              case _AUDIO_DAC_OUTPUT_HEADPHONE:
+1207   2      
+1208   2                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT5 | _BIT4), _BIT4);
+1209   2                  break;
+1210   2      #endif
+1211   2      
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 21  
+
+1212   2              default:
+1213   2      
+1214   2                  ScalerSetBit(P6_C0_REG_DAC_POWER0, ~(_BIT5 | _BIT4), 0x00);
+1215   2      
+1216   2                  break;
+1217   2          }
+1218   1      }
+1219          
+1220          //--------------------------------------------------
+1221          // Description  : Change Auido DAC State
+1222          // Input Value  : Target Audio DAC State
+1223          // Output Value : None
+1224          //--------------------------------------------------
+1225          void ScalerAudioDACSetState(EnumAudioDACState enumTargetState)
+1226          {
+1227   1          SET_AUDIO_DAC_STATE(enumTargetState);
+1228   1          SET_AUDIO_DAC_STATE_CHANGE();
+1229   1      }
+1230          
+1231          //--------------------------------------------------
+1232          // Description  : Get Curretn DAC State
+1233          // Input Value  : None
+1234          // Output Value : Current DAC State
+1235          //--------------------------------------------------
+1236          EnumAudioDACState ScalerAudioDACGetState(void)
+1237          {
+1238   1          return GET_AUDIO_DAC_STATE();
+1239   1      }
+1240          
+1241          //--------------------------------------------------
+1242          // Description  : Get Curretn DAC State Change
+1243          // Input Value  : None
+1244          // Output Value : TRUE => State Changed
+1245          //--------------------------------------------------
+1246          bit ScalerAudioDACGetStateChange(void)
+1247          {
+1248   1          return GET_AUDIO_DAC_STATE_CHANGE();
+1249   1      }
+1250          
+1251          //--------------------------------------------------
+1252          // Description  : Clear DAC State Change
+1253          // Input Value  : None
+1254          // Output Value : None
+1255          //--------------------------------------------------
+1256          void ScalerAudioDACClrStateChange(void)
+1257          {
+1258   1          CLR_AUDIO_DAC_STATE_CHANGE();
+1259   1      }
+1260          
+1261          //--------------------------------------------------
+1262          // Description  : When Vcm already charge to AVDD/2, Vo(Output Voltage) should charge as Vcm
+1263          // Input Value  : bReady
+1264          // Output Value : None
+1265          //--------------------------------------------------
+1266          void ScalerAudioDACSetVcmReady(bit bReady)
+1267          {
+1268   1          ScalerSetBit(P6_C5_REG_ANA_CTRL, ~_BIT0, (BYTE) bReady);
+1269   1      }
+1270          
+1271          //--------------------------------------------------
+1272          // Description  : Transfer depop mode to Normal mode
+1273          // Input Value  : None
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 22  
+
+1274          // Output Value : None
+1275          //--------------------------------------------------
+1276          void ScalerAudioDACNormalToDepop(void)
+1277          {
+1278   1          ScalerAudioDACSetVcmReady(_OFF);
+1279   1      
+1280   1          // Transfer normal to depop operation for AOUT
+1281   1          ScalerSetBit(P6_C6_REG_AOUT_CTRL, ~_BIT3, 0x00);
+1282   1      
+1283   1          // Transfer normal to depop operation for HP output
+1284   1          ScalerSetBit(P6_C7_REG_HPOUT_CTRL, ~_BIT3, 0x00);
+1285   1      
+1286   1          // Disable AOUT
+1287   1          ScalerSetBit(P6_C6_REG_AOUT_CTRL, ~(_BIT7 | _BIT6), (_BIT7 | _BIT6));
+1288   1      
+1289   1          // Disable HP output
+1290   1          ScalerSetBit(P6_C7_REG_HPOUT_CTRL, ~(_BIT7 | _BIT6), (_BIT7 | _BIT6));
+1291   1      
+1292   1          ScalerAudioDACSetVcmReady(_ON);
+1293   1      
+1294   1          ScalerAudioDACSetState(_AUDIO_DAC_DEPOP);
+1295   1      }
+1296          
+1297          //--------------------------------------------------
+1298          // Description  : Transfer depop mode to normal mode
+1299          // Input Value  : None
+1300          // Output Value : None
+1301          //--------------------------------------------------
+1302          void ScalerAudioDACDepopToNormal(void)
+1303          {
+1304   1          // Transfer depop to normal operation for AOUT
+1305   1          ScalerSetBit(P6_C6_REG_AOUT_CTRL, ~_BIT3, _BIT3);
+1306   1      
+1307   1          // Transfer depop to normal operation and enable driving current for HP output
+1308   1          ScalerSetBit(P6_C7_REG_HPOUT_CTRL, ~_BIT3, _BIT3);
+1309   1      
+1310   1          // Disable Vcm ready
+1311   1          ScalerAudioDACSetVcmReady(_OFF);
+1312   1      
+1313   1          ScalerAudioDACSetState(_AUDIO_DAC_READY);
+1314   1      }
+1315          
+1316          //--------------------------------------------------
+1317          // Description  : Switch AOUT/HPOUT to Normal Output
+1318          // Input Value  : None
+1319          // Output Value : None
+1320          //--------------------------------------------------
+1321          void ScalerAudioDACOutputEnable(void)
+1322          {
+1323   1          ScalerAudioDACSetVcmReady(_OFF);
+1324   1      
+1325   1      #if(_DAC_SPEAKER_OUTPUT_SUPPORT == _ON)
+1326   1          if(ScalerGetBit(P6_C0_REG_DAC_POWER0, _BIT5) == _BIT5)
+1327   1          {
+1328   2              // Enable AOUT
+1329   2              ScalerSetBit(P6_C6_REG_AOUT_CTRL, ~(_BIT7 | _BIT6), 0x00);
+1330   2          }
+1331   1      #endif
+1332   1      
+1333   1      #if(_DAC_HP_OUTPUT_SUPPORT == _ON)
+1334   1          if(ScalerGetBit(P6_C0_REG_DAC_POWER0, _BIT4) == _BIT4)
+1335   1          {
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 23  
+
+1336   2              // Enable HP Output
+1337   2              ScalerSetBit(P6_C7_REG_HPOUT_CTRL, ~(_BIT7 | _BIT6), 0x00);
+1338   2          }
+1339   1      #endif
+1340   1      
+1341   1          ScalerAudioDACSetVcmReady(_ON);
+1342   1      }
+1343          
+1344          //--------------------------------------------------
+1345          // Description  : Get Current DAC Output Channel
+1346          // Input Value  : None
+1347          // Output Value : EnumAudioDACOutput
+1348          //--------------------------------------------------
+1349          EnumAudioDACOutput ScalerAudioDACGetOutput(void)
+1350          {
+1351   1          if(ScalerGetBit(P6_C0_REG_DAC_POWER0, (_BIT5 | _BIT4)) == (_BIT5 | _BIT4))
+1352   1          {
+1353   2              return _AUDIO_DAC_OUTPUT_BOTH;
+1354   2          }
+1355   1          else if(ScalerGetBit(P6_C0_REG_DAC_POWER0, (_BIT5 | _BIT4)) == _BIT5)
+1356   1          {
+1357   2              return _AUDIO_DAC_OUTPUT_SPEAKER;
+1358   2          }
+1359   1          else if(ScalerGetBit(P6_C0_REG_DAC_POWER0, (_BIT5 | _BIT4)) == _BIT4)
+1360   1          {
+1361   2              return _AUDIO_DAC_OUTPUT_HEADPHONE;
+1362   2          }
+1363   1      
+1364   1          return _AUDIO_DAC_OUTPUT_NONE;
+1365   1      }
+1366          
+1367          //--------------------------------------------------
+1368          // Description  : Set DAC Output Gain
+1369          // Input Value  : EnumAudioDACOutput, ucOutputGain
+1370          // Output Value : None
+1371          //--------------------------------------------------
+1372          void ScalerAudioDACSetOutputGain(EnumAudioDACOutput enumOutputType, EnumAudioDacOutputGain enumOutputGain)
+1373          {
+1374   1          if(enumOutputType == _AUDIO_DAC_OUTPUT_SPEAKER)
+1375   1          {
+1376   2              // Set AOUT Gain After DAC Block
+1377   2              ScalerSetBit(P6_C8_REG_OUT_GAIN, ~(_BIT6 | _BIT5 | _BIT4), (enumOutputGain << 4));
+1378   2          }
+1379   1          else if(enumOutputType == _AUDIO_DAC_OUTPUT_HEADPHONE)
+1380   1          {
+1381   2              // Set HPOUT Gain After DAC Block
+1382   2              ScalerSetBit(P6_C8_REG_OUT_GAIN, ~(_BIT2 | _BIT1 | _BIT0), enumOutputGain);
+1383   2          }
+1384   1          else if(enumOutputType == _AUDIO_DAC_OUTPUT_BOTH)
+1385   1          {
+1386   2              // Set AOUT and HPOUT Gain After DAC Block
+1387   2              ScalerSetBit(P6_C8_REG_OUT_GAIN, ~(_BIT6 | _BIT5 | _BIT4 | _BIT2 | _BIT1 | _BIT0), ((enumOutputGai
+             -n << 4) | enumOutputGain));
+1388   2          }
+1389   1      }
+1390          #endif // End of #if(_EMBEDDED_DAC_SUPPORT == _ON)
+1391          
+1392          //--------------------------------------------------
+1393          // Description  : Initial DVC Settings
+1394          // Input Value  : None
+1395          // Output Value : None
+1396          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 24  
+
+1397          void ScalerAudioDVCInitial(void)
+1398          {
+1399   1          // Enable DVC function and counter
+1400   1          ScalerSetBit(P8_A0_DVC_EN, ~(_BIT7 | _BIT6), _BIT7);
+1401   1      
+1402   1          // Set DVC ZCD window size
+1403   1          ScalerSetBit(P8_A3_DVC_ZC_WIN_CTRL_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), HIBYTE(_DVC_ZCD_TIMEOUT_DEFAUL
+             -T));
+1404   1          ScalerSetByte(P8_A4_DVC_ZC_WIN_CTRL_1, LOBYTE(_DVC_ZCD_TIMEOUT_DEFAULT));
+1405   1      
+1406   1          // Select DVC Volume Adjust Type
+1407   1          ScalerAudioDVCVolumeAdjustType(_DVC_ADJUST_TYPE);
+1408   1      
+1409   1          // Initial DVC gain = 0
+1410   1          ScalerAudioDVCAdjustVolume(0x00);
+1411   1      
+1412   1          // Initial DVC Mute Control Status
+1413   1          SET_AUDIO_DVC_MUTE_CTRL_STATUS(_ON);
+1414   1      
+1415   1      #if(_DIGITAL_AUDIO_OUTPUT_ADJUST_VOLUME_SUPPORT == _ON)
+              #if(_LINE_IN_SUPPORT == _OFF)
+                  // Set Sampling Frequency "48kHz" For S/PDIF Output From ADC In
+                  ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_48KHZ);
+              
+                  // Set Channel Count "2 ch" For S/PDIF Output From ADC In
+                  ScalerSetBit(P6_E3_AD_SPDIF_CS_1, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), 0x00);
+              
+                  // Enable I2S Output for ADC In
+                  ScalerSetBit(P6_E7_AD_I2S_CTRL, ~_BIT7, _BIT7);
+              #endif
+              
+                  // Select SPDIF from DVC path
+                  ScalerSetBit(P6_E1_AD_SPDIF_CTRL, ~_BIT4, _BIT4);
+              
+                  // Select I2S from DVC path
+                  ScalerSetBit(P6_E7_AD_I2S_CTRL, ~_BIT5, _BIT5);
+              
+                  // Set I2S and SPDIF From DVC path
+                  ScalerSetBit(P6F_00_MUX_DIG_OUT, ~(_BIT6 | _BIT5 | _BIT4 | _BIT2 | _BIT1 | _BIT0), (_AUDIO_FROM_ADC_PO
+             -RT << 4) | _AUDIO_FROM_ADC_PORT);
+              #endif
+1436   1      }
+1437          
+1438          //--------------------------------------------------
+1439          // Description  : Select DVC Volume Adjust Type
+1440          // Input Value  : _DB_GAIN, _VOLUME_STEP_SIZE
+1441          // Output Value : None
+1442          //--------------------------------------------------
+1443          void ScalerAudioDVCVolumeAdjustType(bit bAdjustType)
+1444          {
+1445   1          if(bAdjustType == _DB_GAIN)
+1446   1          {
+1447   2              // Select value mode and set DB gain setp
+1448   2              ScalerSetBit(P8_A0_DVC_EN, ~(_BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), ((_DB_GAIN_DOWN_VALUE << 2) |
+             - _DB_GAIN_UP_VALUE));
+1449   2      
+1450   2              // Initial volume step size for DB gain mode
+1451   2              ScalerSetBit(P8_A1_DVC_VA_MSB, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+1452   2              ScalerSetByte(P8_A2_DVC_VA_LSB, 0x01);
+1453   2          }
+1454   1          else // _VOLUME_STEP_SIZE
+1455   1          {
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 25  
+
+1456   2              // Select value mode
+1457   2              ScalerSetBit(P8_A0_DVC_EN, ~(_BIT4), _BIT4);
+1458   2      
+1459   2              // Set volume step size
+1460   2              ScalerSetBit(P8_A1_DVC_VA_MSB, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), HIBYTE(_VOLUME_ST
+             -EP_SIZE_VALUE));
+1461   2              ScalerSetByte(P8_A2_DVC_VA_LSB, LOBYTE(_VOLUME_STEP_SIZE_VALUE));
+1462   2          }
+1463   1      }
+1464          
+1465          //--------------------------------------------------
+1466          // Description  : Adjust digital volume for DVC function
+1467          // Input Value  : ucVolume
+1468          // Output Value : None
+1469          //--------------------------------------------------
+1470          void ScalerAudioDVCAdjustVolume(WORD usVolume)
+1471          {
+1472   1          // DVC gain MSB
+1473   1          ScalerSetBit(P8_A5_DVC_GAIN_MSB, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), HIBYTE(usVolume));
+1474   1      
+1475   1          // DVC gain LSB  (double buffer)
+1476   1          ScalerSetByte(P8_A6_DVC_GAIN_LSB, LOBYTE(usVolume));
+1477   1      
+1478   1          // Set Double Buffer
+1479   1          ScalerSetBit(P8_A7_DVC_GAIN_READ_MSB, ~_BIT6, _BIT6);
+1480   1      }
+1481          
+1482          //--------------------------------------------------
+1483          // Description  : Mute/Unmute for DVC function
+1484          // Input Value  : bMute
+1485          // Output Value : None
+1486          //--------------------------------------------------
+1487          void ScalerAudioDVCVolumeMute(bit bMute, WORD usVolume)
+1488          {
+1489   1          ScalerAudioDVCVolumeAdjustType(_DVC_ADJUST_TYPE);
+1490   1      
+1491   1          ScalerAudioDVCSetMuteZCDTimeout(bMute, usVolume, _DVC_ADJUST_TYPE);
+1492   1      
+1493   1          PDATA_WORD(0) = (((WORD) ScalerGetByte(P8_A7_DVC_GAIN_READ_MSB) << 8) | ScalerGetByte(P8_A8_DVC_GAIN_R
+             -EAD_LSB));
+1494   1      
+1495   1          if(bMute == _ON)
+1496   1          {
+1497   2              if(PDATA_WORD(0) != 0)
+1498   2              {
+1499   3                  ScalerAudioDVCAdjustVolume(0);
+1500   3      
+1501   3                  PDATA_WORD(1) = 0;
+1502   3      
+1503   3                  do
+1504   3                  {
+1505   4                      ScalerTimerDelayXms(1);
+1506   4                      PDATA_WORD(1)++;
+1507   4                  }
+1508   3                  while((ScalerGetBit(P8_A9_DVC_GAIN_DONE, _BIT7) != _BIT7) && (PDATA_WORD(1) < _DVC_VOLUME_MUTE
+             -_TIMER));
+1509   3              }
+1510   2          }
+1511   1          else // Unmute
+1512   1          {
+1513   2              if(PDATA_WORD(0) != usVolume)
+1514   2              {
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 26  
+
+1515   3                  ScalerAudioDVCAdjustVolume(usVolume);
+1516   3              }
+1517   2          }
+1518   1      
+1519   1          SET_AUDIO_DVC_MUTE_CTRL_STATUS(bMute);
+1520   1      }
+1521          
+1522          //--------------------------------------------------
+1523          // Description  : Set ZCD Timeout
+1524          // Input Value  : bMute, usVolume, bAdjustType
+1525          // Output Value : None
+1526          //--------------------------------------------------
+1527          void ScalerAudioDVCSetMuteZCDTimeout(bit bMute, WORD usVolume, bit bAdjustType)
+1528          {
+1529   1          EnumAudioSamplingFreqPacket enumSamplingFreqPacket = _AUDIO_FREQ_PACKET_NO_AUDIO;
+1530   1      
+1531   1          // Get Sampling Rate
+1532   1      #if(_LINE_IN_SUPPORT == _ON)
+1533   1          if(ScalerAudioGetInputSource() == _LINE_IN_AUDIO)
+1534   1          {
+1535   2              enumSamplingFreqPacket = _AUDIO_FREQ_PACKET_48K;
+1536   2          }
+1537   1          else
+1538   1      #endif
+1539   1          {
+1540   2              enumSamplingFreqPacket = ScalerAudioSamplingFreqDetect(ScalerAudioGetDigitalAudioPortMapping());
+1541   2          }
+1542   1      
+1543   1          if(bAdjustType == _DB_GAIN)
+1544   1          {
+1545   2              // Get down or up step
+1546   2              pData[0] = (bMute == _ON) ? (ScalerGetBit(P8_A0_DVC_EN, (_BIT3 | _BIT2)) >> 2) : ScalerGetBit(P8_A
+             -0_DVC_EN, (_BIT1 | _BIT0));
+1547   2      
+1548   2              // Get numbers of the volume step for mute or unmute
+1549   2              PDATA_WORD(0) = _DVC_DB_STEP_NUMBER << pData[0];
+1550   2          }
+1551   1          else
+1552   1          {
+1553   2              PDATA_WORD(0) = usVolume / _VOLUME_STEP_SIZE_VALUE + 1;
+1554   2          }
+1555   1      
+1556   1          // Calculate samples of ZCD timeout
+1557   1          PDATA_DWORD(1) = (DWORD)enumSamplingFreqPacket * _DVC_VOLUME_MUTE_TIMER / PDATA_WORD(0);
+1558   1      
+1559   1          // Avoid Overflow
+1560   1          if(PDATA_DWORD(1) > 0x0FFF)
+1561   1          {
+1562   2              PDATA_WORD(0) = 0x0FFF;
+1563   2          }
+1564   1          else
+1565   1          {
+1566   2              PDATA_WORD(0) = (WORD)PDATA_DWORD(1);
+1567   2          }
+1568   1      
+1569   1          // Set DVC ZCD window size
+1570   1          ScalerSetBit(P8_A3_DVC_ZC_WIN_CTRL_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), HIBYTE(PDATA_WORD(0)));
+1571   1          ScalerSetByte(P8_A4_DVC_ZC_WIN_CTRL_1, LOBYTE(PDATA_WORD(0)));
+1572   1      }
+1573          
+1574          //--------------------------------------------------
+1575          // Description  : Set ZCD Timeout, only use the type "_VOLUME_STEP_SIZE"
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 27  
+
+1576          // Input Value  : usVolume
+1577          // Output Value : None
+1578          //--------------------------------------------------
+1579          void ScalerAudioDVCSetVolumeZCDTimeout(WORD usVolume)
+1580          {
+1581   1          EnumAudioSamplingFreqPacket enumSamplingFreqPacket = _AUDIO_FREQ_PACKET_NO_AUDIO;
+1582   1      
+1583   1          ScalerAudioDVCVolumeAdjustType(_VOLUME_STEP_SIZE);
+1584   1      
+1585   1          // Get Sampling Rate
+1586   1      #if(_LINE_IN_SUPPORT == _ON)
+1587   1          if(ScalerAudioGetInputSource() == _LINE_IN_AUDIO)
+1588   1          {
+1589   2              enumSamplingFreqPacket = _AUDIO_FREQ_PACKET_48K;
+1590   2          }
+1591   1          else
+1592   1      #endif
+1593   1          {
+1594   2              enumSamplingFreqPacket = ScalerAudioSamplingFreqDetect(ScalerAudioGetDigitalAudioPortMapping());
+1595   2          }
+1596   1      
+1597   1          // Get Current Volume
+1598   1          PDATA_WORD(0) = ((WORD)(ScalerGetByte(P8_A5_DVC_GAIN_MSB) & 0x3F) << 8) | ((WORD)ScalerGetByte(P8_A6_D
+             -VC_GAIN_LSB));
+1599   1      
+1600   1          PDATA_WORD(0) = (PDATA_WORD(0) > usVolume) ? (PDATA_WORD(0) - usVolume) : (usVolume - PDATA_WORD(0));
+1601   1      
+1602   1          PDATA_WORD(0) = PDATA_WORD(0) / _VOLUME_STEP_SIZE_VALUE + 1;
+1603   1      
+1604   1          // Calculate samples of ZCD timeout
+1605   1          PDATA_DWORD(1) = (DWORD)enumSamplingFreqPacket * _DVC_VOLUME_ADJUST_TIMER / PDATA_WORD(0);
+1606   1      
+1607   1          // Avoid Overflow
+1608   1          if(PDATA_DWORD(1) > 0x0FFF)
+1609   1          {
+1610   2              PDATA_WORD(0) = 0x0FFF;
+1611   2          }
+1612   1          else
+1613   1          {
+1614   2              PDATA_WORD(0) = (WORD)PDATA_DWORD(1);
+1615   2          }
+1616   1      
+1617   1          // Set DVC ZCD window size
+1618   1          ScalerSetBit(P8_A3_DVC_ZC_WIN_CTRL_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), HIBYTE(PDATA_WORD(0)));
+1619   1          ScalerSetByte(P8_A4_DVC_ZC_WIN_CTRL_1, LOBYTE(PDATA_WORD(0)));
+1620   1      }
+1621          
+1622          //--------------------------------------------------
+1623          // Description  : Get DVC Mute Status
+1624          // Input Value  : None
+1625          // Output Value : _ON or _OFF
+1626          //--------------------------------------------------
+1627          bit ScalerAudioDVCGetVolumeMuteStatus(void)
+1628          {
+1629   1          return GET_AUDIO_DVC_MUTE_CTRL_STATUS();
+1630   1      }
+1631          
+1632          //--------------------------------------------------
+1633          // Description  : DVC Reset Process
+1634          // Input Value  : None
+1635          // Output Value : None
+1636          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 28  
+
+1637          void ScalerAudioDVCResetProc(void)
+1638          {
+1639   1      #if(_EMBEDDED_DAC_SUPPORT == _ON)
+1640   1          if(ScalerAudioDACGetState() == _AUDIO_DAC_READY)
+1641   1          {
+1642   2              // Switch Audio DAC State to _AUDIO_DAC_DEPOP
+1643   2              ScalerAudioDACNormalToDepop();
+1644   2          }
+1645   1      #endif
+1646   1      
+1647   1          // Reset DVC Counter
+1648   1          ScalerSetBit(P8_A0_DVC_EN, ~_BIT6, _BIT6);
+1649   1      
+1650   1          // At Least Delay 2 Cycle of 1 / 256 * FS (= 32KHz)
+1651   1          DELAY_5US();
+1652   1      
+1653   1          // Enable DVC Counter
+1654   1          ScalerSetBit(P8_A0_DVC_EN, ~_BIT6, 0x00);
+1655   1      
+1656   1      #if(_DIGITAL_AUDIO_OUTPUT_FIX_I2S_PHASE_DELAY == _ON)
+                  // Disable I2S Block
+                  ScalerSetBit(P6_E7_AD_I2S_CTRL, ~_BIT7, 0x00);
+              
+                  // At Least Delay 2 Cycle of 1 / FS (= 32KHz)
+                  DELAY_XUS(70);
+              
+                  // Enable I2S Block
+                  ScalerSetBit(P6_E7_AD_I2S_CTRL, ~_BIT7, _BIT7);
+              #endif
+1666   1      }
+1667          
+1668          #if(_DIGITAL_AUDIO_OUTPUT_ADJUST_VOLUME_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Handle Smapling Frequency Infomation in SPDIF format
+              // Input Value  : enumAudioSource, ucInputPort
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerAudioSpdifChannelStatusProc(EnumAudioInputSource enumAudioSource, BYTE ucInputPort)
+              {
+                  if(enumAudioSource == _DIGITAL_AUDIO)
+                  {
+                      ScalerAudioSpdifCheckIfSamplingFrequencyChange(ucInputPort);
+                  }
+                  else if(enumAudioSource == _LINE_IN_AUDIO)
+                  {
+                      ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_48KHZ);
+                  }
+              }
+              
+              //--------------------------------------------------
+              // Description  : Detect and Change Smapling Frequency Infomation in SPDIF format
+              // Input Value  : ucInputPort
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerAudioSpdifCheckIfSamplingFrequencyChange(BYTE ucInputPort)
+              {
+                  switch(ScalerAudioSamplingFreqDetect(ucInputPort))
+                  {
+                      case _AUDIO_FREQ_PACKET_32K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_32KHZ);
+              
+C51 COMPILER V9.60.0.0   SCALERAUDIO                                                       10/18/2025 16:24:50 PAGE 29  
+
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_44_1K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_44_1KHZ);
+              
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_48K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_48KHZ);
+              
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_88_2K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_88_2KHZ);
+              
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_96K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_96KHZ);
+              
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_176_4K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_176_4KHZ);
+              
+                          break;
+              
+                      case _AUDIO_FREQ_PACKET_192K:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_192KHZ);
+              
+                          break;
+              
+                      default:
+              
+                          ScalerSetBit(P6_E2_AD_SPDIF_CS_0, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _AUDIO_SPDIF_FS_NOT_INDICA
+             -TED);
+              
+                          break;
+                  }
+              }
+              #endif
+1745          #endif // End of #if(_AUDIO_SUPPORT == _ON)
+1746          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2684    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       7
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

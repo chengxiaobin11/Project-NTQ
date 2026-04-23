@@ -1,0 +1,373 @@
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SYSINT
+OBJECT MODULE PLACED IN .\Output\RL6369\SysInt.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\System\Code\SysInt.c LARGE OPTIMIZE(9,SPEED) INCDIR(.\Output\RL63
+                    -69;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Header;.\Kernel\Scaler\ScalerCo
+                    -mmonFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scale
+                    -r\ScalerFunction\Lib\Header;.\Kernel\Scaler\RL6369_Series_Scaler\Header;.\Kernel\Scaler\RL6369_Series_Scaler\Lib\Header;
+                    -.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User
+                    -\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header)
+                    - DEFINE(_PROJECT=_RL6369_PROJECT,_SCALER_TYPE=_RL6369_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6369\SysInt.lst) TABS(
+                    -2) OBJECT(.\Output\RL6369\SysInt.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : SysInt.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          #define __SYSTEM_INT__
+  17          
+  18          #include "SysInclude.h"
+*** WARNING C318 IN LINE 21 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Project\Header\RL6369
+             -_Project.h: can't open file 'SG_ProjectDefine.h'
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Option.h: unknown identifier
+*** WARNING C322 IN LINE 22 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
+             -onfig_Pre_Check.h: unknown identifier
+*** WARNING C320 IN LINE 79 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
+             -onfig_Pre_Check.h: "_PANEL_PIXEL_TYPE should be defined at Panel.h"
+*** WARNING C322 IN LINE 75 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_D
+             -efault.h: unknown identifier
+*** WARNING C317 IN LINE 715 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD0_CONNECT'
+*** WARNING C317 IN LINE 716 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD1_CONNECT'
+*** WARNING C317 IN LINE 717 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD2_CONNECT'
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 2   
+
+*** WARNING C317 IN LINE 732 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D0_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 733 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D1_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 734 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
+             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D2_DP_SOURCE_POWER'
+*** WARNING C322 IN LINE 55 OF .\User\RTD Series\RTD2014Osd\Header\RTD2014TimerEventIDUser.h: unknown identifier
+*** WARNING C320 IN LINE 113 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Config_Check.h: "_FRC_SUPPORT Should Be _ON!!!"
+*** WARNING C320 IN LINE 256 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Config_Check.h: "_YPEAKING_SUPPORT and _ULTRA_VIVID_SUPPORT Should Same Setting!!!"
+*** WARNING C320 IN LINE 994 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Config_Check.h: "_DVI_DE_ONLY_SUPPORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 998 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
+             -t_Config_Check.h: "_HDMI_FROM_DVI_CONNECT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1002 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
+             -ct_Config_Check.h: "_HDMI_FREESYNC_SUPPORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
+             -ct_Config_Check.h: "Type-C Can't Work Under DP OFF Case ~ !!"
+*** WARNING C320 IN LINE 1592 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
+             -ct_Config_Check.h: "INPUTCLOCK_RANGE_DP and _INPUTCLOCK_RANG_HDMI Should <= 225M when _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPO
+             -RT is _OFF!!!"
+*** WARNING C320 IN LINE 34 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
+             -onfig_Check.h: "_PANEL_PIXEL_CLOCK_MAX_KHZ Should Be Under 225M When _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF"
+*** WARNING C320 IN LINE 537 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_
+             -Config_Check.h: "_PANEL_DV_TOTAL_MAX Should Be Larger than (DVTotal * FreeSync Vfreq Ratio)!"
+*** WARNING C320 IN LINE 244 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "D0 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
+             -OT_EXIST"
+*** WARNING C320 IN LINE 270 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "D1 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
+             -OT_EXIST"
+*** WARNING C320 IN LINE 343 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "D0 SMBUS IIC Not Defined When D0 Port Controller = 5400"
+*** WARNING C320 IN LINE 347 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "D1 SMBUS IIC Not Defined When D1 Port Controller = 5400"
+*** WARNING C320 IN LINE 358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "'_D0_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D0_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
+             -OLLER_NONE' !!!"
+*** WARNING C320 IN LINE 362 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
+             -nfig_Check.h: "'_D1_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D1_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
+             -OLLER_NONE' !!!"
+*** WARNING C320 IN LINE 1004 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
+             -onfig_Check.h: "Pinshare Setting Should be Set to Audio HPOUT R/L When _DAC_HP_OUTPUT_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1014 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
+             -onfig_Check.h: "Pinshare Setting Should be Set to Audio LINE_IN R/L When _LINE_IN_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1025 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
+             -onfig_Check.h: "Pinshare Setting Should be Set to Audio SPEAKER_OUTPUT R/L When _DAC_SPEAKER_OUTPUT_SUPPORT Support _ON"
+*** WARNING C322 IN LINE 54 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Debug.h
+             -: unknown identifier
+*** ERROR C136 IN LINE 563 OF .\Kernel\System\Header\SysInclude.h: invalid dimension size: [0]
+  19          
+  20          //****************************************************************************
+  21          // DEFINITIONS / MACROS
+  22          //****************************************************************************
+  23          
+  24          //****************************************************************************
+  25          // STRUCT / TYPE / ENUM DEFINITTIONS
+  26          //****************************************************************************
+  27          
+  28          //****************************************************************************
+  29          // CODE TABLES
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 3   
+
+  30          //****************************************************************************
+  31          
+  32          //****************************************************************************
+  33          // VARIABLE DECLARATIONS
+  34          //****************************************************************************
+  35          // Backup for Burst Write Bug
+  36          BYTE g_ucBackup_EXINT0;
+  37          BYTE g_ucBackup_EXINT1;
+  38          BYTE g_ucBackup_SERIAL;
+  39          
+  40          //****************************************************************************
+  41          // FUNCTION DECLARATIONS
+  42          //****************************************************************************
+  43          void SysEXINT0(void);
+  44          void SysEXINT1(void);
+  45          #if(_USB3_RETIMER_SUPPORT == _ON)
+              void SysEXINT3(void);
+              #endif
+  48          void SysUartSerialPortIntProc(void);
+  49          
+  50          //****************************************************************************
+  51          // FUNCTION DEFINITIONS
+  52          //****************************************************************************
+  53          //--------------------------------------------------
+  54          // Description  : Interrupt 0 Process
+  55          // Input Value  : None
+  56          // Output Value : None
+  57          //--------------------------------------------------
+  58          void SysEXINT0(void)    interrupt 0 using 1
+  59          {
+  60   1          // Backup for Burst Write Bug
+  61   1          g_ucBackup_EXINT0 = MCU_FFF4_SCA_INF_ADDR;
+  62   1      
+  63   1      #if(_DP_SUPPORT == _ON)
+                  if(ScalerDpAuxJudgeHandler_EXINT0() == _TRUE)
+                  {
+                      // Reload Backup for Burst Write Bug
+                      MCU_FFF4_SCA_INF_ADDR = g_ucBackup_EXINT0;
+              
+                      return;
+                  }
+              #endif
+  72   1      
+  73   1      #if(_DP_SUPPORT == _ON)
+                  ScalerDpIntHandler_EXINT0();
+              #endif
+  76   1      
+  77   1      #if(_DISPLAY_PREVENT_GARBAGE_METHOD == _GARBAGE_PREVENT_BY_BACKLIGHT)
+                  ScalerGlobalPreventGarbageByBacklight_EXINT0();
+              #endif
+  80   1      
+  81   1      #if((_OD_SUPPORT == _ON) && (_FRC_SUPPORT == _ON))
+                  // DEN_Start
+                  ScalerODIntHandler_EXINT0();
+              #endif
+  85   1      
+  86   1      #if((_MOTION_BLUR_REDUCTION_SUPPORT == _ON) && (_DRR_MOTION_BLUR_REDUCTION_SUPPORT == _ON))
+                  // DEN_Stop
+                  ScalerMbrIntHandlerDENStop_EXINT0();
+                  // DVS
+                  ScalerMbrIntHandlerDVS_EXINT0();
+              #endif
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 4   
+
+  92   1      
+  93   1      #if(_MHL_SUPPORT == _ON)
+                  ScalerMHLIntHandler_EXINT0();
+              #endif
+  96   1      
+  97   1      #if(_HDCP_2_2_SUPPORT == _ON)
+                  ScalerHdcp2IntHandler_EXINT0();
+              #endif
+ 100   1      
+ 101   1      #if(_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON)
+ 102   1      
+ 103   1      #if(_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)
+                  ScalerTypeCIntHandler_EXINT0();
+              #endif
+ 106   1      
+ 107   1      #endif
+ 108   1      
+ 109   1      #if((_DVI_SUPPORT == _ON) || (_HDMI_SUPPORT == _ON))
+              
+              #if(_HDMI_CEC_SUPPORT == _ON)
+                  ScalerCecIntHandler_EXINT0();
+              #endif
+              
+                  if((GET_POWER_STATUS() != _POWER_STATUS_SAVING) && (GET_POWER_STATUS() != _POWER_STATUS_OFF))
+                  {
+                      ScalerTMDSIntHandler_EXINT0();
+                  }
+                  else
+                  {
+                      ScalerTMDSPSIntHandler_EXINT0();
+                  }
+              
+              #endif
+ 125   1      
+ 126   1      #if(_PANEL_STYLE == _PANEL_VBO)
+                  ScalerDisplayVboIntHandler_EXINT0();
+              #elif(_PANEL_STYLE == _PANEL_DPTX)
+              #if((_PANEL_DPTX_HPD_DETECT == _ON) && (_PANEL_DPTX_IRQ_HPD_DETECT == _ON))
+                  ScalerDisplayDPTxIrqIntHandler_EXINT0();
+              #endif
+              #endif
+ 133   1      
+ 134   1      #if(_DP_TX_SUPPORT == _ON)
+                  ScalerDpTxIntHandle_EXINT0();
+              #endif
+ 137   1      
+ 138   1      #if(_EMBEDDED_DP_TX_SUPPORT == _ON)
+                  ScalerEmbeddedDpTxIntHandle_EXINT0();
+              #endif
+ 141   1      
+ 142   1      #if(_IR_SUPPORT == _IR_HW_SUPPORT)
+                  ScalerIRHWModeIntHandler_EXINT0();
+              #endif
+ 145   1      
+ 146   1      #if(_LC_TANK_SUPPORT == _ON)
+              #if(_XTALESS_SUPPORT == _ON)
+                  ScalerLCTankDpllRegulation_EXINT0();
+              #endif
+              #endif
+ 151   1      
+ 152   1      #if(_AUDIO_SUPPORT == _ON)
+ 153   1      #if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 5   
+
+                  ScalerAudioTtsIntHandler_EXINT0();
+              #endif // End of #if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+ 156   1      #endif
+ 157   1      
+ 158   1      #if(_DP_SUPPORT == _ON)
+                  ScalerDpExitIntSetting_EXINT0();
+              #endif
+ 161   1      
+ 162   1          // Reload Backup for Burst Write Bug
+ 163   1          MCU_FFF4_SCA_INF_ADDR = g_ucBackup_EXINT0;
+ 164   1      }
+ 165          
+ 166          //--------------------------------------------------
+ 167          // Description  : Interrupt 1 Process
+ 168          // Input Value  : None
+ 169          // Output Value : None
+ 170          //--------------------------------------------------
+ 171          void SysEXINT1(void)    interrupt 2 using 2
+ 172          {
+ 173   1          // Backup for Burst Write Bug
+ 174   1          g_ucBackup_EXINT1 = MCU_FFF4_SCA_INF_ADDR;
+ 175   1      
+ 176   1          // User Case for adding EXT_INT1 function
+ 177   1      #if(_EXT_INT1_SUPPORT == _ON)
+                  if((MCU_FFB9_EXT_INT1_CONTROL & _BIT3) == _BIT3)
+                  {
+                      // Clear int1_status flag
+                      MCU_FFB9_EXT_INT1_CONTROL |= _BIT3;
+                      UserInterfaceEXTINT1Handler_EXINT1();
+                  }
+              #endif
+ 185   1      
+ 186   1      #if((_DVI_SUPPORT == _ON) || (_HDMI_SUPPORT == _ON))
+                  ScalerSyncDdcDetect_EXINT1();
+              #endif
+ 189   1      
+ 190   1      #if(_FW_UPDATE_PROCESS_SUPPORT == _ON)
+                  if((bit)UserCommonFwUpdateGetStatus_EXINT1() == _TRUE)
+                  {
+                      UserCommonFwUpdateIntProc_EXINT1();
+                  }
+              #if(_FW_UPDATE_DDCCI_SEL == _FW_UPDATE_SEL_DDCCI0)
+                  else
+              #endif
+              #endif
+ 199   1          {
+ 200   2      #if(_DEBUG_MESSAGE_SUPPORT == _ON)
+                      ScalerDebugIntProc_EXINT1();
+              #else
+ 203   2      
+ 204   2      #if(_DDCCI_CODE_REDUCTION == _OFF)
+ 205   2              if((bit)UserCommonInterfaceGetDdcciStatus_EXINT1() == _TRUE)
+ 206   2              {
+ 207   3                  UserCommonInterfaceDdcciIntGetData_EXINT1();
+ 208   3              }
+ 209   2              else
+ 210   2      #endif
+ 211   2              {
+ 212   3                  ScalerDebugIntProc_EXINT1();
+ 213   3              }
+ 214   2      #endif
+ 215   2          }
+C51 COMPILER V9.60.0.0   SYSINT                                                            04/23/2026 10:22:06 PAGE 6   
+
+ 216   1      
+ 217   1      #if(_AUTO_TEST_SUPPORT == _ON)
+                  SysAutotestIntProc_EXINT1();
+              #endif
+ 220   1      
+ 221   1          // Reload Backup for Burst Write Bug
+ 222   1          MCU_FFF4_SCA_INF_ADDR = g_ucBackup_EXINT1;
+ 223   1      }
+ 224          
+ 225          #if(_USB3_RETIMER_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Interrupt 3 Process
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void SysEXINT3(void)    interrupt 9
+              {
+                  ScalerUSB3RetimerIntHandler_EXINT3();
+              
+                  EXIF &= ~_BIT5;
+              
+                  MCU_FFC2_IRQ_PRIORITY_1 = ((MCU_FFC2_IRQ_PRIORITY_1 & ~(_BIT7 | _BIT6)) | 0x00);
+                  MCU_FFC2_IRQ_PRIORITY_1 = ((MCU_FFC2_IRQ_PRIORITY_1 & ~(_BIT7 | _BIT6)) | _BIT7);
+              }
+              #endif
+ 241          
+ 242          //--------------------------------------------------
+ 243          // Description  : Serial Port0 Interrupt Process
+ 244          // Input Value  : None
+ 245          // Output Value : None
+ 246          //--------------------------------------------------
+ 247          void SysUartSerialPortIntProc(void)    interrupt 4
+ 248          {
+ 249   1          // Backup for Burst Write Bug
+ 250   1          g_ucBackup_SERIAL = MCU_FFF4_SCA_INF_ADDR;
+ 251   1      
+ 252   1      #if(_UART_SUPPORT == _ON)
+                  if(GET_UART_TRANSMIT_STATUS() == _TRUE)
+                  {
+                      CLR_UART_TRANSMIT_STATUS();
+                  }
+              
+                  UserInterfaceUartIntHandler_SERIALPORT();
+              #endif
+ 260   1      
+ 261   1          // Reload Backup for Burst Write Bug
+ 262   1          MCU_FFF4_SCA_INF_ADDR = g_ucBackup_SERIAL;
+ 263   1      }
+ 264          
+
+C51 COMPILATION COMPLETE.  38 WARNING(S),  1 ERROR(S)

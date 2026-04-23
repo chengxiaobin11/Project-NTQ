@@ -1,0 +1,3404 @@
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SCALERDPRX1_INT_SEPTPHY
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\ScalerDPRx1_INT_SeptPhy.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\Scaler\ScalerFunction\Code\ScalerDPRx1_INT_SeptPhy.c LARGE OPTIMI
+                    -ZE(9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kerne
+                    -l\System\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\Scaler
+                    -Function\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel
+                    -\Scaler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common
+                    -\Lib\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\H
+                    -eader;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Fac
+                    -tory\Header) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Proje
+                    -ct\ScalerDPRx1_INT_SeptPhy.lst) TABS(2) OBJECT(.\Output\RL6449_Project\ScalerDPRx1_INT_SeptPhy.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : ScalerDPRx1_INT_SeptPhy.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #include "ScalerFunctionInclude.h"
+  18          
+  19          //****************************************************************************
+  20          // DEFINITIONS / MACROS
+  21          //****************************************************************************
+  22          
+  23          //****************************************************************************
+  24          // STRUCT / TYPE / ENUM DEFINITTIONS
+  25          //****************************************************************************
+  26          
+  27          //****************************************************************************
+  28          // CODE TABLES
+  29          //****************************************************************************
+  30          
+  31          //****************************************************************************
+  32          // VARIABLE DECLARATIONS
+  33          //****************************************************************************
+  34          
+  35          //****************************************************************************
+  36          // FUNCTION DECLARATIONS
+  37          //****************************************************************************
+  38          #if(_D1_DP_EXIST == _ON)
+  39          BYTE ScalerDpRx1GetDpcdBitInfo_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPor
+             -tL, BYTE ucDpcdBit);
+  40          BYTE ScalerDpRx1GetDpcdInfo_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL)
+             -;
+  41          void ScalerDpRx1SetDpcdBitValue_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPo
+             -rtL, BYTE ucNotDpcdBit, BYTE ucDpcdBit);
+  42          void ScalerDpRx1SetDpcdValue_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL
+             -, BYTE ucDpcdValue);
+  43          void ScalerDpRx1SinkStatusSet_EXINT0(EnumDpSinkReceivePort enumReceiverPort, EnumDpSinkStatus enumInSync);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 2   
+
+  44          BYTE ScalerDpRx1TrainingPattern1_EXINT0(EnumDpLinkTrainingType enumDpLtType);
+  45          BYTE ScalerDpRx1TrainingPattern2_EXINT0(EnumDpLinkTrainingType enumDpLtType);
+  46          void ScalerDpRx1TrainingPatternEnd_EXINT0(void);
+  47          
+  48          #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+              void ScalerDpRx1HDCPResetDpcdInfo_EXINT0(void);
+              void ScalerDpRx1HDCPResetKsvFifoToFirst_EXINT0(void);
+              void ScalerDpRx1HDCPSetKsvFifo_EXINT0(void);
+              #endif
+  53          
+  54          #if(_WD_TIMER_INT_SUPPORT == _ON)
+  55          BYTE ScalerDpRx1GetDpcdInfo_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL);
+  56          #if(_DP_HDCP_2_2_SUPPORT == _ON)
+  57          BYTE ScalerDpRx1GetDpcdBitInfo_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPort
+             -L, BYTE ucDpcdBit);
+  58          void ScalerDpRx1SetDpcdValue_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL,
+             - BYTE ucDpcdValue);
+  59          #endif
+  60          #endif
+  61          
+  62          BYTE ScalerDpRx1Tp1Check_EXINT0(EnumDpLinkTrainingType enumDpLtType);
+  63          BYTE ScalerDpRx1Tp2Check_EXINT0(EnumDpLinkTrainingType enumDpLtType);
+  64          
+  65          void ScalerDpRx1AdjustLaneFLDBand_EXINT0(BYTE ucDpRx1LaneNumber, WORD usVCOBandDiff);
+  66          BYTE ScalerDpRx1DFECheck_EXINT0(void);
+  67          void ScalerDpRx1IntHandler_EXINT0(void);
+  68          void ScalerDpRx1SetDFEInitial_EXINT0(void);
+  69          BYTE ScalerDpRx1CheckSourceOUI_EXINT0(EnumDpRxCheckSourceOUI enumDpRx1CheckSourceOUI);
+  70          
+  71          #if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
+              void ScalerDpRx1MstAutoSwitch_EXINT0(void);
+              #if(_D0_DP_EXIST == _ON)
+              void ScalerDpRx1SetHotPlugEvent_EXINT0(EnumDpHotPlugAssertType enumHpdType);
+              void ScalerDpRx1SetBranchDeviceSpecificField_EXINT0(EnumDpVersionType enumDpVersion);
+              void ScalerDpRx1ClearBranchDeviceSpecificField_EXINT0(void);
+              #endif
+              #endif
+  79          
+  80          #endif
+  81          
+  82          //****************************************************************************
+  83          // FUNCTION DEFINITIONS
+  84          //****************************************************************************
+  85          #if(_D1_DP_EXIST == _ON)
+  86          //--------------------------------------------------
+  87          // Description  : Get DPCD Table Information
+  88          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+  89          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+  90          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+  91          // Output Value : DPCD Information
+  92          //--------------------------------------------------
+  93          BYTE ScalerDpRx1GetDpcdBitInfo_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPor
+             -tL, BYTE ucDpcdBit) using 1
+  94          {
+  95   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+  96   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+  97   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+  98   1      
+  99   1          return ScalerGetBit_EXINT(PBA_C4_DPCD_DATA_PORT, ucDpcdBit);
+ 100   1      }
+ 101          //--------------------------------------------------
+ 102          // Description  : Get DPCD Table Information in INT0
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 3   
+
+ 103          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 104          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 105          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 106          // Output Value : DPCD Information
+ 107          //--------------------------------------------------
+ 108          BYTE ScalerDpRx1GetDpcdInfo_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL)
+             - using 1
+ 109          {
+ 110   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 111   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 112   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 113   1      
+ 114   1          return ScalerGetByte_EXINT(PBA_C4_DPCD_DATA_PORT);
+ 115   1      }
+ 116          //--------------------------------------------------
+ 117          // Description  : Set DPCD Table Information in INT0
+ 118          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 119          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 120          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 121          //                ucDpcdValue --> DPCD Value
+ 122          // Output Value : None
+ 123          //--------------------------------------------------
+ 124          void ScalerDpRx1SetDpcdBitValue_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPo
+             -rtL, BYTE ucNotDpcdBit, BYTE ucDpcdBit) using 1
+ 125          {
+ 126   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 127   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 128   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 129   1          ScalerSetBit_EXINT(PBA_C4_DPCD_DATA_PORT, ~(~ucNotDpcdBit), ucDpcdBit);
+ 130   1      }
+ 131          //--------------------------------------------------
+ 132          // Description  : Set DPCD Table Information in INT0
+ 133          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 134          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 135          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 136          //                ucDpcdValue --> DPCD Value
+ 137          // Output Value : None
+ 138          //--------------------------------------------------
+ 139          void ScalerDpRx1SetDpcdValue_EXINT0(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL
+             -, BYTE ucDpcdValue) using 1
+ 140          {
+ 141   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 142   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 143   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 144   1          ScalerSetByte_EXINT(PBA_C4_DPCD_DATA_PORT, ucDpcdValue);
+ 145   1      }
+ 146          //--------------------------------------------------
+ 147          // Description  : DP Sink Status Setting in EXINT
+ 148          // Input Value  : Receive Port, Sync Status
+ 149          // Output Value : None
+ 150          //--------------------------------------------------
+ 151          void ScalerDpRx1SinkStatusSet_EXINT0(EnumDpSinkReceivePort enumReceiverPort, EnumDpSinkStatus enumInSync) 
+             -using 1
+ 152          {
+ 153   1          if(enumInSync == _DP_SINK_IN_SYNC)
+ 154   1          {
+ 155   2              if(enumReceiverPort == _DP_SINK_REVEICE_PORT0)
+ 156   2              {
+ 157   3                  // Set Receive Port 0 in Sync
+ 158   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x05, (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x
+             -05) | _BIT0));
+ 159   3              }
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 4   
+
+ 160   2              else if(enumReceiverPort == _DP_SINK_REVEICE_PORT1)
+ 161   2              {
+ 162   3                  // Set Receive Port 1 in Sync
+ 163   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x05, (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x
+             -05) | _BIT1));
+ 164   3              }
+ 165   2          }
+ 166   1          else
+ 167   1          {
+ 168   2              if(enumReceiverPort == _DP_SINK_REVEICE_PORT0)
+ 169   2              {
+ 170   3                  // Set Receive Port 0 Out of Sync
+ 171   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x05, (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x
+             -05) & ~_BIT0));
+ 172   3              }
+ 173   2              else if(enumReceiverPort == _DP_SINK_REVEICE_PORT1)
+ 174   2              {
+ 175   3                  // Set Receive Port 1 Out of Sync
+ 176   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x05, (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x
+             -05) & ~_BIT1));
+ 177   3              }
+ 178   2          }
+ 179   1      }
+ 180          //--------------------------------------------------
+ 181          // Description  : Check Dp Training Pattern 1
+ 182          // Input Value  : Normal or Fake LT
+ 183          // Output Value : TRUE --> TP1 Pass
+ 184          //--------------------------------------------------
+ 185          BYTE ScalerDpRx1TrainingPattern1_EXINT0(EnumDpLinkTrainingType enumDpLtType) using 1
+ 186          {
+ 187   1          if(ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x00, 0x0E, _BIT7) == _BIT7)
+ 188   1          {
+ 189   2      #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _OFF)
+ 190   2              if(g_ucDpRx1LinkRate > _D1_DP_LINK_CLK_RATE)
+ 191   2      #else
+                      if(g_ucDpRx1LinkRate > ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x22, 0x01))
+              #endif
+ 194   2              {
+ 195   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x00);
+ 196   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+ 197   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x80);
+ 198   3      
+ 199   3                  return _FALSE;
+ 200   3              }
+ 201   2          }
+ 202   1          else
+ 203   1          {
+ 204   2              if(g_ucDpRx1LinkRate > ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x00, 0x01))
+ 205   2              {
+ 206   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x00);
+ 207   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+ 208   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x80);
+ 209   3      
+ 210   3                  return _FALSE;
+ 211   3              }
+ 212   2          }
+ 213   1      
+ 214   1          ScalerDpRx1ErrorCounterDisable_EXINT0();
+ 215   1      
+ 216   1          g_ucDpRx1Tp1PermitSwingLevel0 = ScalerDpRx1CheckSourceOUI_EXINT0(_LT_TP1_PERMIT_SWING_LEVEL_0);
+ 217   1      
+ 218   1          if(enumDpLtType == _DP_NORMAL_LT)
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 5   
+
+ 219   1          {
+ 220   2              if((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x03) & (_BIT1 | _BIT0)) >= _BIT0)
+ 221   2              {
+ 222   3                  ScalerDpRx1Tp1SetPhy_EXINT0(_DP_NF_REF_XTAL);
+ 223   3              }
+ 224   2              else
+ 225   2              {
+ 226   3      #if(_DP_LT_TP1_PERMIT_SWING_LEVEL_0_FOR_SPECIFIC_SOURCE_OUI == _ON)
+                          if(g_ucDpRx1Tp1PermitSwingLevel0 == _TRUE)
+                          {
+                              ScalerDpRx1Tp1SetPhy_EXINT0(_DP_NF_REF_XTAL);
+                          }
+                          else
+              #endif
+ 233   3                  {
+ 234   4                      if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 235   4                      {
+ 236   5      #if(_DP_HBR_RBR_LT_FORCE_MARGINAL_LINK == _OFF)
+              
+                                  ScalerDpRx1Tp1SetPhy_EXINT0(_DP_NF_REF_XTAL);
+              #endif
+ 240   5                      }
+ 241   4                  }
+ 242   3              }
+ 243   2          }
+ 244   1      
+ 245   1          ScalerDpRx1ErrorCounterEnable_EXINT0(enumDpLtType);
+ 246   1      
+ 247   1          if(ScalerDpRx1Tp1Check_EXINT0(enumDpLtType) == _TRUE)
+ 248   1          {
+ 249   2              return _TRUE;
+ 250   2          }
+ 251   1      
+ 252   1          return _FALSE;
+ 253   1      }
+ 254          //--------------------------------------------------
+ 255          // Description  : Check Dp Training Pattern 2
+ 256          // Input Value  : Normal or Fake LT
+ 257          // Output Value : TRUE --> TP2 Pass
+ 258          //--------------------------------------------------
+ 259          BYTE ScalerDpRx1TrainingPattern2_EXINT0(EnumDpLinkTrainingType enumDpLtType) using 1
+ 260          {
+ 261   1          ScalerDpRx1ErrorCounterDisable_EXINT0();
+ 262   1      
+ 263   1          if(enumDpLtType == _DP_NORMAL_LT)
+ 264   1          {
+ 265   2              ScalerDpRx1Tp2SetPhy_EXINT0();
+ 266   2          }
+ 267   1      
+ 268   1          ScalerDpRx1ErrorCounterEnable_EXINT0(enumDpLtType);
+ 269   1      
+ 270   1          if(ScalerDpRx1Tp2Check_EXINT0(enumDpLtType) == _TRUE)
+ 271   1          {
+ 272   2              return _TRUE;
+ 273   2          }
+ 274   1      
+ 275   1          return _FALSE;
+ 276   1      }
+ 277          //--------------------------------------------------
+ 278          // Description  : Settings after Link Training Pass
+ 279          // Input Value  : None
+ 280          // Output Value : None
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 6   
+
+ 281          //--------------------------------------------------
+ 282          void ScalerDpRx1TrainingPatternEnd_EXINT0(void) using 1
+ 283          {
+ 284   1          switch(g_ucDpRx1LaneCount)
+ 285   1          {
+ 286   2              case _DP_ONE_LANE:
+ 287   2                  ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~(_BIT4 | _BIT3), _BIT3);
+ 288   2      
+ 289   2                  // Clear Lane1/2/3 Link status
+ 290   2                  ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x02, 0x02, ~(_BIT6 | _BIT5 | _BIT4), 0x00);
+ 291   2                  ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x02, 0x03, ~(_BIT6 | _BIT5 | _BIT4 | _BIT2 | _BIT1 | 
+             -_BIT0), 0x00);
+ 292   2      
+ 293   2                  break;
+ 294   2      
+ 295   2              case _DP_TWO_LANE:
+ 296   2                  ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~(_BIT4 | _BIT3), _BIT4);
+ 297   2      
+ 298   2                  // Clear Lane2/3 Link status
+ 299   2                  ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x02, 0x03, ~(_BIT6 | _BIT5 | _BIT4 | _BIT2 | _BIT1 | 
+             -_BIT0), 0x00);
+ 300   2      
+ 301   2                  break;
+ 302   2      
+ 303   2              case _DP_FOUR_LANE:
+ 304   2              default:
+ 305   2                  ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~(_BIT4 | _BIT3), (_BIT4 | _BIT3));
+ 306   2                  break;
+ 307   2          }
+ 308   1      
+ 309   1          // De-Skew Circuit Reset
+ 310   1          ScalerSetBit_EXINT(PB0_0E_DESKEW_PHY, ~(_BIT7 | _BIT6), 0x00);
+ 311   1          ScalerSetBit_EXINT(PB0_0E_DESKEW_PHY, ~(_BIT7 | _BIT6), _BIT6);
+ 312   1      
+ 313   1          if((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x01) & _BIT7) == _BIT7)
+ 314   1          {
+ 315   2              // Enable Enhancement Control Mode --> MAC
+ 316   2              ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~_BIT2, _BIT2);
+ 317   2          }
+ 318   1          else
+ 319   1          {
+ 320   2              // Disable Enhancement Control Mode --> MAC
+ 321   2              ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~_BIT2, 0x00);
+ 322   2          }
+ 323   1      
+ 324   1          if((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x02) & _BIT5) == _BIT5)
+ 325   1          {
+ 326   2              // Disable Scrambling
+ 327   2              ScalerSetBit_EXINT(PB0_07_SCRAMBLE_CTRL, ~_BIT5, _BIT5);
+ 328   2          }
+ 329   1          else
+ 330   1          {
+ 331   2              // Enable Scrambling
+ 332   2              ScalerSetBit_EXINT(PB0_07_SCRAMBLE_CTRL, ~_BIT5, 0x00);
+ 333   2          }
+ 334   1      }
+ 335          
+ 336          #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+              //--------------------------------------------------
+              // Description  : Reset Dp Rx HDCP info
+              // Input Value  : None
+              // Output Value : None
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 7   
+
+              //--------------------------------------------------
+              void ScalerDpRx1HDCPResetDpcdInfo_EXINT0(void) using 1
+              {
+              #if(_DP_HDCP_2_2_SUPPORT == _ON)
+                  // Clear RxStatus REAUTH_REQ and Link Intergrity Failure for HDCP 2.2
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x94, 0x93, (ScalerDpRx1GetDpcdInfo_EXINT0(0x06, 0x94, 0x93) & 0x
+             -E0));
+              #endif
+              
+                  // Check if nead to clear HDCP dpcd info
+                  if((ScalerDpRx1GetDpcdInfo_EXINT0(0x06, 0x80, 0x2A) != 0x00) || (ScalerDpRx1GetDpcdInfo_EXINT0(0x06, 0
+             -x80, 0x2B) != 0x00))
+                  {
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, 0x29, 0x00);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, 0x2A, 0x00);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, 0x2B, 0x00);
+              
+                      for(pData_EXINT[0] = 0; pData_EXINT[0] < 20; pData_EXINT[0]++)
+                      {
+                          ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, (0x14 + pData_EXINT[0]), 0x00);
+                      }
+              
+                      for(pData_EXINT[0] = 0; pData_EXINT[0] < 15; pData_EXINT[0]++)
+                      {
+                          ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, (0x2C + pData_EXINT[0]), 0x00);
+                      }
+              
+                      // Delay Time us [200,x] Waiting for R0 Calculate Finish
+                      DELAY_XUS_EXINT(200);
+              
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, 0x29, 0x02);
+                  }
+              }
+              //--------------------------------------------------
+              // Description  : Load KSV List to Rx KSV FIFO
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1HDCPResetKsvFifoToFirst_EXINT0(void) using 1
+              {
+                  for(g_usDpRx1HdcpKsvFifoOffset = 0; g_usDpRx1HdcpKsvFifoOffset < 15; g_usDpRx1HdcpKsvFifoOffset++)
+                  {
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, (0x2C + g_usDpRx1HdcpKsvFifoOffset), g_pucDpTxHdcpKsvFi
+             -fo[g_usDpRx1HdcpKsvFifoOffset]);
+                  }
+              }
+              //--------------------------------------------------
+              // Description  : Load KSV List to Rx KSV FIFO
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1HDCPSetKsvFifo_EXINT0(void) using 1
+              {
+                  for(pData_EXINT[0] = 0; pData_EXINT[0] < 15; pData_EXINT[0]++)
+                  {
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x06, 0x80, (0x2C + pData_EXINT[0]), g_pucDpTxHdcpKsvFifo[g_usDpRx1
+             -HdcpKsvFifoOffset + pData_EXINT[0]]);
+                  }
+              
+                  g_usDpRx1HdcpKsvFifoOffset += pData_EXINT[0];
+              }
+              
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 8   
+
+              #endif // End of #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+ 400          
+ 401          #if(_WD_TIMER_INT_SUPPORT == _ON)
+ 402          //--------------------------------------------------
+ 403          // Description  : Get DPCD Table Information in WDINT
+ 404          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 405          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 406          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 407          // Output Value : DPCD Information
+ 408          //--------------------------------------------------
+ 409          BYTE ScalerDpRx1GetDpcdInfo_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL) 
+             -using 3
+ 410          {
+ 411   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 412   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 413   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 414   1      
+ 415   1          return ScalerGetByte_EXINT(PBA_C4_DPCD_DATA_PORT);
+ 416   1      }
+ 417          
+ 418          #if(_DP_HDCP_2_2_SUPPORT == _ON)
+ 419          //--------------------------------------------------
+ 420          // Description  : Get DPCD Table Information in WDINT
+ 421          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 422          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 423          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 424          // Output Value : DPCD Information
+ 425          //--------------------------------------------------
+ 426          BYTE ScalerDpRx1GetDpcdBitInfo_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPort
+             -L, BYTE ucDpcdBit) using 3
+ 427          {
+ 428   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 429   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 430   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 431   1      
+ 432   1          return ScalerGetBit_EXINT(PBA_C4_DPCD_DATA_PORT, ucDpcdBit);
+ 433   1      }
+ 434          
+ 435          //--------------------------------------------------
+ 436          // Description  : Set DPCD Table Information in WDINT
+ 437          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 438          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 439          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 440          //                ucDpcdValue --> DPCD Value
+ 441          // Output Value : None
+ 442          //--------------------------------------------------
+ 443          void ScalerDpRx1SetDpcdValue_WDINT(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL,
+             - BYTE ucDpcdValue) using 3
+ 444          {
+ 445   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 446   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 447   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 448   1          ScalerSetByte_EXINT(PBA_C4_DPCD_DATA_PORT, ucDpcdValue);
+ 449   1      }
+ 450          
+ 451          #endif
+ 452          #endif
+ 453          
+ 454          //--------------------------------------------------
+ 455          // Description  : Check Dp Training Pattern 1
+ 456          // Input Value  : Normal or Fake LT
+ 457          // Output Value : TRUE --> TP1 Pass
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 9   
+
+ 458          //--------------------------------------------------
+ 459          BYTE ScalerDpRx1Tp1Check_EXINT0(EnumDpLinkTrainingType enumDpLtType) using 1
+ 460          {
+ 461   1          BYTE pucDpPhyLinkTrainingLevel[4];
+ 462   1          BYTE pucDpPhyLinkTrainingRequest[4];
+ 463   1          BYTE ucTP1NormalLTSwingLevel = 2;
+ 464   1          BYTE ucTP1RBRHBRFakeLTSwingLevel = 1;
+ 465   1      
+ 466   1      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                  BYTE ucTP1HBR2FakeLTSwingLevel = 2;
+              #else
+ 469   1          BYTE ucTP1HBR2FakeLTSwingLevel = 3;
+ 470   1      #endif
+ 471   1      
+ 472   1          BYTE ucFakeLTLaneCount = g_ucDpRx1LaneCount;
+ 473   1      
+ 474   1          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x00);
+ 475   1          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+ 476   1          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x80);
+ 477   1      
+ 478   1      #if(_DP_LT_TP1_PERMIT_SWING_LEVEL_0_FOR_SPECIFIC_SOURCE_OUI == _ON)
+                  if(g_ucDpRx1Tp1PermitSwingLevel0 == _TRUE)
+                  {
+                      ucTP1NormalLTSwingLevel = 0;
+                      ucTP1RBRHBRFakeLTSwingLevel = 0;
+                      ucTP1HBR2FakeLTSwingLevel = 0;
+                  }
+              #endif
+ 486   1      
+ 487   1          if(enumDpLtType == _DP_NORMAL_LT)
+ 488   1          {
+ 489   2              if((GET_DP_RX1_LINK_TRAINING_STATUS() != _DP_NORMAL_TRAINING_PATTERN_1_FAIL) &&
+ 490   2                 (GET_DP_RX1_LINK_TRAINING_STATUS() != _DP_FAKE_TRAINING_PATTERN_1_FAIL) &&
+ 491   2                 (g_bDpRx1Tp1Initial == _FALSE))
+ 492   2              {
+ 493   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x03, 0x00);
+ 494   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x04, 0x00);
+ 495   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x05, 0x00);
+ 496   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x06, 0x00);
+ 497   3      
+ 498   3                  g_ucDpRx1LinkRequest01 = 0x00;
+ 499   3                  g_ucDpRx1LinkRequest23 = 0x00;
+ 500   3      
+ 501   3      #if(_DP_HBR_RBR_LT_FORCE_MARGINAL_LINK == _ON)
+ 502   3                  SET_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR();
+ 503   3                  SET_DP_RX_D1_LANE1_MARGIN_LINK_HBR_RBR();
+ 504   3                  SET_DP_RX_D1_LANE2_MARGIN_LINK_HBR_RBR();
+ 505   3                  SET_DP_RX_D1_LANE3_MARGIN_LINK_HBR_RBR();
+ 506   3      #endif
+ 507   3                  g_bDpRx1Tp1Initial = _TRUE;
+ 508   3              }
+ 509   2      
+ 510   2              pucDpPhyLinkTrainingLevel[0] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x03);
+ 511   2              pucDpPhyLinkTrainingLevel[1] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x04);
+ 512   2              pucDpPhyLinkTrainingLevel[2] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x05);
+ 513   2              pucDpPhyLinkTrainingLevel[3] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x06);
+ 514   2      
+ 515   2      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                      for(pData_EXINT[0] = 0; pData_EXINT[0] <= 3; pData_EXINT[0]++)
+                      {
+                          if((pucDpPhyLinkTrainingLevel[pData_EXINT[0]] & (_BIT1 | _BIT0)) == 2)
+                          {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 10  
+
+                              if((pucDpPhyLinkTrainingLevel[pData_EXINT[0]] & _BIT2) == _BIT2)
+                              {
+                                  g_pucDpRx1MaxSwing[pData_EXINT[0]] = 2;
+                              }
+                              else
+                              {
+                                  g_pucDpRx1MaxSwing[pData_EXINT[0]] = 3;
+                              }
+                          }
+                      }
+              #endif
+ 531   2              for(pData_EXINT[0] = 0; pData_EXINT[0] <= 1; pData_EXINT[0]++)
+ 532   2              {
+ 533   3                  if((pucDpPhyLinkTrainingLevel[2 * pData_EXINT[0]] & (_BIT1 | _BIT0)) < 2)
+ 534   3                  {
+ 535   4      #if(_DP_LT_DIRECT_REQUEST_SWING_LEVEL_2 == _ON)
+ 536   4                      pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = 0x02;
+ 537   4      #else
+                              pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = (pucDpPhyLinkTrainingLevel[2 * pData_EXI
+             -NT[0]] & (_BIT1 | _BIT0)) + 0x01;
+              #endif
+ 540   4                  }
+ 541   3                  else
+ 542   3                  {
+ 543   4                      pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = 0x03;
+ 544   4                  }
+ 545   3      
+ 546   3                  if((pucDpPhyLinkTrainingLevel[(2 * pData_EXINT[0]) + 1] & (_BIT1 | _BIT0)) < 2)
+ 547   3                  {
+ 548   4      #if(_DP_LT_DIRECT_REQUEST_SWING_LEVEL_2 == _ON)
+ 549   4                      pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = 0x20;
+ 550   4      #else
+                              pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = ((pucDpPhyLinkTrainingLevel[(2 * p
+             -Data_EXINT[0]) + 1] << 4) & (_BIT5 | _BIT4)) + 0x10;
+              #endif
+ 553   4                  }
+ 554   3                  else
+ 555   3                  {
+ 556   4                      pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = 0x30;
+ 557   4                  }
+ 558   3              }
+ 559   2      
+ 560   2              g_ucDpRx1LinkStatus01 = 0;
+ 561   2              g_ucDpRx1LinkStatus23 = 0;
+ 562   2      
+ 563   2              switch(g_ucDpRx1LaneCount)
+ 564   2              {
+ 565   3                  case _DP_FOUR_LANE:
+ 566   3      
+ 567   3                      // Read Back Lane3 Vth
+ 568   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE3 << 6));
+ 569   3      
+ 570   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 571   3      
+ 572   3                      // Lane3 Check
+ 573   3                      if(((GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 574   3                         ((GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 575   3                         ((GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 576   3                         ((GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 11  
+
+             -CRC_3, _BIT7) == _BIT7)))
+ 577   3                      {
+ 578   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 579   4                          {
+ 580   5                              if(((pucDpPhyLinkTrainingLevel[3] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[3] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 581   5                              {
+ 582   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x10;
+ 583   6                              }
+ 584   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 585   5                              {
+ 586   6                                  if((GET_DP_RX_D1_LANE3_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 587   6                                     ((pucDpPhyLinkTrainingLevel[3] & (_BIT1 | _BIT0)) >= ((g_ucDpRx1LinkRequest
+             -23 >> 4) & (_BIT1 | _BIT0))))
+ 588   6                                  {
+ 589   7                                      g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x10;
+ 590   7                                  }
+ 591   6                                  else
+ 592   6                                  {
+ 593   7                                      g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTr
+             -ainingRequest[3]);
+ 594   7                                      CLR_DP_RX_D1_LANE3_MARGIN_LINK_HBR_RBR();
+ 595   7                                  }
+ 596   6                              }
+ 597   5                              else
+ 598   5                              {
+ 599   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[3]);
+ 600   6                              }
+ 601   5                          }
+ 602   4                          else
+ 603   4                          {
+ 604   5                              if(((pucDpPhyLinkTrainingLevel[3] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[3] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 605   5                              {
+ 606   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x10;
+ 607   6                              }
+ 608   5                              else
+ 609   5                              {
+ 610   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[3]);
+ 611   6                              }
+ 612   5                          }
+ 613   4                      }
+ 614   3                      else if(((pucDpPhyLinkTrainingLevel[3] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[3
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 615   3                      {
+ 616   4                          g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[3]);
+ 617   4                      }
+ 618   3      
+ 619   3                      // Read Back Lane2 Vth
+ 620   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE2 << 6));
+ 621   3      
+ 622   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 623   3      
+ 624   3                      // Lane2 Check
+ 625   3                      if(((GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 626   3                         ((GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 627   3                         ((GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 12  
+
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 628   3                         ((GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 629   3                      {
+ 630   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 631   4                          {
+ 632   5                              if(((pucDpPhyLinkTrainingLevel[2] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[2] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 633   5                              {
+ 634   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x01;
+ 635   6                              }
+ 636   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 637   5                              {
+ 638   6                                  if((GET_DP_RX_D1_LANE2_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 639   6                                     ((pucDpPhyLinkTrainingLevel[2] & (_BIT1 | _BIT0)) >= (g_ucDpRx1LinkRequest2
+             -3 & (_BIT1 | _BIT0))))
+ 640   6                                  {
+ 641   7                                      g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x01;
+ 642   7                                  }
+ 643   6                                  else
+ 644   6                                  {
+ 645   7                                      g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTr
+             -ainingRequest[2]);
+ 646   7                                      CLR_DP_RX_D1_LANE2_MARGIN_LINK_HBR_RBR();
+ 647   7                                  }
+ 648   6                              }
+ 649   5                              else
+ 650   5                              {
+ 651   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[2]);
+ 652   6                              }
+ 653   5                          }
+ 654   4                          else
+ 655   4                          {
+ 656   5                              if(((pucDpPhyLinkTrainingLevel[2] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[2] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 657   5                              {
+ 658   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x01;
+ 659   6                              }
+ 660   5                              else
+ 661   5                              {
+ 662   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[2]);
+ 663   6                              }
+ 664   5                          }
+ 665   4                      }
+ 666   3                      else if(((pucDpPhyLinkTrainingLevel[2] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[2
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 667   3                      {
+ 668   4                          g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[2]);
+ 669   4                      }
+ 670   3      
+ 671   3                      // Read Back Lane1 Vth
+ 672   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE1 << 6));
+ 673   3      
+ 674   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 675   3      
+ 676   3                      // Lane1 Check
+ 677   3                      if(((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 678   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 13  
+
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 679   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 680   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 681   3                      {
+ 682   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 683   4                          {
+ 684   5                              if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[1] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 685   5                              {
+ 686   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 687   6                              }
+ 688   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 689   5                              {
+ 690   6                                  if((GET_DP_RX_D1_LANE1_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 691   6                                     ((pucDpPhyLinkTrainingLevel[1] & (_BIT1 | _BIT0)) >= ((g_ucDpRx1LinkRequest
+             -01 >> 4) & (_BIT1 | _BIT0))))
+ 692   6                                  {
+ 693   7                                      g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 694   7                                  }
+ 695   6                                  else
+ 696   6                                  {
+ 697   7                                      g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTr
+             -ainingRequest[1]);
+ 698   7                                      CLR_DP_RX_D1_LANE1_MARGIN_LINK_HBR_RBR();
+ 699   7                                  }
+ 700   6                              }
+ 701   5                              else
+ 702   5                              {
+ 703   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[1]);
+ 704   6                              }
+ 705   5                          }
+ 706   4                          else
+ 707   4                          {
+ 708   5                              if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[1] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 709   5                              {
+ 710   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 711   6                              }
+ 712   5                              else
+ 713   5                              {
+ 714   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[1]);
+ 715   6                              }
+ 716   5                          }
+ 717   4                      }
+ 718   3                      else if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 719   3                      {
+ 720   4                          g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[1]);
+ 721   4                      }
+ 722   3      
+ 723   3                      // Read Back Lane0 Vth
+ 724   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+ 725   3      
+ 726   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 727   3      
+ 728   3                      // Lane0 Check
+ 729   3                      if(((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 14  
+
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 730   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 731   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 732   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 733   3                      {
+ 734   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 735   4                          {
+ 736   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 737   5                              {
+ 738   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 739   6                              }
+ 740   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 741   5                              {
+ 742   6                                  if((GET_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 743   6                                     ((pucDpPhyLinkTrainingLevel[0] & (_BIT1 | _BIT0)) >= (g_ucDpRx1LinkRequest0
+             -1 & (_BIT1 | _BIT0))))
+ 744   6                                  {
+ 745   7                                      g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 746   7                                  }
+ 747   6                                  else
+ 748   6                                  {
+ 749   7                                      g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTr
+             -ainingRequest[0]);
+ 750   7                                      CLR_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR();
+ 751   7                                  }
+ 752   6                              }
+ 753   5                              else
+ 754   5                              {
+ 755   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 756   6                              }
+ 757   5                          }
+ 758   4                          else
+ 759   4                          {
+ 760   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 761   5                              {
+ 762   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 763   6                              }
+ 764   5                              else
+ 765   5                              {
+ 766   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 767   6                              }
+ 768   5                          }
+ 769   4                      }
+ 770   3                      else if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 771   3                      {
+ 772   4                          g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[0]);
+ 773   4                      }
+ 774   3      
+ 775   3      #if(_DP_LT_VALID_LANE_REQUEST_THE_SAME_LEVEL == _ON)
+                              if(((g_ucDpRx1LinkStatus01 & 0x11) != 0x11) || ((g_ucDpRx1LinkStatus23 & 0x11) != 0x11))
+                              {
+                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[0]);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 15  
+
+                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[1]);
+                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[2]);
+                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[3]);
+                              }
+              #endif
+ 784   3                      break;
+ 785   3      
+ 786   3                  case _DP_TWO_LANE:
+ 787   3      
+ 788   3                      // Read Back Lane1 Vth
+ 789   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE1 << 6));
+ 790   3      
+ 791   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 792   3      
+ 793   3                      // Lane1 Check
+ 794   3                      if(((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 795   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 796   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 797   3                         ((GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 798   3                      {
+ 799   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 800   4                          {
+ 801   5                              if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[1] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 802   5                              {
+ 803   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 804   6                              }
+ 805   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 806   5                              {
+ 807   6                                  if((GET_DP_RX_D1_LANE1_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 808   6                                     ((pucDpPhyLinkTrainingLevel[1] & (_BIT1 | _BIT0)) >= ((g_ucDpRx1LinkRequest
+             -01 >> 4) & (_BIT1 | _BIT0))))
+ 809   6                                  {
+ 810   7                                      g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 811   7                                  }
+ 812   6                                  else
+ 813   6                                  {
+ 814   7                                      g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTr
+             -ainingRequest[1]);
+ 815   7                                      CLR_DP_RX_D1_LANE1_MARGIN_LINK_HBR_RBR();
+ 816   7                                  }
+ 817   6                              }
+ 818   5                              else
+ 819   5                              {
+ 820   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[1]);
+ 821   6                              }
+ 822   5                          }
+ 823   4                          else
+ 824   4                          {
+ 825   5                              if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[1] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 826   5                              {
+ 827   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x10;
+ 828   6                              }
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 16  
+
+ 829   5                              else
+ 830   5                              {
+ 831   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTraini
+             -ngRequest[1]);
+ 832   6                              }
+ 833   5                          }
+ 834   4                      }
+ 835   3                      else if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 836   3                      {
+ 837   4                          g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[1]);
+ 838   4                      }
+ 839   3      
+ 840   3                      // Read Back Lane0 Vth
+ 841   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+ 842   3      
+ 843   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 844   3      
+ 845   3                      // Lane0 Check
+ 846   3                      if(((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 847   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 848   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 849   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 850   3                      {
+ 851   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 852   4                          {
+ 853   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 854   5                              {
+ 855   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 856   6                              }
+ 857   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 858   5                              {
+ 859   6                                  if((GET_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 860   6                                     ((pucDpPhyLinkTrainingLevel[0] & (_BIT1 | _BIT0)) >= (g_ucDpRx1LinkRequest0
+             -1 & (_BIT1 | _BIT0))))
+ 861   6                                  {
+ 862   7                                      g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 863   7                                  }
+ 864   6                                  else
+ 865   6                                  {
+ 866   7                                      g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTr
+             -ainingRequest[0]);
+ 867   7                                      CLR_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR();
+ 868   7                                  }
+ 869   6                              }
+ 870   5                              else
+ 871   5                              {
+ 872   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 873   6                              }
+ 874   5                          }
+ 875   4                          else
+ 876   4                          {
+ 877   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 878   5                              {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 17  
+
+ 879   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 880   6                              }
+ 881   5                              else
+ 882   5                              {
+ 883   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 884   6                              }
+ 885   5                          }
+ 886   4                      }
+ 887   3                      else if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 888   3                      {
+ 889   4                          g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[0]);
+ 890   4                      }
+ 891   3      
+ 892   3      #if(_DP_LT_VALID_LANE_REQUEST_THE_SAME_LEVEL == _ON)
+                              if((g_ucDpRx1LinkStatus01 & 0x11) != 0x11)
+                              {
+                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[0]);
+                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingReques
+             -t[1]);
+                              }
+              #endif
+ 899   3                      break;
+ 900   3      
+ 901   3                  case _DP_ONE_LANE:
+ 902   3                  default:
+ 903   3      
+ 904   3                      // Read Back Lane0 Vth
+ 905   3                      ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+ 906   3      
+ 907   3                      ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+ 908   3      
+ 909   3                      // Lane0 Check
+ 910   3                      if(((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT4) == _BIT4)) ||
+ 911   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT5) == _BIT5)) ||
+ 912   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT6) == _BIT6)) ||
+ 913   3                         ((GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit_EXINT(PB0_14_EQ_
+             -CRC_3, _BIT7) == _BIT7)))
+ 914   3                      {
+ 915   4                          if(g_ucDpRx1LinkRate <= _DP_LINK_HBR)
+ 916   4                          {
+ 917   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 918   5                              {
+ 919   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 920   6                              }
+ 921   5                              else if((ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F) > 3)
+ 922   5                              {
+ 923   6                                  if((GET_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR() == _FALSE) &&
+ 924   6                                     ((pucDpPhyLinkTrainingLevel[0] & (_BIT1 | _BIT0)) >= (g_ucDpRx1LinkRequest0
+             -1 & (_BIT1 | _BIT0))))
+ 925   6                                  {
+ 926   7                                      g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 927   7                                  }
+ 928   6                                  else
+ 929   6                                  {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 18  
+
+ 930   7                                      g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTr
+             -ainingRequest[0]);
+ 931   7                                      CLR_DP_RX_D1_LANE0_MARGIN_LINK_HBR_RBR();
+ 932   7                                  }
+ 933   6                              }
+ 934   5                              else
+ 935   5                              {
+ 936   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 937   6                              }
+ 938   5                          }
+ 939   4                          else
+ 940   4                          {
+ 941   5                              if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLeve
+             -l[0] & (_BIT1 | _BIT0)) >= ucTP1NormalLTSwingLevel))
+ 942   5                              {
+ 943   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x01;
+ 944   6                              }
+ 945   5                              else
+ 946   5                              {
+ 947   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTraini
+             -ngRequest[0]);
+ 948   6                              }
+ 949   5                          }
+ 950   4                      }
+ 951   3                      else if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0
+             -] & (_BIT1 | _BIT0)) < (_BIT1 | _BIT0)))
+ 952   3                      {
+ 953   4                          g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingReques
+             -t[0]);
+ 954   4                      }
+ 955   3      
+ 956   3                      break;
+ 957   3              }
+ 958   2      
+ 959   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, g_ucDpRx1LinkStatus01);
+ 960   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, g_ucDpRx1LinkStatus23);
+ 961   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+ 962   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, g_ucDpRx1LinkRequest23);
+ 963   2      
+ 964   2              switch(g_ucDpRx1LaneCount)
+ 965   2              {
+ 966   3                  case _DP_ONE_LANE:
+ 967   3      
+ 968   3                      if((g_ucDpRx1LinkStatus01 & _BIT0) == _BIT0)
+ 969   3                      {
+ 970   4                          return _TRUE;
+ 971   4                      }
+ 972   3      
+ 973   3                      break;
+ 974   3      
+ 975   3                  case _DP_TWO_LANE:
+ 976   3      
+ 977   3                      if((g_ucDpRx1LinkStatus01 & (_BIT4 | _BIT0)) == (_BIT4 | _BIT0))
+ 978   3                      {
+ 979   4                          return _TRUE;
+ 980   4                      }
+ 981   3      
+ 982   3                      break;
+ 983   3      
+ 984   3                  case _DP_FOUR_LANE:
+ 985   3                  default:
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 19  
+
+ 986   3      
+ 987   3                      if(((g_ucDpRx1LinkStatus01 & (_BIT4 | _BIT0)) == (_BIT4 | _BIT0)) && (((g_ucDpRx1LinkStatu
+             -s23 & (_BIT4 | _BIT0)) == (_BIT4 | _BIT0))))
+ 988   3                      {
+ 989   4                          return _TRUE;
+ 990   4                      }
+ 991   3      
+ 992   3                      break;
+ 993   3              }
+ 994   2          }
+ 995   1          else
+ 996   1          {
+ 997   2              if((GET_DP_RX1_LINK_TRAINING_STATUS() != _DP_NORMAL_TRAINING_PATTERN_1_FAIL) && (GET_DP_RX1_LINK_T
+             -RAINING_STATUS() != _DP_FAKE_TRAINING_PATTERN_1_FAIL))
+ 998   2              {
+ 999   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x03, 0x00);
+1000   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x04, 0x00);
+1001   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x05, 0x00);
+1002   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x01, 0x06, 0x00);
+1003   3              }
+1004   2      
+1005   2              pucDpPhyLinkTrainingLevel[0] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x03);
+1006   2              pucDpPhyLinkTrainingLevel[1] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x04);
+1007   2              pucDpPhyLinkTrainingLevel[2] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x05);
+1008   2              pucDpPhyLinkTrainingLevel[3] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x06);
+1009   2      
+1010   2      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                      for(pData_EXINT[0] = 0; pData_EXINT[0] <= 3; pData_EXINT[0]++)
+                      {
+                          if((pucDpPhyLinkTrainingLevel[pData_EXINT[0]] & (_BIT1 | _BIT0)) == 2)
+                          {
+                              if((pucDpPhyLinkTrainingLevel[pData_EXINT[0]] & _BIT2) == _BIT2)
+                              {
+                                  g_pucDpRx1MaxSwing[pData_EXINT[0]] = 2;
+                              }
+                              else
+                              {
+                                  g_pucDpRx1MaxSwing[pData_EXINT[0]] = 3;
+                              }
+                          }
+                      }
+              #endif
+1026   2              for(pData_EXINT[0] = 0; pData_EXINT[0] <= 1; pData_EXINT[0]++)
+1027   2              {
+1028   3                  if((pucDpPhyLinkTrainingLevel[2 * pData_EXINT[0]] & (_BIT1 | _BIT0)) < 2)
+1029   3                  {
+1030   4      #if(_DP_LT_DIRECT_REQUEST_SWING_LEVEL_2 == _ON)
+1031   4                      pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = 0x02;
+1032   4      #else
+                              pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = (pucDpPhyLinkTrainingLevel[2 * pData_EXI
+             -NT[0]] & (_BIT1 | _BIT0)) + 0x01;
+              #endif
+1035   4                  }
+1036   3                  else
+1037   3                  {
+1038   4                      pucDpPhyLinkTrainingRequest[2 * pData_EXINT[0]] = 0x03;
+1039   4                  }
+1040   3      
+1041   3                  if((pucDpPhyLinkTrainingLevel[(2 * pData_EXINT[0]) + 1] & (_BIT1 | _BIT0)) < 2)
+1042   3                  {
+1043   4      #if(_DP_LT_DIRECT_REQUEST_SWING_LEVEL_2 == _ON)
+1044   4                      pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = 0x20;
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 20  
+
+1045   4      #else
+                              pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = ((pucDpPhyLinkTrainingLevel[(2 * p
+             -Data_EXINT[0]) + 1] << 4) & (_BIT5 | _BIT4)) + 0x10;
+              #endif
+1048   4                  }
+1049   3                  else
+1050   3                  {
+1051   4                      pucDpPhyLinkTrainingRequest[(2 * pData_EXINT[0]) + 1] = 0x30;
+1052   4                  }
+1053   3              }
+1054   2      
+1055   2              g_ucDpRx1LinkRequest01 = (pucDpPhyLinkTrainingLevel[0] & 0x03) | ((pucDpPhyLinkTrainingLevel[1] <<
+             - 4) & 0x30);
+1056   2              g_ucDpRx1LinkRequest23 = (pucDpPhyLinkTrainingLevel[2] & 0x03) | ((pucDpPhyLinkTrainingLevel[3] <<
+             - 4) & 0x30);
+1057   2      
+1058   2      #if(_DP_RX_MI_DONGLE_SUPPORT == _ON)
+                      if(g_ucDpRx1FakeLTLaneCount <= g_ucDpRx1LaneCount)
+                      {
+                          ucFakeLTLaneCount = g_ucDpRx1FakeLTLaneCount;
+                      }
+                      else
+                      {
+                          ucFakeLTLaneCount = g_ucDpRx1LaneCount;
+                      }
+              #endif
+1068   2              switch(ucFakeLTLaneCount)
+1069   2              {
+1070   3                  case _DP_ONE_LANE:
+1071   3      
+1072   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1073   3                      {
+1074   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1075   4                          {
+1076   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1077   5                          }
+1078   4                      }
+1079   3                      else
+1080   3                      {
+1081   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1082   4                          {
+1083   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1084   5                          }
+1085   4                      }
+1086   3      
+1087   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1088   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, 0x00);
+1089   3      
+1090   3                      if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[0] & (
+             -_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x06, (_BIT1 | _BIT0)))))
+1091   3                      {
+1092   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x01);
+1093   4      
+1094   4                          return _TRUE;
+1095   4                      }
+1096   3      
+1097   3                      break;
+1098   3      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 21  
+
+1099   3                  case _DP_TWO_LANE:
+1100   3      
+1101   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1102   3                      {
+1103   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1104   4                          {
+1105   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1106   5                          }
+1107   4      
+1108   4                          if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1109   4                          {
+1110   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[1]);
+1111   5                          }
+1112   4                      }
+1113   3                      else
+1114   3                      {
+1115   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1116   4                          {
+1117   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1118   5                          }
+1119   4      
+1120   4                          if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1121   4                          {
+1122   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[1]);
+1123   5                          }
+1124   4                      }
+1125   3      
+1126   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1127   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, 0x00);
+1128   3      
+1129   3                      if((((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[0] & 
+             -(_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x06, (_BIT1 | _BIT0))))) &&
+1130   3                         (((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[1] & 
+             -(_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x06, (_BIT5 | _BIT4)) >> 4))))
+1131   3                      {
+1132   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x11);
+1133   4      
+1134   4                          return _TRUE;
+1135   4                      }
+1136   3      
+1137   3                      break;
+1138   3      
+1139   3                  case _DP_FOUR_LANE:
+1140   3                  default:
+1141   3      
+1142   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1143   3                      {
+1144   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1145   4                          {
+1146   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1147   5                          }
+1148   4      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 22  
+
+1149   4                          if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1150   4                          {
+1151   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[1]);
+1152   5                          }
+1153   4      
+1154   4                          if(((pucDpPhyLinkTrainingLevel[2] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[2]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1155   4                          {
+1156   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[2]);
+1157   5                          }
+1158   4      
+1159   4                          if(((pucDpPhyLinkTrainingLevel[3] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[3]
+             - & (_BIT1 | _BIT0)) < ucTP1HBR2FakeLTSwingLevel))
+1160   4                          {
+1161   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[3]);
+1162   5                          }
+1163   4                      }
+1164   3                      else
+1165   3                      {
+1166   4                          if(((pucDpPhyLinkTrainingLevel[0] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[0]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1167   4                          {
+1168   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[0]);
+1169   5                          }
+1170   4      
+1171   4                          if(((pucDpPhyLinkTrainingLevel[1] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[1]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1172   4                          {
+1173   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[1]);
+1174   5                          }
+1175   4      
+1176   4                          if(((pucDpPhyLinkTrainingLevel[2] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[2]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1177   4                          {
+1178   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | pucDpPhyLinkTrainingRe
+             -quest[2]);
+1179   5                          }
+1180   4      
+1181   4                          if(((pucDpPhyLinkTrainingLevel[3] & _BIT2) != _BIT2) && ((pucDpPhyLinkTrainingLevel[3]
+             - & (_BIT1 | _BIT0)) < ucTP1RBRHBRFakeLTSwingLevel))
+1182   4                          {
+1183   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | pucDpPhyLinkTrainingRe
+             -quest[3]);
+1184   5                          }
+1185   4                      }
+1186   3      
+1187   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1188   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, g_ucDpRx1LinkRequest23);
+1189   3      
+1190   3                      if((((pucDpPhyLinkTrainingLevel[0] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[0] & 
+             -(_BIT1 | _BIT0)) == ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x06, (_BIT1 | _BIT0)))) &&
+1191   3                         (((pucDpPhyLinkTrainingLevel[1] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[1] & 
+             -(_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x06, (_BIT5 | _BIT4)) >> 4))) &&
+1192   3                         (((pucDpPhyLinkTrainingLevel[2] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[2] & 
+             -(_BIT1 | _BIT0)) == ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x07, (_BIT1 | _BIT0)))) &&
+1193   3                         (((pucDpPhyLinkTrainingLevel[3] & _BIT2) == _BIT2) || ((pucDpPhyLinkTrainingLevel[3] & 
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 23  
+
+             -(_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x07, (_BIT5 | _BIT4)) >> 4))))
+1194   3                      {
+1195   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x11);
+1196   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x11);
+1197   4      
+1198   4                          return _TRUE;
+1199   4                      }
+1200   3      
+1201   3                      break;
+1202   3              }
+1203   2          }
+1204   1      
+1205   1          return _FALSE;
+1206   1      }
+1207          //--------------------------------------------------
+1208          // Description  : Check Dp Training Pattern 2
+1209          // Input Value  : Normal or Fake LT
+1210          // Output Value : TRUE --> TP2 Pass
+1211          //--------------------------------------------------
+1212          BYTE ScalerDpRx1Tp2Check_EXINT0(EnumDpLinkTrainingType enumDpLtType) using 1
+1213          {
+1214   1          BYTE ucEQCRCStatus = 0;
+1215   1          BYTE ucEQCRCStatus1 = 0;
+1216   1          BYTE ucEQCRCStatus2 = 0;
+1217   1          BYTE ucFakeLTLaneCount = g_ucDpRx1LaneCount;
+1218   1      
+1219   1      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                  BYTE ucTP2NormalLTSwingLevel = 2;
+                  BYTE ucTP2HBR2FakeLTSwingLevel = 2;
+              #else
+1223   1          BYTE ucTP2NormalLTSwingLevel = 3;
+1224   1          BYTE ucTP2HBR2FakeLTSwingLevel = 3;
+1225   1      #endif
+1226   1      
+1227   1          pData_EXINT[0] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x03);
+1228   1          pData_EXINT[1] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x04);
+1229   1          pData_EXINT[2] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x05);
+1230   1          pData_EXINT[3] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x06);
+1231   1      
+1232   1          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x80);
+1233   1      
+1234   1          if(enumDpLtType == _DP_NORMAL_LT)
+1235   1          {
+1236   2              g_ucDpRx1LinkRequest01 = ((pData_EXINT[0] & 0x03) |
+1237   2                                        ((pData_EXINT[0] >> 1) & 0x0C) |
+1238   2                                        ((pData_EXINT[1] << 4) & 0x30) |
+1239   2                                        ((pData_EXINT[1] << 3) & 0xC0));
+1240   2      
+1241   2              g_ucDpRx1LinkRequest23 = ((pData_EXINT[2] & 0x03) |
+1242   2                                        ((pData_EXINT[2] >> 1) & 0x0C) |
+1243   2                                        ((pData_EXINT[3] << 4) & 0x30) |
+1244   2                                        ((pData_EXINT[3] << 3) & 0xC0));
+1245   2      
+1246   2              // Enable EQ-CRC and Clear EQ-CRC Status(- K28.5)
+1247   2              ScalerSetBit_EXINT(PB0_12_EQ_CRC_1, ~(_BIT7 | _BIT6 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT7 | _BI
+             -T6 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+1248   2      
+1249   2              // Delay Time us [25,x]
+1250   2              DELAY_25US_EXINT();
+1251   2      
+1252   2              ucEQCRCStatus1 = ScalerGetByte_EXINT(PB0_12_EQ_CRC_1);
+1253   2      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 24  
+
+1254   2              if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1255   2              {
+1256   3                  for(g_ucDpRx1Temp = 0; g_ucDpRx1Temp <= 30; g_ucDpRx1Temp++)
+1257   3                  {
+1258   4                      ucEQCRCStatus1 = ucEQCRCStatus1 & ScalerGetByte_EXINT(PB0_12_EQ_CRC_1);
+1259   4                  }
+1260   3              }
+1261   2              else
+1262   2              {
+1263   3                  for(g_ucDpRx1Temp = 0; g_ucDpRx1Temp <= 5; g_ucDpRx1Temp++)
+1264   3                  {
+1265   4                      ucEQCRCStatus1 = ucEQCRCStatus1 & ScalerGetByte_EXINT(PB0_12_EQ_CRC_1);
+1266   4                  }
+1267   3              }
+1268   2      
+1269   2              // Disable EQ-CRC
+1270   2              ScalerSetBit_EXINT(PB0_12_EQ_CRC_1, ~(_BIT7 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT3 | _BIT2 | _BI
+             -T1 | _BIT0));
+1271   2      
+1272   2              // Enable EQ-CRC and Clear EQ-CRC Status(+ K28.5)
+1273   2              ScalerSetBit_EXINT(PB0_12_EQ_CRC_1, ~(_BIT7 | _BIT6 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT7 | _BI
+             -T3 | _BIT2 | _BIT1 | _BIT0));
+1274   2      
+1275   2              // Delay Time us [25,x]
+1276   2              DELAY_25US_EXINT();
+1277   2      
+1278   2              ucEQCRCStatus2 = ScalerGetByte_EXINT(PB0_12_EQ_CRC_1);
+1279   2      
+1280   2              for(g_ucDpRx1Temp = 0; g_ucDpRx1Temp <= 5; g_ucDpRx1Temp++)
+1281   2              {
+1282   3                  ucEQCRCStatus2 = ucEQCRCStatus2 & ScalerGetByte_EXINT(PB0_12_EQ_CRC_1);
+1283   3              }
+1284   2      
+1285   2              // Disable EQ-CRC
+1286   2              ScalerSetBit_EXINT(PB0_12_EQ_CRC_1, ~(_BIT7 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT3 | _BIT2 | _BI
+             -T1 | _BIT0));
+1287   2      
+1288   2              ucEQCRCStatus = (ucEQCRCStatus1 | ucEQCRCStatus2);
+1289   2      
+1290   2              g_ucDpRx1EQCRC = 0x00;
+1291   2      
+1292   2              if(GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0)
+1293   2              {
+1294   3                  g_ucDpRx1EQCRC |= (ucEQCRCStatus & 0x01);
+1295   3              }
+1296   2              else if(GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1)
+1297   2              {
+1298   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x02) >> 1);
+1299   3              }
+1300   2              else if(GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2)
+1301   2              {
+1302   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x04) >> 2);
+1303   3              }
+1304   2              else if(GET_DP_RX1_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3)
+1305   2              {
+1306   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x08) >> 3);
+1307   3              }
+1308   2      
+1309   2              if(GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE0)
+1310   2              {
+1311   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x01) << 1);
+1312   3              }
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 25  
+
+1313   2              else if(GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE1)
+1314   2              {
+1315   3                  g_ucDpRx1EQCRC |= (ucEQCRCStatus & 0x02);
+1316   3              }
+1317   2              else if(GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE2)
+1318   2              {
+1319   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x04) >> 1);
+1320   3              }
+1321   2              else if(GET_DP_RX1_PCB_LANE1_MAPPING() == _DP_SCALER_LANE3)
+1322   2              {
+1323   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x08) >> 2);
+1324   3              }
+1325   2      
+1326   2              if(GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE0)
+1327   2              {
+1328   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x01) << 2);
+1329   3              }
+1330   2              else if(GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE1)
+1331   2              {
+1332   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x02) << 1);
+1333   3              }
+1334   2              else if(GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE2)
+1335   2              {
+1336   3                  g_ucDpRx1EQCRC |= (ucEQCRCStatus & 0x04);
+1337   3              }
+1338   2              else if(GET_DP_RX1_PCB_LANE2_MAPPING() == _DP_SCALER_LANE3)
+1339   2              {
+1340   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x08) >> 1);
+1341   3              }
+1342   2      
+1343   2              if(GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE0)
+1344   2              {
+1345   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x01) << 3);
+1346   3              }
+1347   2              else if(GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE1)
+1348   2              {
+1349   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x02) << 2);
+1350   3              }
+1351   2              else if(GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE2)
+1352   2              {
+1353   3                  g_ucDpRx1EQCRC |= ((ucEQCRCStatus & 0x04) << 1);
+1354   3              }
+1355   2              else if(GET_DP_RX1_PCB_LANE3_MAPPING() == _DP_SCALER_LANE3)
+1356   2              {
+1357   3                  g_ucDpRx1EQCRC |= (ucEQCRCStatus & 0x08);
+1358   3              }
+1359   2      
+1360   2              ucEQCRCStatus = g_ucDpRx1EQCRC;
+1361   2      
+1362   2              switch(g_ucDpRx1LaneCount)
+1363   2              {
+1364   3                  case _DP_FOUR_LANE:
+1365   3      
+1366   3      #if(_DP_LT_VALID_LANE_REQUEST_THE_SAME_LEVEL == _OFF)
+1367   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1368   3      #endif
+1369   3                      {
+1370   4                          if((ucEQCRCStatus & (_BIT3 | _BIT2 | _BIT1 | _BIT0)) != (_BIT3 | _BIT2 | _BIT1 | _BIT0
+             -))
+1371   4                          {
+1372   5                              ucEQCRCStatus &= ~(_BIT3 | _BIT2 | _BIT1 | _BIT0);
+1373   5                          }
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 26  
+
+1374   4                      }
+1375   3      
+1376   3                      // reset LinkStatus CR state
+1377   3                      g_ucDpRx1LinkStatus01 = 0x11;
+1378   3                      g_ucDpRx1LinkStatus23 = 0x11;
+1379   3      
+1380   3                      // Lane2 EQ-CRC Check
+1381   3                      if((ucEQCRCStatus & _BIT2) == _BIT2)
+1382   3                      {
+1383   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1384   4                          {
+1385   5                              if(((pData_EXINT[2] & _BIT2) == _BIT2) || ((pData_EXINT[2] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1386   5                              {
+1387   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x07;
+1388   6                              }
+1389   5                              else
+1390   5                              {
+1391   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | (pData_EXINT[2] & 
+             -(_BIT1 | _BIT0))) + 0x01;
+1392   6                              }
+1393   5                          }
+1394   4                          else
+1395   4                          {
+1396   5                              g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x07;
+1397   5                          }
+1398   4                      }
+1399   3                      else
+1400   3                      {
+1401   4                          if(((g_ucDpRx1LinkRequest23 & 0x03) + ((g_ucDpRx1LinkRequest23 >> 2) & 0x03)) < 3)
+1402   4                          {
+1403   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[2] & _BIT2) != _BIT2))
+1404   5                              {
+1405   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x04;
+              #else
+1408   6                                  g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x01;
+1409   6      #endif
+1410   6                              }
+1411   5                              else if((pData_EXINT[2] & _BIT5) != _BIT5)
+1412   5                              {
+1413   6                                  g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x04;
+1414   6                              }
+1415   5                          }
+1416   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[2] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[2] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[2] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[2] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest23 = 0x03 | (g_ucDpRx1LinkRequest23 & 0xF0);
+                                              g_pucDpRx1MaxSwing[2] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[2] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[2] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 27  
+
+                                              g_ucDpRx1LinkRequest23 = 0x06 | (g_ucDpRx1LinkRequest23 & 0xF0);
+                                              g_pucDpRx1MaxSwing[2] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1440   4                      }
+1441   3      
+1442   3                      // Lane3 EQ-CRC Check
+1443   3                      if((ucEQCRCStatus & _BIT3) == _BIT3)
+1444   3                      {
+1445   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1446   4                          {
+1447   5                              if(((pData_EXINT[3] & _BIT2) == _BIT2) || ((pData_EXINT[3] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1448   5                              {
+1449   6                                  g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x70;
+1450   6                              }
+1451   5                              else
+1452   5                              {
+1453   6                                  g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | ((pData_EXINT[3] <
+             -< 4) & (_BIT5 | _BIT4))) + 0x10;
+1454   6                              }
+1455   5                          }
+1456   4                          else
+1457   4                          {
+1458   5                              g_ucDpRx1LinkStatus23 = g_ucDpRx1LinkStatus23 | 0x70;
+1459   5                          }
+1460   4                      }
+1461   3                      else
+1462   3                      {
+1463   4                          if((((g_ucDpRx1LinkRequest23 >> 4) & 0x03) + ((g_ucDpRx1LinkRequest23 >> 6) & 0x03)) <
+             - 3)
+1464   4                          {
+1465   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[3] & _BIT2) != _BIT2))
+1466   5                              {
+1467   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x40;
+              #else
+1470   6                                  g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x10;
+1471   6      #endif
+1472   6                              }
+1473   5                              else if((pData_EXINT[3] & _BIT5) != _BIT5)
+1474   5                              {
+1475   6                                  g_ucDpRx1LinkRequest23 = g_ucDpRx1LinkRequest23 + 0x40;
+1476   6                              }
+1477   5                          }
+1478   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[3] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[3] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[3] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[3] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest23 = 0x30 | (g_ucDpRx1LinkRequest23 & 0x0F);
+                                              g_pucDpRx1MaxSwing[3] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 28  
+
+                                          if(((pData_EXINT[3] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[3] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest23 = 0x60 | (g_ucDpRx1LinkRequest23 & 0x0F);
+                                              g_pucDpRx1MaxSwing[3] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1502   4                      }
+1503   3      
+1504   3                      // Lane1 EQ-CRC Check
+1505   3                      if((ucEQCRCStatus & _BIT1) == _BIT1)
+1506   3                      {
+1507   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1508   4                          {
+1509   5                              if(((pData_EXINT[1] & _BIT2) == _BIT2) || ((pData_EXINT[1] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1510   5                              {
+1511   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x70;
+1512   6                              }
+1513   5                              else
+1514   5                              {
+1515   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] <
+             -< 4) & (_BIT5 | _BIT4))) + 0x10;
+1516   6                              }
+1517   5                          }
+1518   4                          else
+1519   4                          {
+1520   5                              g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x70;
+1521   5                          }
+1522   4                      }
+1523   3                      else
+1524   3                      {
+1525   4                          if((((g_ucDpRx1LinkRequest01 >> 4) & 0x03) + ((g_ucDpRx1LinkRequest01 >> 6) & 0x03)) <
+             - 3)
+1526   4                          {
+1527   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[1] & _BIT2) != _BIT2))
+1528   5                              {
+1529   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x40;
+              #else
+1532   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x10;
+1533   6      #endif
+1534   6                              }
+1535   5                              else if((pData_EXINT[1] & _BIT5) != _BIT5)
+1536   5                              {
+1537   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x40;
+1538   6                              }
+1539   5                          }
+1540   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[1] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[1] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[1] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[1] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x30 | (g_ucDpRx1LinkRequest01 & 0x0F);
+                                              g_pucDpRx1MaxSwing[1] = 0xFF;
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 29  
+
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[1] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[1] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x60 | (g_ucDpRx1LinkRequest01 & 0x0F);
+                                              g_pucDpRx1MaxSwing[1] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1564   4                      }
+1565   3      
+1566   3                      // Lane0 EQ-CRC Check
+1567   3                      if((ucEQCRCStatus & _BIT0) == _BIT0)
+1568   3                      {
+1569   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1570   4                          {
+1571   5                              if(((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_EXINT[0] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1572   5                              {
+1573   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1574   6                              }
+1575   5                              else
+1576   5                              {
+1577   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & 
+             -(_BIT1 | _BIT0))) + 0x01;
+1578   6                              }
+1579   5                          }
+1580   4                          else
+1581   4                          {
+1582   5                              g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1583   5                          }
+1584   4                      }
+1585   3                      else
+1586   3                      {
+1587   4                          if(((g_ucDpRx1LinkRequest01 & 0x03) + ((g_ucDpRx1LinkRequest01 >> 2) & 0x03)) < 3)
+1588   4                          {
+1589   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[0] & _BIT2) != _BIT2))
+1590   5                              {
+1591   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+              #else
+1594   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x01;
+1595   6      #endif
+1596   6                              }
+1597   5                              else if((pData_EXINT[0] & _BIT5) != _BIT5)
+1598   5                              {
+1599   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+1600   6                              }
+1601   5                          }
+1602   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[0] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[0] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[0] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[0] == 3))
+                                          {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 30  
+
+                                              g_ucDpRx1LinkRequest01 = 0x03 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[0] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[0] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x06 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1626   4                      }
+1627   3      
+1628   3                      break;
+1629   3      
+1630   3                  case _DP_TWO_LANE:
+1631   3      
+1632   3      #if(_DP_LT_VALID_LANE_REQUEST_THE_SAME_LEVEL == _OFF)
+1633   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1634   3      #endif
+1635   3                      {
+1636   4                          if((ucEQCRCStatus & (_BIT1 | _BIT0)) != (_BIT1 | _BIT0))
+1637   4                          {
+1638   5                              ucEQCRCStatus &= ~(_BIT1 | _BIT0);
+1639   5                          }
+1640   4                      }
+1641   3      
+1642   3                      // reset LinkStatus CR state
+1643   3                      g_ucDpRx1LinkStatus01 = 0x11;
+1644   3                      g_ucDpRx1LinkStatus23 = 0x00;
+1645   3      
+1646   3                      // Lane1 EQ-CRC Check
+1647   3                      if((ucEQCRCStatus & _BIT1) == _BIT1)
+1648   3                      {
+1649   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1650   4                          {
+1651   5                              if(((pData_EXINT[1] & _BIT2) == _BIT2) || ((pData_EXINT[1] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1652   5                              {
+1653   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x70;
+1654   6                              }
+1655   5                              else
+1656   5                              {
+1657   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] <
+             -< 4) & (_BIT5 | _BIT4))) + 0x10;
+1658   6                              }
+1659   5                          }
+1660   4                          else
+1661   4                          {
+1662   5                              g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x70;
+1663   5                          }
+1664   4                      }
+1665   3                      else
+1666   3                      {
+1667   4                          if((((g_ucDpRx1LinkRequest01 >> 4) & 0x03) + ((g_ucDpRx1LinkRequest01 >> 6) & 0x03)) <
+             - 3)
+1668   4                          {
+1669   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[1] & _BIT2) != _BIT2))
+1670   5                              {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 31  
+
+1671   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x40;
+              #else
+1674   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x10;
+1675   6      #endif
+1676   6                              }
+1677   5                              else if((pData_EXINT[1] & _BIT5) != _BIT5)
+1678   5                              {
+1679   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x40;
+1680   6                              }
+1681   5                          }
+1682   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[1] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[1] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[1] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[1] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x30 | (g_ucDpRx1LinkRequest01 & 0x0F);
+                                              g_pucDpRx1MaxSwing[1] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[1] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[1] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x60 | (g_ucDpRx1LinkRequest01 & 0x0F);
+                                              g_pucDpRx1MaxSwing[1] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1706   4                      }
+1707   3      
+1708   3                      // Lane0 EQ-CRC Check
+1709   3                      if((ucEQCRCStatus & _BIT0) == _BIT0)
+1710   3                      {
+1711   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1712   4                          {
+1713   5                              if(((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_EXINT[0] & (_BIT1 | _BIT0)) >= u
+             -cTP2NormalLTSwingLevel))
+1714   5                              {
+1715   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1716   6                              }
+1717   5                              else
+1718   5                              {
+1719   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & 
+             -(_BIT1 | _BIT0))) + 0x01;
+1720   6                              }
+1721   5                          }
+1722   4                          else
+1723   4                          {
+1724   5                              g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1725   5                          }
+1726   4                      }
+1727   3                      else
+1728   3                      {
+1729   4                          if(((g_ucDpRx1LinkRequest01 & 0x03) + ((g_ucDpRx1LinkRequest01 >> 2) & 0x03)) < 3)
+1730   4                          {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 32  
+
+1731   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[0] & _BIT2) != _BIT2))
+1732   5                              {
+1733   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+              #else
+1736   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x01;
+1737   6      #endif
+1738   6                              }
+1739   5                              else if((pData_EXINT[0] & _BIT5) != _BIT5)
+1740   5                              {
+1741   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+1742   6                              }
+1743   5                          }
+1744   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[0] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[0] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[0] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[0] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x03 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[0] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[0] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x06 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1768   4                      }
+1769   3      
+1770   3                      break;
+1771   3      
+1772   3                  case _DP_ONE_LANE:
+1773   3                  default:
+1774   3      
+1775   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1776   3                      {
+1777   4                          if((ucEQCRCStatus & _BIT0) != _BIT0)
+1778   4                          {
+1779   5                              ucEQCRCStatus &= ~_BIT0;
+1780   5                          }
+1781   4                      }
+1782   3      
+1783   3                      // reset LinkStatus CR state
+1784   3                      g_ucDpRx1LinkStatus01 = 0x01;
+1785   3                      g_ucDpRx1LinkStatus23 = 0x00;
+1786   3      
+1787   3                      // Lane0 EQ-CRC Check
+1788   3                      if((ucEQCRCStatus & _BIT0) == _BIT0)
+1789   3                      {
+1790   4                          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1791   4                          {
+1792   5                              if(((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_EXINT[0] & (_BIT1 | _BIT0)) >= u
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 33  
+
+             -cTP2NormalLTSwingLevel))
+1793   5                              {
+1794   6                                  g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1795   6                              }
+1796   5                              else
+1797   5                              {
+1798   6                                  g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & 
+             -(_BIT1 | _BIT0))) + 0x01;
+1799   6                              }
+1800   5                          }
+1801   4                          else
+1802   4                          {
+1803   5                              g_ucDpRx1LinkStatus01 = g_ucDpRx1LinkStatus01 | 0x07;
+1804   5                          }
+1805   4                      }
+1806   3                      else
+1807   3                      {
+1808   4                          if(((g_ucDpRx1LinkRequest01 & 0x03) + ((g_ucDpRx1LinkRequest01 >> 2) & 0x03)) < 3)
+1809   4                          {
+1810   5                              if(((g_ucDpRx1LinkRate == _DP_LINK_HBR2)) && ((pData_EXINT[0] & _BIT2) != _BIT2))
+1811   5                              {
+1812   6      #if(_DP_LT_TP1_TP2_S2P0_PERMIT_PASS == _ON)
+                                          g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+              #else
+1815   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x01;
+1816   6      #endif
+1817   6                              }
+1818   5                              else if((pData_EXINT[0] & _BIT5) != _BIT5)
+1819   5                              {
+1820   6                                  g_ucDpRx1LinkRequest01 = g_ucDpRx1LinkRequest01 + 0x04;
+1821   6                              }
+1822   5                          }
+1823   4      #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+                                  else
+                                  {
+                                      if(g_pucDpRx1MaxSwing[0] != 0xFF)
+                                      {
+                                          // S2P1 -> S3P0
+                                          if(((pData_EXINT[0] & (_BIT2 | _BIT1 | _BIT0)) == _BIT1) &&
+                                             ((pData_EXINT[0] & (_BIT4 | _BIT3)) == _BIT3) &&
+                                             (g_pucDpRx1MaxSwing[0] == 3))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x03 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+              
+                                          // S3P0 -> S2P1
+                                          if(((pData_EXINT[0] & (_BIT1 | _BIT0)) == (_BIT1 | _BIT0)) &&
+                                             ((pData_EXINT[0] & (_BIT5 | _BIT4 | _BIT3)) == 0x00))
+                                          {
+                                              g_ucDpRx1LinkRequest01 = 0x06 | (g_ucDpRx1LinkRequest01 & 0xF0);
+                                              g_pucDpRx1MaxSwing[0] = 0xFF;
+                                          }
+                                      }
+                                  }
+              #endif
+1847   4                      }
+1848   3      
+1849   3                      break;
+1850   3              }
+1851   2      
+1852   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, g_ucDpRx1LinkStatus01);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 34  
+
+1853   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, g_ucDpRx1LinkStatus23);
+1854   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1855   2              ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, g_ucDpRx1LinkRequest23);
+1856   2      
+1857   2              switch(g_ucDpRx1LaneCount)
+1858   2              {
+1859   3                  case _DP_ONE_LANE:
+1860   3      
+1861   3                      if((g_ucDpRx1LinkStatus01 & 0x07) == 0x07)
+1862   3                      {
+1863   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+1864   4                          return _TRUE;
+1865   4                      }
+1866   3      
+1867   3                      break;
+1868   3      
+1869   3                  case _DP_TWO_LANE:
+1870   3      
+1871   3                      if((g_ucDpRx1LinkStatus01 & 0x77) == 0x77)
+1872   3                      {
+1873   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+1874   4                          return _TRUE;
+1875   4                      }
+1876   3      
+1877   3                      break;
+1878   3      
+1879   3                  case _DP_FOUR_LANE:
+1880   3                  default:
+1881   3      
+1882   3                      if(((g_ucDpRx1LinkStatus01 & 0x77) == 0x77) && (((g_ucDpRx1LinkStatus23 & 0x77) == 0x77)))
+1883   3                      {
+1884   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+1885   4                          return _TRUE;
+1886   4                      }
+1887   3      
+1888   3                      break;
+1889   3              }
+1890   2          }
+1891   1          else
+1892   1          {
+1893   2              g_ucDpRx1LinkRequest01 = (pData_EXINT[0] & 0x03) | ((pData_EXINT[1] << 4) & 0x30);
+1894   2              g_ucDpRx1LinkRequest23 = (pData_EXINT[2] & 0x03) | ((pData_EXINT[3] << 4) & 0x30);
+1895   2      
+1896   2      #if(_DP_RX_MI_DONGLE_SUPPORT == _ON)
+                      if(g_ucDpRx1FakeLTLaneCount <= g_ucDpRx1LaneCount)
+                      {
+                          ucFakeLTLaneCount = g_ucDpRx1FakeLTLaneCount;
+                      }
+                      else
+                      {
+                          ucFakeLTLaneCount = g_ucDpRx1LaneCount;
+                      }
+              #endif
+1906   2              switch(ucFakeLTLaneCount)
+1907   2              {
+1908   3                  case _DP_ONE_LANE:
+1909   3      
+1910   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x01);
+1911   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+1912   3      
+1913   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1914   3                      {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 35  
+
+1915   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+1916   4                          {
+1917   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+1918   5                          }
+1919   4                      }
+1920   3                      else
+1921   3                      {
+1922   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < _BIT1)
+             -)
+1923   4                          {
+1924   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+1925   5                          }
+1926   4                      }
+1927   3      
+1928   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1929   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, 0x00);
+1930   3      
+1931   3                      if(((pData_EXINT[0] & _BIT5) == _BIT5) || ((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_E
+             -XINT[0] & (_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x06) & (_BIT1 | _BIT0))))
+1932   3                      {
+1933   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x07);
+1934   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+1935   4      
+1936   4                          return _TRUE;
+1937   4                      }
+1938   3      
+1939   3                      break;
+1940   3      
+1941   3                  case _DP_TWO_LANE:
+1942   3      
+1943   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x11);
+1944   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+1945   3      
+1946   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1947   3                      {
+1948   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+1949   4                          {
+1950   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+1951   5                          }
+1952   4      
+1953   4                          if(((pData_EXINT[1] & _BIT2) != _BIT2) && ((pData_EXINT[1] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+1954   4                          {
+1955   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+1956   5                          }
+1957   4                      }
+1958   3                      else
+1959   3                      {
+1960   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < _BIT1)
+             -)
+1961   4                          {
+1962   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+1963   5                          }
+1964   4      
+1965   4                          if(((pData_EXINT[1] & _BIT2) != _BIT2) && ((pData_EXINT[1] & (_BIT1 | _BIT0)) < _BIT1)
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 36  
+
+             -)
+1966   4                          {
+1967   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+1968   5                          }
+1969   4                      }
+1970   3      
+1971   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+1972   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, 0x00);
+1973   3      
+1974   3                      if((((pData_EXINT[0] & _BIT5) == _BIT5) || ((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[0] & (_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x06) & (_BIT1 | _BIT0)))) &&
+1975   3                         (((pData_EXINT[1] & _BIT5) == _BIT5) || ((pData_EXINT[1] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[1] & (_BIT1 | _BIT0)) == ((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x06) & (_BIT5 | _BIT4)) >> 4))))
+1976   3                      {
+1977   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x77);
+1978   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+1979   4      
+1980   4                          return _TRUE;
+1981   4                      }
+1982   3      
+1983   3                      break;
+1984   3      
+1985   3                  case _DP_FOUR_LANE:
+1986   3                  default:
+1987   3      
+1988   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x11);
+1989   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x11);
+1990   3      
+1991   3                      if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+1992   3                      {
+1993   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+1994   4                          {
+1995   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+1996   5                          }
+1997   4      
+1998   4                          if(((pData_EXINT[1] & _BIT2) != _BIT2) && ((pData_EXINT[1] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+1999   4                          {
+2000   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+2001   5                          }
+2002   4      
+2003   4                          if(((pData_EXINT[2] & _BIT2) != _BIT2) && ((pData_EXINT[2] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+2004   4                          {
+2005   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | (pData_EXINT[2] & (_BI
+             -T1 | _BIT0))) + 0x01;
+2006   5                          }
+2007   4      
+2008   4                          if(((pData_EXINT[3] & _BIT2) != _BIT2) && ((pData_EXINT[3] & (_BIT1 | _BIT0)) < ucTP2H
+             -BR2FakeLTSwingLevel))
+2009   4                          {
+2010   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | ((pData_EXINT[3] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+2011   5                          }
+2012   4                      }
+2013   3                      else
+2014   3                      {
+2015   4                          if(((pData_EXINT[0] & _BIT2) != _BIT2) && ((pData_EXINT[0] & (_BIT1 | _BIT0)) < _BIT1)
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 37  
+
+             -)
+2016   4                          {
+2017   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xFC) | (pData_EXINT[0] & (_BI
+             -T1 | _BIT0))) + 0x01;
+2018   5                          }
+2019   4      
+2020   4                          if(((pData_EXINT[1] & _BIT2) != _BIT2) && ((pData_EXINT[1] & (_BIT1 | _BIT0)) < _BIT1)
+             -)
+2021   4                          {
+2022   5                              g_ucDpRx1LinkRequest01 = ((g_ucDpRx1LinkRequest01 & 0xCF) | ((pData_EXINT[1] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+2023   5                          }
+2024   4      
+2025   4                          if(((pData_EXINT[2] & _BIT2) != _BIT2) && ((pData_EXINT[2] & (_BIT1 | _BIT0)) < _BIT1)
+             -)
+2026   4                          {
+2027   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xFC) | (pData_EXINT[2] & (_BI
+             -T1 | _BIT0))) + 0x01;
+2028   5                          }
+2029   4      
+2030   4                          if(((pData_EXINT[3] & _BIT2) != _BIT2) && ((pData_EXINT[3] & (_BIT1 | _BIT0)) < _BIT1)
+             -)
+2031   4                          {
+2032   5                              g_ucDpRx1LinkRequest23 = ((g_ucDpRx1LinkRequest23 & 0xCF) | ((pData_EXINT[3] & (_B
+             -IT1 | _BIT0)) << 4)) + 0x10;
+2033   5                          }
+2034   4                      }
+2035   3      
+2036   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x06, g_ucDpRx1LinkRequest01);
+2037   3                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x07, g_ucDpRx1LinkRequest23);
+2038   3      
+2039   3                      if((((pData_EXINT[0] & _BIT5) == _BIT5) || ((pData_EXINT[0] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[0] & (_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x06) & (_BIT1 | _BIT0)))) &&
+2040   3                         (((pData_EXINT[1] & _BIT5) == _BIT5) || ((pData_EXINT[1] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[1] & (_BIT1 | _BIT0)) == ((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x06) & (_BIT5 | _BIT4)) >> 4))) &&
+2041   3                         (((pData_EXINT[2] & _BIT5) == _BIT5) || ((pData_EXINT[2] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[2] & (_BIT1 | _BIT0)) == (ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x07) & (_BIT1 | _BIT0)))) &&
+2042   3                         (((pData_EXINT[3] & _BIT5) == _BIT5) || ((pData_EXINT[3] & _BIT2) == _BIT2) || ((pData_
+             -EXINT[3] & (_BIT1 | _BIT0)) == ((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x07) & (_BIT5 | _BIT4)) >> 4))))
+2043   3                      {
+2044   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x77);
+2045   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x77);
+2046   4                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x81);
+2047   4      
+2048   4                          return _TRUE;
+2049   4                      }
+2050   3      
+2051   3                      break;
+2052   3              }
+2053   2          }
+2054   1      
+2055   1          return _FALSE;
+2056   1      }
+2057          
+2058          //--------------------------------------------------
+2059          // Description  : DP FLD Band Finetune
+2060          // Input Value  : LaneNumber
+2061          // Output Value : None
+2062          //--------------------------------------------------
+2063          void ScalerDpRx1AdjustLaneFLDBand_EXINT0(BYTE ucDpRx1LaneNumber, WORD usVCOBandDiff) using 1
+2064          {
+2065   1          BYTE ucBestVCOBand = 0;
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 38  
+
+2066   1          BYTE ucAutoVCOBand = 0;
+2067   1      
+2068   1          switch(ucDpRx1LaneNumber)
+2069   1          {
+2070   2              default:
+2071   2              case _DP_SCALER_LANE0:
+2072   2      
+2073   2                  ucAutoVCOBand = (ScalerGetByte_EXINT(P7A_36_ANA_CDR_11) & 0x7F);
+2074   2      
+2075   2                  break;
+2076   2      
+2077   2              case _DP_SCALER_LANE1:
+2078   2      
+2079   2                  ucAutoVCOBand = (ScalerGetByte_EXINT(P7A_37_ANA_CDR_12) & 0x7F);
+2080   2      
+2081   2                  break;
+2082   2      
+2083   2              case _DP_SCALER_LANE2:
+2084   2      
+2085   2                  ucAutoVCOBand = (ScalerGetByte_EXINT(P7A_38_ANA_CDR_13) & 0x7F);
+2086   2      
+2087   2                  break;
+2088   2      
+2089   2              case _DP_SCALER_LANE3:
+2090   2      
+2091   2                  ucAutoVCOBand = (ScalerGetByte_EXINT(P7A_39_ANA_CDR_14) & 0x7F);
+2092   2      
+2093   2                  break;
+2094   2          }
+2095   1      
+2096   1          // [1:0] freqdet_lane_sel
+2097   1          ScalerSetBit_EXINT(PB0_51_DP_SIG_DET_1, ~(_BIT1 | _BIT0), ucDpRx1LaneNumber);
+2098   1      
+2099   1          // [6] LANE_COUNT_CLEAR = 0 -> Keep the LANE_COUNT value
+2100   1          ScalerSetBit_EXINT(PB0_52_DP_SIG_DET_2, ~_BIT6, 0x00);
+2101   1      
+2102   1          // [7] DP_SIG_DET_EN = 1'b1 -> Enable Signal Detection
+2103   1          ScalerSetBit_EXINT(PB0_50_DP_SIG_DET_0, ~_BIT7, 0x00);
+2104   1          ScalerSetBit_EXINT(PB0_50_DP_SIG_DET_0, ~_BIT7, _BIT7);
+2105   1      
+2106   1          // Delay Time us [5,150] Polling for Measure Done
+2107   1          for(g_ucDpRx1Temp = 0; g_ucDpRx1Temp <= 30; g_ucDpRx1Temp++)
+2108   1          {
+2109   2              DELAY_5US_EXINT();
+2110   2      
+2111   2              if(ScalerGetBit_EXINT(PB0_50_DP_SIG_DET_0, _BIT6) == _BIT6)
+2112   2              {
+2113   3                  break;
+2114   3              }
+2115   2          }
+2116   1      
+2117   1          if(ScalerGetBit_EXINT(PB0_50_DP_SIG_DET_0, _BIT6) == _BIT6)
+2118   1          {
+2119   2              g_pusDpRx1ClockCount1[ucDpRx1LaneNumber] = ((((WORD)ScalerGetByte_EXINT(PB0_53_DP_SIG_DET_3)) << 8
+             -) | ScalerGetByte_EXINT(PB0_54_DP_SIG_DET_4));
+2120   2      
+2121   2              if(g_pusDpRx1ClockCount1[ucDpRx1LaneNumber] < g_pusDpRx1ClockCount[ucDpRx1LaneNumber])
+2122   2              {
+2123   3                  ucBestVCOBand = ucAutoVCOBand + (((g_pusDpRx1ClockCount[ucDpRx1LaneNumber] - g_pusDpRx1ClockCo
+             -unt1[ucDpRx1LaneNumber]) / usVCOBandDiff) + 1);
+2124   3              }
+2125   2              else
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 39  
+
+2126   2              {
+2127   3                  ucBestVCOBand = ucAutoVCOBand - ((g_pusDpRx1ClockCount1[ucDpRx1LaneNumber] - g_pusDpRx1ClockCo
+             -unt[ucDpRx1LaneNumber]) / usVCOBandDiff);
+2128   3              }
+2129   2          }
+2130   1          else
+2131   1          {
+2132   2              ucBestVCOBand = ucAutoVCOBand;
+2133   2          }
+2134   1      
+2135   1          // [7] DP_SIG_DET_EN = 0 -> Disable Signal Detection
+2136   1          ScalerSetBit_EXINT(PB0_50_DP_SIG_DET_0, ~_BIT7, 0x00);
+2137   1      
+2138   1          // Manually Reload FLD Band
+2139   1          switch(ucDpRx1LaneNumber)
+2140   1          {
+2141   2              default:
+2142   2              case _DP_SCALER_LANE0:
+2143   2      
+2144   2                  ScalerSetBit_EXINT(P7A_32_ANA_CDR_07, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0)
+             -, ucBestVCOBand);
+2145   2      
+2146   2                  break;
+2147   2      
+2148   2              case _DP_SCALER_LANE1:
+2149   2      
+2150   2                  ScalerSetBit_EXINT(P7A_33_ANA_CDR_08, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0)
+             -, ucBestVCOBand);
+2151   2      
+2152   2                  break;
+2153   2      
+2154   2              case _DP_SCALER_LANE2:
+2155   2      
+2156   2                  ScalerSetBit_EXINT(P7A_34_ANA_CDR_09, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0)
+             -, ucBestVCOBand);
+2157   2      
+2158   2                  break;
+2159   2      
+2160   2              case _DP_SCALER_LANE3:
+2161   2      
+2162   2                  ScalerSetBit_EXINT(P7A_35_ANA_CDR_10, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0)
+             -, ucBestVCOBand);
+2163   2      
+2164   2                  break;
+2165   2          }
+2166   1      }
+2167          //--------------------------------------------------
+2168          // Description : check DFE Coef in INT0
+2169          // Input Value  : None
+2170          // Output Value : True --> valid, False --> invalid
+2171          //--------------------------------------------------
+2172          BYTE ScalerDpRx1DFECheck_EXINT0(void) using 1
+2173          {
+2174   1          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+2175   1          {
+2176   2              return _TRUE;
+2177   2          }
+2178   1      
+2179   1          switch(g_ucDpRx1LaneCount)
+2180   1          {
+2181   2              case _DP_FOUR_LANE:
+2182   2      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 40  
+
+2183   2                  // Read Lane2 DFE
+2184   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE2 << 6));
+2185   2      
+2186   2                  // Read Back Vth
+2187   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2188   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2189   2      
+2190   2                  // Read Back Tap0
+2191   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2192   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2193   2      
+2194   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2195   2                  {
+2196   3                      return _FALSE;
+2197   3                  }
+2198   2      
+2199   2                  // Read Lane3 DFE
+2200   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE3 << 6));
+2201   2      
+2202   2                  // Read Back Vth
+2203   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2204   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2205   2      
+2206   2                  // Read Back Tap0
+2207   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2208   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2209   2      
+2210   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2211   2                  {
+2212   3                      return _FALSE;
+2213   3                  }
+2214   2      
+2215   2                  // Read Lane1 DFE
+2216   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE1 << 6));
+2217   2      
+2218   2                  // Read Back Vth
+2219   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2220   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2221   2      
+2222   2                  // Read Back Tap0
+2223   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2224   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2225   2      
+2226   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2227   2                  {
+2228   3                      return _FALSE;
+2229   3                  }
+2230   2      
+2231   2                  // Read Lane0 DFE
+2232   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+2233   2      
+2234   2                  // Read Back Vth
+2235   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2236   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2237   2      
+2238   2                  // Read Back Tap0
+2239   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2240   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2241   2      
+2242   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2243   2                  {
+2244   3                      return _FALSE;
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 41  
+
+2245   3                  }
+2246   2      
+2247   2                  break;
+2248   2      
+2249   2              case _DP_TWO_LANE:
+2250   2      
+2251   2                  // Read Lane1 DFE
+2252   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE1 << 6));
+2253   2      
+2254   2                  // Read Back Vth
+2255   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2256   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2257   2      
+2258   2                  // Read Back Tap0
+2259   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2260   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2261   2      
+2262   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2263   2                  {
+2264   3                      return _FALSE;
+2265   3                  }
+2266   2      
+2267   2                  // Read Lane0 DFE
+2268   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+2269   2      
+2270   2                  // Read Back Vth
+2271   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2272   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2273   2      
+2274   2                  // Read Back Tap0
+2275   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2276   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2277   2      
+2278   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2279   2                  {
+2280   3                      return _FALSE;
+2281   3                  }
+2282   2      
+2283   2                  break;
+2284   2      
+2285   2              case _DP_ONE_LANE:
+2286   2      
+2287   2                  // Read Lane0 DFE
+2288   2                  ScalerSetBit_EXINT(P7A_F2_COEF_3, ~(_BIT7 | _BIT6), (_D1_DP_LANE0 << 6));
+2289   2      
+2290   2                  // Read Back Vth
+2291   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2292   2                  pData_EXINT[0] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x0F);
+2293   2      
+2294   2                  // Read Back Tap0
+2295   2                  ScalerSetBit_EXINT(P7A_F0_COEF_1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+2296   2                  pData_EXINT[1] = (ScalerGetByte_EXINT(P7A_F1_COEF_2) & 0x1F);
+2297   2      
+2298   2                  if(PDATA_WORD_EXINT(0) == 0x0015)
+2299   2                  {
+2300   3                      return _FALSE;
+2301   3                  }
+2302   2      
+2303   2                  break;
+2304   2      
+2305   2              default:
+2306   2      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 42  
+
+2307   2                  return _FALSE;
+2308   2      
+2309   2                  break;
+2310   2          }
+2311   1      
+2312   1          return _TRUE;
+2313   1      }
+2314          
+2315          //--------------------------------------------------
+2316          // Description  : DP Interrupt Handler
+2317          // Input Value  : None
+2318          // Output Value : None
+2319          //--------------------------------------------------
+2320          void ScalerDpRx1IntHandler_EXINT0(void) using 1
+2321          {
+2322   1          // Aux Firmware Control -> Reply Defer
+2323   1          SET_DP_RX1_AUX_MANUAL_MODE_EXINT();
+2324   1      
+2325   1          g_pucDpRx1Backup[0] = ScalerGetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H);
+2326   1          g_pucDpRx1Backup[1] = ScalerGetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M);
+2327   1          g_pucDpRx1Backup[2] = ScalerGetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L);
+2328   1      
+2329   1          // DP Global IRQ Flag
+2330   1          if(ScalerGetBit_EXINT(PBA_DC_AUX_IRQ_STATUS, _BIT7) == _BIT7)
+2331   1          {
+2332   2              // Fifo overflow/ underflow IRQ & flag
+2333   2              if((ScalerGetBit_EXINT(PB9_3A_DP_IRQ_CTRL0, (_BIT1 | _BIT0)) != 0x00) && (ScalerGetBit_EXINT(PB8_2
+             -1_PG_CTRL_1, (_BIT4 | _BIT2)) != 0x00))
+2334   2              {
+2335   3                  // Disable fifo overflwo/ underflwo IRQ
+2336   3                  ScalerSetBit_EXINT(PB9_3A_DP_IRQ_CTRL0, ~(_BIT1 | _BIT0), 0x00);
+2337   3      
+2338   3                  // Set free run & force to BG
+2339   3                  ScalerSetBit_EXINT(P0_28_VIDEO_DISPLAY_CONTROL_REG, ~(_BIT5 | _BIT3), _BIT5);
+2340   3      
+2341   3      #if(_AUDIO_SUPPORT == _ON)
+2342   3                  // Disable Audio Channel
+2343   3                  ScalerAudioDpAudioEnable_EXINT0(_DISABLE, _D1_INPUT_PORT);
+2344   3      #endif
+2345   3      
+2346   3                  // Disable VB-ID[3] Change IRQ
+2347   3                  ScalerSetBit_EXINT(PB9_3B_DP_IRQ_CTRL1, ~_BIT4, 0x00);
+2348   3      
+2349   3                  // Set DP Receive Port0 Out of Sync
+2350   3                  ScalerDpRx1SinkStatusSet_EXINT0(_DP_SINK_REVEICE_PORT0, _DP_SINK_OUT_OF_SYNC);
+2351   3      
+2352   3                  // The Judge Handler take much time, It lead to MacBook 720P @50 <---> @60 Timing changing Iss
+             -ue
+2353   3                  if(((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x01, 0x11) & _BIT0) == 0x00) &&
+2354   3                     (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x06, 0x00, (_BIT2 | _BIT1 | _BIT0)) == _BIT0) &&
+2355   3                     (ScalerDpRx1DFECheck_EXINT0() == _FALSE))
+2356   3                  {
+2357   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x00);
+2358   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+2359   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x04, 0x80);
+2360   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x05, 0x00);
+2361   4                  }
+2362   3      
+2363   3      #if((_DP_TX_SUPPORT == _ON) || (_EMBEDDED_DP_TX_SUPPORT == _ON))
+                          if(GET_DP_TX_STREAM_SOURCE() == _DP_TX_SOURCE_CLONE)
+                          {
+                              // Set DPTx Force Output Idle Pattern
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 43  
+
+                              ScalerDpTxForceIdlePattern_EXINT0();
+                          }
+              #endif
+2370   3              }
+2371   2      
+2372   2              // LLCTS 7.2.1.3 Sink Status
+2373   2              if((ScalerGetBit_EXINT(PB9_3B_DP_IRQ_CTRL1, _BIT4) == _BIT4) && (ScalerGetBit_EXINT(PB9_36_DP_GLB_
+             -STATUS, _BIT6) == _BIT6))
+2374   2              {
+2375   3                  // Disable VB-ID[3] Change IRQ
+2376   3                  ScalerSetBit_EXINT(PB9_3B_DP_IRQ_CTRL1, ~_BIT4, 0x00);
+2377   3      
+2378   3                  // Clear VB-ID[3] Change Flag
+2379   3                  ScalerSetBit_EXINT(PB9_36_DP_GLB_STATUS, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BI
+             -T1), _BIT6);
+2380   3      
+2381   3                  if(ScalerGetBit_EXINT(PB9_01_DP_VBID, _BIT3) == _BIT3)
+2382   3                  {
+2383   4                      // Set DP Receive Port0 Out of Sync
+2384   4                      ScalerDpRx1SinkStatusSet_EXINT0(_DP_SINK_REVEICE_PORT0, _DP_SINK_OUT_OF_SYNC);
+2385   4                  }
+2386   3              }
+2387   2      
+2388   2              if(ScalerGetBit_EXINT(PBA_DD_AUX_DPCD_IRQ, _BIT0) == _BIT0) // Write 00600h into INT0
+2389   2              {
+2390   3                  // Clear Flag
+2391   3                  ScalerSetBit_EXINT(PBA_DD_AUX_DPCD_IRQ, ~_BIT0, _BIT0);
+2392   3      
+2393   3                  if((ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x06, 0x00, (_BIT2 | _BIT1 | _BIT0)) == _BIT1) ||
+2394   3                     (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x06, 0x00, (_BIT2 | _BIT1 | _BIT0)) == (_BIT2 | _B
+             -IT0)))
+2395   3                  {
+2396   4                      // DP Power Down
+2397   4                      if(GET_DP_RX1_BACKUP_PD_LINK_STATUS_FLG() == _FALSE)
+2398   4                      {
+2399   5                          SET_DP_RX1_BACKUP_PD_LINK_STATUS_FLG();
+2400   5      
+2401   5                          g_pucDpRx1LinkStatusBackup_INT[0] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x02);
+2402   5                          g_pucDpRx1LinkStatusBackup_INT[1] = ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x02, 0x03);
+2403   5                          g_pucDpRx1LinkStatusBackup_INT[2] = ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x04,
+             - _BIT0);
+2404   5                      }
+2405   4      
+2406   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, 0x00);
+2407   4                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, 0x00);
+2408   4                      ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x02, 0x04, ~(_BIT7 | _BIT0), _BIT7);
+2409   4      
+2410   4      #if(_DP_MST_SUPPORT == _ON)
+                              CLR_DP_RX1_SOURCE_WRITE_POWER_UP();
+              #endif
+2413   4                  }
+2414   3                  else if(ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x06, 0x00, (_BIT2 | _BIT1 | _BIT0)) == _BIT0)
+2415   3                  {
+2416   4                      // DP Power Normal
+2417   4                      if(GET_DP_RX1_BACKUP_PD_LINK_STATUS_FLG() == _TRUE)
+2418   4                      {
+2419   5                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x02, g_pucDpRx1LinkStatusBackup_INT[0]);
+2420   5                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x03, g_pucDpRx1LinkStatusBackup_INT[1]);
+2421   5                          ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x02, 0x04, ~(_BIT7 | _BIT0), (_BIT7 | g_pucDp
+             -Rx1LinkStatusBackup_INT[2]));
+2422   5                      }
+2423   4      
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 44  
+
+2424   4                      CLR_DP_RX1_BACKUP_PD_LINK_STATUS_FLG();
+2425   4                      g_pucDpRx1LinkStatusBackup_INT[0] = 0x00;
+2426   4                      g_pucDpRx1LinkStatusBackup_INT[1] = 0x00;
+2427   4                      g_pucDpRx1LinkStatusBackup_INT[2] = 0x00;
+2428   4      
+2429   4      #if(_DP_MST_SUPPORT == _ON)
+                              SET_DP_RX1_SOURCE_WRITE_POWER_UP(_DP_SOURCE_WRITE_POWER_UP_TRIGGERED);
+              #endif
+2432   4                  }
+2433   3              }
+2434   2      
+2435   2              if(ScalerGetBit_EXINT(PBA_DA_AUX_FIFO_RST, (_BIT2 | _BIT1)) == (_BIT2 | _BIT1)) // Write 68xxxh in
+             -to INT0
+2436   2              {
+2437   3                  // Clear Flag
+2438   3                  ScalerSetBit_EXINT(PBA_DA_AUX_FIFO_RST, ~_BIT1, _BIT1);
+2439   3      
+2440   3                  // Clear Integrity Failure Flag
+2441   3                  ScalerSetBit_EXINT(PB0_1B_HDCP_INTGT_VRF, ~_BIT1, _BIT1);
+2442   3      
+2443   3      #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+                          if(ScalerGetBit_EXINT(PBA_FA_DUMMY_0, _BIT3) == _BIT3)
+                          {
+                              // Detect if V'(0x68027) is read by Source
+                              if((ScalerGetByte_EXINT(PBA_D3_AUX_RX_ADDR_M) == 0x80) && (ScalerGetByte_EXINT(PBA_D4_AUX_
+             -RX_ADDR_L) == 0x28))
+                              {
+                                  ScalerDpRx1HDCPResetKsvFifoToFirst_EXINT0();
+                              }
+                          }
+              #endif
+2453   3                  if(GET_DP_RX1_FAKE_LINK_TRAINING() == _TRUE)
+2454   3                  {
+2455   4                      // DP Mac Clock Select to Xtal Clock
+2456   4                      ScalerSetBit_EXINT(PB0_01_PHY_DIG_RESET_CTRL, ~_BIT6, _BIT6);
+2457   4                  }
+2458   3              }
+2459   2      
+2460   2              // Detect if Aksv(0x6800B) is Written by Source
+2461   2              if(ScalerGetBit_EXINT(PBA_A5_AUX_RESERVE5, (_BIT6 | _BIT2)) == (_BIT6 | _BIT2))
+2462   2              {
+2463   3                  ScalerSetBit_EXINT(PBA_A5_AUX_RESERVE5, ~(_BIT2 | _BIT1 | _BIT0), _BIT2);
+2464   3      
+2465   3      #if(_DP_HDCP_2_2_SUPPORT == _ON)
+2466   3                  // Switch HDCP to 1.4 Module from 2.2 Module as receiving AKsv
+2467   3                  if(GET_DP_RX1_HDCP_MODE_EXINT() == _HDCP_22)
+2468   3                  {
+2469   4                      // Select to HDCP 1.4 Module
+2470   4                      SET_DP_RX1_HDCP_MODE_EXINT(_HDCP_14);
+2471   4      
+2472   4                      // Calculate R0' by manual toggle HDCP 1.4 Module
+2473   4                      ScalerSetBit_EXINT(PB0_63_HDCP_OTHER, ~_BIT7, _BIT7);
+2474   4                      ScalerSetBit_EXINT(PB0_63_HDCP_OTHER, ~_BIT7, 0x00);
+2475   4                  }
+2476   3      
+2477   3      #if(_WD_TIMER_INT_SUPPORT == _ON)
+2478   3                  ScalerTimerWDCancelTimerEvent_EXINT0(_SCALER_WD_TIMER_EVENT_DP_RX1_HDCP2_SKE);
+2479   3      #endif
+2480   3      #endif
+2481   3      
+2482   3      #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+                          ScalerDpRx1HDCPResetDpcdInfo_EXINT0();
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 45  
+
+              
+                          SET_DP_RX1_HDCP_AUTH_AKSV_WRITTEN();
+              #endif
+2487   3              }
+2488   2      
+2489   2      #if((_DP_TX_SUPPORT == _ON) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+                      // Read 6803A into INT0
+                      if(ScalerGetBit_EXINT(PBA_FA_DUMMY_0, (_BIT1 | _BIT0)) == (_BIT1 | _BIT0))
+                      {
+                          ScalerSetBit_EXINT(PBA_FA_DUMMY_0, ~_BIT0, _BIT0);
+              
+                          ScalerDpRx1HDCPSetKsvFifo_EXINT0();
+                      }
+              #endif
+2498   2              if(ScalerGetBit_EXINT(PBA_DD_AUX_DPCD_IRQ, _BIT2) == _BIT2) // Write 00270h into INT0
+2499   2              {
+2500   3                  // Clear Flag
+2501   3                  ScalerSetBit_EXINT(PBA_DD_AUX_DPCD_IRQ, ~_BIT2, _BIT2);
+2502   3      
+2503   3                  if((GET_DP_RX1_CRC_CALCULATE() == _FALSE) && (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x7
+             -0, _BIT0) == _BIT0))
+2504   3                  {
+2505   4                      SET_DP_RX1_CRC_CALCULATE();
+2506   4                  }
+2507   3      
+2508   3                  if(ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x02, 0x70, _BIT0) == 0x00)
+2509   3                  {
+2510   4                      CLR_DP_RX1_CRC_CALCULATE();
+2511   4      
+2512   4                      // Reset the CRC value of DPCD
+2513   4                      CLR_DP_RX1_CRC_VALUE_EXINT0();
+2514   4                  }
+2515   3      
+2516   3                  // Clear TEST_CRC_COUNT
+2517   3      #if(_DP_CRC_TEST_VISUAL_CHECK == _ON)
+                          ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x46, 0x00);
+              #else
+2520   3                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x02, 0x46, 0x20);
+2521   3      #endif
+2522   3              }
+2523   2      
+2524   2      #if(_DP_MST_SUPPORT == _ON)
+              
+              #if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
+                      ScalerDpRx1MstAutoSwitch_EXINT0();
+              #endif
+              
+                      if(g_enumDpMSTCapablePort == _DP_MST_RX1_PORT)
+                      {
+                          ScalerDpRxMstIntHandle_EXINT0();
+                      }
+              #endif
+2535   2      
+2536   2      #if(_AUDIO_SUPPORT == _ON)
+2537   2              // ---------------------------------
+2538   2              // LPCM Format Change
+2539   2              // ---------------------------------
+2540   2      
+2541   2              // Check Change Flag
+2542   2              if(ScalerGetBit_EXINT(PB9_36_DP_GLB_STATUS, _BIT2) == _BIT2)
+2543   2              {
+2544   3                  // Disable Audio Coding Type Change INT
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 46  
+
+2545   3                  ScalerSetBit_EXINT(PB9_3B_DP_IRQ_CTRL1, ~_BIT0, 0x00);
+2546   3      
+2547   3                  // Clear Audio Coding Type Change Flag
+2548   3                  ScalerSetBit_EXINT(PB9_36_DP_GLB_STATUS, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BI
+             -T1), _BIT2);
+2549   3      
+2550   3                  // Disable Audio Output
+2551   3                  ScalerSetByte_EXINT(PB9_B3_DP_CHANNEL_EN, 0x00);
+2552   3      
+2553   3                  // Set Change Flag
+2554   3                  SET_DP_D1_AUDIO_CODING_TYPE_CHANGE();
+2555   3              }
+2556   2      
+2557   2      
+2558   2              // ---------------------------------
+2559   2              // Fifo Tracking
+2560   2              // ---------------------------------
+2561   2      
+2562   2              // Detect if Auido Sampling is Changed
+2563   2              if(ScalerGetBit_EXINT(PB9_50_AUD_FREQUENY_DET_0, (_BIT6 | _BIT5)) == (_BIT6 | _BIT5))
+2564   2              {
+2565   3                  // Clear Auido Sampling Change Flag
+2566   3                  ScalerSetBit_EXINT(PB9_50_AUD_FREQUENY_DET_0, ~_BIT5, _BIT5);
+2567   3      
+2568   3                  // Set Sampling Change Flag
+2569   3                  SET_DP_D1_AUDIO_SAMPLING_FREQ_CHANGE();
+2570   3      
+2571   3                  // Disable Boundary Tracking Method
+2572   3                  ScalerSetBit_EXINT(PB9_81_AUD_BDRY_0, ~_BIT7, 0x00);
+2573   3      
+2574   3                  // Disable Trend Tracking Method
+2575   3                  ScalerSetBit_EXINT(PB9_92_AUD_TRND_0, ~_BIT7, 0x00);
+2576   3      
+2577   3                  // Reload D code
+2578   3                  ScalerSetBit_EXINT(PB9_7C_AUD_FSM_CTRL_1, ~_BIT7, _BIT7);
+2579   3      
+2580   3      #if(_AUDIO_MANUAL_SAMPLING_FREQ_SUPPORT == _OFF)
+2581   3                  // No Audio Detect
+2582   3                  if((ScalerGetBit_EXINT(PB9_61_AUD_SAMPLE_CNT_0, (_BIT7 | _BIT6 | _BIT5 | _BIT4)) >> 4) == 0x00
+             -)
+2583   3                  {
+2584   4                      // -----------------------------------------
+2585   4                      // Set User Define Frequency When No Audio
+2586   4                      // -----------------------------------------
+2587   4                      ScalerAudioD1AudioFrequencyMode_EXINT0(_AUDIO_TRACKING_MANNUAL_MODE);
+2588   4      
+2589   4                      // Clear Flag
+2590   4                      CLR_AUDIO_D1_AUTO_LOAD_FREQ();
+2591   4                  }
+2592   3      #endif
+2593   3              }
+2594   2      #endif
+2595   2          }
+2596   1      
+2597   1          ScalerSetByte_EXINT(PBA_C1_DPCD_ADDR_PORT_H, g_pucDpRx1Backup[0]);
+2598   1          ScalerSetByte_EXINT(PBA_C2_DPCD_ADDR_PORT_M, g_pucDpRx1Backup[1]);
+2599   1          ScalerSetByte_EXINT(PBA_C3_DPCD_ADDR_PORT_L, g_pucDpRx1Backup[2]);
+2600   1      }
+2601          //--------------------------------------------------
+2602          // Description  : DP PHY DFE Initial Setting in TP2
+2603          // Input Value  : None
+2604          // Output Value : None
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 47  
+
+2605          //--------------------------------------------------
+2606          void ScalerDpRx1SetDFEInitial_EXINT0(void) using 1
+2607          {
+2608   1          // [6] Enable Timer Control DFE Loop
+2609   1          // [5:4] Reduce Gain to 1/4
+2610   1          // [3] Disable Running Length Detection
+2611   1          // [2] bypass Blank out Case-3 Symbol
+2612   1          ScalerSetBit_EXINT(P7A_A0_L0_DFE_EN_1, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT6 | _BIT5));
+2613   1          ScalerSetBit_EXINT(P7A_B0_L1_DFE_EN_1, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT6 | _BIT5));
+2614   1          ScalerSetBit_EXINT(P7A_C0_L2_DFE_EN_1, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT6 | _BIT5));
+2615   1          ScalerSetBit_EXINT(P7A_D0_L3_DFE_EN_1, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT6 | _BIT5));
+2616   1      
+2617   1          // [7:6] adapt_mode[1:0] = 2'b11 --> Amplitude-based Adaptation with Independent LE Loop(Loop Mode 3)
+2618   1          // [5] edge_det_mode = 1 --> Edge Lag Data
+2619   1          // [4] transition_only = 1 --> Only Transition Bit is Effective
+2620   1          // [3] le_auto_reload = 0 --> Disable Auto-reload LE Coefficient
+2621   1          // [2:0] tap1_delay[2:0] = 3'b010 --> Tap1+LE Delay 2us after Tap0
+2622   1          ScalerSetByte_EXINT(P7A_E0_MODE_TIMER, 0xF2);
+2623   1      
+2624   1          // Set DFE Delay Time
+2625   1          ScalerSetByte_EXINT(P7A_E1_TIMER, 0x01);
+2626   1      
+2627   1          // Tap0,Tap1 Loop Gain 1/512
+2628   1          ScalerSetBit_EXINT(P7A_E2_GAIN_1, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT5 | _BIT2));
+2629   1      
+2630   1          // Tap2,Tap3 Loop Gain 1/512
+2631   1          ScalerSetBit_EXINT(P7A_E3_GAIN_2, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT5 | _BIT2));
+2632   1      
+2633   1          // Tap4,Servo Loop Gain 1/512
+2634   1          ScalerSetBit_EXINT(P7A_E4_GAIN_3, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2), (_BIT5 | _BIT3));
+2635   1      
+2636   1          // LE Gain1 Loop Gain 1/256, LE Gain2 Loop Gain 0, LE Pre-Courser Gain 0
+2637   1          ScalerSetBit_EXINT(P7A_E5_GAIN_4, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1), (_BIT6 | _
+             -BIT4 | _BIT3));
+2638   1          ScalerSetBit_EXINT(P7A_FA_GAIN_PREC, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT2 | _BIT1));
+2639   1      
+2640   1          // Tap0 Max is 21
+2641   1          ScalerSetByte_EXINT(P7A_E6_LIMIT_1, 0x35);
+2642   1      
+2643   1          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+2644   1          {
+2645   2              // Tap1 Min is 49
+2646   2              ScalerSetBit_EXINT(P7A_E7_LIMIT_2, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _BIT
+             -4 | _BIT0));
+2647   2          }
+2648   1          else
+2649   1          {
+2650   2              // Tap1 Min is 51
+2651   2              ScalerSetBit_EXINT(P7A_E7_LIMIT_2, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _BIT
+             -4 | _BIT1 | _BIT0));
+2652   2          }
+2653   1      
+2654   1          // Tap2 Max is 6, Min is -6
+2655   1          ScalerSetBit_EXINT(P7A_E8_LIMIT_3, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3), (_BIT5 | _BIT4));
+2656   1          ScalerSetBit_EXINT(P7A_E8_LIMIT_3, ~(_BIT2 | _BIT1 | _BIT0), _BIT0);
+2657   1          ScalerSetBit_EXINT(P7A_E9_LIMIT_4, ~(_BIT7 | _BIT6), _BIT7);
+2658   1      
+2659   1          // Tap3 Max is 0, Min is -3
+2660   1          ScalerSetBit_EXINT(P7A_E9_LIMIT_4, ~(_BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2661   1          ScalerSetBit_EXINT(P7A_EA_LIMIT_5, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4 | _BIT3), (_BIT4 | _BIT3));
+2662   1      
+2663   1          // Tap4 Max is 0, Min is -3
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 48  
+
+2664   1          ScalerSetBit_EXINT(P7A_EA_LIMIT_5, ~(_BIT2 | _BIT1 | _BIT0), 0x00);
+2665   1          ScalerSetBit_EXINT(P7A_EB_LIMIT_6, ~(_BIT7 | _BIT6), 0x00);
+2666   1          ScalerSetBit_EXINT(P7A_EB_LIMIT_6, ~(_BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT1 | _BIT0));
+2667   1      
+2668   1          // Tap0 Threshold = 10
+2669   1          ScalerSetBit_EXINT(P7A_EF_RESET_1, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), (_BIT7 | _BIT5));
+2670   1      
+2671   1          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+2672   1          {
+2673   2              // Set Vth Max = 6, Min = 4
+2674   2              ScalerSetByte_EXINT(P7A_F9_LIMIT_10, 0x64);
+2675   2          }
+2676   1          else
+2677   1          {
+2678   2              // Set Vth Max = 6, Min = 2
+2679   2              ScalerSetByte_EXINT(P7A_F9_LIMIT_10, 0x62);
+2680   2          }
+2681   1      
+2682   1          // Set Vth/Servo-loop/Tap Divider
+2683   1          ScalerSetByte_EXINT(P7A_EC_LOOP_DIV_1, 0xA3);
+2684   1      
+2685   1          if(g_ucDpRx1TrainingPatternSet == _DP_TRAINING_PATTERN_3)
+2686   1          {
+2687   2              // Tap Divider = 34 for TP3
+2688   2              ScalerSetByte_EXINT(P7A_ED_LOOP_DIV_2, 0xE2);
+2689   2          }
+2690   1          else
+2691   1          {
+2692   2              // Tap Divider = 10 for TP2
+2693   2              ScalerSetByte_EXINT(P7A_ED_LOOP_DIV_2, 0xCA);
+2694   2          }
+2695   1      
+2696   1          // [1] tap1_trans = 1'b0 --> Tap1 is Effective every bit
+2697   1          // [0] tap0_trans = 1'b0 --> Tap0 is Effective every bit
+2698   1          ScalerSetBit_EXINT(P7A_E3_GAIN_2, ~(_BIT1 | _BIT0), 0x00);
+2699   1      
+2700   1          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+2701   1          {
+2702   2              // [1:0] trans_rlength = 2'b01 --> Tap0 Run Length = 3
+2703   2              ScalerSetBit_EXINT(P7A_E4_GAIN_3, ~(_BIT1 | _BIT0), _BIT0);
+2704   2          }
+2705   1          else
+2706   1          {
+2707   2              // [1:0] trans_rlength = 2'b00 --> Tap0 Run Length = 2
+2708   2              ScalerSetBit_EXINT(P7A_E4_GAIN_3, ~(_BIT1 | _BIT0), 0x00);
+2709   2          }
+2710   1      
+2711   1          // [5] servo_notrans = 1'b0 --> Servo is Effective every bit
+2712   1          // [4] tap0_notrans = 1'b0 --> Tap0 is Effective every bit
+2713   1          ScalerSetBit_EXINT(P7A_F8_GRAY_DEC_2, ~(_BIT5 | _BIT4), 0x00);
+2714   1      
+2715   1      
+2716   1          /////////////////////////
+2717   1          // DFE Code Initialize //
+2718   1          /////////////////////////
+2719   1      
+2720   1          if(g_ucDpRx1LinkRate == _DP_LINK_HBR2)
+2721   1          {
+2722   2              // LE Max = 18, Initial = 16, Servo Initial = 16
+2723   2              ScalerSetByte_EXINT(P7A_A2_L0_LIMIT_INIT, 0x20);
+2724   2              ScalerSetByte_EXINT(P7A_B2_L1_LIMIT_INIT, 0x20);
+2725   2              ScalerSetByte_EXINT(P7A_C2_L2_LIMIT_INIT, 0x20);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 49  
+
+2726   2              ScalerSetByte_EXINT(P7A_D2_L3_LIMIT_INIT, 0x20);
+2727   2              ScalerSetByte_EXINT(P7A_A3_L0_INIT_1, 0xD0);
+2728   2              ScalerSetByte_EXINT(P7A_B3_L1_INIT_1, 0xD0);
+2729   2              ScalerSetByte_EXINT(P7A_C3_L2_INIT_1, 0xD0);
+2730   2              ScalerSetByte_EXINT(P7A_D3_L3_INIT_1, 0xD0);
+2731   2          }
+2732   1          else
+2733   1          {
+2734   2              // LE Max = 20, Initial = 16, Servo Initial = 16
+2735   2              ScalerSetByte_EXINT(P7A_A2_L0_LIMIT_INIT, 0x40);
+2736   2              ScalerSetByte_EXINT(P7A_B2_L1_LIMIT_INIT, 0x40);
+2737   2              ScalerSetByte_EXINT(P7A_C2_L2_LIMIT_INIT, 0x40);
+2738   2              ScalerSetByte_EXINT(P7A_D2_L3_LIMIT_INIT, 0x40);
+2739   2              ScalerSetByte_EXINT(P7A_A3_L0_INIT_1, 0xD0);
+2740   2              ScalerSetByte_EXINT(P7A_B3_L1_INIT_1, 0xD0);
+2741   2              ScalerSetByte_EXINT(P7A_C3_L2_INIT_1, 0xD0);
+2742   2              ScalerSetByte_EXINT(P7A_D3_L3_INIT_1, 0xD0);
+2743   2          }
+2744   1      
+2745   1          // Tap0 Initial Value = 18
+2746   1          ScalerSetByte_EXINT(P7A_A4_L0_INIT_2, 0x12);
+2747   1          ScalerSetByte_EXINT(P7A_B4_L1_INIT_2, 0x12);
+2748   1          ScalerSetByte_EXINT(P7A_C4_L2_INIT_2, 0x12);
+2749   1          ScalerSetByte_EXINT(P7A_D4_L3_INIT_2, 0x12);
+2750   1      
+2751   1          // Tap1 Initial Value = 15
+2752   1          ScalerSetByte_EXINT(P7A_A5_L0_INIT_3, 0x0F);
+2753   1          ScalerSetByte_EXINT(P7A_B5_L1_INIT_3, 0x0F);
+2754   1          ScalerSetByte_EXINT(P7A_C5_L2_INIT_3, 0x0F);
+2755   1          ScalerSetByte_EXINT(P7A_D5_L3_INIT_3, 0x0F);
+2756   1      
+2757   1          // Tap2 Initial Value = 0
+2758   1          ScalerSetByte_EXINT(P7A_A6_L0_INIT_4, 0x00);
+2759   1          ScalerSetByte_EXINT(P7A_B6_L1_INIT_4, 0x00);
+2760   1          ScalerSetByte_EXINT(P7A_C6_L2_INIT_4, 0x00);
+2761   1          ScalerSetByte_EXINT(P7A_D6_L3_INIT_4, 0x00);
+2762   1      
+2763   1          // Vth Initial Value = 4
+2764   1          ScalerSetByte_EXINT(P7A_A9_L0_INIT_7, 0x04);
+2765   1          ScalerSetByte_EXINT(P7A_B9_L1_INIT_7, 0x04);
+2766   1          ScalerSetByte_EXINT(P7A_C9_L2_INIT_7, 0x04);
+2767   1          ScalerSetByte_EXINT(P7A_D9_L3_INIT_7, 0x04);
+2768   1      
+2769   1          // Load Intial DFE Code
+2770   1          ScalerSetByte_EXINT(P7A_AA_L0_INIT_8, 0xFF);
+2771   1          ScalerSetByte_EXINT(P7A_BA_L1_INIT_8, 0xFF);
+2772   1          ScalerSetByte_EXINT(P7A_CA_L2_INIT_8, 0xFF);
+2773   1          ScalerSetByte_EXINT(P7A_DA_L3_INIT_8, 0xFF);
+2774   1      
+2775   1          ScalerSetByte_EXINT(P7A_AA_L0_INIT_8, 0x00);
+2776   1          ScalerSetByte_EXINT(P7A_BA_L1_INIT_8, 0x00);
+2777   1          ScalerSetByte_EXINT(P7A_CA_L2_INIT_8, 0x00);
+2778   1          ScalerSetByte_EXINT(P7A_DA_L3_INIT_8, 0x00);
+2779   1      
+2780   1          // DFE Loop Normal
+2781   1          ScalerSetBit_EXINT(P7A_EF_RESET_1, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+2782   1          ScalerSetBit_EXINT(P7A_EF_RESET_1, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT3 | _BIT2 | _BIT1 | _BIT0));
+2783   1      
+2784   1          // Disable All Adaptation Loop
+2785   1          ScalerSetByte_EXINT(P7A_A1_L0_DFE_EN_2, 0x00);
+2786   1          ScalerSetByte_EXINT(P7A_B1_L1_DFE_EN_2, 0x00);
+2787   1          ScalerSetByte_EXINT(P7A_C1_L2_DFE_EN_2, 0x00);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 50  
+
+2788   1          ScalerSetByte_EXINT(P7A_D1_L3_DFE_EN_2, 0x00);
+2789   1      }
+2790          
+2791          //--------------------------------------------------
+2792          // Description  : Check DP Source OUI for Specific Action
+2793          // Input Value  : Action that Need to Check Specific Source OUI
+2794          // Output Value : Whether Specific Source OUI Hit or Not
+2795          //--------------------------------------------------
+2796          BYTE ScalerDpRx1CheckSourceOUI_EXINT0(EnumDpRxCheckSourceOUI enumDpRx1CheckSourceOUI) using 1
+2797          {
+2798   1          switch(enumDpRx1CheckSourceOUI)
+2799   1          {
+2800   2      #if(_DP_LT_TP1_PERMIT_SWING_LEVEL_0_FOR_SPECIFIC_SOURCE_OUI == _ON)
+                      case _LT_TP1_PERMIT_SWING_LEVEL_0:
+                      {
+                          BYTE pucSrcIeeeOuiUser[9] = _SRC_IEEE_OUI_APPLE_2017_PRO_15INCH_IDENTIFY_STRING;
+              
+                          for(pData_EXINT[0] = 0; pData_EXINT[0] < 9; pData_EXINT[0]++)
+                          {
+                              if((ScalerDpRx1GetDpcdInfo_EXINT0(0x00, 0x03, pData_EXINT[0])) != (pucSrcIeeeOuiUser[pData
+             -_EXINT[0]]))
+                              {
+                                  return _FALSE;
+                              }
+                          }
+              
+                          return _TRUE;
+                      }
+              #endif
+2816   2              default:
+2817   2      
+2818   2                  return _FALSE;
+2819   2          }
+2820   1      }
+2821          
+2822          #if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : DP Mst Auto Switch
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1MstAutoSwitch_EXINT0(void) using 1
+              {
+                  // DPCD Write 111h
+                  if((ScalerGetBit_EXINT(PBA_B2_AUX_SPECIAL_IRQ_EN, _BIT7) == _BIT7) &&
+                     (ScalerGetBit_EXINT(PBA_B3_AUX_SPECIAL_IRQ_FLAG, _BIT7) == _BIT7))
+                  {
+                      if(ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x00, 0x21, _BIT0) == 0x00)
+                      {
+                          // Rx1 Disable DPCD 111/1C2 IRQ
+                          ScalerSetBit_EXINT(PBA_B2_AUX_SPECIAL_IRQ_EN, ~(_BIT7 | _BIT4), 0x00);
+              
+                          return;
+                      }
+              
+                      // 00111h Is Set
+                      if((ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x01, 0x11, _BIT1) == _BIT1) ||
+                         (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x01, 0x11, _BIT0) == _BIT0))
+                      {
+                          if(g_enumDpMSTCapablePort == _DP_MST_NO_PORT)
+                          {
+                              // Rx1 gets MST use right
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 51  
+
+                              ScalerDpRxMstInitial_EXINT0(_DP_MST_RX1_PORT);
+              
+              #if(_ERROR_PRONE_CODE == _TRUE)
+              #if(_D0_DP_EXIST == _ON)
+                              // Disable other ports' capabilities
+                              ScalerDpRxMstCapabilitySwitch_EXINT0(_D0_INPUT_PORT, _DISABLE);
+              #endif
+              #endif
+                          }
+                      }
+                      // 00111h Is Cleared
+                      else if((ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x01, 0x11, _BIT1) == 0x00) &&
+                              (ScalerDpRx1GetDpcdBitInfo_EXINT0(0x00, 0x01, 0x11, _BIT0) == 0x00))
+                      {
+                          ScalerSetBit_EXINT(PBA_B3_AUX_SPECIAL_IRQ_FLAG, ~(_BIT7 | _BIT4 | _BIT3), _BIT7);
+              
+                          if(g_enumDpMSTCapablePort == _DP_MST_RX1_PORT)
+                          {
+                              // Rx1 loses MST use right
+                              ScalerDpRxMstInitial_EXINT0(_DP_MST_NO_PORT);
+                          }
+                      }
+                  }
+              
+                  // 1000h is written while 111h[1] has been cleared unexpectedly
+                  if((GET_REG_DP_RX_DOWN_REQUEST_ADDR_WRITTEN_IRQ_ENABLE_EXINT() == _TRUE) && (GET_REG_DP_RX_DOWN_REQUES
+             -T_ADDR_WRITTEN_EXINT() == _TRUE))
+                  {
+                      if(GET_REG_DP_RX_DOWN_REQUEST_MSG_D1_SUPPORT_ENABLE_EXINT() == _TRUE)
+                      {
+                          if(g_enumDpMSTCapablePort == _DP_MST_NO_PORT)
+                          {
+                              // Recover 111h[1]
+                              ScalerDpRx1SetDpcdBitValue_EXINT0(0x00, 0x01, 0x11, ~_BIT1, _BIT1);
+              
+                              ScalerDpRxMstInitial_EXINT0(_DP_MST_RX1_PORT);
+              
+              #if(_ERROR_PRONE_CODE == _TRUE)
+              #if(_D0_DP_EXIST == _ON)
+                              // Disable other ports' capabilities
+                              ScalerDpRxMstCapabilitySwitch_EXINT0(_D0_INPUT_PORT, _DISABLE);
+              #endif
+              #endif
+                          }
+              
+                          CLR_REG_DP_RX_DOWN_REQUEST_ADDR_WRITTEN_IRQ_ENABLE_EXINT();
+                      }
+                  }
+              }
+              
+              #if(_ERROR_PRONE_CODE == _TRUE)
+              #if(_D0_DP_EXIST == _ON)
+              //--------------------------------------------------
+              // Description  : Set Dp HotPlug Event
+              // Input Value  : Hot Plug Type
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1SetHotPlugEvent_EXINT0(EnumDpHotPlugAssertType enumHpdType) using 1
+              {
+              #if(_DP_LONG_HPD_ALLOWED_BY_USER_SUPPORT == _ON)
+                  if(GET_DP_RX_D1_LONG_HPD_ALLOWED() == _FALSE)
+                  {
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 52  
+
+                      if(GET_DP_RX_D1_HPD_STATUS() == _HIGH)
+                      {
+                          if((enumHpdType > _DP_HPD_LOW) && (enumHpdType < _DP_HPD_ASSERTED))
+                          {
+                              return;
+                          }
+                      }
+                  }
+              #endif
+              
+                  // If the priority of enumHpdType is higher
+                  if(enumHpdType < GET_DP_RX1_HOTPLUG_ASSERT_TYPE_EXINT())
+                  {
+                      SET_DP_RX1_HOTPLUG_ASSERT_TYPE_EXINT(enumHpdType);
+                  }
+              }
+              //--------------------------------------------------
+              // Description  : Dp Set Branch Device Specific Field 00500h - 005FFh in INT0
+              // Input Value  : _DP_VERSION_1_1 or _DP_VERSION_1_2 or _DP_VERSION_1_4
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1SetBranchDeviceSpecificField_EXINT0(EnumDpVersionType enumDpVersion) using 1
+              {
+                  if(enumDpVersion >= _DP_VERSION_1_4)
+                  {
+                      // Branch IEEE OUI For DP1.4
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x00, _DP_1_4_BRANCH_RTK_IEEE_OUI_L);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x01, _DP_1_4_BRANCH_RTK_IEEE_OUI_M);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x02, _DP_1_4_BRANCH_RTK_IEEE_OUI_H);
+              
+                      // Branch IEEE OUI LSB For DP1.4
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x03, _DP_1_4_BRANCH_RTK_ID_STRING_0);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x04, _DP_1_4_BRANCH_RTK_ID_STRING_1);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x05, _DP_1_4_BRANCH_RTK_ID_STRING_2);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x06, _DP_1_4_BRANCH_RTK_ID_STRING_3);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x07, _DP_1_4_BRANCH_RTK_ID_STRING_4);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x08, _DP_1_4_BRANCH_RTK_ID_STRING_5);
+              
+                      // Branch HW/FW Version For DP1.4
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x09, _DP_1_4_BRANCH_RTK_HW_VERSION);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0A, _DP_1_4_BRANCH_RTK_FW_VERSION_H);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0B, _DP_1_4_BRANCH_RTK_FW_VERSION_L);
+                  }
+                  else if(enumDpVersion >= _DP_VERSION_1_2)
+                  {
+                      // Branch IEEE OUI For DP1.2
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x00, _DP_1_2_BRANCH_RTK_IEEE_OUI_L);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x01, _DP_1_2_BRANCH_RTK_IEEE_OUI_M);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x02, _DP_1_2_BRANCH_RTK_IEEE_OUI_H);
+              
+                      // Branch IEEE OUI LSB For DP1.2
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x03, _DP_1_2_BRANCH_RTK_ID_STRING_0);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x04, _DP_1_2_BRANCH_RTK_ID_STRING_1);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x05, _DP_1_2_BRANCH_RTK_ID_STRING_2);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x06, _DP_1_2_BRANCH_RTK_ID_STRING_3);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x07, _DP_1_2_BRANCH_RTK_ID_STRING_4);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x08, _DP_1_2_BRANCH_RTK_ID_STRING_5);
+              
+                      // Branch HW/FW Version For DP1.2
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x09, _DP_1_2_BRANCH_RTK_HW_VERSION);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0A, _DP_1_2_BRANCH_RTK_FW_VERSION_H);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0B, _DP_1_2_BRANCH_RTK_FW_VERSION_L);
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 53  
+
+                  }
+                  else
+                  {
+              #if(_DP_SINK_VER11_OUI_SUPPORT == _ON)
+                      // Branch IEEE OUI For DP1.1
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x00, _DP_1_1_BRANCH_RTK_IEEE_OUI_L);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x01, _DP_1_1_BRANCH_RTK_IEEE_OUI_M);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x02, _DP_1_1_BRANCH_RTK_IEEE_OUI_H);
+              #else
+                      // Branch IEEE OUI Not Support
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x00, 0x00);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x01, 0x00);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x02, 0x00);
+              #endif
+                      // Branch IEEE OUI LSB For DP1.1
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x03, _DP_1_1_BRANCH_RTK_ID_STRING_0);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x04, _DP_1_1_BRANCH_RTK_ID_STRING_1);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x05, _DP_1_1_BRANCH_RTK_ID_STRING_2);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x06, _DP_1_1_BRANCH_RTK_ID_STRING_3);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x07, _DP_1_1_BRANCH_RTK_ID_STRING_4);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x08, _DP_1_1_BRANCH_RTK_ID_STRING_5);
+              
+                      // Branch HW/FW Version For DP1.1
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x09, _DP_1_1_BRANCH_RTK_HW_VERSION);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0A, _DP_1_1_BRANCH_RTK_FW_VERSION_H);
+                      ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0B, _DP_1_1_BRANCH_RTK_FW_VERSION_L);
+                  }
+              }
+              //--------------------------------------------------
+              // Description  : Dp Clear Branch Device Specific Field 00500h - 005FFh in INT0
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx1ClearBranchDeviceSpecificField_EXINT0(void) using 1
+              {
+                  // Branch IEEE OUI
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x00, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x01, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x02, 0x00);
+              
+                  // Branch IEEE OUI LSB
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x03, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x04, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x05, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x06, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x07, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x08, 0x00);
+              
+                  // Branch HW/FW Version
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x09, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0A, 0x00);
+                  ScalerDpRx1SetDpcdValue_EXINT0(0x00, 0x05, 0x0B, 0x00);
+              }
+              #endif // End of #if(_D0_DP_EXIST == _ON)
+              #endif // End of #if(_ERROR_PRONE_CODE == _TRUE)
+              #endif // End of #if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
+3028          #endif // End of #if(_D1_DP_EXIST == _ON)
+3029          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   7114    ----
+C51 COMPILER V9.60.0.0   SCALERDPRX1_INT_SEPTPHY                                           10/18/2025 16:52:56 PAGE 54  
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      39
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

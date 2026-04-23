@@ -1,0 +1,1507 @@
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SCALERDISPLAY
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\ScalerDisplay.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\Scaler\ScalerFunction\Code\ScalerDisplay.c LARGE OPTIMIZE(9,SPEED
+                    -) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\H
+                    -eader;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\L
+                    -ib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL
+                    -6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Heade
+                    -r;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\Us
+                    -er\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Heade
+                    -r) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\ScalerD
+                    -isplay.lst) TABS(2) OBJECT(.\Output\RL6449_Project\ScalerDisplay.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : ScalerDisplay.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #define __SCALER_DISPLAY__
+  18          
+  19          #include "ScalerFunctionInclude.h"
+  20          
+  21          //****************************************************************************
+  22          // DEFINITIONS / MACROS
+  23          //****************************************************************************
+  24          
+  25          
+  26          //****************************************************************************
+  27          // STRUCT / TYPE / ENUM DEFINITTIONS
+  28          //****************************************************************************
+  29          
+  30          
+  31          //****************************************************************************
+  32          // CODE TABLES
+  33          //****************************************************************************
+  34          #if(_PANEL_STYLE == _PANEL_VBO)
+  35          BYTE code tDISPLAY_VBO_DRV_TABLE[48] =
+  36          {
+  37              // Pre-emphasis->               0(0mV)               1(50mV)              2(100mV)             3(150mV
+             -)
+  38              // VoltageSwing
+  39              /*    0 (200mV)   */      0x00, 0x08, 0x22,    0x24, 0x08, 0x44,    0x25, 0x08, 0x66,    0x27, 0x08, 0
+             -xAA,
+  40              /*    1 (250mV)   */      0x00, 0x08, 0x44,    0x05, 0x08, 0x66,    0x64, 0x08, 0xAA,    0x65, 0x0A, 0
+             -xAA,
+  41              /*    2 (300mV)   */      0x00, 0x08, 0x66,    0x01, 0x08, 0xAA,    0x03, 0x0A, 0xAA,    0x61, 0x0C, 0
+             -xAA,
+  42              /*    3 (350mV)   */      0x00, 0x08, 0xAA,    0x01, 0x0A, 0xAA,    0x60, 0x0C, 0xAA,    0x61, 0x0E, 0
+             -xAA,
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 2   
+
+  43          };
+  44          #endif
+  45          
+  46          
+  47          //****************************************************************************
+  48          // VARIABLE DECLARATIONS
+  49          //****************************************************************************
+  50          #if(_PANEL_STYLE == _PANEL_VBO)
+  51          StructVboInfo g_stVboInfo =
+  52          {
+  53              _FAIL,
+  54              _FALSE,
+  55              _DISABLE,
+  56          };
+  57          #endif // #if(_PANEL_STYLE == _PANEL_VBO)
+  58          
+  59          StructDisplayCustomizedData g_stDisplayCustomizedData;
+  60          
+  61          //****************************************************************************
+  62          // FUNCTION DECLARATIONS
+  63          //****************************************************************************
+  64          #if(_PANEL_STYLE == _PANEL_LVDS)
+              void ScalerDisplayLvdsTxDataSel(void);
+              void ScalerDisplayLvdsTxPortSwap(void);
+              #endif
+  68          
+  69          #if(_PANEL_STYLE == _PANEL_VBO)
+  70          void ScalerDisplayVboMac(bit bOn);
+  71          void ScalerDisplayVboPhy(bit bOn);
+  72          void ScalerDisplayVboAnalogPhyConrol(bit bEnable);
+  73          void ScalerDisplayVboCdr2AlnLatency(void);
+  74          
+  75          void ScalerDisplayVboHtpdnSetFwControl(bit bEnable);
+  76          
+  77          #if(_PANEL_VBO_CHANGE_CLK_RESET_TYPE == _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN)
+              void ScalerDisplayVboForceLinkTraining(bit bEnable);
+              #endif
+  80          
+  81          void ScalerDisplayVboForceVideoOutput(bit bEnable);
+  82          void ScalerDisplayVboSetLocknInterrupt(bit bEnable);
+  83          void ScalerDisplayVboSetUnLocknInterrupt(bit bEnable);
+  84          void ScalerDisplayVboPollingHotPlug(WORD usNum);
+  85          void ScalerDisplayVboHtpdnHandler(void);
+  86          void ScalerDisplayVboLocknHandler(void);
+  87          void ScalerDisplayVboCtsFifoHandler(void);
+  88          bit ScalerDisplayVboLocknStatus(void);
+  89          void ScalerDisplayVboPanelSetFastOff(bit bEnable);
+  90          bit ScalerDisplayVboPanelFastOffCheck(void);
+  91          void ScalerDisplayVboPanelBacklightReTurnOn(void);
+  92          void ScalerDisplayVboIntHandler_EXINT0(void);
+  93          bit ScalerDisplayGetVboPowerStatus(void);
+  94          void ScalerDisplaySetVboPLLSSC(bit bDclkSpreadSpeed, BYTE ucSpreadRange);
+  95          void ScalerDisplayVboDrivingControl(BYTE ucDrvLane, BYTE ucEmpLane);
+  96          void ScalerDisplayVboInitialTable(void);
+  97          void ScalerDisplayVboPLL(bit bOn);
+  98          void ScalerDisplayVboPower(bit bOn);
+  99          void ScalerDisplayVboSetZ0(void);
+ 100          #endif
+ 101          
+ 102          DWORD ScalerDisplayGetPanelClockInfo(EnumPanelClockType enumType);
+ 103          BYTE ScalerDisplaySelectDVFMode(void);
+ 104          void ScalerDisplaySetDVFreq(void);
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 3   
+
+ 105          
+ 106          
+ 107          //****************************************************************************
+ 108          // FUNCTION DEFINITIONS
+ 109          //****************************************************************************
+ 110          
+ 111          #if(_PANEL_STYLE == _PANEL_LVDS)
+              //--------------------------------------------------
+              // Description  : LVDS TX Port output Data Selection
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDisplayLvdsTxDataSel(void)
+              {
+              #if(_LVDS_PORT_SEL == _LVDS_1_PORT_A)
+              
+                  ScalerSetByte(P39_02_LVDS_DISPLAY_CONV_CTRL1, 0x00);
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port A Output Termination Enable (Analog Port B)
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port A Output Termination Disable (Analog Port B)
+                  ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_1_PORT_B)
+              
+                  ScalerSetByte(P39_02_LVDS_DISPLAY_CONV_CTRL1, 0x00);
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port B Output Termination Enable (Analog Port A)
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port B Output Termination Disable (Analog Port A)
+                  ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 4   
+
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_1_PORT_C)
+              
+                  ScalerSetByte(_LVDS_TXCD_OUTPUT_DATA_PORT_ADDR, 0x00);
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port C Output Termination Enable (Analog Port B)
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port C Output Termination Disable (Analog Port B)
+                  ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_1_PORT_D)
+              
+                  ScalerSetByte(_LVDS_TXCD_OUTPUT_DATA_PORT_ADDR, 0x00);
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port D Output Termination Enable (Analog Port A)
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port D Output Termination Disable (Analog Port A)
+                  ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_2_PORT_AB)
+              
+                  ScalerSetByte(P39_02_LVDS_DISPLAY_CONV_CTRL1, ((_LVDS_PORT_MIRROR == _DISABLE) ? 0x01 : 0x10));
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port AB Output Termination Enable
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 5   
+
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port AB Output Termination Disable
+                  ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+                  ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_2_PORT_CD)
+              
+                  ScalerSetByte(_LVDS_TXCD_OUTPUT_DATA_PORT_ADDR, ((_LVDS_PORT_MIRROR == _DISABLE) ? 0x01 : 0x10));
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port CD Output Termination Enable
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port CD Output Termination Disable
+                  ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+                  ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #elif(_LVDS_PORT_SEL == _LVDS_4_PORT_ABCD)
+              
+                  ScalerSetByte(P39_02_LVDS_DISPLAY_CONV_CTRL1, ((_LVDS_PORT_MIRROR == _DISABLE) ? 0x01 : 0x32));
+                  ScalerSetByte(P39_03_LVDS_DISPLAY_CONV_CTRL2, ((_LVDS_PORT_MIRROR == _DISABLE) ? 0x23 : 0x10));
+              
+              #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port ABCD Output Termination Enable
+                  if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 6   
+
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT5 | _
+             -BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+                  else
+                  {
+                      ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                      ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (_BIT4 | _
+             -BIT3 | _BIT2 | _BIT1 | _BIT0));
+                  }
+              
+              #else // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+                  // Set LVDS Port ABCD Output Termination Disable
+                  ScalerSetBit(P15_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+                  ScalerSetBit(P15_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+                  ScalerSetBit(P55_26_LVDS_PORTA_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+                  ScalerSetBit(P55_36_LVDS_PORTB_CTRL6, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), 0x00);
+              
+              #endif // #if(_LVDS_TERMINATION_CONTROL == _ENABLE)
+              
+              #endif // #if(_LVDS_PORT_SEL == _LVDS_1_PORT_A)
+              }
+              
+              //--------------------------------------------------
+              // Description  : LVDS TX Port output Data Swap Selection
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDisplayLvdsTxPortSwap(void)
+              {
+                  BYTE ucLvdsPortSwapIndex = 0;
+              
+                  // Port AB Swap
+                  ucLvdsPortSwapIndex = ((_LVDS_PORT_AB_SWAP == _DISABLE) ? 0 : 4);
+              
+                  ScalerSetByte(P39_02_LVDS_DISPLAY_CONV_CTRL1, (((ScalerGetBit(P39_02_LVDS_DISPLAY_CONV_CTRL1, (_BIT7 |
+             - _BIT6 | _BIT5 | _BIT4))) >> ucLvdsPortSwapIndex) | ((ScalerGetBit(P39_02_LVDS_DISPLAY_CONV_CTRL1, (_BIT3 | _BIT2 | _BIT
+             -1 | _BIT0))) << ucLvdsPortSwapIndex)));
+              
+                  // Port CD Swap
+                  ucLvdsPortSwapIndex = ((_LVDS_PORT_CD_SWAP == _DISABLE) ? 0 : 4);
+              
+                  ScalerSetByte(P39_03_LVDS_DISPLAY_CONV_CTRL2, (((ScalerGetBit(P39_03_LVDS_DISPLAY_CONV_CTRL2, (_BIT7 |
+             - _BIT6 | _BIT5 | _BIT4))) >> ucLvdsPortSwapIndex) | ((ScalerGetBit(P39_03_LVDS_DISPLAY_CONV_CTRL2, (_BIT3 | _BIT2 | _BIT
+             -1 | _BIT0))) << ucLvdsPortSwapIndex)));
+              
+                  // Port EF Swap
+                  ucLvdsPortSwapIndex = ((_LVDS_PORT_EF_SWAP == _DISABLE) ? 0 : 4);
+              
+                  ScalerSetByte(P39_04_LVDS_DISPLAY_CONV_CTRL3, (((ScalerGetBit(P39_04_LVDS_DISPLAY_CONV_CTRL3, (_BIT7 |
+             - _BIT6 | _BIT5 | _BIT4))) >> ucLvdsPortSwapIndex) | ((ScalerGetBit(P39_04_LVDS_DISPLAY_CONV_CTRL3, (_BIT3 | _BIT2 | _BIT
+             -1 | _BIT0))) << ucLvdsPortSwapIndex)));
+              
+                  // Port GH Swap
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 7   
+
+                  ucLvdsPortSwapIndex = ((_LVDS_PORT_GH_SWAP == _DISABLE) ? 0 : 4);
+              
+                  ScalerSetByte(P39_05_LVDS_DISPLAY_CONV_CTRL4, (((ScalerGetBit(P39_05_LVDS_DISPLAY_CONV_CTRL4, (_BIT7 |
+             - _BIT6 | _BIT5 | _BIT4))) >> ucLvdsPortSwapIndex) | ((ScalerGetBit(P39_05_LVDS_DISPLAY_CONV_CTRL4, (_BIT3 | _BIT2 | _BIT
+             -1 | _BIT0))) << ucLvdsPortSwapIndex)));
+              }
+              #endif // End of #if(_PANEL_STYLE == _PANEL_LVDS)
+ 328          
+ 329          #if(_PANEL_STYLE == _PANEL_VBO)
+ 330          //--------------------------------------------------
+ 331          // Description  : Settings for Vbyone MAC
+ 332          // Input Value  : _ON or _OFF
+ 333          // Output Value : None
+ 334          //--------------------------------------------------
+ 335          void ScalerDisplayVboMac(bit bOn)
+ 336          {
+ 337   1          BYTE ucCount = 0;
+ 338   1      
+ 339   1          if(bOn == _ON)
+ 340   1          {
+ 341   2              // Set Vby1 MAC
+ 342   2              ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~_BIT7, _BIT7);
+ 343   2      
+ 344   2              // Check Vby1 Cts Fifo Status Twice
+ 345   2              for(ucCount = 0; ucCount < 2; ucCount++)
+ 346   2              {
+ 347   3                  ScalerTimerDelayXms(2);
+ 348   3      
+ 349   3                  // Check Vbyone Cts Fifo Condiction
+ 350   3                  if(ScalerGetBit(P38_17_CTS_FIFO_L, (_BIT1 | _BIT0)) != 0x00)
+ 351   3                  {
+ 352   4                      // Cts Fifo Handler
+ 353   4                      ScalerDisplayVboCtsFifoHandler();
+ 354   4                  }
+ 355   3              }
+ 356   2          }
+ 357   1          else
+ 358   1          {
+ 359   2              // Reset Vby1 MAC
+ 360   2              ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~_BIT7, 0x00);
+ 361   2          }
+ 362   1      }
+ 363          
+ 364          //--------------------------------------------------
+ 365          // Description  : Settings for Vbyone Digital Phy
+ 366          // Input Value  : _ON or _OFF
+ 367          // Output Value : None
+ 368          //--------------------------------------------------
+ 369          void ScalerDisplayVboPhy(bit bOn)
+ 370          {
+ 371   1          if(bOn == _ON)
+ 372   1          {
+ 373   2              // Set Vby1 Digital Phy
+ 374   2              ScalerSetBit(P38_00_VIDEO_FORMAT_H, ~_BIT4, _BIT4);
+ 375   2      
+ 376   2              // Enable Digital Phy output
+ 377   2              ScalerSetByte(P38_8E_PHY0_TXBIST_02_H1, 0xFF);
+ 378   2          }
+ 379   1          else
+ 380   1          {
+ 381   2              // Disable Digital Phy output
+ 382   2              ScalerSetByte(P38_8E_PHY0_TXBIST_02_H1, 0x00);
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 8   
+
+ 383   2      
+ 384   2              // Reset Vby1 Digital Phy
+ 385   2              ScalerSetBit(P38_00_VIDEO_FORMAT_H, ~_BIT4, 0x00);
+ 386   2          }
+ 387   1      }
+ 388          
+ 389          //--------------------------------------------------
+ 390          // Description  : Control Vby1 Phy
+ 391          // Input Value  : bit bEnable
+ 392          // Output Value : None
+ 393          //--------------------------------------------------
+ 394          void ScalerDisplayVboAnalogPhyConrol(bit bEnable)
+ 395          {
+ 396   1          if(bEnable == _ENABLE)
+ 397   1          {
+ 398   2              // Vby1 Power on
+ 399   2              ScalerDisplayVboPower(_ON);
+ 400   2      
+ 401   2              // Vby1 PLL on
+ 402   2              ScalerDisplayVboPLL(_ON);
+ 403   2      
+ 404   2              // Set Vby1 MAC
+ 405   2              ScalerDisplayVboMac(_ON);
+ 406   2      
+ 407   2              // Set Vby1 Digital Phy, Enable Output
+ 408   2              ScalerDisplayVboPhy(_ON);
+ 409   2          }
+ 410   1          else
+ 411   1          {
+ 412   2              // Reset Vby1 Digital Phy, disable Output
+ 413   2              ScalerDisplayVboPhy(_OFF);
+ 414   2      
+ 415   2              // Reset Vby1 MAC
+ 416   2              ScalerDisplayVboMac(_OFF);
+ 417   2      
+ 418   2              // Vby1 PLL off
+ 419   2              ScalerDisplayVboPLL(_OFF);
+ 420   2      
+ 421   2              // Vby1 Power off
+ 422   2              ScalerDisplayVboPower(_OFF);
+ 423   2          }
+ 424   1      }
+ 425          
+ 426          //--------------------------------------------------
+ 427          // Description  : Vbyone Latency between CDR and ALN pattern
+ 428          // Input Value  : None
+ 429          // Output Value : None
+ 430          //--------------------------------------------------
+ 431          void ScalerDisplayVboCdr2AlnLatency(void)
+ 432          {
+ 433   1          ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~(_BIT5 | _BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), (((_CDR_TRA
+             -NSFER_ALN_LATENCY * 27) >> 16) & 0x3F));
+ 434   1          ScalerSetByte(P38_0B_TRANSMIT_CONTROL_L2, (((_CDR_TRANSFER_ALN_LATENCY * 27) >> 8) & 0xFF));
+ 435   1          ScalerSetByte(P38_0C_TRANSMIT_CONTROL_L1, ((_CDR_TRANSFER_ALN_LATENCY * 27) & 0xFF));
+ 436   1      }
+ 437          
+ 438          //--------------------------------------------------
+ 439          // Description  : Vbyone HTPDN Interrupt Enable
+ 440          // Input Value  : _ENABLE or _DISABLE
+ 441          // Output Value : None
+ 442          //--------------------------------------------------
+ 443          void ScalerDisplayVboHtpdnSetFwControl(bit bEnable)
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 9   
+
+ 444          {
+ 445   1          // Write Clear the HTDPN and LOCKN Flag
+ 446   1          ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), (_BIT5 | _BIT4));
+ 447   1      
+ 448   1          if(bEnable == _ENABLE)
+ 449   1          {
+ 450   2              // Set HTPDN Interrupt Disable
+ 451   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT6 | _BIT5 | _BIT4 | _BIT1 | _BIT0), 0x00);
+ 452   2      
+ 453   2              // Set HTPDN Pull High
+ 454   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT1, _BIT1);
+ 455   2      
+ 456   2              // Set Vby1 HTPDN controlled by F/W
+ 457   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT7, _BIT7);
+ 458   2          }
+ 459   1          else
+ 460   1          {
+ 461   2              // Set HTPDN Interrupt Enable
+ 462   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT6 | _BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT6);
+ 463   2      
+ 464   2              // Set Vby1 HTPDN controlled by H/W
+ 465   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT7, 0x00);
+ 466   2          }
+ 467   1      }
+ 468          
+ 469          #if(_PANEL_VBO_CHANGE_CLK_RESET_TYPE == _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN)
+              //--------------------------------------------------
+              // Description  : Vbyone Force Link Training Flow
+              // Input Value  : _ENABLE or _DISABLE
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDisplayVboForceLinkTraining(bit bEnable)
+              {
+                  BYTE ucForceLinkTrainCnt = 5;
+              
+                  if(bEnable == _ENABLE)
+                  {
+                      // LOCKN status initial: Fail
+                      g_stVboInfo.b1VboLocknStatus = _FAIL;
+              
+                      // LOCKN Ripped off status initial: False
+                      g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+              
+                      // Disable Detect Lock Status
+                      ScalerDisplayVboSetLocknInterrupt(_DISABLE);
+              
+                      // Disable Detect UnLock Stauts
+                      ScalerDisplayVboSetUnLocknInterrupt(_DISABLE);
+              
+                      // Set LOCKN Pull High
+                      ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT0, _BIT0);
+              
+                      // Enable Vby1 LOCKN controlled by F/W
+                      ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, _BIT6);
+              
+                      ScalerTimerDelayXms(10);
+                  }
+                  else
+                  {
+                      // Wait LT stable
+                      ScalerTimerDelayXms(50);
+              
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 10  
+
+                      // Enable Vby1 LOCKN controlled by H/W
+                      ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, 0x00);
+              
+                      // Set LOCKN Pull High
+                      ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT0, _BIT0);
+              
+                      ScalerTimerDelayXms(10);
+              
+                      // Check Vby1 LOCKN Status by ALN enable flag
+                      if(ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == 0x00)
+                      {
+                          do
+                          {
+                              // Enable Vby1 LOCKN controlled by F/W
+                              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, _BIT6);
+              
+                              ScalerTimerDelayXms(20);
+              
+                              // Enable Vby1 LOCKN controlled by H/W
+                              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, 0x00);
+              
+                              ScalerTimerDelayXms(2);
+              
+                              ucForceLinkTrainCnt--;
+                          }
+                          while((ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == 0x00) && (ucForceLinkTrainCnt > 0));
+              
+                          if(ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == _BIT1)
+                          {
+                              g_stVboInfo.b1VboLocknStatus = _TRUE;
+                          }
+              
+                          DebugMessageCheck("VBO lock status", ScalerGetBit(P38_0E_THREE_FLAG, _BIT4));
+                      }
+              
+                      // Enable Detect Lock Status
+                      ScalerDisplayVboSetLocknInterrupt(_ENABLE);
+              
+                      // Enable Detect UnLock Stauts
+                      ScalerDisplayVboSetUnLocknInterrupt(_ENABLE);
+                  }
+              }
+              #endif
+ 549          
+ 550          //--------------------------------------------------
+ 551          // Description  : Vbyone Video Output Enable
+ 552          // Input Value  : _ENABLE or _DISABLE
+ 553          // Output Value : None
+ 554          //--------------------------------------------------
+ 555          void ScalerDisplayVboForceVideoOutput(bit bEnable)
+ 556          {
+ 557   1          if(bEnable == _ENABLE)
+ 558   1          {
+ 559   2              // Set LOCKN Pull High
+ 560   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT0, _BIT0);
+ 561   2      
+ 562   2              // Set Vby1 LOCKN controlled by F/W
+ 563   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, _BIT6);
+ 564   2      
+ 565   2              // Set LOCKN Pull Low
+ 566   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT0, 0x00);
+ 567   2          }
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 11  
+
+ 568   1          else
+ 569   1          {
+ 570   2              // Disable Detect Lock Status
+ 571   2              ScalerDisplayVboSetLocknInterrupt(_DISABLE);
+ 572   2      
+ 573   2              // Disable Detect UnLock Stauts
+ 574   2              ScalerDisplayVboSetUnLocknInterrupt(_DISABLE);
+ 575   2      
+ 576   2              // Set LOCKN Pull High
+ 577   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT0, _BIT0);
+ 578   2      
+ 579   2              // Set Vby1 LOCKN controlled by H/W
+ 580   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT6, 0x00);
+ 581   2      
+ 582   2              // Clear all flag
+ 583   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), (_BIT5 | _BIT4 | _BIT1 | _BIT
+             -0));
+ 584   2      
+ 585   2              // LOCKN status initial: Fail
+ 586   2              g_stVboInfo.b1VboLocknStatus = _FAIL;
+ 587   2      
+ 588   2              // LOCKN Ripped off status initial: False
+ 589   2              g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+ 590   2      
+ 591   2              // Set Panel Fast Off Disable
+ 592   2              g_stVboInfo.b1PanelFastOffStatus = _DISABLE;
+ 593   2          }
+ 594   1      }
+ 595          
+ 596          //--------------------------------------------------
+ 597          // Description  : Vbyone LOCKN Interrupt Enable
+ 598          // Input Value  : _ENABLE or _DISABLE
+ 599          // Output Value : None
+ 600          //--------------------------------------------------
+ 601          void ScalerDisplayVboSetLocknInterrupt(bit bEnable)
+ 602          {
+ 603   1          // Write Clear the Lock Flag
+ 604   1          ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT5);
+ 605   1      
+ 606   1          if(bEnable == _ENABLE)
+ 607   1          {
+ 608   2              // Set LOCKN Interrupt Enable
+ 609   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT7 | _BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT7);
+ 610   2          }
+ 611   1          else
+ 612   1          {
+ 613   2              // Set LOCKN Interrupt Disable
+ 614   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT7 | _BIT5 | _BIT4 | _BIT1 | _BIT0), 0x00);
+ 615   2          }
+ 616   1      }
+ 617          
+ 618          //--------------------------------------------------
+ 619          // Description  : Vbyone LOCKN_FAIL Interrupt Enable
+ 620          // Input Value  : _ENABLE or _DISABLE
+ 621          // Output Value : None
+ 622          //--------------------------------------------------
+ 623          void ScalerDisplayVboSetUnLocknInterrupt(bit bEnable)
+ 624          {
+ 625   1          // Write Clear the UnLock Flag
+ 626   1          ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT1);
+ 627   1      
+ 628   1          if(bEnable == _ENABLE)
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 12  
+
+ 629   1          {
+ 630   2              // Set LOCKN_FAIL Interrupt Enable
+ 631   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT3 | _BIT1 | _BIT0), _BIT3);
+ 632   2          }
+ 633   1      
+ 634   1          else
+ 635   1          {
+ 636   2              // Set LOCKN_FAIL Interrupt Disable
+ 637   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT3 | _BIT1 | _BIT0), 0x00);
+ 638   2          }
+ 639   1      }
+ 640          
+ 641          //--------------------------------------------------
+ 642          // Description  : Wait for Vbyone Htpdn
+ 643          // Input Value  : WORD usNum
+ 644          // Output Value : None
+ 645          //--------------------------------------------------
+ 646          void ScalerDisplayVboPollingHotPlug(WORD usNum)
+ 647          {
+ 648   1          ScalerTimerPollingFlagProc(usNum, P38_28_VBY1_IRQ_CTRL, _BIT4, _TRUE);
+ 649   1      }
+ 650          
+ 651          //--------------------------------------------------
+ 652          // Description  : Vbyone Htpdn Handler
+ 653          // Input Value  : None
+ 654          // Output Value : None
+ 655          //--------------------------------------------------
+ 656          void ScalerDisplayVboHtpdnHandler(void)
+ 657          {
+ 658   1          if(ScalerGetBit(P38_28_VBY1_IRQ_CTRL, _BIT4) != _BIT4)
+ 659   1          {
+ 660   2              // Set HTPDN Interrupt Disable
+ 661   2              ScalerSetBit(P38_28_VBY1_IRQ_CTRL, ~(_BIT6 | _BIT5 | _BIT4 | _BIT1 | _BIT0), 0x00);
+ 662   2      
+ 663   2              // Set UnLOCKN Status: None
+ 664   2              g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+ 665   2      
+ 666   2              // Set Vby1 HTPDN controlled by F/W
+ 667   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT7, _BIT7);
+ 668   2      
+ 669   2              // Set HTPDN Pull Low
+ 670   2              ScalerSetBit(P38_27_VBY1_FW_CTRL, ~_BIT1, 0x00);
+ 671   2      
+ 672   2              // Set LOCKN Interrupt Enable
+ 673   2              ScalerDisplayVboSetLocknInterrupt(_ENABLE);
+ 674   2          }
+ 675   1      
+ 676   1          // Set Detect UnLock Interrupt Enable
+ 677   1          ScalerDisplayVboSetUnLocknInterrupt(_ENABLE);
+ 678   1      }
+ 679          
+ 680          //--------------------------------------------------
+ 681          // Description  : Vbyone Lockn Handler
+ 682          // Input Value  : None
+ 683          // Output Value : None
+ 684          //--------------------------------------------------
+ 685          void ScalerDisplayVboLocknHandler(void)
+ 686          {
+ 687   1          DebugMessageCheck("Lockn Status", ScalerDisplayVboLocknStatus());
+ 688   1          DebugMessageCheck("ALN Status", ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1));
+ 689   1      
+ 690   1          // Check Vbyone Lockn status success
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 13  
+
+ 691   1          if(!((ScalerDisplayVboLocknStatus() == _SUCCESS) || (ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == _B
+             -IT1)))
+ 692   1          {
+ 693   2              // Force transfer to ALN pattern, and enable video output
+ 694   2              ScalerDisplayVboForceVideoOutput(_ENABLE);
+ 695   2      
+ 696   2              // Wait Delay time for ALN patern
+ 697   2              ScalerTimerDelayXms(80);
+ 698   2          }
+ 699   1      }
+ 700          
+ 701          //--------------------------------------------------
+ 702          // Description  : Vbyone CTS-FIFO Handler
+ 703          // Input Value  : None
+ 704          // Output Value : None
+ 705          //--------------------------------------------------
+ 706          void ScalerDisplayVboCtsFifoHandler(void)
+ 707          {
+ 708   1          BYTE ucCount = 0;
+ 709   1      
+ 710   1          // Set CTS FIFO Initial Address For Reading
+ 711   1          ScalerSetBit(P38_15_CTS_FIFO_H, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+ 712   1      
+ 713   1          // Set CTS FIFO PLL Tracking Boundary
+ 714   1          ScalerSetByte(P38_16_CTS_FIFO_M, 0x00);
+ 715   1      
+ 716   1          // Toggle Vby1 MAC
+ 717   1          ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~_BIT7, 0x00);
+ 718   1          ScalerTimerDelayXms(2);
+ 719   1          ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~_BIT7, _BIT7);
+ 720   1      
+ 721   1          // Toggle Vby1 Cts Fifo 4 Times
+ 722   1          for(ucCount = 0; ucCount < 4; ucCount++)
+ 723   1          {
+ 724   2              ScalerSetBit(P38_17_CTS_FIFO_L, ~_BIT3, 0x00);
+ 725   2              ScalerTimerDelayXms(2);
+ 726   2      
+ 727   2              ScalerSetBit(P38_17_CTS_FIFO_L, ~_BIT3, _BIT3);
+ 728   2              ScalerTimerDelayXms(2);
+ 729   2          }
+ 730   1      
+ 731   1          // Reset CTS FIFO PLL Tracking Boundary
+ 732   1          ScalerSetByte(P38_16_CTS_FIFO_M, 0x11);
+ 733   1      }
+ 734          
+ 735          //--------------------------------------------------
+ 736          // Description  : Vbyone LOCKN Check
+ 737          // Input Value  : None
+ 738          // Output Value : _SUCCESS or _FAIL
+ 739          //--------------------------------------------------
+ 740          bit ScalerDisplayVboLocknStatus(void)
+ 741          {
+ 742   1          return g_stVboInfo.b1VboLocknStatus;
+ 743   1      }
+ 744          
+ 745          //--------------------------------------------------
+ 746          // Description  : Vbyone Panel Fast Off Setting
+ 747          // Input Value  : _ENABLE or _DISABLE
+ 748          // Output Value : None
+ 749          //--------------------------------------------------
+ 750          void ScalerDisplayVboPanelSetFastOff(bit bEnable)
+ 751          {
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 14  
+
+ 752   1          if(bEnable == _ENABLE)
+ 753   1          {
+ 754   2              g_stVboInfo.b1PanelFastOffStatus = _ENABLE;
+ 755   2          }
+ 756   1          else
+ 757   1          {
+ 758   2              g_stVboInfo.b1PanelFastOffStatus = _DISABLE;
+ 759   2          }
+ 760   1      }
+ 761          
+ 762          //--------------------------------------------------
+ 763          // Description  : Vbyone Panel Fast Off Check
+ 764          // Input Value  : None
+ 765          // Output Value : _ENABLE or _DISABLE
+ 766          //--------------------------------------------------
+ 767          bit ScalerDisplayVboPanelFastOffCheck(void)
+ 768          {
+ 769   1          return g_stVboInfo.b1PanelFastOffStatus;
+ 770   1      }
+ 771          
+ 772          //--------------------------------------------------
+ 773          // Description  : Vbyone LOCKN Re Lock, Re-Turn on Backlight
+ 774          // Input Value  : None
+ 775          // Output Value : None
+ 776          //--------------------------------------------------
+ 777          void ScalerDisplayVboPanelBacklightReTurnOn(void)
+ 778          {
+ 779   1          // When CDR Re-Lock: Backlight Re-Turn on
+ 780   1          if(g_stVboInfo.b1VboLocknRippedOff == _TRUE)
+ 781   1          {
+ 782   2              if((ScalerDisplayVboLocknStatus() == _SUCCESS) || (ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == 
+             -_BIT1))
+ 783   2              {
+ 784   3                  ScalerTimerDelayXms(_PANEL_POWER_ON_T3);
+ 785   3      
+ 786   3                  // Check Vby1 ALN_En flag, when Vby1 CDR locked, this flag will be triggered
+ 787   3                  if(ScalerGetBit(P38_0D_TRANSMIT_STATUS, _BIT1) == _BIT1)
+ 788   3                  {
+ 789   4                      // Backlight Turn On
+ 790   4                      PCB_BACKLIGHT_POWER_PIN(_LIGHT_CONTROL_ON);
+ 791   4      
+ 792   4                      // Set CDR re-lock Status: None
+ 793   4                      g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+ 794   4      
+ 795   4                      // Set LOCKN Status: Success
+ 796   4                      g_stVboInfo.b1VboLocknStatus = _SUCCESS;
+ 797   4                  }
+ 798   3                  else
+ 799   3                  {
+ 800   4      #if(_PANEL_VBO_UNLOCK_MUTE_BY_FW_POLLING == _ON)
+                              // Backlight Turn Off
+                              PCB_BACKLIGHT_POWER_PIN(_LIGHT_CONTROL_OFF);
+              #endif
+ 804   4                      // Set LOCKN Status: Fail
+ 805   4                      g_stVboInfo.b1VboLocknStatus = _FAIL;
+ 806   4                  }
+ 807   3              }
+ 808   2      #if(_PANEL_VBO_UNLOCK_MUTE_BY_FW_POLLING == _ON)
+                      else
+                      {
+                          // Backlight Turn Off
+                          PCB_BACKLIGHT_POWER_PIN(_LIGHT_CONTROL_OFF);
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 15  
+
+              
+                          // Set LOCKN Status: Fail
+                          g_stVboInfo.b1VboLocknStatus = _FAIL;
+                      }
+              #endif
+ 818   2          }
+ 819   1      }
+ 820          
+ 821          //--------------------------------------------------
+ 822          // Description  : Vbyone Interrupt Handler: HTPDN, LOCKN
+ 823          // Input Value  : None
+ 824          // Output Value : None
+ 825          //--------------------------------------------------
+ 826          void ScalerDisplayVboIntHandler_EXINT0(void) using 1
+ 827          {
+ 828   1          // HTPDN: Plug-In Flag
+ 829   1          if(ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT6 | _BIT4)) == (_BIT6 | _BIT4))
+ 830   1          {
+ 831   2              // Set LOCKN Interrupt Enable
+ 832   2              ScalerSetBit_EXINT(P38_28_VBY1_IRQ_CTRL, ~(_BIT7 | _BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT7);
+ 833   2      
+ 834   2              // Disable HPTDN Interrupt
+ 835   2              ScalerSetBit_EXINT(P38_28_VBY1_IRQ_CTRL, ~(_BIT6 | _BIT5 | _BIT4 | _BIT1 | _BIT0), 0x00);
+ 836   2      
+ 837   2              // Set UnLOCKN Status: None
+ 838   2              g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+ 839   2          }
+ 840   1      
+ 841   1          // LOCKN: Glitch / Unlock / Lock
+ 842   1          if((ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT3 | _BIT1)) == (_BIT3 | _BIT1)) &&
+ 843   1             (ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT7 | _BIT5)) == (_BIT7 | _BIT5)))
+ 844   1          {
+ 845   2              // Write Clear the Lock / UnLock Flag
+ 846   2              ScalerSetBit_EXINT(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), (_BIT5 | _BIT1));
+ 847   2      
+ 848   2              // Set LOCKN Status: Fail
+ 849   2              g_stVboInfo.b1VboLocknStatus = _SUCCESS;
+ 850   2          }
+ 851   1          else if(ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT3 | _BIT1)) == (_BIT3 | _BIT1))
+ 852   1          {
+ 853   2              // Write Clear the UnLock Flag
+ 854   2              ScalerSetBit_EXINT(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT1);
+ 855   2      
+ 856   2      #if(_PANEL_VBO_UNLOCK_MUTE_BY_FW_POLLING == _OFF)
+ 857   2              // Backlight Turn Off when CDR unlock
+ 858   2              PCB_BACKLIGHT_POWER_PIN(_LIGHT_CONTROL_OFF);
+ 859   2      #endif
+ 860   2      
+ 861   2              // Set UnLOCKN Status: Ripped off
+ 862   2              g_stVboInfo.b1VboLocknRippedOff = _TRUE;
+ 863   2      
+ 864   2              // Set LOCKN Status: Fail
+ 865   2              g_stVboInfo.b1VboLocknStatus = _FAIL;
+ 866   2          }
+ 867   1          else if(ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT7 | _BIT5)) == (_BIT7 | _BIT5))
+ 868   1          {
+ 869   2              // Write Clear the Lock Flag
+ 870   2              ScalerSetBit_EXINT(P38_28_VBY1_IRQ_CTRL, ~(_BIT5 | _BIT4 | _BIT1 | _BIT0), _BIT5);
+ 871   2      
+ 872   2              // Set LOCKN Status: Success
+ 873   2              g_stVboInfo.b1VboLocknStatus = _SUCCESS;
+ 874   2          }
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 16  
+
+ 875   1      
+ 876   1          // LOCKN: Un-LOCK Flag
+ 877   1          // HTPDN: Un-Plug Flag
+ 878   1          // if((ScalerGetBit_EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT3 | _BIT1)) == (_BIT3 | _BIT1)) || (ScalerGetBit_
+             -EXINT(P38_28_VBY1_IRQ_CTRL, (_BIT2 | _BIT0)) == (_BIT2 | _BIT0)))
+ 879   1      }
+ 880          
+ 881          //--------------------------------------------------
+ 882          // Description  : Get Vby1 Power Status
+ 883          // Input Value  : None
+ 884          // Output Value : _TRUE: Power On   _FALSE: Power Down
+ 885          //--------------------------------------------------
+ 886          bit ScalerDisplayGetVboPowerStatus(void)
+ 887          {
+ 888   1          return (bit)(ScalerGetBit(P38_A0_DPTX_PHY_CTRL0, _BIT4));
+ 889   1      }
+ 890          
+ 891          //--------------------------------------------------
+ 892          // Description  : Adjust Vbo Ref DPLL Spread Spectrum
+ 893          // Input Value  : Spread Spectrum Range
+ 894          // Output Value : None
+ 895          //--------------------------------------------------
+ 896          void ScalerDisplaySetVboPLLSSC(bit bDclkSpreadSpeed, BYTE ucSpreadRange)
+ 897          {
+ 898   1          bDclkSpreadSpeed = bDclkSpreadSpeed;
+ 899   1      
+ 900   1          // Disable Dpll Dclk Spread Range
+ 901   1          ScalerSetBit(P1_C6_DCLK_SPREAD_SPECTRUM, ~0xF0, 0x00);
+ 902   1      
+ 903   1          // Set Dpll Dclk Double Buffer
+ 904   1          ScalerSetBit(P1_C6_DCLK_SPREAD_SPECTRUM, ~_BIT2, _BIT2);
+ 905   1      
+ 906   1          if(ucSpreadRange != 0x00)
+ 907   1          {
+ 908   2              PDATA_WORD(0) = (WORD)((ScalerGetBit(P38_DC_DPTX_CMU12, 0x1F) << 4) | (ScalerGetByte(P38_DD_DPTX_C
+             -MU13) >> 4));
+ 909   2              PDATA_WORD(1) = (WORD)((ScalerGetBit(P38_DD_DPTX_CMU13, 0x0F) << 8) | ScalerGetByte(P38_DE_DPTX_CM
+             -U14));
+ 910   2      
+ 911   2              // Calculate Spread Spectrum FMDIV: 30kHz
+ 912   2              PDATA_WORD(3) = (((_EXT_XTAL / 31) + 2) & 0xFFFC);
+ 913   2      
+ 914   2              // Calculate SSC
+ 915   2              PDATA_WORD(2) = ((((DWORD)PDATA_WORD(0) + 4) * 4096 + PDATA_WORD(1))) * 16 / 100 / PDATA_WORD(3) /
+             - 15 * ucSpreadRange;
+ 916   2      
+ 917   2              // Set Spread Spectrum FMDIV: 30kHz
+ 918   2              ScalerSetByte(P38_E0_DPTX_CMU16, (BYTE)(PDATA_WORD(3) >> 8));
+ 919   2              ScalerSetByte(P38_E1_DPTX_CMU17, (BYTE)PDATA_WORD(3));
+ 920   2      
+ 921   2              // Set Spread Spectrum Range
+ 922   2              ScalerSetByte(P38_E2_DPTX_CMU18, (BYTE)(PDATA_WORD(2) >> 8));
+ 923   2              ScalerSetByte(P38_E3_DPTX_CMU19, (BYTE)PDATA_WORD(2));
+ 924   2      
+ 925   2              // [5] 1: Enable SSC, 0: disable
+ 926   2              // [4] 0: 1st Order SDM, 1:2nd Order SDM
+ 927   2              // [3] 0: Triangular wave, 1: Square wave
+ 928   2              ScalerSetBit(P38_D5_DPTX_CMU5, ~(_BIT5 | _BIT4 | _BIT3), _BIT5);
+ 929   2          }
+ 930   1          else
+ 931   1          {
+ 932   2              // Disable SSC
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 17  
+
+ 933   2              ScalerSetBit(P38_D5_DPTX_CMU5, ~_BIT5, 0x00);
+ 934   2          }
+ 935   1      }
+ 936          
+ 937          //--------------------------------------------------
+ 938          // Description  : Setting for Vbyone driving control
+ 939          // Input Value  : Driving current and Pre-emphasis for Vby1 Data Lane
+ 940          // Output Value : None
+ 941          //--------------------------------------------------
+ 942          void ScalerDisplayVboDrivingControl(BYTE ucDrvLane, BYTE ucEmpLane)
+ 943          {
+ 944   1          BYTE ucIndex = 0x00;
+ 945   1          BYTE *pucTable = 0x00;
+ 946   1      
+ 947   1          ucIndex = (ucDrvLane * 4 + ucEmpLane) * 3;
+ 948   1      
+ 949   1          pucTable = tDISPLAY_VBO_DRV_TABLE;
+ 950   1      
+ 951   1          // De-emphasis [9:8]
+ 952   1          ScalerSetBit(P38_A8_DPTX_DEEMP_EN_LANE7_4H, ~(_BIT7 | _BIT6), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 6));
+ 953   1          ScalerSetBit(P38_A8_DPTX_DEEMP_EN_LANE7_4H, ~(_BIT5 | _BIT4), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 4));
+ 954   1          ScalerSetBit(P38_A8_DPTX_DEEMP_EN_LANE7_4H, ~(_BIT3 | _BIT2), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 2));
+ 955   1          ScalerSetBit(P38_A8_DPTX_DEEMP_EN_LANE7_4H, ~(_BIT1 | _BIT0), (((pucTable[ucIndex + 1] & 0xF0) >> 4)))
+             -;
+ 956   1      
+ 957   1          ScalerSetBit(P38_AD_DPTX_DEEMP_EN_LANE3_0H, ~(_BIT7 | _BIT6), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 6));
+ 958   1          ScalerSetBit(P38_AD_DPTX_DEEMP_EN_LANE3_0H, ~(_BIT5 | _BIT4), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 4));
+ 959   1          ScalerSetBit(P38_AD_DPTX_DEEMP_EN_LANE3_0H, ~(_BIT3 | _BIT2), (((pucTable[ucIndex + 1] & 0xF0) >> 4) <
+             -< 2));
+ 960   1          ScalerSetBit(P38_AD_DPTX_DEEMP_EN_LANE3_0H, ~(_BIT1 | _BIT0), (((pucTable[ucIndex + 1] & 0xF0) >> 4)))
+             -;
+ 961   1      
+ 962   1          // De-emphasis [7:0]
+ 963   1          ScalerSetByte(P38_A9_DPTX_DEEMP_EN_LANE7L, pucTable[ucIndex + 0]);
+ 964   1          ScalerSetByte(P38_AA_DPTX_DEEMP_EN_LANE6L, pucTable[ucIndex + 0]);
+ 965   1          ScalerSetByte(P38_AB_DPTX_DEEMP_EN_LANE5L, pucTable[ucIndex + 0]);
+ 966   1          ScalerSetByte(P38_AC_DPTX_DEEMP_EN_LANE4L, pucTable[ucIndex + 0]);
+ 967   1      
+ 968   1          ScalerSetByte(P38_AE_DPTX_DEEMP_EN_LANE3L, pucTable[ucIndex + 0]);
+ 969   1          ScalerSetByte(P38_AF_DPTX_DEEMP_EN_LANE2L, pucTable[ucIndex + 0]);
+ 970   1          ScalerSetByte(P38_B0_DPTX_DEEMP_EN_LANE1L, pucTable[ucIndex + 0]);
+ 971   1          ScalerSetByte(P38_B1_DPTX_DEEMP_EN_LANE0L, pucTable[ucIndex + 0]);
+ 972   1      
+ 973   1          // Data [3:0]
+ 974   1          ScalerSetBit(P38_B4_DPTX_DRV_DAC_DAT_LANE7_6, ~0xF0, ((pucTable[ucIndex + 1] & 0x0F) << 4));
+ 975   1          ScalerSetBit(P38_B4_DPTX_DRV_DAC_DAT_LANE7_6, ~0x0F, (pucTable[ucIndex + 1] & 0x0F));
+ 976   1          ScalerSetBit(P38_B5_DPTX_DRV_DAC_DAT_LANE5_4, ~0xF0, ((pucTable[ucIndex + 1] & 0x0F) << 4));
+ 977   1          ScalerSetBit(P38_B5_DPTX_DRV_DAC_DAT_LANE5_4, ~0x0F, (pucTable[ucIndex + 1] & 0x0F));
+ 978   1      
+ 979   1          ScalerSetBit(P38_B6_DPTX_DRV_DAC_DAT_LANE3_2, ~0xF0, ((pucTable[ucIndex + 1] & 0x0F) << 4));
+ 980   1          ScalerSetBit(P38_B6_DPTX_DRV_DAC_DAT_LANE3_2, ~0x0F, (pucTable[ucIndex + 1] & 0x0F));
+ 981   1          ScalerSetBit(P38_B7_DPTX_DRV_DAC_DAT_LANE1_0, ~0xF0, ((pucTable[ucIndex + 1] & 0x0F) << 4));
+ 982   1          ScalerSetBit(P38_B7_DPTX_DRV_DAC_DAT_LANE1_0, ~0x0F, (pucTable[ucIndex + 1] & 0x0F));
+ 983   1      
+ 984   1          // Post1 [3:0]
+ 985   1          ScalerSetBit(P38_BC_DPTX_DRV_DAC_POST1_LANE7_6, ~0xF0, (pucTable[ucIndex + 2] & 0xF0));
+ 986   1          ScalerSetBit(P38_BC_DPTX_DRV_DAC_POST1_LANE7_6, ~0x0F, ((pucTable[ucIndex + 2] & 0xF0) >> 4));
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 18  
+
+ 987   1          ScalerSetBit(P38_BD_DPTX_DRV_DAC_POST1_LANE5_4, ~0xF0, (pucTable[ucIndex + 2] & 0xF0));
+ 988   1          ScalerSetBit(P38_BD_DPTX_DRV_DAC_POST1_LANE5_4, ~0x0F, ((pucTable[ucIndex + 2] & 0xF0) >> 4));
+ 989   1      
+ 990   1          ScalerSetBit(P38_BE_DPTX_DRV_DAC_POST1_LANE3_2, ~0xF0, (pucTable[ucIndex + 2] & 0xF0));
+ 991   1          ScalerSetBit(P38_BE_DPTX_DRV_DAC_POST1_LANE3_2, ~0x0F, ((pucTable[ucIndex + 2] & 0xF0) >> 4));
+ 992   1          ScalerSetBit(P38_BF_DPTX_DRV_DAC_POST1_LANE1_0, ~0xF0, (pucTable[ucIndex + 2] & 0xF0));
+ 993   1          ScalerSetBit(P38_BF_DPTX_DRV_DAC_POST1_LANE1_0, ~0x0F, ((pucTable[ucIndex + 2] & 0xF0) >> 4));
+ 994   1      
+ 995   1          // Post0 [3:0]
+ 996   1          ScalerSetBit(P38_B8_DPTX_DRV_DAC_POST0_LANE7_6, ~0xF0, ((pucTable[ucIndex + 2] & 0x0F) << 4));
+ 997   1          ScalerSetBit(P38_B8_DPTX_DRV_DAC_POST0_LANE7_6, ~0x0F, (pucTable[ucIndex + 2] & 0x0F));
+ 998   1          ScalerSetBit(P38_B9_DPTX_DRV_DAC_POST0_LANE5_4, ~0xF0, ((pucTable[ucIndex + 2] & 0x0F) << 4));
+ 999   1          ScalerSetBit(P38_B9_DPTX_DRV_DAC_POST0_LANE5_4, ~0x0F, (pucTable[ucIndex + 2] & 0x0F));
+1000   1      
+1001   1          ScalerSetBit(P38_BA_DPTX_DRV_DAC_POST0_LANE3_2, ~0xF0, ((pucTable[ucIndex + 2] & 0x0F) << 4));
+1002   1          ScalerSetBit(P38_BA_DPTX_DRV_DAC_POST0_LANE3_2, ~0x0F, (pucTable[ucIndex + 2] & 0x0F));
+1003   1          ScalerSetBit(P38_BB_DPTX_DRV_DAC_POST0_LANE1_0, ~0xF0, ((pucTable[ucIndex + 2] & 0x0F) << 4));
+1004   1          ScalerSetBit(P38_BB_DPTX_DRV_DAC_POST0_LANE1_0, ~0x0F, (pucTable[ucIndex + 2] & 0x0F));
+1005   1      }
+1006          
+1007          //--------------------------------------------------
+1008          // Description  : Initial Settings for Vbyone Interface
+1009          // Input Value  : None
+1010          // Output Value : None
+1011          //--------------------------------------------------
+1012          void ScalerDisplayVboInitialTable(void)
+1013          {
+1014   1          // Set DISP mode is Vby1
+1015   1          ScalerSetBit(P39_00_LVDS_DISP_TYPE, ~(_BIT2 | _BIT1 | _BIT0), (_BIT2 | _BIT0));
+1016   1      
+1017   1          // Set Link Clk Source
+1018   1          ScalerSetBit(P38_2A_VBY1_LCLK_SOURCE_CTRL, ~_BIT0, _BIT0);
+1019   1      
+1020   1          // Set Vby1 HS Control
+1021   1          ScalerSetBit(P38_17_CTS_FIFO_L, ~(_BIT7 | _BIT1 | _BIT0), ((_VBO_HS_CONTROL & _BIT0) << 7));
+1022   1      
+1023   1          // Set Vby1 Display Data Bit Resolution
+1024   1          ScalerSetBit(P38_00_VIDEO_FORMAT_H, ~(_BIT5 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _VBO_BIT_MODE);
+1025   1      
+1026   1          // Set Vby1 Display Data Lane
+1027   1          ScalerSetByte(P38_03_LANE_STATUS_H, (_BIT6 | _VBO_OUTPUT_PORT));
+1028   1      
+1029   1          // Set Vby1 Display Type
+1030   1          ScalerSetByte(P38_04_LANE_STATUS_L, ((_VBO_PANEL_SECTION << 3) | _VBO_BYTE_MODE));
+1031   1      
+1032   1          // Set Vby1 MLSwap and LaneSwap Control
+1033   1          ScalerSetBit(P38_27_VBY1_FW_CTRL, ~(_BIT5 | _BIT4), ((_VBO_ML_SWAP << 5) | (_VBO_LANE_SWAP << 4)));
+1034   1      
+1035   1          // Set Vby1 Transmit Control
+1036   1          ScalerSetBit(P38_09_TRANSMIT_CONTROL_H2, ~(_BIT5 | _BIT4), (_BIT5 | (_VBO_VIDEO_TRANSFER_TYPE << 4)));
+1037   1          ScalerSetBit(P38_0A_TRANSMIT_CONTROL_H1, ~_BIT6, 0x00);
+1038   1          ScalerSetBit(P38_0D_TRANSMIT_STATUS, ~_BIT7, _BIT7);
+1039   1          ScalerSetBit(P38_0E_THREE_FLAG, ~(_BIT2 | _BIT1 | _BIT0), ((_VBO_VS_CONTROL << 1) | ((_VBO_HS_CONTROL 
+             -& _BIT1) >> 1)));
+1040   1      
+1041   1          // Set ASY FIFO PLL Tracking Boundary
+1042   1          ScalerSetBit(P38_08_PLL_TRACKING, ~(_BIT4 | _BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT0);
+1043   1      
+1044   1          // Set CTS FIFO Initial Address For Reading
+1045   1          ScalerSetBit(P38_15_CTS_FIFO_H, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT3);
+1046   1      
+1047   1          // Set CTS FIFO PLL Tracking Boundary
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 19  
+
+1048   1          ScalerSetByte(P38_16_CTS_FIFO_M, 0x11);
+1049   1      
+1050   1          // Set Vby1 Digital Phy Initial
+1051   1          ScalerSetBit(P38_88_PHY0_TXBIST_00_L1, ~(_BIT4 | _BIT0), (_BIT4 | _BIT0));
+1052   1          ScalerSetBit(P38_89_PHY0_TXBIST_01_H2, ~(_BIT6 | _BIT5 | _BIT4), 0x00);
+1053   1      
+1054   1          // Set Vby1 PN Swap Control
+1055   1      #if(_VBO_PN_SWAP == _ENABLE)
+1056   1          ScalerSetByte(P38_80_DPTX_PN_SWAP1, 0xFF);
+1057   1      #else
+                  ScalerSetByte(P38_80_DPTX_PN_SWAP1, 0x00);
+              #endif // End of #if(_VBO_PN_SWAP == _ENABLE)
+1060   1      
+1061   1          // Disable Vby1 Digital Output, Force Vby1 Output DC Level Signal
+1062   1          ScalerSetByte(P38_8E_PHY0_TXBIST_02_H1, 0x00);
+1063   1      
+1064   1          // Set HTPDN control by F/W, pull high
+1065   1          ScalerDisplayVboHtpdnSetFwControl(_ENABLE);
+1066   1      
+1067   1          // Reset Vby1 Digital Phy, disable Output
+1068   1          ScalerDisplayVboPhy(_OFF);
+1069   1      
+1070   1          // Reset Vby1 MAC
+1071   1          ScalerDisplayVboMac(_OFF);
+1072   1      
+1073   1          // Set Vby1 Z0
+1074   1          ScalerDisplayVboSetZ0();
+1075   1      
+1076   1          // Set Vby1 Driving Control
+1077   1          ScalerDisplayVboDrivingControl(_VBO_LANE_DRIV_CONTROL, _VBO_PRE_EMPHASIS_CONTROL);
+1078   1      
+1079   1          // Set Vby1 CDR to ALN Latency Control
+1080   1          ScalerDisplayVboCdr2AlnLatency();
+1081   1      
+1082   1          // LOCKN status initial: Fail
+1083   1          g_stVboInfo.b1VboLocknStatus = _FAIL;
+1084   1      
+1085   1          // LOCKN Ripped off status initial: False
+1086   1          g_stVboInfo.b1VboLocknRippedOff = _FALSE;
+1087   1      
+1088   1          // Set Panel Fast Off Disable
+1089   1          g_stVboInfo.b1PanelFastOffStatus = _DISABLE;
+1090   1      }
+1091          
+1092          //--------------------------------------------------
+1093          // Description  : Vbyone PLL Power Control
+1094          // Input Value  : _ON or _OFF
+1095          // Output Value : None
+1096          //--------------------------------------------------
+1097          void ScalerDisplayVboPLL(bit bOn)
+1098          {
+1099   1          if(bOn == _ON)
+1100   1          {
+1101   2              // Power Up DPLL CLK to Vby1
+1102   2              ScalerSetBit(P1_DC_DCLK_GATED_CTRL2, ~_BIT1, _BIT1);
+1103   2      
+1104   2              // Power Up Vby1 PLL for LCLK
+1105   2              ScalerSetBit(P38_09_TRANSMIT_CONTROL_H2, ~_BIT6, _BIT6);
+1106   2          }
+1107   1          else
+1108   1          {
+1109   2              // Power Down Vby1 PLL for LCLK
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 20  
+
+1110   2              ScalerSetBit(P38_09_TRANSMIT_CONTROL_H2, ~_BIT6, 0x00);
+1111   2      
+1112   2              // Disable DPLL CLK to Vby1
+1113   2              ScalerSetBit(P1_DC_DCLK_GATED_CTRL2, ~_BIT1, 0x00);
+1114   2          }
+1115   1      }
+1116          
+1117          //--------------------------------------------------
+1118          // Description  : Vbyone Power Control
+1119          // Input Value  : _ON or _OFF
+1120          // Output Value : None
+1121          //--------------------------------------------------
+1122          void ScalerDisplayVboPower(bit bOn)
+1123          {
+1124   1          if(bOn == _ON)
+1125   1          {
+1126   2              // Disable Weakly Pull Down
+1127   2              ScalerSetByte(P38_C1_DPTX_RCVDET_BIAS_PULLDN1, 0x00);
+1128   2      
+1129   2              // Power Up Vby1 Digital Block: reg_en
+1130   2              ScalerSetBit(P38_09_TRANSMIT_CONTROL_H2, ~_BIT7, _BIT7);
+1131   2      
+1132   2              // Power Up Vby1 Analog Block
+1133   2      #if(_VBO_OUTPUT_PORT == _VBO_1_DATA_LANE)
+              
+                      // Lane:0 power on
+                      ScalerSetByte(P38_A1_DPTX_PHY_CTRL1, _BIT0);
+              
+              #elif(_VBO_OUTPUT_PORT == _VBO_2_DATA_LANE)
+              
+                      // Lane:0-1 power on
+                      ScalerSetByte(P38_A1_DPTX_PHY_CTRL1, (_BIT1 | _BIT0));
+              
+              #elif(_VBO_OUTPUT_PORT == _VBO_4_DATA_LANE)
+              
+                      // Lane:0-3 power on
+                      ScalerSetByte(P38_A1_DPTX_PHY_CTRL1, (_BIT3 | _BIT2 | _BIT1 | _BIT0));
+              
+              #else   // #elif(_VBO_OUTPUT_PORT == _VBO_8_DATA_LANE)
+1149   2      
+1150   2              // Lane:0-7 power on
+1151   2              ScalerSetByte(P38_A1_DPTX_PHY_CTRL1, 0xFF);
+1152   2      
+1153   2      #endif  // End of #if(_VBO_OUTPUT_PORT == _VBO_1_DATA_LANE)
+1154   2          }
+1155   1          else
+1156   1          {
+1157   2              // Power Down Vby1 Analog Block
+1158   2              ScalerSetByte(P38_A1_DPTX_PHY_CTRL1, 0x00);
+1159   2      
+1160   2              // Power Down Vby1 Digital Block
+1161   2              ScalerSetBit(P38_09_TRANSMIT_CONTROL_H2, ~_BIT7, 0x00);
+1162   2      
+1163   2              // Enable Weakly Pull Down
+1164   2              ScalerSetByte(P38_C1_DPTX_RCVDET_BIAS_PULLDN1, 0xFF);
+1165   2          }
+1166   1      }
+1167          
+1168          //--------------------------------------------------
+1169          // Description  : Settings for Vbyone Z0 Value
+1170          // Input Value  : None
+1171          // Output Value : None
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 21  
+
+1172          //--------------------------------------------------
+1173          void ScalerDisplayVboSetZ0(void)
+1174          {
+1175   1          // Set Vby1 Z0 Value
+1176   1          ScalerSetByte(P38_CC_DPTX_Z0_LANE7_6, 0x88);
+1177   1          ScalerSetByte(P38_CD_DPTX_Z0_LANE5_4, 0x88);
+1178   1          ScalerSetByte(P38_CE_DPTX_Z0_LANE3_2, 0x88);
+1179   1          ScalerSetByte(P38_CF_DPTX_Z0_LANE1_0, 0x88);
+1180   1      }
+1181          
+1182          #endif // End of #if(_PANEL_STYLE == _PANEL_VBO)
+1183          
+1184          //--------------------------------------------------
+1185          // Description  : Get panel clock info
+1186          // Input Value  :
+1187          // Output Value : None
+1188          //--------------------------------------------------
+1189          DWORD ScalerDisplayGetPanelClockInfo(EnumPanelClockType enumType)
+1190          {
+1191   1          switch(enumType)
+1192   1          {
+1193   2              case _PANEL_INFO_CLOCK:
+1194   2                  return _PANEL_PIXEL_CLOCK_KHZ;
+1195   2              case _PANEL_INFO_CLOCK_MAX:
+1196   2                  return _PANEL_PIXEL_CLOCK_MAX_KHZ;
+1197   2              case _PANEL_INFO_CLOCK_MIN:
+1198   2                  return _PANEL_PIXEL_CLOCK_MIN_KHZ;
+1199   2      
+1200   2              default:
+1201   2                  break;
+1202   2          }
+1203   1      
+1204   1          return 0;
+1205   1      }
+1206          
+1207          //--------------------------------------------------
+1208          // Description  : Set display DVF mode by V freq.
+1209          // Input Value  : stDVCustomizedFreq --> custim V freq. range
+1210          // Output Value : None
+1211          //--------------------------------------------------
+1212          BYTE ScalerDisplaySelectDVFMode(void)
+1213          {
+1214   1      
+1215   1      #if(Project_ID == ID_KAIXIA_HK2795E04_SG2451B01_2_8LAN_VBY1_FHD280HZ_8BIT_20240103)
+              
+                if(GET_INPUT_TIMING_VFREQ()<610)
+                  return _PANEL_TYP_FRAME_RATE_FREE_RUN;
+              #elif(Project_ID == ID_KAITENG_HK2795E04_FHD300HZ_VB1)
+                if(GET_INPUT_TIMING_VFREQ()<610)
+                  return _PANEL_TYP_FRAME_RATE_FREE_RUN;
+              #endif  
+1223   1      
+1224   1      #if(_FRC_SUPPORT == _ON)
+1225   1      #if(_DRR_FREE_RUN_DISPLAY_SUPPORT == _OFF)
+1226   1      #if(_FREESYNC_SUPPORT == _ON)
+                  if(GET_FREESYNC_ENABLED() == _TRUE)
+                  {
+                      return _1_IVF;
+                  }
+                  else
+              #endif
+1233   1      #endif
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 22  
+
+1234   1          {
+1235   2              if(g_stDisplayCustomizedData.stDVCustomizedFreq.b1FORCETOFREERUN == _ENABLE)
+1236   2              {
+1237   3                  return _PANEL_TYP_FRAME_RATE_FREE_RUN;
+1238   3              }
+1239   2              else
+1240   2              {
+1241   3                  WORD usMaxFreqMargin = g_stDisplayCustomizedData.stDVCustomizedFreq.usMaxFreq + _FRAME_SYNC_MA
+             -RGIN;
+1242   3                  WORD usMinFreqMargin = g_stDisplayCustomizedData.stDVCustomizedFreq.usMinFreq - _FRAME_SYNC_MA
+             -RGIN;
+1243   3      
+1244   3      #if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+                          StructRtkAdvMbrPanelInfo stPanelInfo;
+                          memset(&stPanelInfo, 0, sizeof(StructRtkAdvMbrPanelInfo));
+              
+                          stPanelInfo.usMaxFreq = g_stDisplayCustomizedData.stDVCustomizedFreq.usMaxFreq;
+                          stPanelInfo.usMinFreq = g_stDisplayCustomizedData.stDVCustomizedFreq.usMinFreq;
+                          stPanelInfo.ucFrameSyncMargin = _FRAME_SYNC_MARGIN;
+                          stPanelInfo.ulPixelClock = _PANEL_PIXEL_CLOCK_KHZ;
+                          stPanelInfo.ulPixelClockMax = _PANEL_PIXEL_CLOCK_MAX_SPREAD;
+                          stPanelInfo.ulPixelClockMin = _PANEL_PIXEL_CLOCK_MIN_SPREAD;
+              
+                          ScalerMbrUpdateRtkAdvMbrStatus(GET_MDOMAIN_INPUT_VFREQ(), &stPanelInfo);
+                          DebugMessageScaler("MBR: GET_MDOMAIN_INPUT_VFREQ", ScalerMbrGetAdvMbrStatus());
+              #endif
+1258   3      
+1259   3                  if((g_stMDomainInputData.usVFreq <= usMaxFreqMargin) &&
+1260   3                     (g_stMDomainInputData.usVFreq >= usMinFreqMargin))
+1261   3                  {
+1262   4                      return _1_IVF;
+1263   4                  }
+1264   3                  else
+1265   3                  {
+1266   4      #if(_DISPLAY_ROTATION_SUPPORT == _ON)
+1267   4      #if((_DISPLAY_ROTATION_TYPE == _DISPLAY_ROTATION_GEN_II) && (_FRC_HW_AUTO_3BLOCK_TOGGLE_SUPPORT == _ON))
+                              if(ScalerRotationCheckStatus() == _TRUE)
+                              {
+              #if(_MN_FRAME_TRACKING_SUPPORT == _ON)
+              #if(_MN_FRAMESYNC_FORCE_TO_FREERUN == _OFF)
+                                  if((g_stMDomainInputData.usVFreq <= (usMaxFreqMargin * 5 / 4)) &&
+                                     (g_stMDomainInputData.usVFreq >= (usMinFreqMargin * 5 / 4))) // DVF = 5 * IVF / 4
+                                  {
+                                      return _5_4_IVF;
+                                  }
+                                  else if((g_stMDomainInputData.usVFreq <= (usMaxFreqMargin * 6 / 5)) &&
+                                          (g_stMDomainInputData.usVFreq >= (usMinFreqMargin * 6 / 5))) // DVF = 6 * IVF 
+             -/ 5
+                                  {
+                                      return _6_5_IVF;
+                                  }
+                                  else
+              #endif
+              #endif
+                                  {
+                                      return _PANEL_TYP_FRAME_RATE_FREE_RUN;
+                                  }
+                              }
+                              else
+              #endif
+1291   4      #endif
+1292   4                      {
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 23  
+
+1293   5      #if(_MN_FRAME_TRACKING_SUPPORT == _ON)
+1294   5      #if(_MN_FRAMESYNC_FORCE_TO_FREERUN == _OFF)
+1295   5                          if((g_stMDomainInputData.usVFreq <= (usMaxFreqMargin / 2)) &&
+1296   5                             (g_stMDomainInputData.usVFreq >= (usMinFreqMargin / 2))) // DVF = 2 * IVF
+1297   5                          {
+1298   6                              // For 1080p_30
+1299   6                              return _2_IVF;
+1300   6                          }
+1301   5                          else if((g_stMDomainInputData.usVFreq <= (usMaxFreqMargin * 2 / 5)) &&
+1302   5                                  (g_stMDomainInputData.usVFreq >= (usMinFreqMargin * 2 / 5))) // DVF = 2.5 * IV
+             -F
+1303   5                          {
+1304   6                              // For 1080p_25, 1080p_24
+1305   6                              return _2_5_IVF;
+1306   6                          }
+1307   5                          else if((g_stMDomainInputData.usVFreq <= (usMaxFreqMargin / 3)) &&
+1308   5                                  (g_stMDomainInputData.usVFreq >= (usMinFreqMargin / 3))) // DVF = 3 * IVF
+1309   5                          {
+1310   6                              return _3_IVF;
+1311   6                          }
+1312   5                          else
+1313   5      #endif
+1314   5      #endif
+1315   5                          {
+1316   6                              return _PANEL_TYP_FRAME_RATE_FREE_RUN;
+1317   6                          }
+1318   5                      }
+1319   4                  }
+1320   3              }
+1321   2          }
+1322   1      #else // else of #if(_FRC_SUPPORT == _ON)
+              
+                  return _1_IVF;
+              
+              #endif // End of #if(_FRC_SUPPORT == _ON)
+1327   1      }
+1328          
+1329          //--------------------------------------------------
+1330          // Description  : Set DVfreq.
+1331          // Input Value  : None
+1332          // Output Value : None
+1333          //--------------------------------------------------
+1334          void ScalerDisplaySetDVFreq(void)
+1335          {
+1336   1          switch(GET_MEMORY_DVF_SELECT())
+1337   1          {
+1338   2              case _1_IVF:
+1339   2                  g_usDVFreq = g_stMDomainInputData.usVFreq;
+1340   2                  break;
+1341   2      
+1342   2      #if(_FRC_SUPPORT == _ON)
+1343   2              case _2_IVF:
+1344   2                  g_usDVFreq = 2 * g_stMDomainInputData.usVFreq;
+1345   2                  break;
+1346   2      
+1347   2              case _3_IVF:
+1348   2                  g_usDVFreq = 3 * g_stMDomainInputData.usVFreq;
+1349   2                  break;
+1350   2      
+1351   2              case _5_4_IVF:
+1352   2                  g_usDVFreq = 4 * g_stMDomainInputData.usVFreq / 5;
+1353   2                  break;
+C51 COMPILER V9.60.0.0   SCALERDISPLAY                                                     10/18/2025 16:52:35 PAGE 24  
+
+1354   2      
+1355   2              case _6_5_IVF:
+1356   2                  g_usDVFreq = 5 * g_stMDomainInputData.usVFreq / 6;
+1357   2                  break;
+1358   2      
+1359   2              case _2_5_IVF:
+1360   2                  g_usDVFreq = 5 * g_stMDomainInputData.usVFreq / 2;
+1361   2                  break;
+1362   2      
+1363   2              case _PANEL_TYP_FRAME_RATE_FREE_RUN:
+1364   2                  g_usDVFreq = g_stDisplayCustomizedData.stDVCustomizedFreq.usTypFreq;
+1365   2                  break;
+1366   2      #endif
+1367   2              default:
+1368   2                  g_usDVFreq = g_stMDomainInputData.usVFreq;
+1369   2                  break;
+1370   2          }
+1371   1      }
+1372          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2033    ----
+   CONSTANT SIZE    =     48    ----
+   XDATA SIZE       =      9      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----      11
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

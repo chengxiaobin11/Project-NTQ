@@ -1,0 +1,330 @@
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RTD2014DDCCI_AUTOALIGN
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\RTD2014Ddcci_AutoAlign.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Series\RTD2014Osd\Code\RTD2014Ddcci_AutoAlign.c LARGE OPTIMIZE(
+                    -9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\S
+                    -ystem\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFun
+                    -ction\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Sc
+                    -aler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Li
+                    -b\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Head
+                    -er;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factor
+                    -y\Header) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\
+                    -RTD2014Ddcci_AutoAlign.lst) TABS(2) OBJECT(.\Output\RL6449_Project\RTD2014Ddcci_AutoAlign.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          #define __RTD2011_ALIGN__
+  16          
+  17          #include "UserCommonInclude.h"
+  18          
+  19          #if(_OSD_TYPE == _REALTEK_2014_OSD)
+  20          
+  21          //****************************************************************************
+  22          // VARIABLE DECLARATIONS
+  23          //****************************************************************************
+  24          
+  25          
+  26          //****************************************************************************
+  27          // FUNCTION DECLARATIONS
+  28          //****************************************************************************
+  29          
+  30          void RTDDdcciAutoAlignPro(void);
+  31          //--------------------------------------------------
+  32          // Description  : 
+  33          // Input Value  : None
+  34          // Output Value : None
+  35          //--------------------------------------------------
+  36          
+  37          bit IS_OSD_RESET(void)
+  38          {
+  39   1        return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x01));
+  40   1      }
+  41          
+  42          
+  43          
+  44          bit IS_AUTO_COLOR(void)
+  45          {
+  46   1        return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x02));
+  47   1      }
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 2   
+
+  48          /********************************************************************/
+  49          bit IS_TEST_LIGHTMAX(void)
+  50          {
+  51   1        return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x03));
+  52   1      }
+  53          
+  54          bit IS_LOAD_RGB(void)
+  55          {
+  56   1        return ((g_pucDdcciRxBuf[4]==0xff)&&(g_pucDdcciRxBuf[5]==0x04));
+  57   1      }
+  58          
+  59          
+  60          bit IS_ALIGN_FINISH(void)
+  61          {
+  62   1        return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x05));
+  63   1      }
+  64          
+  65          
+  66          
+  67          
+  68          
+  69          
+  70          
+  71          bit IS_START(void)
+  72          {
+  73   1        return ((g_pucDdcciRxBuf[4]==0xff)&&(g_pucDdcciRxBuf[5]==0xFF));
+  74   1      }
+  75          
+  76          /*******************************************************************/
+  77          
+  78          bit IS_RGB_ADJ(void)
+  79          {
+  80   1        return ((g_pucDdcciRxBuf[4]==0x20)&&(g_pucDdcciRxBuf[5]==0x01));
+  81   1      }
+  82          
+  83          /*******************************************************************/
+  84          bit IS_SAVE_9300(void)
+  85          {
+  86   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x00));
+  87   1      }
+  88          
+  89          bit IS_SAVE_7500(void)
+  90          {
+  91   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x01));
+  92   1      }
+  93          
+  94          bit IS_SAVE_6500(void)
+  95          {
+  96   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x02));
+  97   1      }
+  98          
+  99          bit IS_SAVE_5800(void)
+ 100          {
+ 101   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x03));
+ 102   1      }
+ 103          
+ 104          bit IS_SAVE_sRGB(void)
+ 105          {
+ 106   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x04));
+ 107   1      }
+ 108          
+ 109          bit IS_SAVE_USER(void)
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 3   
+
+ 110          {
+ 111   1        return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x05));
+ 112   1      }
+ 113          
+ 114          //*****************************************************
+ 115          
+ 116          //--------------------------------------------------
+ 117          // Description  : RTDDdccireply
+ 118          // Input Value  : None
+ 119          // Output Value : None
+ 120          //--------------------------------------------------
+ 121          extern void RTDDdccireply(BYTE Flag);
+ 122          
+ 123          //--------------------------------------------------
+ 124          // Description  : 
+ 125          // Input Value  : None
+ 126          // Output Value : None
+ 127          //--------------------------------------------------
+ 128          void RTDDdcciAutoAlignPro(void)
+ 129          {
+ 130   1        /************************FUNC***********************************/
+ 131   1        if(IS_OSD_RESET())
+ 132   1        {
+ 133   2          OsdDispOsdReset();
+ 134   2          RTDDdccireply(_TRUE);
+ 135   2        }
+ 136   1      
+ 137   1        if(IS_AUTO_COLOR())
+ 138   1        {
+ 139   2        
+ 140   2      #if(_VGA_SUPPORT != _ON)
+ 141   2          RTDDdccireply(0X02);
+ 142   2          return;
+ 143   2      #endif
+ 144   2          if(SysSourceGetSourceType() != _SOURCE_VGA)
+ 145   2          { 
+ 146   3            RTDDdccireply(_FALSE);
+ 147   3          }
+ 148   2          else
+ 149   2          {
+ 150   3          
+ 151   3      #if(_VGA_SUPPORT == _ON)    
+                    OsdDisplayAutoBalanceProc();
+                    RTDDdccireply(_TRUE);
+              #endif
+ 155   3          }
+ 156   2        }
+ 157   1         /****************************CT**********************************/
+ 158   1         
+ 159   1         if(IS_TEST_LIGHTMAX())
+ 160   1         {
+ 161   2           if(ScalerTimerSearchActiveTimerEvent(_USER_TIMER_EVENT_BUININ_MSG))
+ 162   2           {
+ 163   3             ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BUININ_MSG);
+ 164   3             RTDFactoryOsdFuncDisableOsd();
+ 165   3             ScalerDDomainPatternGenAdjustColor(255,255,255);
+ 166   3             ScalerDDomainPatternGenEnable(_ENABLE);
+ 167   3             ScalerDDomainBackgroundEnable(_DISABLE);
+ 168   3           
+ 169   3           }
+ 170   2           else
+ 171   2           {
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 4   
+
+ 172   3             ScalerOsdDisableOsd();
+ 173   3           }
+ 174   2           SET_COLOR_TEMP_TYPE_USER_R(128);
+ 175   2           SET_COLOR_TEMP_TYPE_USER_G(128);
+ 176   2           SET_COLOR_TEMP_TYPE_USER_B(128);
+ 177   2           UserAdjustContrast(100);
+ 178   2           UserAdjustBacklight(100);
+ 179   2           RTDDdccireply(_TRUE);
+ 180   2         }
+ 181   1      
+ 182   1         if(IS_START())
+ 183   1         {
+ 184   2             
+ 185   2           RTDNVRamRestoreBriCon();
+ 186   2           RTDNVRamRestoreBacklight();
+ 187   2           UserAdjustBacklight(GET_OSD_BACKLIGHT());
+ 188   2           UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+ 189   2           
+ 190   2           RTDDdccireply(_TRUE);
+ 191   2         }
+ 192   1         
+ 193   1         if(IS_LOAD_RGB())
+ 194   1         {
+ 195   2           SET_COLOR_TEMP_TYPE_USER_R(g_pucDdcciRxBuf[6]);
+ 196   2           SET_COLOR_TEMP_TYPE_USER_G(g_pucDdcciRxBuf[7]);
+ 197   2           SET_COLOR_TEMP_TYPE_USER_B(g_pucDdcciRxBuf[8]);   
+ 198   2      #if(_DEF_COLORFUL)
+                   UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+              #else
+ 201   2           UserAdjustContrast(GET_OSD_CONTRAST());
+ 202   2      #endif
+ 203   2           RTDDdccireply(_TRUE);
+ 204   2         }
+ 205   1         
+ 206   1      
+ 207   1         /************************************R G B**************************/     
+ 208   1        if(IS_RGB_ADJ())
+ 209   1        {
+ 210   2          SET_COLOR_TEMP_TYPE_USER_R(g_pucDdcciRxBuf[6]);
+ 211   2          SET_COLOR_TEMP_TYPE_USER_G(g_pucDdcciRxBuf[7]);
+ 212   2          SET_COLOR_TEMP_TYPE_USER_B(g_pucDdcciRxBuf[8]);
+ 213   2      
+ 214   2      #if(_DEF_COLORFUL)
+                   UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+              #else 
+ 217   2          UserAdjustContrast(GET_OSD_CONTRAST());
+ 218   2      #endif
+ 219   2          RTDDdccireply(_SUCCESS);
+ 220   2        }
+ 221   1          
+ 222   1        
+ 223   1        /***********************************SAVE****************************/
+ 224   1         if(IS_SAVE_9300())
+ 225   1         {
+ 226   2           SET_COLOR_TEMP_TYPE(_CT_9300);
+ 227   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 228   2           RTDDdccireply(_TRUE);
+ 229   2         }
+ 230   1         if(IS_SAVE_7500())
+ 231   1         {
+ 232   2           SET_COLOR_TEMP_TYPE(_CT_7500);
+ 233   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 5   
+
+ 234   2           RTDDdccireply(_TRUE);
+ 235   2         }
+ 236   1         if(IS_SAVE_6500())
+ 237   1         {
+ 238   2           SET_COLOR_TEMP_TYPE(_CT_6500);
+ 239   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 240   2           RTDDdccireply(_TRUE);
+ 241   2         }
+ 242   1         if(IS_SAVE_5800())
+ 243   1         {
+ 244   2           SET_COLOR_TEMP_TYPE(_CT_5800);
+ 245   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 246   2           RTDDdccireply(_TRUE);
+ 247   2         }
+ 248   1         if(IS_SAVE_sRGB())
+ 249   1         {
+ 250   2           SET_COLOR_TEMP_TYPE(_CT_SRGB);
+ 251   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 252   2           RTDDdccireply(_TRUE);
+ 253   2         }
+ 254   1         if(IS_SAVE_USER())
+ 255   1         {
+ 256   2           SET_COLOR_TEMP_TYPE(_CT_USER);
+ 257   2           RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 258   2           RTDDdccireply(_TRUE);
+ 259   2        }
+ 260   1      
+ 261   1         if(IS_ALIGN_FINISH())
+ 262   1         {
+ 263   2      SET_COLOR_TEMP_TYPE(_CT_6500);
+ 264   2      RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+ 265   2      SET_OSD_ALIGN_MODE(_ON);
+ 266   2      RTDDdccireply(_TRUE);
+ 267   2      RTDNVRamSaveOSDData();
+ 268   2      RTDFactoryMainMenu();
+ 269   2      ScalerTimerActiveTimerEvent(SEC(5), _USER_TIMER_EVENT_OSD_DISABLE);    
+ 270   2      
+ 271   2        if(GET_OSD_BURNING_MODE() && SysModeGetModeState() == _MODE_STATUS_NOSIGNAL)
+ 272   2        {
+ 273   3          ScalerTimerActiveTimerEvent(SEC(0.01),_USER_TIMER_EVENT_BUININ_MSG);
+ 274   3          ScalerOsdEnableOsd();
+ 275   3                        #if  (_BURNIN_MSG_MENU_SUPPORT==_ON)
+ 276   3                  RTDBurnInMenu();
+ 277   3                #endif
+ 278   3        }
+ 279   2        }
+ 280   1      
+ 281   1         
+ 282   1      }
+ 283          #endif //end of 
+ 284          
+ 285          
+ 286          
+ 287          
+ 288          
+*** WARNING C294 IN LINE 144 OF User\RTD Series\RTD2014Osd\Code\RTD2014Ddcci_AutoAlign.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    647    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   RTD2014DDCCI_AUTOALIGN                                            10/18/2025 16:54:13 PAGE 6   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

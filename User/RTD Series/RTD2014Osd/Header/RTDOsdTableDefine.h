@@ -1,0 +1,9860 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2017>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : RTDOsdTableDefine.h
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+// 16 ��  
+
+
+//_ENGLISH
+#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+
+
+    BYTE code tsOSD_SIGNAL_SOURCE1[] ={
+#if _ENGLISH_SUPPORT
+    _I_,_n_,_p_,_u_,_t_,_,_S_,_o_,_u_,_r_,_c_,_e_,_x40_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _E_,_i_,_n_,_g_,_a_,_n_,_g_,_s_,_q_,_u_,_e_,_l_,_l_,_e_,_x40_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _F_,_u_,_e_,_n_,_t_,_e_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_x40_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _L_,_a_,_,_S_,_o_,_u_,_r_,_c_,_e_,_,_D_,_x57_,_e_,_n_,_t_,_r_,_x56_,_e_,_x40_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _S_,_o_,_r_,_g_,_e_,_n_,_t_,_e_,_,_d_,_i_,_,_I_,_n_,_g_,_r_,_e_,_s_,_s_,_o_,_x40_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _I_,_n_,_v_,_o_,_e_,_r_,_b_,_r_,_o_,_n_,_x40_,_END_,
+#endif
+    
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+    _F_,_o_,_n_,_t_,_e_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_x40_,_END_,
+#else
+    _I_,_n_,_t_,_r_,_o_,_d_,_u_,_z_,_i_,_r_,_,_F_,_o_,_n_,_t_,_e_,_x40_,_END_,
+#endif
+#endif
+    
+#if _SVENSKA_SUPPORT
+    _I_,_n_,_g_,_x5d_,_n_,_g_,_s_,_k_,_x4b_,_l_,_l_,_a_,_x40_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _G_,_i_,_r_,_i_,_x5f_,_,_k_,_a_,_y_,_n_,_a_,_x60_,_x61_,_x40_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _x65_,_x66_,_x67_,_x68_,_,_x69_,_x6a_,_x6b_,_x6c_,_x67_,_x6d_,_x67_,_x68_,_x6e_,_x40_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _B_,_e_,_m_,_e_,_n_,_e_,_t_,_i_,_,_f_,_o_,_r_,_r_,_x52_,_s_,_x40_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _x9b_,_r_,_x50_,_d_,_x9c_,_o_,_,_s_,_y_,_g_,_n_,_a_,_x9c_,_u_,_,_w_,_e_,_j_,_x9d_,_c_,_i_,_o_,_w_,_e_,_g_,_o_,_x40_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _xa7_,_xa8_,_x40_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _xa8_,_PAGE_,0x01,_x20_,_PAGE_,0x00,_x40_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _PAGE_,0x01,_x6c_,_x6d_,_x6e_,_x6f_,_x70_,_x71_,_x72_,_x73_, _PAGE_,0x00,_x40_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _PAGE_,0x01,_x9b_,_x9c_,_x9d_,_x9e_,_PAGE_,0x00,_x40_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _S_,_y_,_x48_,_t_,_t_,_e_,_e_,_n_,_,_l_,_x4b_,_h_,_d_,_e_,_x40_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _V_,_s_,_t_,_u_,_p_,_n_,_x53_,_,_z_,_d_,_r_,_o_,_j_,_x40_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _PAGE_,0x02,0x90,_PAGE_,0x00,_xa8_,_PAGE_,0x00,_x40_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _e_,_x97_,_x94_,_i_,_PAGE_,0x02,_x2c_,_x2d_,_PAGE_,0x00,_x40_,_END_,
+#endif
+    };
+
+BYTE code tsOSD_SIGNAL_SOURCE[] ={
+#if _ENGLISH_SUPPORT
+_I_,_n_,_p_,_u_,_t_,_,_S_,_o_,_u_,_r_,_c_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_E_,_i_,_n_,_g_,_a_,_n_,_g_,_s_,_q_,_u_,_e_,_l_,_l_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_u_,_e_,_n_,_t_,_e_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_a_,_,_S_,_o_,_u_,_r_,_c_,_e_,_,_D_,_x57_,_e_,_n_,_t_,_r_,_x56_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_o_,_r_,_g_,_e_,_n_,_t_,_e_,_,_d_,_i_,_,_I_,_n_,_g_,_r_,_e_,_s_,_s_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_I_,_n_,_v_,_o_,_e_,_r_,_b_,_r_,_o_,_n_,_END_,
+#endif
+
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_F_,_o_,_n_,_t_,_e_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_END_,
+#else
+_I_,_n_,_t_,_r_,_o_,_d_,_u_,_z_,_i_,_r_,_,_F_,_o_,_n_,_t_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_I_,_n_,_g_,_x5d_,_n_,_g_,_s_,_k_,_x4b_,_l_,_l_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_i_,_r_,_i_,_x5f_,_,_k_,_a_,_y_,_n_,_a_,_x60_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x66_,_x67_,_x68_,_,_x69_,_x6a_,_x6b_,_x6c_,_x67_,_x6d_,_x67_,_x68_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_B_,_e_,_m_,_e_,_n_,_e_,_t_,_i_,_,_f_,_o_,_r_,_r_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_x9b_,_r_,_x50_,_d_,_x9c_,_o_,_,_s_,_y_,_g_,_n_,_a_,_x9c_,_u_,_,_w_,_e_,_j_,_x9d_,_c_,_i_,_o_,_w_,_e_,_g_,_o_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xa7_,_xa8_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xa8_,_PAGE_,0x01,_x20_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x6c_,_x6d_,_x6e_,_x6f_,_x70_,_x71_,_x72_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x9b_,_x9c_,_x9d_,_x9e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_S_,_y_,_x48_,_t_,_t_,_e_,_e_,_n_,_,_l_,_x4b_,_h_,_d_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_V_,_s_,_t_,_u_,_p_,_n_,_x53_,_,_z_,_d_,_r_,_o_,_j_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x90,_PAGE_,0x00,_xa8_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_e_,_x97_,_x94_,_i_,_PAGE_,0x02,_x2c_,_x2d_,_END_,
+#endif
+};
+
+BYTE code tsOSD_BRIGHTNESS_CONTRAST[] =  //tsOSD_BRIGHTNESS   tsOSD_CONTRAST
+{
+#if _ENGLISH_SUPPORT
+_B_,_r_,_i_,_g_,_h_,_t_,_n_,_e_,_s_,_s_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_H_,_e_,_l_,_l_,_i_,_g_,_k_,_e_,_i_,_t_,
+_x3f_,
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_B_,_r_,_i_,_l_,_l_,_o_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x56_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x59_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_H_,_e_,_l_,_d_,_e_,_r_,_h_,_e_,_i_,_d_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_B_,_r_,_i_,_l_,_h_,_o_,
+_x3f_,
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_L_,_j_,_u_,_s_,_s_,_t_,_x42_,_x3f_,_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_P_,_a_,_r_,_l_,_a_,_k_,_l_,_x61_,_k_,_x3f_,_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x6f_,_x6d_,_x70_,_x69_,_x6a_,_x71_,_x72_,_x70_,_x66_,_x70_,_x6c_,_x3f_,_x73_,_x71_,_x70_,_x74_,_x75_,_x69_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_x56_,_n_,_y_,_e_,_r_,_x99_,_x3f_,_K_,_o_,_n_,_t_,_r_,_a_,_s_,_z_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_a_,_s_,_n_,_o_,_x9d_,_x9e_,_x3f_,_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xa9_,_xaa_,_x3f_,_xab_,_xac_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x1b_,_x21_,_x22_,_x23_,_x24_,_x25_,_x26_,_x27_,_x28_,_x0_,_x26_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x74_,_x75_,_x73_,_x6f_,_x6d_,_x6e_,_x76_,_PAGE_,0x00,_x3f_,_PAGE_,0x01,_x77_,_x6f_,_x71_,_x6e_,_x75_,_x78_,_x6d_,_x6e_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x9f_,_xa0_,_PAGE_,0x00,_x3f_,_PAGE_,0x01,_xa1_,_xa2_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_i_,_r_,_k_,_k_,_a_,_u_,_s_,_x3f_,_k_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_J_,_a_,_s_,_x3f_,_k_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xa9_,_xaa_,_x3f_,_PAGE_,0x02,0x91,_PAGE_,0x00,_xac_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8a_,_PAGE_,0x00,_a_,_p_,_b_,_l_,_PAGE_,0x01,_x77_,_x9a_,_PAGE_,0x00,_b_,_l_,_PAGE_,0x01,_x77_,_PAGE_,0x00,
+_x3f_,
+_PAGE_,0x01,_x77_,_x92_,_x79_,_x9a_,_PAGE_,0x00,_p_,_a_,_c_,_PAGE_,0x01,_x9a_,_END_,
+
+#endif
+};
+
+BYTE code tsOSD_COLOR_SETTING[] =
+{
+#if _ENGLISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_,_S_,_e_,_t_,_t_,_i_,_n_,_g_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_a_,_r_,_b_,_e_,_i_,_n_,_s_,_t_,_e_,_l_,_l_,_u_,_n_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_j_,_u_,_s_,_t_,_e_,_,_d_,_e_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_x56_,_g_,_l_,_a_,_g_,_e_,_,_C_,_o_,_u_,_l_,_e_,_u_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_m_,_p_,_o_,_s_,_t_,_a_,_z_,_i_,_o_,_n_,_e_,_,_d_,_e_,_l_,_,_C_,_o_,_l_,_o_,_r_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_K_,_l_,_e_,_u_,_r_,_i_,_n_,_s_,_t_,_e_,_l_,_l_,_i_,_n_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_C_,_o_,_n_,_f_,_i_,_g_,_u_,_r_,_a_,_x58_,_x5a_,_o_,_,_d_,_e_,_,_C_,_o_,_r_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_x4b_,_r_,_g_,_i_,_n_,_s_,_t_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_R_,_e_,_n_,_k_,_,_A_,_y_,_a_,_r_,_l_,_a_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x76_,_x77_,_x75_,_x78_,_x6a_,_x6b_,_x66_,_,_x79_,_x7a_,_x7b_,_x78_,_x6c_,_x70_,_x7c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_z_,_x53_,_n_,_b_,_e_,_x52_,_l_,_l_,_x53_,_t_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_U_,_s_,_t_,_x42_,_,_K_,_o_,_l_,_o_,_r_,_x50_,_w_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xad_,_xae_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xad_,_PAGE_,0x01,_x29_,_PAGE_,0x00,_xec_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_c_,_PAGE_,0x01,_x6e_,_x75_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x7a_,_x7b_,_x7c_,_x6e_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa3_,_xa4_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_V_,_x4b_,_r_,_i_,_a_,_s_,_e_,_t_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_N_,_a_,_s_,_t_,_a_,_v_,_e_,_n_,_x53_,_,_b_,_a_,_r_,_e_,_v_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x92,_PAGE_,0x00,_xad_,_PAGE_,0x01,_x29_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x87_,_x67_,_c_,_x74_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_PQ_SETTING[] =
+{
+#if _ENGLISH_SUPPORT
+_P_,_i_,_c_,_t_,_u_,_r_,_e_,_,_Q_,_u_,_a_,_l_,_i_,_t_,_y_,_,_S_,_e_,_t_,_t_,_i_,_n_,_g_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_P_,_Q_,_,_E_,_i_,_n_,_s_,_t_,_e_,_l_,_l_,_u_,_n_,_g_,_e_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_C_,_o_,_n_,_f_,_i_,_g_,_u_,_r_,_a_,_c_,_i_,_x50_,_n_,_,_d_,_e_,_,_P_,_Q_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+#if(_DEF_HSBL )
+_P_,_a_,_r_,_a_,_m_,_PAGE_,0x02,_x39_,_PAGE_,0x00,_t_,_r_,_e_,_s_,_,_P_,_Q_,_END_,
+#else
+_C_,_o_,_n_,_f_,_i_,_g_,_x42_,_I_,_m_,_a_,_g_,_e_,_END_,
+#endif
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_m_,_p_,_o_,_s_,_t_,_a_,_z_,_i_,_o_,_n_,_i_,_,_P_,_Q_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_P_,_Q_,_,_I_,_n_,_s_,_t_,_e_,_l_,_l_,_i_,_n_,_g_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_C_,_o_,_n_,_f_,_i_,_g_,_,_Q_,_u_,_a_,_l_,_i_,_d_,_,_I_,_m_,_a_,_g_,_e_,_m_,_END_,
+#else
+_C_,_o_,_n_,_f_,_i_,_g_,_u_,_r_,_a_,_x58_,_x5a_,_o_,_,_d_,_e_,_,_P_,_Q_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_B_,_i_,_l_,_d_,_e_,_i_,_n_,_r_,_i_,_c_,_h_,_t_,_u_,_n_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_x48_,_r_,_x4a_,_n_,_t_,_x4a_,_,_A_,_y_,_a_,_r_,_l_,_a_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x76_,_x77_,_x75_,_x78_,_x6a_,_x6b_,_x66_,_,_x69_,_x6a_,_x7d_,_x72_,_x71_,_x6c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_x56_,_p_,_b_,_e_,_x52_,_l_,_l_,_x53_,_t_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_U_,_s_,_t_,_a_,_w_,_i_,_e_,_n_,_x42_,_b_,_r_,_a_,_z_,_u_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_P_,_Q_,_xaf_,_xb0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x2a_,_x2b_,_x29_,_PAGE_,0x00,_xec_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x77_,_x78_,_x70_,_x7c_,_x6d_,_x6e_,_x7b_,_x6f_,_PAGE_,0x00,_,_PAGE_,0x01,_x72_,_x7d_,_x6f_,_x7e_,_x75_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa5_,_xa6_,_PAGE_,0x00,_,_PAGE_,0x01,_xa7_,_xa8_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_u_,_v_,_a_,_n_,_l_,_a_,_a_,_t_,_u_,_a_,_s_,_e_,_t_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_N_,_a_,_s_,_t_,_a_,_v_,_e_,_n_,_x53_,_,_k_,_v_,_a_,_l_,_i_,_t_,_y_,_,_o_,_b_,_r_,_a_,_z_,_u_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x93,_PAGE_,0x01,_x2b_,_x29_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_P_,_Q_,_,_Q_,_p_,_PAGE_,0x01,_x79_,_PAGE_,0x00,_a_,_PAGE_,0x01,_x9a_,_PAGE_,0x02,_x2d_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_DISPLAY[] =
+{
+#if _ENGLISH_SUPPORT
+_D_,_i_,_s_,_p_,_l_,_a_,_y_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_n_,_z_,_e_,_i_,_g_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_a_,_n_,_t_,_a_,_l_,_l_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_f_,_f_,_i_,_c_,_h_,_a_,_g_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_c_,_h_,_e_,_r_,_m_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_W_,_e_,_e_,_r_,_g_,_a_,_v_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_E_,_x_,_i_,_b_,_i_,_x58_,_x5a_,_o_,_END_,
+#else
+_V_,_i_,_s_,_u_,_a_,_l_,_i_,_z_,_a_,_x58_,_x5a_,_o_,_END_,
+#endif
+#endif
+#if _SVENSKA_SUPPORT
+_V_,_i_,_s_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_x48_,_r_,_x4a_,_n_,_t_,_x4a_,_l_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x7e_,_x69_,_x6a_,_x7d_,_x72_,_x71_,_x6a_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_i_,_j_,_e_,_l_,_z_,_x99_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_k_,_a_,_z_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb1_,_xb2_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x2c_,_x30_,_x28_,_x2e_,_x2f_,_x30_,_x29_,_PAGE_,0x00,_xec_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_x6d_,_x6e_,_x75_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x7d_,_x73_,_x75_,_x78_,_x71_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa9_,_x9e_,_xaa_,_xab_,_xac_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_n_,_x4b_,_y_,_t_,_t_,_x48_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_u_,_k_,_x52_,_z_,_a_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x94,_PAGE_,0x00,_xb2_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x82_,_x6c_,_x8f_,_x8d_,_x87_,_PAGE_,0x00,_e_,_PAGE_,0x01,_x8e_,_END_,
+#endif
+};
+
+	
+BYTE code tsOSD_AUDIO[] =
+{
+#if _ENGLISH_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+
+#if _PORTUGUESE_SUPPORT
+#if (_LANG_19==_OFF)
+_PAGE_,3,0x07,_PAGE_,0,_u_,_d_,_i_,_o_,_END_,
+#else
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_A_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb3_,_xb4_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x31_,_x32_,_x2c_,_x30_,_x31_,_x29_,_PAGE_,0x00,_xec_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_x6d_,_x6e_,_x75_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x7d_,_x7b_,_x7f_,_x73_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xad_,_xa9_,_xad_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_a_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_a_,_u_,_d_,_i_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb3_,_PAGE_,0x02,0x95,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x82_,_PAGE_,0x00,_b_,_l_,_PAGE_,0x01,_x7e_,_PAGE_,0x00,_b_,_l_,_c_,_END_,
+#endif
+};
+
+BYTE code tsOSD_OSD[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x03,_xd_,_xe_,_PAGE_,0x01,_x3b_,_x32_,_END_,
+#else
+    _O_,_S_,_D_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_O_,_s_,_d_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_O_,_s_,_d_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xdb_,_PAGE_,0x02,0x96,_x94_,_PAGE_,0x00,_xb2_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_S_,_D_,_END_,
+#endif
+};
+
+BYTE code tsOSD_OTHER[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_t_,_h_,_e_,_r_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_n_,_d_,_e_,_r_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_O_,_t_,_r_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_u_,_t_,_r_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_l_,_t_,_r_,_i_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_n_,_d_,_e_,_r_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_O_,_u_,_t_,_r_,_o_,_END_,
+#else
+_O_,_u_,_t_,_r_,_a_,_END_,
+#endif
+#endif
+#if _SVENSKA_SUPPORT
+_E_,_x_,_t_,_r_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_E_,_k_,_s_,_t_,_r_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x7a_,_x72_,_x6b_,_x75_,_x69_,_x70_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_E_,_x_,_t_,_r_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_E_,_k_,_s_,_t_,_r_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb7_,_xb8_,_xaf_,_xb0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x33_,_x34_,_PAGE_,0x03,_x10_,_PAGE_,0x01,_x34_,_x29_,_PAGE_,0x00,_xec_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x82_,_x75_,_x7f_,_x83_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa0_,_xae_,_PAGE_,0x00,_,_PAGE_,0x01,_xa7_,_xa8_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_o_,_i_,_n_,_e_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_j_,_i_,_n_,_PAGE_,0x02,0x85,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb7_,_xb8_,_PAGE_,0x01,_x29_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_p_,_PAGE_,0x01,_x79_,_PAGE_,0x00,_a_,_PAGE_,0x01,_x9a_,_PAGE_,0x00,_y_,_END_,
+#endif
+};
+
+BYTE code tsOSD_FACTORY[] =
+{
+	 _F_,_a_,_c_,_t_,_o_,_r_,_y_,_END_,
+};
+
+code BYTE *tOSD_MENU_TITLE_TABLE[] =
+{
+	tsOSD_SIGNAL_SOURCE,
+	tsOSD_BRIGHTNESS_CONTRAST,
+	tsOSD_COLOR_SETTING,
+	tsOSD_PQ_SETTING,
+	tsOSD_DISPLAY,
+#if(_OSD_7PAGE || _DEF_PAGE8)
+	tsOSD_AUDIO,
+#endif
+	tsOSD_OSD,
+	tsOSD_OTHER,
+	tsOSD_FACTORY
+};
+
+
+
+BYTE code tsOSD_CROSS[] =
+{
+
+#if _ENGLISH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,0x03,_x18_,_x19_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _C_,_R_,_O_,_S_,_S_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_BRIGHTNESS[] =
+{
+#if _ENGLISH_SUPPORT
+_B_,_r_,_i_,_g_,_h_,_t_,_n_,_e_,_s_,_s_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_H_,_e_,_l_,_l_,_i_,_g_,_k_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_B_,_r_,_i_,_l_,_l_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x56_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x59_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_H_,_e_,_l_,_d_,_e_,_r_,_h_,_e_,_i_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_B_,_r_,_i_,_l_,_h_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_L_,_j_,_u_,_s_,_s_,_t_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_P_,_a_,_r_,_l_,_a_,_k_,_l_,_x61_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x6f_,_x6d_,_x70_,_x69_,_x6a_,_x71_,_x72_,_x70_,_x66_,_x70_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_x56_,_n_,_y_,_e_,_r_,_x99_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_a_,_s_,_n_,_o_,_x9d_,_x9e_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+_xa9_,_xaa_,_END_,
+#endif
+
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x1b_,_x21_,_x22_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x74_,_x75_,_x73_,_x6f_,_x6d_,_x6e_,_x76_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x9f_,_xa0_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_i_,_r_,_k_,_k_,_a_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_j_,_a_,_s_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xa9_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8a_,_PAGE_,0x00,_a_,_p_,_b_,_l_,_PAGE_,0x01,_x77_,_x9a_,_PAGE_,0x00,_b_,_l_,_PAGE_,0x01,_x77_,_END_,
+#endif
+};
+
+BYTE code tsOSD_CONTRAST[] =
+{
+#if _ENGLISH_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x71_,_x70_,_x74_,_x75_,_x69_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_z_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xab_,_xac_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x24_,_x25_,_x26_,_x27_,_x28_,_x26_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x77_,_x6f_,_x71_,_x6e_,_x75_,_x78_,_x6d_,_x6e_,_x71_,_x6f_,_x6d_,_x6e_,_x76_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa1_,_xa2_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_k_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x91_,_PAGE_,0x00,_xac_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x77_,_x92_,_x79_,_x9a_,_PAGE_,0x00,_p_,_a_,_c_,_PAGE_,0x01,_x9a_,_END_,
+#endif
+
+};
+
+
+BYTE code tsOSD_BLACKLEVEL[] =
+{
+#if _ENGLISH_SUPPORT
+
+_B_,_l_,_a_,_c_,_k_,_,_L_,_e_,_v_,_e_,_l_,_END_,
+
+#endif
+
+#if _GERMAN_SUPPORT
+_S_,_c_,_h_,_w_,_a_,_r_,_z_,_w_,_e_,_r_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_N_,_i_,_v_,_e_,_l_,_,_d_,_e_,_,_n_,_e_,_g_,_r_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_N_,_i_,_v_,_e_,_a_,_u_,_,_d_,_e_,_,_n_,_o_,_i_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_i_,_v_,_e_,_l_,_l_,_o_,_,_d_,_i_,_,_n_,_e_,_r_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_Z_,_w_,_a_,_r_,_t_,_n_,_i_,_v_,_e_,_a_,_u_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_N_,_x53_,_v_,_e_,_l_,_,_d_,_e_,_,_p_,_r_,_e_,_t_,_o_,_END_,
+#else
+_N_,_x53_,_v_,_e_,_l_,_,_d_,_e_,_,_n_,_e_,_g_,_r_,_o_,_END_,
+#endif
+
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_v_,_a_,_r_,_t_,_,_n_,_i_,_v_,_x5d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_y_,_a_,_h_,_,_s_,_e_,_v_,_i_,_y_,_e_,_s_,_i_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8c_,_x6c_,_x77_,_x7a_,_x7c_,_,_x69_,_x7e_,_x74_,_x7e_,_x69_,_x89_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_e_,_k_,_e_,_t_,_e_,_,_s_,_z_,_i_,_n_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_z_,_i_,_o_,_m_,_,_c_,_z_,_e_,_r_,_n_,_i_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_xe1_,_xe2_,_xe3_,_xe4_,_END_,
+#endif
+
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x02,_xe1_,_PAGE_,0x03,_xb_,_xc_,_END_,
+#else
+    _B_,_l_,_a_,_c_,_k_,_,_L_,_e_,_v_,_e_,_l_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_B_,_l_,_a_,_c_,_k_,_,_L_,_e_,_v_,_e_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_B_,_l_,_a_,_c_,_k_,_,_L_,_e_,_v_,_e_,_l_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_M_,_u_,_s_,_t_,_a_,_,_t_,_a_,_s_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,0x8c,_PAGE_,0x00,_e_,_r_,_n_,_x52_,_,_x55_,_r_,_o_,_v_,_e_,_PAGE_,0x02,0x8d,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xea_,_PAGE_,0x01,_x60_,_x16_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_a_,_p_,_a_,_,_PAGE_,0x01,_x9a_,_PAGE_,0x00,_Y_,_p_,_a_,_PAGE_,0x01,_x77_,_x88_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_ECO[] =
+{
+#if(_DEF_HSBL)
+	_P_,_i_,_c_,_t_,_u_,_r_,_e_,_,_M_,_o_,_d_,_e_,_END_,	//_ENGLISH
+	_B_,_i_,_l_,_d_,_m_,_o_,_d_,_u_,_s_,_END_,
+	_M_,_o_,_d_,_o_,_,_d_,_e_,_,_I_,_m_,_a_,_g_,_e_,_n_,_END_,
+	_M_,_o_,_d_,_o_,_,_d_,_e_,_,_I_,_m_,_a_,_g_,_e_,_END_,
+	_M_,_o_,_d_,_a_,_l_,_i_,_t_,_x59_,_,_I_,_m_,_m_,_a_,_g_,_i_,_n_,_e_,_END_,
+	_F_,_o_,_t_,_o_,_,_M_,_o_,_d_,_u_,_s_,_END_,
+	_M_,_o_,_d_,_o_,_,_d_,_e_,_,_I_,_m_,_a_,_g_,_e_,_m_,_END_,
+#else
+#if _ENGLISH_SUPPORT
+_P_,_i_,_c_,_t_,_u_,_r_,_e_,_,_M_,_o_,_d_,_e_,_END_,    //_ENGLISH
+#endif
+#if _GERMAN_SUPPORT
+_x49_,_k_,_o_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_E_,_c_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_E_,_c_,_o_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_E_,_c_,_o_,_x42_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_E_,_C_,_O_,_s_,_t_,_a_,_n_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    #if(_JX_OSD_TABLE_PORTUGUESE)
+    _M_,_o_,_d_,_o_,_,_i_,_m_,_a_,_g_,_e_,_m_,_END_,
+    #elif(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+    _M_,_o_,_d_,_e_,_,_E_,_C_,_O_,_END_,
+    #else
+    _E_,_c_,_o_,_,_E_,_C_,_O_,_END_,
+    #endif
+#endif
+
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_p_,_a_,_r_,_l_,_x4b_,_g_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_E_,_k_,_o_,_,_M_,_o_,_d_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x84_,_x69_,_x6a_,_x70_,_x7c_,_x81_,_x7a_,_x67_,_x74_,_x6c_,_,_E_,_c_,_o_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_E_,_c_,_o_,_,_x4a_,_z_,_e_,_m_,_m_,_x50_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_E_,_k_,_o_,_n_,_o_,_m_,_i_,_c_,_z_,_n_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xc0_,_xc1_,_xc2_,_xc3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_xc7_,_PAGE_,0x01,_x4e_,_PAGE_,0x03,_x11_,_PAGE_,0x01,_x56_,_x32_,_x39_,_x32_,_x3a_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x84_,_x7c_,_x8a_,_x72_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x72_,_x7d_,_x6f_,_x7e_,_x75_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa5_,_xa6_,_xba_,_xbb_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_u_,_v_,_a_,_t_,_i_,_l_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_R_,_e_,_PAGE_,0x02,0x88,_PAGE_,0x00,_i_,_m_,_,_o_,_b_,_r_,_x52_,_z_,_k_,_u_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xc0_,_xc1_,_xc2_,_xc3_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8d_,_PAGE_,0x00,_p_,_o_,_PAGE_,0x01,_x91_,_x6c_,_x87_,_x76_,_PAGE_,0x00,_,_p_,_e_,_PAGE_,0x01,_x8a_,_PAGE_,0x00,_i_,_x8c_,_i_,_END_,
+#endif
+};
+
+BYTE code tsOSD_DCR[] =
+{
+#if(_DEF_HSBL)
+	_A_,_c_,_t_,_i_,_v_,_e_,_,_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+	_A_,_k_,_t_,_i_,_v_,_e_,_r_,_,_K_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+	_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_,_A_,_c_,_t_,_i_,_v_,_o_,_END_,
+	_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_,_A_,_c_,_t_,_i_,_f_,_END_,
+	_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_o_,_,_A_,_t_,_t_,_i_,_v_,_o_,_END_,
+	_A_,_c_,_t_,_i_,_e_,_f_,_,_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_END_,
+	_C_,_o_,_n_,_t_,_r_,_a_,_s_,_t_,_e_,_,_A_,_c_,_t_,_i_,_v_,_o_,_END_,
+#else
+
+#if _ENGLISH_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_D_,_C_,_R_,_END_,
+#endif
+
+#endif
+
+
+#if _SVENSKA_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xbc_,_xbd_,_xab_,_xac_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xb3_,_xb4_,_PAGE_,0x00,_,_PAGE_,0x01,_xa1_,_xa2_,_xb5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_D_,_C_,_R_,_x44_,_y_,_x44_,_y_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x51_,_PAGE_,0x02,0x99,_x91_,_PAGE_,0x00,_xac_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_D_,_C_,_R_,_END_,
+#endif
+};
+
+BYTE code tsOSD_SHARPNESS[] =
+{
+#if _ENGLISH_SUPPORT
+_S_,_h_,_a_,_r_,_p_,_n_,_e_,_s_,_s_,_END_,	//_ENGLISH
+#endif
+#if _GERMAN_SUPPORT
+_S_,_c_,_h_,_x4b_,_r_,_f_,_e_,_END_,//_K_,_l_,_a_,_r_,_h_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_N_,_i_,_t_,_i_,_d_,_e_,_z_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_D_,_x56_,_f_,_i_,_n_,_i_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_i_,_t_,_i_,_d_,_e_,_z_,_z_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_c_,_h_,_e_,_r_,_p_,_t_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_N_,_i_,_t_,_i_,_d_,_e_,_z_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_K_,_l_,_a_,_r_,_h_,_e_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_N_,_e_,_t_,_l_,_i_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8d_,_x6c_,_x88_,_x68_,_x71_,_x69_,_x6a_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_V_,_i_,_l_,_x52_,_g_,_o_,_s_,_s_,_x52_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_r_,_z_,_e_,_j_,_r_,_z_,_y_,_s_,_t_,_o_,_x9d_,_x9e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdf_,_xe0_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x36_,_x56_,_x32_,_x2e_,_x57_,_x28_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x97_,_x98_,_x6e_,_x73_,_x6f_,_x6d_,_x6e_,_x94_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd7_,_xa1_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_e_,_r_,_x4b_,_v_,_y_,_y_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_b_,_y_,_s_,_t_,_r_,_o_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xdf_,_xe0_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x97_,_a_,_x8a_,_PAGE_,0x01,_x9a_,_x88_,_x87_,_x88_,_x73_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_HDR_MODE[] =
+{
+_H_,_D_,_R_,_END_,
+};
+
+BYTE code tsOSD_H_POSITION[] =
+{
+_END_,
+};
+
+BYTE code tsOSD_V_POSITION[] =
+{
+	_END_,
+};
+
+BYTE code tsOSD_PIXEL_CLOCK[] =
+{
+    _C_,_l_,_o_,_c_,_k_,_END_,
+};
+
+BYTE code tsOSD_PHASE[] =
+{
+    _P_,_h_,_a_,_s_,_e_,_END_,
+};
+
+BYTE code tsOSD_ASPECT[] =
+{
+#if _ENGLISH_SUPPORT
+	_A_,_s_,_p_,_e_,_c_,_t_,_,_R_,_a_,_t_,_i_,_o_,_END_,
+#endif
+
+#if _GERMAN_SUPPORT
+_S_,_e_,_i_,_t_,_e_,_n_,_v_,_e_,_r_,_h_,_x4b_,_l_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_e_,_l_,_a_,_c_,_i_,_x50_,_n_,_,_d_,_e_,_,_A_,_s_,_p_,_e_,_c_,_t_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_a_,_t_,_i_,_o_,_,_d_,_x57_,_a_,_f_,_f_,_i_,_c_,_h_,_a_,_g_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_r_,_o_,_p_,_o_,_r_,_z_,_i_,_o_,_n_,_i_,_,_I_,_m_,_m_,_a_,_g_,_i_,_n_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_B_,_e_,_e_,_l_,_d_,_v_,_e_,_r_,_h_,_o_,_u_,_d_,_i_,_n_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_a_,_x_,_a_,_,_d_,_e_,_,_p_,_r_,_o_,_p_,_o_,_r_,_x58_,_x5a_,_o_,_END_,
+#else
+_F_,_o_,_r_,_m_,_a_,_t_,_o_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_B_,_i_,_l_,_d_,_f_,_x48_,_r_,_h_,_x5d_,_l_,_l_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_x48_,_r_,_x4a_,_n_,_t_,_x4a_,_,_O_,_r_,_a_,_n_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x71_,_x6c_,_x80_,_x7c_,_x67_,_x74_,_x6c_,_,_x69_,_x6a_,_x7d_,_x72_,_x71_,_x6c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_x56_,_p_,_a_,_r_,_x52_,_n_,_y_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_s_,_p_,_x50_,_x9c_,_c_,_z_,_x42_,_,_O_,_b_,_r_,_a_,_z_,_u_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xcc_,_xd8_,_xd9_,_xc3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x4c_,_,_x28_,_,_x4d_,_,_x4e_,_,_x26_,_,_PAGE_,0x03,_x16_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8f_,_x6f_,_x6f_,_x6e_,_x71_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x6d_,_x6e_,_x6f_,_x75_,_x6f_,_x71_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa5_,_xa6_,_xb5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_u_,_v_,_a_,_s_,_u_,_h_,_d_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_p_,_o_,_m_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_r_,_,_s_,_t_,_r_,_a_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa5,_xa6_,_PAGE_,0x00,_xac_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_e_,_c_,_x8a_,_i_,_x97_,_,_PAGE_,0x01,_x8d_,_PAGE_,0x00,_i_,_PAGE_,0x01,_x85_,_PAGE_,0x00,_i_,_x8c_,_i_,_END_,
+#endif
+};
+
+BYTE code tsOSD_CT[] =
+{
+#if _ENGLISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_,_T_,_e_,_m_,_p_,_e_,_r_,_a_,_t_,_u_,_r_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_a_,_r_,_b_,_t_,_e_,_m_,_p_,_e_,_r_,_a_,_t_,_u_,_r_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_e_,_m_,_p_,_x42_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_e_,_m_,_p_,_x42_,_,_d_,_e_,_,_C_,_o_,_u_,_l_,_e_,_u_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_e_,_m_,_p_,_x42_,_,_C_,_o_,_l_,_o_,_r_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_K_,_l_,_e_,_u_,_r_,_t_,_e_,_m_,_p_,_x42_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_e_,_m_,_p_,_e_,_r_,_a_,_t_,_u_,_r_,_a_,_,_d_,_e_,_,_c_,_o_,_r_,_END_,
+#else
+_T_,_e_,_m_,_p_,_x42_,_,_d_,_a_,_,_C_,_o_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_F_,_x4b_,_r_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_R_,_e_,_n_,_k_,_,_S_,_x61_,_c_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x85_,_x69_,_x7a_,_x78_,_x7c_,_x7d_,_x7a_,_x6c_,_x6b_,_x74_,_x6c_,_,_x79_,_x7a_,_x7b_,_x78_,_x6c_,_x70_,_x7c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_z_,_x53_,_n_,_h_,_x99_,_m_,_x56_,_r_,_s_,_x56_,_k_,_l_,_e_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_T_,_e_,_m_,_p_,_e_,_r_,_x42_,_B_,_a_,_r_,_w_,_o_,_w_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xad_,_xc4_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xad_,_xc4_,_xaa_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8b_,_x7b_,_x7c_,_x6e_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x6e_,_x7c_,_x80_,_x8c_,_x7c_,_x75_,_x78_,_x6e_,_x7f_,_x75_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbc_,_xbd_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_x4b_,_r_,_i_,_l_,_x4b_,_m_,_p_,_x48_,_t_,_i_,_l_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_T_,_e_,_p_,_l_,_o_,_t_,_a_,_,_b_,_a_,_r_,_e_,_v_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xad_,_PAGE_,0x02,0x9c,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_T_,_e_,_x8c_,_x65_,_e_,_p_,_a_,_x87_,_y_,_p_,_a_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_RED[] =
+{
+#if _ENGLISH_SUPPORT
+_R_,_e_,_d_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_R_,_o_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_o_,_j_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_o_,_u_,_g_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_o_,_s_,_s_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_o_,_o_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_V_,_e_,_r_,_m_,_e_,_l_,_h_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_R_,_x48_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_x61_,_r_,_m_,_x61_,_z_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x72_,_x7d_,_x7d_,_x6a_,_x71_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_P_,_i_,_r_,_o_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_z_,_e_,_r_,_w_,_o_,_n_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd4_,_xad_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x49_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x73_,_x75_,_x78_,_x6d_,_x71_,_x88_,_x8e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xb4_,_xbc_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_u_,_n_,_a_,_i_,_n_,_e_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x87_,_PAGE_,0x00,_e_,_r_,_v_,_e_,_n_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa2,_PAGE_,0x00,_xad_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x77_,_x88_,_x7d_,_x88_,_x87_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_GREEN[] =
+{
+#if _ENGLISH_SUPPORT
+_G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_G_,_r_,_x4a_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_V_,_e_,_r_,_d_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_V_,_e_,_r_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_V_,_e_,_r_,_d_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_r_,_o_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_V_,_e_,_r_,_d_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_G_,_r_,_x48_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Y_,_e_,_x5f_,_i_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x7a_,_x7f_,_x6b_,_x6a_,_x71_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_Z_,_x48_,_l_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_Z_,_i_,_e_,_l_,_o_,_n_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd5_,_xad_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x4a_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x7d_,_x7c_,_x87_,_x7c_,_x71_,_x88_,_x8e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xcf_,_xbc_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_i_,_h_,_r_,_e_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_z_,_e_,_l_,_e_,_n_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa3,_PAGE_,0x00,_xad_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8a_,_x78_,_x6d_,_x88_,_x87_,_END_,
+#endif
+};
+
+#if(_DEF_STA_SIX_COLOR)
+BYTE code tsOSD_CYAN[] =
+{
+	_C_,_y_,_a_,_n_,_END_,
+
+};
+
+BYTE code tsOSD_MAGENTA[] =
+{
+	_M_,_a_,_g_,_e_,_n_,_t_,_a_,_END_,
+};
+
+
+BYTE code tsOSD_YELLOW[] =
+{
+	_Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+};
+
+#endif
+
+BYTE code tsOSD_BLUE[] =
+{
+#if _ENGLISH_SUPPORT
+_B_,_l_,_u_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_B_,_l_,_a_,_u_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_z_,_u_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_B_,_l_,_e_,_u_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_B_,_l_,_u_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_B_,_l_,_a_,_u_,_w_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_A_,_z_,_u_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_B_,_l_,_x5d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_M_,_a_,_v_,_i_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8c_,_x7e_,_x80_,_x69_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_x56_,_k_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_i_,_e_,_b_,_i_,_e_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xc8_,_xad_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x3d_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x6d_,_x72_,_x71_,_x72_,_x8e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xc3_,_xbc_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_s_,_i_,_n_,_i_,_n_,_e_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_m_,_o_,_d_,_r_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x9e_,_PAGE_,0x00,_xad_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x8a_,_x85_,_x8a_,_END_,
+#endif
+};
+
+
+ 
+code BYTE *tsOSD_USER_table[]=
+{
+tsOSD_RED,
+tsOSD_GREEN,
+tsOSD_BLUE,
+};
+
+BYTE code tsOSD_LANGUAGE[] =
+{
+#if _ENGLISH_SUPPORT
+_L_,_a_,_n_,_g_,_u_,_a_,_g_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_p_,_r_,_a_,_c_,_h_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_I_,_d_,_i_,_o_,_m_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_a_,_n_,_g_,_u_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_i_,_n_,_g_,_u_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_T_,_a_,_a_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_I_,_d_,_i_,_o_,_m_,_a_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_p_,_r_,_x5d_,_k_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_i_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x94_,_x80_,_x7b_,_x6b_,_x6b_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_y_,_e_,_l_,_v_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_xa1_,_z_,_y_,_k_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf3_,_PAGE_,0x01,_xe_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x03,_x15_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x74_,_x7d_,_x88_,_x73_,_PAGE_,0x00,_x40_,_,_PAGE_,0x01,_x78_,_x71_,_x83_,_x87_,_x72_,_x8e_,_x6d_,_x73_,_x72_,_x8e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xe4_,_xe5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_i_,_e_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_J_,_a_,_z_,_y_,_k_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x64_,_xe_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x87_,_i_,_PAGE_,0x01,_x87_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_OSD_H_POSITION[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_S_,_D_,_,_H_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_x44_,_H_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_o_,_s_,_i_,_c_,_i_,_x50_,_n_,_,_H_,_,_d_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_,_H_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_o_,_s_,_i_,_z_,_i_,_o_,_n_,_e_,_,_o_,_r_,_x44_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_,_H_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_P_,_o_,_s_,_i_,_x58_,_x5a_,_o_,_,_H_,_o_,_r_,_i_,_z_,_o_,_n_,_t_,_a_,_l_,_,_d_,_o_,_,_O_,_S_,_D_,_END_,
+#else
+_P_,_o_,_s_,_i_,_x58_,_x5a_,_o_,_,_H_,_,_O_,_S_,_D_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_P_,_o_,_s_,_i_,_t_,_i_,_e_,_x44_,_H_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Y_,_a_,_t_,_a_,_y_,_,_K_,_o_,_n_,_u_,_m_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x95_,_x7a_,_x6a_,_x96_,_x44_,_,_x75_,_x92_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_x44_,_,_p_,_o_,_z_,_x53_,_c_,_i_,_x50_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_z_,_y_,_c_,_j_,_a_,_,_P_,_o_,_z_,_i_,_o_,_m_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_PAGE_,0x01,_x15_,_x16_,_x17_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_x15_,_x16_,_x17_,_PAGE_,0x03,_x12_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x89_,_x6f_,_x75_,_PAGE_,0x00,_x44_,_PAGE_,0x01,_x8c_,_x6f_,_x7d_,_x72_,_x7a_,_x72_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_xe6_,_xe7_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_O_,_S_,_D_,_,_H_,_x44_,_a_,_s_,_e_,_n_,_t_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_O_,_S_,_D_,_,_H_,_x44_,_p_,_o_,_z_,_i_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb5_,_PAGE_,0x02,0xb1,_PAGE_,0x01,_x15_,_x16_,_x17_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_S_,_D_,_,_H_,_x44_,_PAGE_,0x01,_x87_,_PAGE_,0x00,_a_,_y_,_a_,_PAGE_,0x01,_x7d_,_x88_,_x80_,_x88_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_OSD_V_POSITION[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_S_,_D_,_,_V_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_x44_,_V_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_o_,_s_,_i_,_c_,_i_,_x50_,_n_,_,_V_,_,_d_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_,_V_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_o_,_s_,_i_,_z_,_i_,_o_,_n_,_e_,_,_v_,_e_,_r_,_x44_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_,_V_,_x44_,_P_,_o_,_s_,_i_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_P_,_o_,_s_,_i_,_c_,_a_,_o_,_,_V_,_e_,_r_,_t_,_i_,_c_,_a_,_l_,_,_d_,_o_,_,_O_,_S_,_D_,_END_,
+#else
+_P_,_o_,_s_,_i_,_x58_,_x5a_,_o_,_,_V_,_,_O_,_S_,_D_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_P_,_o_,_s_,_i_,_t_,_i_,_o_,_n_,_x44_,_V_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_i_,_k_,_e_,_y_,_,_K_,_o_,_n_,_u_,_m_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x6c_,_x70_,_x6c_,_x7d_,_x44_,_,_x75_,_x92_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_V_,_x44_,_,_p_,_o_,_z_,_x53_,_c_,_i_,_x50_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_z_,_y_,_c_,_j_,_a_,_,_P_,_i_,_o_,_n_,_o_,_w_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_PAGE_,0x01,_x18_,_x19_,_x17_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_x18_,_PAGE_,0x03,_x13_,_PAGE_,0x01,_x17_,_PAGE_,0x03,_x12_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x7c_,_x75_,_x6e_,_PAGE_,0x00,_x44_,_PAGE_,0x01,_x8c_,_x6f_,_x7d_,_x72_,_x7a_,_x72_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_xe6_,_xe8_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_O_,_S_,_D_,_,_V_,_x44_,_a_,_s_,_e_,_n_,_t_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_O_,_S_,_D_,_,_V_,_x44_,_P_,_o_,_z_,_i_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb5_,_PAGE_,0x02,_xb1_,_PAGE_,0x01,_x18_,_x19_,_x17_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_S_,_D_,_,_V_,_x44_,_PAGE_,0x01,_x87_,_PAGE_,0x00,_a_,_y_,_a_,_PAGE_,0x01,_x7d_,_x88_,_x80_,_x88_,_END_,
+#endif
+};
+
+BYTE code tsOSD_OSD_TIMER[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_S_,_D_,_,_T_,_i_,_m_,_e_,_,_O_,_u_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_x44_,_A_,_b_,_s_,_c_,_h_,_a_,_l_,_t_,_z_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_i_,_e_,_m_,_p_,_o_,_,_d_,_e_,_,_e_,_s_,_p_,_e_,_r_,_a_,_,_d_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_e_,_m_,_p_,_o_,_r_,_i_,_s_,_a_,_t_,_i_,_o_,_n_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_i_,_m_,_e_,_o_,_u_,_t_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_,_T_,_i_,_m_,_e_,_o_,_u_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_e_,_m_,_p_,_o_,_,_d_,_e_,_,_e_,_x_,_i_,_b_,_i_,_c_,_a_,_o_,_,_d_,_o_,_,_O_,_S_,_D_,_END_,
+#else
+_T_,_e_,_m_,_p_,_o_,_,_L_,_i_,_m_,_i_,_t_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_T_,_i_,_m_,_e_,_o_,_u_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Z_,_a_,_m_,_a_,_n_,_,_A_,_x5f_,_x61_,_m_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x86_,_x7a_,_x7c_,_x71_,_x6a_,_x7d_,_x72_,_,_x72_,_x7a_,_x6a_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_i_,_k_,_a_,_p_,_c_,_s_,_o_,_l_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_z_,_a_,_s_,_,_Z_,_a_,_k_,_o_,_xa2_,_x42_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_xb1_,_xb2_,_xe3_,_xe4_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_x65_,_x30_,_x66_,_x32_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x75_,_x7c_,_x80_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x8c_,_x6f_,_x73_,_x78_,_x7d_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_xea_,_xeb_,_xec_,_xed_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_O_,_S_,_D_,_x44_,_a_,_i_,_k_,_a_,_e_,_r_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8c_,_PAGE_,0x00,_a_,_s_,_o_,_v_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_p_,_r_,_o_,_d_,_u_,_PAGE_,0x02,_x88_,_PAGE_,0x00,_e_,_k_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb5_,_PAGE_,0x02,_xb1_,_x94_,_PAGE_,0x00,_xb2_,_PAGE_,0x02,0xb3,_xb4_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_x85_,_p_,_c_,_e_,_x87_,_y_,_,_y_,_a_,_PAGE_,0x01,_x73_,_x88_,_x9a_,_x88_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_TRANSPARENCY[] =
+{
+#if _ENGLISH_SUPPORT
+	_O_,_S_,_D_,_,_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_c_,_y_,_END_,
+#endif
+
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_x44_,_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_z_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_c_,_i_,_a_,_,_d_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_c_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_z_,_a_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_,_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_r_,_x5b_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_c_,_i_,_a_,_,_d_,_o_,_,_O_,_S_,_D_,_END_,
+#else
+_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_x5c_,_n_,_c_,_i_,_a_,_,_O_,_S_,_D_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_T_,_r_,_a_,_n_,_s_,_p_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x64_,_e_,_f_,_f_,_a_,_f_,_l_,_x61_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x82_,_x6a_,_x6c_,_x88_,_x7f_,_x71_,_x69_,_x6a_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_x54_,_t_,_l_,_x52_,_t_,_s_,_z_,_x50_,_s_,_x52_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_r_,_z_,_e_,_z_,_r_,_x42_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_PAGE_,0x01,_x1a_,_x1b_,_PAGE_,0x00,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_x1a_,_x1b_,_PAGE_,0x00,_xaa_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8d_,_x75_,_x6f_,_x7d_,_x75_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_xe9_,_xa1_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_O_,_S_,_D_,_x44_,_l_,_x4b_,_p_,_i_,_n_,_x4b_,_k_,_y_,_v_,_y_,_y_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_T_,_r_,_a_,_n_,_s_,_p_,_a_,_r_,_e_,_n_,_t_,_n_,_o_,_s_,_t_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb5_,_PAGE_,0x02,_xb1_,_xb2_,_PAGE_,0x01,_x51_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x8c_,_x85_,_PAGE_,0x01,_x87_,_x82_,_PAGE_,0x00,_i_,_p_,_PAGE_,0x01,_x87_,_PAGE_,0x00,_i_,_x7d_,_END_,
+#endif
+};
+
+BYTE code tsOSD_IMAGE_AUTO_ADJUST[] =
+{
+    _I_,_m_,_a_,_g_,_e_,_,_A_,_u_,_t_,_o_,_,_A_,_d_,_j_,_u_,_s_,_t_,_END_,
+};
+
+
+BYTE code tsOSD_COLOR_AUTO_ADJUST[] =
+{
+    _C_,_o_,_l_,_o_,_r_,_,_A_,_u_,_t_,_o_,_,_A_,_d_,_j_,_u_,_s_,_t_,_END_,
+};
+
+BYTE code tsOSD_RESET_PAGE[] =
+{
+#if _ENGLISH_SUPPORT
+_R_,_e_,_s_,_e_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_Z_,_u_,_r_,_x4a_,_c_,_k_,_s_,_e_,_t_,_z_,_e_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_e_,_s_,_t_,_a_,_b_,_l_,_e_,_c_,_e_,_r_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_x56_,_i_,_n_,_i_,_t_,_i_,_a_,_l_,_i_,_s_,_e_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_i_,_p_,_r_,_i_,_s_,_t_,_i_,_n_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_e_,_s_,_e_,_t_,_t_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_R_,_e_,_s_,_e_,_t_,_END_,
+#else
+_R_,_e_,_s_,_t_,_a_,_u_,_r_,_a_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_x5e_,_t_,_e_,_r_,_s_,_t_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_x61_,_f_,_x61_,_r_,_l_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x7e_,_x6c_,_x71_,_x6c_,_x88_,_x7c_,_x7a_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_l_,_a_,_p_,_h_,_e_,_l_,_y_,_z_,_e_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_R_,_e_,_s_,_e_,_t_,_o_,_w_,_a_,_n_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x1e_,_PAGE_,0x00,_xb0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x38_,_x69_,_x55_,_x26_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8f_,_x7e_,_x75_,_x6f_,_x6d_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x2d_,_xa0_,_xa5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_n_,_o_,_l_,_l_,_a_,_t_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_r_,_e_,_s_,_e_,_t_,_o_,_v_,_a_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xb6,_PAGE_,0x01,_x17_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x88_,_x6d_,_x88_,_PAGE_,0x00,_p_,_y_,_END_,
+#endif
+};
+
+
+
+
+BYTE code tsOSD_LOW_BLUE[] =
+{
+#if _ENGLISH_SUPPORT
+_L_,_o_,_w_,_,_B_,_l_,_u_,_e_,_,_L_,_i_,_g_,_h_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_L_,_o_,_w_,_,_B_,_l_,_u_,_e_,_,_L_,_i_,_g_,_h_,_t_,_,_M_,_o_,_d_,_u_,_s_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_M_,_o_,_d_,_o_,_,_d_,_e_,_,_A_,_z_,_u_,_l_,_,_B_,_a_,_j_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_M_,_o_,_d_,_e_,_,_B_,_l_,_e_,_u_,_e_,_,_F_,_a_,_i_,_b_,_l_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_M_,_o_,_d_,_a_,_l_,_i_,_t_,_x59_,_,_B_,_l_,_u_,_,_B_,_a_,_s_,_s_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_L_,_a_,_g_,_e_,_,_b_,_l_,_a_,_u_,_w_,_e_,_,_M_,_o_,_d_,_u_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_L_,_o_,_w_,_,_B_,_l_,_u_,_e_,_,_L_,_i_,_g_,_h_,_t_,_END_,
+#else
+_M_,_o_,_d_,_o_,_,_L_,_o_,_w_,_,_B_,_l_,_u_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_L_,_x5d_,_g_,_t_,_,_b_,_l_,_x5d_,_t_,_t_,_,_l_,_j_,_u_,_s_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_x4a_,_x5f_,_x4a_,_k_,_,_M_,_a_,_v_,_i_,_,_I_,_x5f_,_x61_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x86_,_x6c_,_x78_,_x66_,_x80_,_x72_,_,_x78_,_x7e_,_x80_,_x69_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_l_,_a_,_c_,_s_,_o_,_n_,_y_,_,_k_,_x56_,_k_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_L_,_o_,_w_,_B_,_l_,_u_,_e_,_L_,_i_,_g_,_h_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xc7_,_xc8_,_xc9_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x2e_,_PAGE_,0x02,_x22_,_PAGE_,0x01,_x32_,_x27_,_x30_,_x26_,_PAGE_,0x02,_xcb_,_xcc_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x6d_,_x87_,_x78_,_x7e_,_x88_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x6d_,_x72_,_x71_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x6d_,_x7b_,_x7c_,_x6e_,_PAGE_,0x00,_,_END_,
+#endif
+
+#if _KOREAN_SUPPORT
+#if(Project_ID == ID_HUIXIONG_HK2785E06_MV315QHM_N40_QHD90HZ_10BIT_EDID_X322Q90_20230713)
+_L_,_O_,_W_,_,_B_,_I_,_L_,_E_,_,_L_,_I_,_G_,_H_,_T_,_END_,
+#elif (Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_L_,_o_,_w_,_B_,_l_,_u_,_e_,_L_,_i_,_g_,_h_,_t_,_END_,
+#else
+_L_,_O_,_W_,_,_B_,_L_,_U_,_E_,_END_,
+#endif
+#endif
+
+#if _FINNISH_SUPPORT
+_M_,_a_,_t_,_a_,_l_,_a_,_,_s_,_i_,_n_,_i_,_n_,_e_,_n_,_,_v_,_a_,_l_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_N_,_x53_,_z_,_k_,_x56_,_,_m_,_o_,_d_,_r_,_x56_,_,_s_,_v_,_PAGE_,0x02,0x89,_PAGE_,0x00,_t_,_l_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xc7_,_PAGE_,0x02,0x9e,_PAGE_,0x00,_xc9_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_T_,_x85_,_x8c_,_e_,_x97_,_,_x8a_,_x85_,_x8a_,_END_,
+#endif
+};
+
+BYTE code tsOSD_MUTE[] =
+{
+#if _ENGLISH_SUPPORT
+_M_,_u_,_t_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_t_,_u_,_m_,_m_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_l_,_e_,_n_,_c_,_i_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_M_,_u_,_e_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_M_,_u_,_t_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_D_,_e_,_m_,_p_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_M_,_u_,_d_,_o_,_END_,
+#else
+_C_,_o_,_r_,_t_,_a_,_r_,_,_o_,_,_s_,_o_,_m_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_t_,_u_,_m_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_e_,_s_,_s_,_i_,_z_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8f_,_x7c_,_x81_,_x90_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_x56_,_m_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_i_,_e_,_m_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdd_,_xb3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x52_,_,_x53_,_,_x32_,_,_x26_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x88_,_x73_,_x87_,_PAGE_,0x00,_x42_,_PAGE_,0x01,_x7d_,_x7b_,_x7f_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd3_,_x9d_,_xd4_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_m_,_y_,_k_,_i_,_s_,_t_,_x4b_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_z_,_t_,_l_,_u_,_m_,_i_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa8,_PAGE_,0x00,_xb3_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x82_,_PAGE_,0x00,_a_,_y_,_PAGE_,0x01,_x88_,_x6d_,_x6d_,_x88_,_x7d_,_END_,
+#endif
+};
+
+BYTE code tsOSD_VOLUME[] =
+{
+#if _ENGLISH_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_L_,_a_,_u_,_t_,_s_,_t_,_x4b_,_r_,_k_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_V_,_o_,_l_,_u_,_m_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_V_,_o_,_l_,_y_,_m_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_e_,_s_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x91_,_x71_,_x70_,_x6c_,_x6b_,_x66_,_,_x68_,_x79_,_x7c_,_x81_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_a_,_n_,_g_,_e_,_r_,_x99_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_G_,_x9c_,_o_,_x9d_,_n_,_o_,_x9d_,_x9e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb3_,_xde_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_xb3_,_xde_,_END_,
+#else
+    _PAGE_,0x01,_x54_,_,_x38_,_,_x53_,_,_x32_,_,_x42_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x89_,_x75_,_x6f_,_x80_,_x73_,_x6f_,_x6d_,_x6e_,_x94_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd5_,_xd6_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_i_,_l_,_a_,_v_,_u_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_h_,_l_,_a_,_s_,_i_,_t_,_o_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb3_,_xde_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x8a_,_x85_,_PAGE_,0x01,_x87_,_x77_,_x80_,_PAGE_,0x00,_i_,_END_,
+#endif
+};
+
+BYTE code tsOSD_FREESYNC[] =
+{
+_A_,_d_,_a_,_p_,_t_,_i_,_v_,_e_,_,_,_S_,_y_,_n_,_c_,_END_,
+};    
+
+
+BYTE code tsOSD_FREESYNC_TJ[] =
+{
+_F_,_r_,_e_,_e_,_S_,_y_,_n_,_c_,_END_,
+};    
+
+
+
+
+
+BYTE code tsOSD_OD_PAGE[] =
+{
+#if _ENGLISH_SUPPORT
+
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217) || (Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104 )
+	_R_,_e_,_s_,_p_,_o_,_n_,_s_,_e_,_,_T_,_i_,_m_,_e_,_END_,
+#else
+	_O_,_v_,_e_,_r_,_d_,_r_,_i_,_v_,_e_,_END_,
+#endif
+
+#endif
+
+#if _GERMAN_SUPPORT
+_R_,_e_,_a_,_k_,_t_,_i_,_o_,_n_,_s_,_z_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_i_,_e_,_m_,_p_,_o_,_,_d_,_e_,_,_R_,_e_,_s_,_p_,_u_,_e_,_s_,_t_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_e_,_m_,_p_,_s_,_,_d_,_e_,_,_R_,_e_,_p_,_o_,_n_,_s_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_e_,_m_,_p_,_o_,_,_d_,_i_,_,_R_,_i_,_s_,_p_,_o_,_s_,_t_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_e_,_s_,_p_,_o_,_n_,_s_,_t_,_i_,_j_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_O_,_v_,_e_,_r_,_d_,_r_,_i_,_v_,_e_,_r_,_END_,
+#else
+_T_,_e_,_m_,_p_,_o_,_,_d_,_e_,_,_R_,_e_,_s_,_p_,_o_,_s_,_t_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_O_,_v_,_e_,_r_,_d_,_r_,_i_,_v_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_A_,_x5f_,_x61_,_r_,_x61_,_,_Y_,_x4a_,_k_,_l_,_e_,_n_,_m_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_O_,_v_,_e_,_r_,_d_,_r_,_i_,_v_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_e_,_l_,_x4a_,_l_,_x53_,_r_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_r_,_z_,_y_,_s_,_p_,_i_,_e_,_s_,_z_,_e_,_n_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+
+#if(_CAIXIAOLI)
+_xbc_,_xbd_,_O_,_D_,_END_,
+
+#else
+_O_,_D_,_xe1_,_xe2_,_END_,
+
+#endif
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x01,_x58_,_x59_,_x5a_,_PAGE_,0x00,_xaa_,_END_,
+#else
+    _O_,_D_,_END_,
+#endif
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x75_,_x7c_,_x80_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x6f_,_x6e_,_x73_,_x87_,_x72_,_x73_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd8_,_xd9_,_PAGE_,0x00,_,_PAGE_,0x01,_xda_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_y_,_l_,_i_,_v_,_a_,_i_,_h_,_d_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_r_,_y_,_c_,_h_,_l_,_o_,_b_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_h_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_O_,_v_,_e_,_r_,_d_,_r_,_i_,_v_,_e_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_D_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_AUTO_POWERDOWN[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_f_,_f_,_,_T_,_i_,_m_,_e_,_r_,_END_,
+#endif
+
+#if _GERMAN_SUPPORT
+_A_,_b_,_s_,_c_,_h_,_a_,_l_,_t_,_t_,_i_,_m_,_e_,_r_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_e_,_m_,_p_,_x42_,_A_,_p_,_a_,_g_,_a_,_d_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_M_,_i_,_n_,_u_,_t_,_x42_,_d_,_x56_,_s_,_a_,_c_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_i_,_m_,_e_,_r_,_,_s_,_p_,_e_,_g_,_n_,_i_,_m_,_x42_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_U_,_i_,_t_,_x44_,_t_,_i_,_m_,_e_,_r_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_i_,_m_,_e_,_r_,_,_d_,_e_,_s_,_l_,_i_,_g_,_a_,_d_,_o_,_END_,
+#else
+_T_,_e_,_m_,_p_,_o_,_r_,_i_,_z_,_x42_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_A_,_v_,_s_,_t_,_x4b_,_n_,_g_,_n_,_x42_,_t_,_i_,_m_,_e_,_r_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Z_,_a_,_m_,_a_,_n_,_l_,_a_,_n_,_m_,_x61_,_x5f_,_,_k_,_a_,_p_,_a_,_t_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x86_,_x7a_,_x7c_,_x71_,_x6a_,_x7d_,_x72_,_,_,_x7d_,_x80_,_x69_,_x74_,_x6b_,_x6a_,_x78_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_I_,_d_,_x99_,_z_,_x53_,_t_,_e_,_t_,_t_,_,_l_,_e_,_x52_,_l_,_l_,_x53_,_t_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_T_,_i_,_m_,_e_,_r_,_,_w_,_y_,_x9c_,_z_,_a_,_s_,_i_,_l_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xec_,_xe3_,_xbf_,_PAGE_,0x01,_x1f_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x36_,_x56_,_x55_,_x26_,_x6a_,_x6b_,_x25_,_x65_,_x30_,_x66_,_x32_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x9a_,_x78_,_x8e_,_x80_,_x7c_,_x75_,_PAGE_,0x00,_,_PAGE_,0x01,_x7b_,_x88_,_x73_,_x87_,_x81_,_x70_,_x7c_,_x71_,_x72_,_x99_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xf5_,_xf6_,_PAGE_,0x00,_,_PAGE_,0x01,_xae_,_xac_,_xf7_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_A_,_j_,_a_,_s_,_t_,_i_,_m_,_e_,_n_,_,_p_,_o_,_i_,_s_,_,_p_,_x4b_,_x4b_,_l_,_t_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8c_,_PAGE_,0x00,_a_,_s_,_o_,_v_,_a_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_,_v_,_y_,_p_,_n_,_u_,_t_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xec_,_PAGE_,0x02,_xb3_,_x9b_,_x28_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_A_,_u_,_t_,_o_,_,_P_,_o_,_w_,_e_,_r_,_,_D_,_o_,_w_,_n_,_END_,
+#endif
+};
+BYTE code tsOSD_HOTKEY_RIGHT[] =
+{
+	_H_,_O_,_T_,_K_,_E_,_Y_,_R_,_I_,_G_,_H_,_T_,_END_,
+};
+
+//hh
+BYTE code tsOSD_HOTKEY_LEFT[] =
+{
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+	_O_,_S_,_D_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_M_,_o_,_d_,_e_,_END_,
+};
+
+BYTE code tsOSD_LOS_TYPE1[] =
+{
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	0xbB,0xbC,0xbD,_,0x91,0x92,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_1_,_END_,
+};
+
+BYTE code tsOSD_LOS_TYPE2[] =
+{
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	0xbB,0xbC,0xbD,_,0x91,0x92,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+	_L_,_O_,_S_,_T_,_Y_,_P_,_E_,_2_,_END_,
+};
+
+BYTE code tsOSD_FLICKER_FREE[] =
+{
+	_F_,_l_,_i_,_c_,_k_,_e_,_r_,_,_F_,_r_,_e_,_e_,_END_,
+};
+
+BYTE code tsOSD_MPRT[] =
+{
+
+#if(_CAIXIAOLI)
+
+_D_,_y_,_A_,_c_,_2_,_END_,
+
+#else
+//_M_,_P_,_R_,_T_,_END_,
+_D_,_y_,_A_,_c_,_END_,
+
+#endif
+};
+
+
+BYTE code tsOSD_GAMMA[] =
+{
+#if _ENGLISH_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_xe5_,_xe6_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x1f_,_PAGE_,0x01,_x25_,_x66_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x89_,_x78_,_x80_,_x80_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xb8_,_xb9_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_g_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_g_,_a_,_m_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_G_,_a_,_m_,_m_,_a_,_END_,
+#endif
+};
+
+BYTE code tsOSD_COLOURGAMUT_MODE[] =
+{
+#if _ENGLISH_SUPPORT
+
+_c_,_o_,_l_,_o_,_u_,_r_,_,_g_,_a_,_m_,_u_,_t_,_END_,
+
+
+#endif
+#if _GERMAN_SUPPORT
+_F_,_a_,_r_,_b_,_s_,_k_,_a_,_l_,_a_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_G_,_a_,_m_,_a_,_,_d_,_e_,_,_c_,_o_,_l_,_o_,_r_,_e_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_G_,_a_,_m_,_m_,_e_,_,_d_,_e_,_,_c_,_o_,_u_,_l_,_e_,_u_,_r_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_G_,_a_,_m_,_u_,_t_,_,_c_,_o_,_l_,_o_,_r_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_k_,_l_,_e_,_u_,_r_,_e_,_n_,_g_,_a_,_m_,_m_,_a_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_G_,_a_,_m_,_a_,_,_d_,_e_,_,_c_,_o_,_r_,_e_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_f_,_x4b_,_r_,_g_,_o_,_m_,_f_,_x5d_,_n_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_r_,_e_,_n_,_k_,_,_g_,_a_,_m_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x79_,_x7a_,_x6d_,_x78_,_x6c_,_x70_,_x6a_,_x7d_,_x68_,_,_x67_,_x7d_,_x7f_,_x78_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_s_,_z_,_x53_,_n_,_s_,_k_,_x52_,_l_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_g_,_a_,_m_,_a_,_,_k_,_o_,_l_,_o_,_r_,_x50_,_w_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xad_,_PAGE_,0x02,_x4_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+//_PAGE_,0x01,_x48_,_PAGE_,0x02,0x4c,_PAGE_,0x01,_x44_,_PAGE_,0x02,_x4c_,_x4d_,_END_,
+_PAGE_,0x02,	_xcd_,_xce_,_xcf_,_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x83_,_x78_,_x80_,_x80_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbc_,_PAGE_,0x00,_,_PAGE_,0x01,_xb1_,_xee_,_PAGE_,0x02,_x5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_x4b_,_r_,_i_,_a_,_s_,_t_,_e_,_i_,_k_,_k_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_b_,_a_,_r_,_e_,_v_,_n_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_g_,_a_,_m_,_u_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xad_,_PAGE_,0x02,_x4_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_T_,_x67_,_c_,_,_x94_,_a_,_x8c_,_y_,_x87_,_PAGE_,0x01,_x88_,_END_,
+#endif
+};
+
+BYTE code tsOSD_SIX_SATURATION_MODE[] =
+{
+#if _ENGLISH_SUPPORT
+_S_,_i_,_x_,_,_S_,_a_,_t_,_u_,_r_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_i_,_x_,_,_S_,_x4b_,_t_,_t_,_i_,_g_,_u_,_n_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_x_,_,_S_,_a_,_t_,_u_,_r_,_a_,_c_,_i_,_x50_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_i_,_x_,_,_S_,_a_,_t_,_u_,_r_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_i_,_x_,_,_S_,_a_,_t_,_u_,_r_,_a_,_z_,_i_,_o_,_n_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_i_,_x_,_,_V_,_e_,_r_,_z_,_a_,_d_,_i_,_g_,_i_,_n_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_S_,_i_,_x_,_,_S_,_a_,_t_,_u_,_r_,_a_,_x58_,_x5a_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_i_,_x_,_,_M_,_x4b_,_t_,_t_,_n_,_a_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_x_,_,_D_,_o_,_y_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_S_,_i_,_x_,_,_x8a_,_x7c_,_x7a_,_x69_,_x6b_,_x78_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_i_,_x_,_,_T_,_e_,_l_,_x53_,_t_,_e_,_t_,_t_,_s_,_x56_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_i_,_x_,_,_N_,_a_,_s_,_y_,_c_,_e_,_n_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19 == _OFF)
+_PAGE_,0x02,_x45_,_x46_,_PAGE_,0x00,_xd6_,_xd7_,_xaa_,_END_,
+#else
+_PAGE_,0x02,_xe6_,_xe7_,_PAGE_,0x00,_xd6_,_xd7_,_xaa_,_END_,
+#endif
+#endif
+#if _JAPANESE_SUPPORT
+_xae_,_xaa_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_S_,_i_,_x_,_,_PAGE_,0x01,_x79_,_x78_,_x6d_,_x88_,_x93_,_x7c_,_x71_,_x71_,_x6f_,_x6d_,_x6e_,_x94_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd0_,_xa5_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_S_,_i_,_x_,_,_k_,_y_,_l_,_l_,_x4b_,_i_,_s_,_y_,_y_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_S_,_i_,_x_,_,_s_,_y_,_t_,_o_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_xe6_,_xe7_,_PAGE_,0x01,_x4b_,_PAGE_,0x00,_xd7_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_S_,_i_,_x_,_,_K_,_a_,_PAGE_,0x01,_x71_,_x88_,_PAGE_,0x00,_x9c_,_y_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_SATURATION_MODE[] =
+{
+#if _ENGLISH_SUPPORT
+_S_,_a_,_t_,_u_,_r_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_x4b_,_t_,_t_,_i_,_g_,_u_,_n_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_a_,_t_,_u_,_r_,_a_,_c_,_i_,_x50_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_a_,_t_,_u_,_r_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_a_,_t_,_u_,_r_,_a_,_z_,_i_,_o_,_n_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_V_,_e_,_r_,_z_,_a_,_d_,_i_,_g_,_i_,_n_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_S_,_a_,_t_,_u_,_r_,_a_,_x58_,_x5a_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_M_,_x4b_,_t_,_t_,_n_,_a_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_o_,_y_,_m_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x7c_,_x7a_,_x69_,_x6b_,_x78_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_T_,_e_,_l_,_x53_,_t_,_e_,_t_,_t_,_s_,_x56_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_a_,_s_,_y_,_c_,_e_,_n_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd6_,_xd7_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xae_,_xaa_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_x6d_,_x88_,_x93_,_x7c_,_x71_,_x71_,_x6f_,_x6d_,_x6e_,_x94_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd0_,_xa5_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_y_,_l_,_l_,_x4b_,_i_,_s_,_y_,_y_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_s_,_y_,_t_,_o_,_s_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x4b_,_PAGE_,0x00,_xd7_,_xaa_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_a_,_PAGE_,0x01,_x71_,_x88_,_PAGE_,0x00,_x9c_,_y_,_END_,
+#endif
+};
+
+BYTE code tsOSD_OVERCLOCK_MODE[] =
+{
+_O_,_V_,_E_,_R_,_,_C_,_L_,_O_,_C_,_K_,_END_,
+};
+
+BYTE code tsOSD_NULL[] =
+{
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+	_N_,_U_,_L_,_L_,_END_,
+};
+
+BYTE code tsOSD_LED_TYPE[] =
+{
+#if _ENGLISH_SUPPORT 
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_, 
+#endif
+#if _GERMAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,2,0xe9,0xea,0xed,0xcd,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif	
+	
+};
+
+
+
+BYTE code tsOSD_ECO_FPS[] =
+{
+#if _ENGLISH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_F_,_p_,_s_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_F_,_P_,_S_,_END_,
+#endif
+};
+
+#if(_DEF_COLORFUL)
+BYTE code tsOSD_ECO_COLORFUN[] =
+{
+#if _ENGLISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+
+#endif
+#if _JAPANESE_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+};
+
+
+#endif
+
+
+
+BYTE code tsOSD_ECO_RTS[] =
+{
+#if _ENGLISH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_R_,_t_,_s_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_R_,_T_,_S_,_END_,
+#endif
+};
+//Energy saving mode
+
+BYTE code tsOSD_ECO_ENERGY_SAVING[] =
+{
+#if _ENGLISH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_E_,_c_,_o_,_n_,_o_,_m_,_i_,_a_,_,_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_END_,
+#else
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+//_E_,_n_,_e_,_r_,_g_,_y_,_s_,_a_,_v_,_i_,_n_,_g_,_m_,_o_,_d_,_e_,_END_,
+_xf1_,_xce_,_END_,
+
+#endif
+#if _JAPANESE_SUPPORT
+//_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+_xf1_,_PAGE_,0x02,_x3e_,_PAGE_,0x01,_x57_,_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+//���ߧ֧�ԧ��ҧ֧�֧ا֧ߧڧ�
+_PAGE_,0x02,_x2c_,_PAGE_,0x01,_x71_,_x7c_,_x75_,_x89_,_x6f_,_x6d_,_x7e_,_x7c_,_x75_,_x7c_,_x8a_,_x7c_,_x71_,_x72_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+//_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+_PAGE_,0x01,_xe0_,_xd1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_E_,_n_,_e_,_r_,_g_,_y_,_,_s_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+//_E_,_n_,_e_,_r_,_g_,_y_,_s_,_a_,_v_,_i_,_n_,_g_,_m_,_o_,_d_,_e_,_END_,
+_xf1_,_PAGE_,0x01,_x60_,_END_,
+
+#endif
+};
+
+
+BYTE code tsOSD_ECO_STANDARD[] =
+{
+#if _ENGLISH_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+
+#endif
+
+#if _GERMAN_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_E_,_s_,_t_,_x52_,_n_,_d_,_a_,_r_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_P_,_a_,_d_,_r_,_x5a_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x87_,_x81_,_x7e_,_x6a_,_x7d_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xca_,_xcb_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+#if 1//_2822NJ
+    _PAGE_,0x01,_x28_,_x65_,_x25_,_x6a_,_x32_,_x3a_,_END_,
+#else
+    _PAGE_,0x01,_x3e_,_x3f_,_PAGE_,0x00,_,_END_,
+#endif
+#else
+    _PAGE_,0x01,_x3e_,_x3f_,_PAGE_,0x00,_,_END_,
+#endif
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8f_,_x6e_,_x78_,_x71_,_x90_,_x78_,_x75_,_x6e_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,_xe7_,_xe8_,_END_,
+//_PAGE_,0x02,_xeb_,_xec_,_END_,
+
+#endif
+#if _FINNISH_SUPPORT
+_s_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_s_,_t_,_a_,_n_,_d_,_a_,_r_,_d_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x3e_,_x3f_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_c_,_x87_,_a_,_x97_,_PAGE_,0x01,_x90_,_PAGE_,0x00,_a_,_p_,_x87_,_x87_,_PAGE_,0x01,_x88_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_ECO_GAME[] =
+{
+#if _ENGLISH_SUPPORT
+_G_,_a_,_m_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_p_,_i_,_e_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_J_,_u_,_e_,_g_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_J_,_e_,_u_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_G_,_i_,_o_,_c_,_h_,_i_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_p_,_e_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_J_,_o_,_g_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_p_,_e_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_y_,_u_,_n_,_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x6c_,_x6a_,_x79_,_x71_,_x74_,_x89_,_x6a_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_J_,_x52_,_t_,_x56_,_k_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_G_,_r_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd0_,_xd1_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x41_,_x32_,_x42_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x72_,_x83_,_x75_,_x78_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xcc_,_xa2_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_e_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_h_,_r_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa0,_xa1_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_PAGE_,0x01,_x8e_,_x88_,_x79_,_END_,
+#endif
+};
+BYTE code tsOSD_ECO_MOVIE[] =
+{
+#if _ENGLISH_SUPPORT
+_M_,_o_,_v_,_i_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_e_,_l_,_x53_,_c_,_u_,_l_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_F_,_i_,_l_,_m_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x87_,_x6c_,_x6a_,_x71_,_x74_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_F_,_i_,_l_,_m_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xce_,_xcf_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x01,_x42_,_x32_,_PAGE_,0x03,_x14_,_PAGE_,0x01,_x32_,_END_,
+#else
+    _PAGE_,0x01,_x40_,_x2a_,_PAGE_,0x00,_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x91_,_x72_,_x87_,_x76_,_x80_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,_x4f_,_PAGE_,0x01,_xa5_,_END_,
+//_PAGE_,0x01,_xa1_,_xa5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_e_,_l_,_o_,_k_,_u_,_v_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_f_,_i_,_l_,_m_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x60_,_PAGE_,0x00,_xcf_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x91_,_x72_,_x87_,_x76_,_x80_,_END_,
+#endif
+};
+BYTE code tsOSD_ECO_TEXT[] =
+{
+#if(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+    _E_,_C_,_O_,_END_,  //_ENGLISH
+#else
+
+#if _ENGLISH_SUPPORT
+	_P_,_h_,_o_,_t_,_o_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_h_,_o_,_t_,_o_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_o_,_t_,_o_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_o_,_t_,_o_,_x60_,_r_,_a_,_f_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x88_,_x6d_,_x70_,_x7c_,_x67_,_x7a_,_x6c_,_x88_,_x74_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_x56_,_n_,_y_,_k_,_x56_,_p_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_Z_,_d_,_j_,_xa1_,_c_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xcc_,_xcd_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+#if 1// _2822NJ
+    _PAGE_,0x02,_x1e_,_PAGE_,0x03,_xf_,_PAGE_,0x01,_x26_,_END_,
+#else
+    _PAGE_,0x02,_xc8_,_xc9_,_,_END_,
+#endif
+#else
+    _PAGE_,0x02,_xc8_,_xc9_,_,_END_,
+#endif
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x72_,_x7d_,_x6f_,_x7e_,_x75_,_x78_,_x8a_,_x7c_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbe_,_xc7_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_a_,_l_,_o_,_k_,_u_,_v_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_f_,_o_,_t_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x9f,_PAGE_,0x00,_xcd_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x8a_,_x74_,_x87_,_a_,_x65_,_END_,
+#endif
+
+#endif
+};
+
+BYTE code tsOSD_ON[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_E_,_i_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_c_,_t_,_x42_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_M_,_a_,_r_,_c_,_h_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_O_,_n_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_a_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_L_,_i_,_g_,_a_,_d_,_o_,_END_,
+#else
+_A_,_c_,_t_,_i_,_v_,_a_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_P_,_x5d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_A_,_x58_,_x61_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x71_,_x69_,_x71_,_x69_,_x7a_,_x67_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_B_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_x9c_,_x9f_,_c_,_z_,_o_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xbe_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x31_,_,_x25_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x73_,_x87_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xb6_,_xa0_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_x4b_,_x4b_,_l_,_l_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x9a,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_a_,_PAGE_,0x01,_x85_,_PAGE_,0x00,_y_,_END_,
+#endif
+};
+BYTE code tsOSD_NORMAL[] =
+{
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+#if _ENGLISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_a_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x6c_,_x71_,_x7c_,_x71_,_x6a_,_x7d_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_o_,_r_,_m_,_x52_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdc_,_xbc_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xdc_,_PAGE_,0x01,_x51_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd1_,_PAGE_,0x02,_x61_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_n_,_o_,_r_,_m_,_a_,_a_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_n_,_o_,_r_,_m_,_x52_,_l_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x46_,_PAGE_,0x02,_x99_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_0_,_END_,
+#endif
+#else
+#if _ENGLISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_a_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x6c_,_x71_,_x7c_,_x71_,_x6a_,_x7d_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_o_,_r_,_m_,_x52_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdc_,_xbc_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x5b_,_x32_,_x66_,_PAGE_,0x02,_x22_,_x6a_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd1_,_PAGE_,0x02,_x61_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_n_,_o_,_r_,_m_,_a_,_a_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_n_,_o_,_r_,_m_,_x52_,_l_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x46_,_PAGE_,0x02,_x99_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_0_,_END_,
+#endif
+#endif
+};
+
+
+BYTE code tsOSD_FLICKER[] =
+{
+_F_,_L_,_I_,_C_,_K_,_F_,_R_,_E_,_E_,_END_,
+};
+
+
+
+
+BYTE code tsGAMMA1_8[] =
+{
+_1_,_x42_,_8_,_END_,
+};
+
+
+BYTE code tsGAMMA2_0[] =
+{
+_2_,_x42_,_0_,_END_,
+};
+
+BYTE code tsGAMMA2_2[] =
+{
+_2_,_x42_,_2_,_END_,
+};
+
+BYTE code tsGAMMA2_4[] =
+{
+_2_,_x42_,_4_,_END_,
+};
+
+
+BYTE code tsGAMMA2_6[] =
+{
+_2_,_x42_,_6_,_END_,
+
+};
+
+
+#if _ENABLE_ENERGE_NOTICE_MENU			
+BYTE code tsOSD_ENERGE_NOTICE1[] =
+{
+ 	_C_,_h_,_a_,_n_,_g_,_i_,_n_,_g_,0x00,_t_,_h_,_e_,0x00,_s_,_e_,_t_,_t_,_i_,_n_,_g_,0x00,_m_,_a_,_y_,0x00,_i_,_n_,_c_,_r_,_e_,_a_,_s_,_e_,0x00,_t_,_h_,_e_,0x00,_p_,_o_,_w_,_e_,_r_,0x00,_END_,
+ 	_E_,_i_,_n_,_e_,_,_PAGE_,0x02,0x38,_PAGE_,0x00,_n_,_d_,_e_,_r_,_u_,_n_,_g_,_,_d_,_e_,_r_,_,_E_,_i_,_n_,_s_,_t_,_e_,_l_,_l_,_u_,_n_,_g_,_,_k_,_a_,_n_,_n_,_,_d_,_e_,_n_,_END_,	//_GERMAN
+ 	_S_,_i_,_,_s_,_e_,_,_c_,_a_,_m_,_b_,_i_,_a_,_,_e_,_l_,_,_a_,_j_,_u_,_s_,_t_,_e_,0x46,_,_p_,_u_,_e_,_d_,_e_,_,_a_,_u_,_m_,_e_,_n_,_t_,_a_,_r_,_,_e_,_l_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_END_,//_SPANISH
+ 	_C_,_h_,_a_,_n_,_g_,_e_,_r_,_,_l_,_e_,_,_r_,0x56,_g_,_l_,_a_,_g_,_e_,_,_p_,_e_,_u_,_t_,_,_a_,_u_,_g_,_m_,_e_,_n_,_t_,_e_,_r_,_,_l_,_a_,_END_, //_FRENCH
+	_L_,_a_,_,_m_,_o_,_d_,_i_,_f_,_i_,_c_,_a_,_,_d_,_e_,_l_,_l_,0x57,_i_,_m_,_p_,_o_,_s_,_t_,_a_,_z_,_i_,_o_,_n_,_e_,_,_p_,_o_,_t_,_r_,_e_,_b_,_b_,_e_,_,_a_,_u_,_m_,_e_,_n_,_t_,_a_,_r_,_e_,_END_,//_ITALIAN
+	_A_,_l_,_s_,_,_d_,_e_,_,_i_,_n_,_s_,_t_,_e_,_l_,_l_,_i_,_n_,_g_,_,_w_,_o_,_r_,_d_,_t_,_,_v_,_e_,_r_,_a_,_n_,_d_,_e_,_r_,_d_,0x46,_,_k_,_a_,_n_,_,_h_,_e_,_t_,_END_,
+ 	_A_,_l_,_t_,_e_,_r_,_a_,_r_,_,_a_,_,_c_,_o_,_n_,_f_,_i_,_g_,_u_,_r_,_a_,0x58,0x5A,_o_,_,_p_,_o_,_d_,_e_,_,_a_,_u_,_m_,_e_,_n_,_t_,_a_,_r_,_,_o_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_END_,	//_PORTUGUESE
+};
+
+BYTE code tsOSD_ENERGE_NOTICE2[] =
+{
+    _c_,_o_,_n_,_s_,_u_,_m_,_p_,_t_,_i_,_o_,_n_,_x42_,_END_,
+	_S_,_t_,_r_,_o_,_m_,_v_,_e_,_r_,_b_,_r_,_a_,_u_,_c_,_h_,_,_e_,_r_,_h_,0x48,_h_,_e_,_n_,0x42,_END_,
+	_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,0x53,_a_,0x42,_END_,
+	_c_,_o_,_n_,_s_,_o_,_m_,_m_,_a_,_t_,_i_,_o_,_n_,_,_d_,0x57,0x56,_n_,_e_,_r_,_g_,_i_,_e_,0x42,_,_END_,//_FRENCH
+	_i_,_l_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_,_e_,_n_,_e_,_r_,_g_,_e_,_t_,_i_,_c_,_o_,0x42,_END_,
+	_e_,_n_,_e_,_r_,_g_,_i_,_e_,_v_,_e_,_r_,_b_,_r_,_u_,_i_,_k_,_,_t_,_o_,_e_,_n_,_e_,_m_,_e_,_n_,0x42,_END_,
+	_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,0x42,_END_,
+};
+
+BYTE code tsOSD_ENERGE_NOTICE3[] =
+{
+ 	_D_,_o_,0x00,_y_,_o_,_u_,0x00,_w_,_a_,_n_,_t_,0x00,_t_,_o_,0x00,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_x45_,_END_,
+ 	_M_,0x48,_c_,_h_,_t_,_e_,_n_,_,_S_,_i_,_e_,_,_f_,_o_,_r_,_t_,_f_,_a_,_h_,_r_,_e_,_n_,_x45_,_END_,
+	 _D_,_e_,_s_,_e_,_a_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x45_,_END_,	//��ͷȱ�����ʺ�
+	 _V_,_o_,_u_,_l_,_e_,_z_,0x44,_v_,_o_,_u_,_s_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_r_,_x45_,_END_,
+	_C_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_e_,_x45_,_END_,
+	_W_,_i_,_l_,_t_,_,_u_,_,_d_,_o_,_o_,_r_,_g_,_a_,_a_,_n_,_x45_,_END_,
+	_V_,_o_,_c_,0x5C,_,_q_,_u_,_e_,_r_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x45_,_END_,
+};
+#endif
+
+BYTE code tsOSD_YES1[] =
+{
+	_Y_,_e_,_s_,_END_,
+	_J_,_a_,_END_,
+	_S_,_i_,_END_,
+	_O_,_u_,_i_,_END_,
+	_S_,_i_,_END_,
+	_J_,_a_,_END_,
+	_S_,_i_,_m_,_END_,
+};
+
+BYTE code tsOSD_NO1[] =
+{
+	_N_,_o_,_END_,
+	_N_,_e_,_i_,_n_,_END_,
+	_N_,_o_,_END_,	
+	_N_,_o_,_n_,_END_,
+	_N_,_o_,_END_,
+	_N_,_e_,_e_,_END_,
+	_N_,_x5a_,_o_,_END_,
+};
+
+BYTE code tOSD_1_1_STR[] =
+{
+	_1_,_x42_,_1_,_END_,
+};
+BYTE code tOSD_1_2_STR[] =
+{
+	_1_,_x42_,_2_,_END_,
+};
+BYTE code tOSD_1_3_STR[] =
+{
+	_1_,_x42_,_2_,_END_,
+};
+
+
+BYTE code tsOSD_OFF[] =
+{
+#if _ENGLISH_SUPPORT
+_O_,_f_,_f_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_s_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_D_,_e_,_s_,_a_,_c_,_t_,_x42_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_r_,_r_,_x5c_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_O_,_f_,_f_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_U_,_i_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_D_,_e_,_s_,_l_,_i_,_g_,_a_,_d_,_o_,_END_,
+#else
+_D_,_e_,_s_,_a_,_c_,_t_,_i_,_v_,_a_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_A_,_v_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_a_,_p_,_a_,_l_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x71_,_x69_,_x7a_,_x67_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_i_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_y_,_x9c_,_x9f_,_c_,_z_,_o_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xbf_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x31_,_,_PAGE_,0x02,_x1e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x88_,_x73_,_x87_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xb7_,_xa0_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_o_,_i_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_p_,_r_,_y_,_PAGE_,0x02,0x87,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x9b,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8a_,_x78_,_x7e_,_PAGE_,0x00,_y_,_END_,
+#endif
+};
+
+BYTE code tsOSD_AutoSouce[] =
+{
+	_A_,_u_,_t_,_o_,_,_S_,_o_,_u_,_r_,_c_,_e_,_END_,
+};
+
+BYTE code tsOSD_trumpet[] =
+{
+	_T_,_r_,_u_,_m_,_p_,_e_,_t_,_END_,
+};
+
+
+BYTE code tsOSD_earphone[] =
+{
+	_E_,_a_,_r_,_p_,_h_,_o_,_n_,_e_,_END_,
+};
+
+
+
+BYTE code tsOSD_AUTO[] =
+{
+
+#if _ENGLISH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_A_,_u_,_t_,_o_,_m_,_x52_,_t_,_i_,_c_,_o_,_END_,
+#else
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_A_,_u_,_t_,_o_,_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_t_,_o_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x81_,_x70_,_x42_,_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_u_,_t_,_o_,_x42_,_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_A_,_u_,_t_,_o_,_m_,_x42_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdc_,_xbc_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xdc_,_PAGE_,0x01,_x51_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x78_,_x7b_,_x6e_,_x6f_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xc0_,_xb3_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_a_,_u_,_t_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_a_,_u_,_t_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xdc_,_PAGE_,0x01,_x51_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_a_,_x8f_,_x87_,_o_,_x8c_,_a_,_x87_,_x87_,_PAGE_,0x01,_x88_,_PAGE_,0x00,_,_x87_,_x67_,_x7a_,_PAGE_,0x01,_x90_,_PAGE_,0x00,_e_,_END_,
+#endif
+
+
+};
+
+BYTE code tsOSD_HDR2084[] =
+{
+	_O_,_N_,_END_,
+	//_H_,_D_,_R_,_,_2_,_0_,_8_,_4_,_END_,
+};
+
+BYTE code	tsOSD_ASPECT_WIDE[]=
+{
+#if _ENGLISH_SUPPORT
+_W_,_i_,_d_,_e_,_,_S_,_c_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_B_,_r_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_n_,_c_,_h_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_,_L_,_a_,_r_,_g_,_e_,_u_,_r_,_,_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_W_,_i_,_d_,_e_,_s_,_c_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_B_,_r_,_e_,_e_,_d_,_b_,_e_,_e_,_l_,_d_,_,_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_W_,_i_,_d_,_e_,_,_S_,_c_,_r_,_e_,_e_,_n_,_END_,
+#else
+_W_,_i_,_d_,_e_,_s_,_c_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_B_,_r_,_e_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_e_,_n_,_i_,_x5f_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x81_,_x7a_,_x69_,_x74_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_z_,_x56_,_l_,_e_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_z_,_e_,_r_,_o_,_k_,_i_,_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xda_,_xdb_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x4f_,_x30_,_x3a_,_x28_,_x4e_,_x38_,_x32_,_x50_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x95_,_x72_,_x75_,_x6f_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x96_,_x73_,_x75_,_x78_,_x71_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd1_,_xd2_,_xa5_,_xa6_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_L_,_a_,_a_,_j_,_a_,_k_,_u_,_v_,_a_,_n_,_x4b_,_y_,_t_,_t_,_x48_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,0x8a,_PAGE_,0x00,_i_,_r_,_o_,_k_,_o_,_x55_,_h_,_l_,_x52_,_,_o_,_b_,_r_,_a_,_z_,_o_,_v_,_k_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xa7,_PAGE_,0x00,_xdb_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_e_,_x97_,_,_PAGE_,0x01,_x96_,_x77_,_PAGE_,0x00,_p_,_a_,_x97_,_END_,
+#endif
+};
+
+BYTE code tsOSD_ASPECT_169[]=
+{
+	_1_,_6_,_x40_,_9_,_END_,
+};
+
+BYTE code tsOSD_ASPECT_11[]=
+{
+	_1_,_x40_,_1_,_END_,
+};
+
+BYTE code tsOSD_ASPECT_43[]=
+{
+_4_,_x40_,_3_,_END_,
+};
+
+BYTE code tsOSD_ASPECT_403[]=
+{
+_4_,_x40_,_0_,_3_,_END_,
+};
+
+
+BYTE code tsOSD_ASPECT_AUTO[]=
+{
+#if _ENGLISH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_A_,_u_,_t_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_A_,_u_,_t_,_o_,_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_t_,_o_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x81_,_x70_,_x42_,_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_u_,_t_,_o_,_x42_,_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_A_,_u_,_t_,_o_,_m_,_x42_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xdc_,_xbc_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xdc_,_PAGE_,0x01,_x51_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x78_,_x7b_,_x6e_,_x6f_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xc0_,_xb3_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_a_,_u_,_t_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_a_,_u_,_t_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xdc_,_PAGE_,0x01,_x51_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_a_,_x8f_,_x87_,_o_,_x8c_,_a_,_x87_,_x87_,_PAGE_,0x01,_x88_,_PAGE_,0x00,_,_x87_,_x67_,_x7a_,_PAGE_,0x01,_x90_,_PAGE_,0x00,_e_,_END_,
+#endif
+};
+
+BYTE code tsOSD_7500[] =
+{
+#if _ENGLISH_SUPPORT
+
+#if(_DEF_CT_JX)
+_7_,_5_,_0_,_0_,_END_,
+#else
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+
+#endif
+
+#if _GERMAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_a_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x6c_,_x71_,_x7c_,_x71_,_x6a_,_x7d_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_o_,_r_,_m_,_x52_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_o_,_r_,_m_,_a_,_l_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xca_,_xcb_,_END_,
+//_N_,_o_,_r_,_m_,_a_,_l_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x5b_,_x32_,_x66_,_PAGE_,0x02,_x22_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x6f_,_x75_,_x80_,_x78_,_x87_,_x76_,_x71_,_x88_,_x8e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+//_PAGE_,0x01,_xa0_,_PAGE_,0x02,_xd5_,_END_,
+_PAGE_,0x01,_xd1_,_PAGE_,0x02,_x61_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_n_,_o_,_r_,_m_,_a_,_a_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_n_,_o_,_r_,_m_,_x52_,_l_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x46_,_PAGE_,0x02,_x99_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_c_,_x87_,_a_,_x97_,_PAGE_,0x01,_x90_,_PAGE_,0x00,_a_,_p_,_x87_,_x87_,_PAGE_,0x01,_x88_,_END_,
+#endif
+
+};
+BYTE code tsOSD_5800[] =
+{
+	_5_,_8_,_0_,_0_,_END_,
+};
+
+#if(_DEF_CT_JX)
+BYTE code tsOSD_7000[] =
+{
+	_7_,_0_,_0_,_0_,_END_,
+};
+
+BYTE code tsOSD_8000[] =
+{
+	_8_,_0_,_0_,_0_,_END_,
+};
+
+#endif
+
+
+BYTE code tsOSD_COOL[] =
+{
+#if _ENGLISH_SUPPORT
+
+#if(_DEF_CT_JX)
+_9_,_3_,_0_,_0_,_END_,
+#else
+_C_,_o_,_o_,_l_,_END_,
+#endif
+
+#endif
+#if _GERMAN_SUPPORT
+_K_,_a_,_l_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_r_,_x53_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_r_,_o_,_i_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_r_,_e_,_d_,_d_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_K_,_o_,_e_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_F_,_r_,_i_,_o_,_END_,
+#else
+_F_,_r_,_i_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_K_,_a_,_l_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_e_,_r_,_i_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8b_,_x81_,_x79_,_x7a_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_i_,_d_,_e_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_Z_,_i_,_m_,_n_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd3_,_xad_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+//_xd3_,_xad_,_PAGE_,0x00,_,_END_,
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x03,_x8_,_PAGE_,0x00,_xad_,_END_,
+#else
+    _PAGE_,0x01,_xfb_,_PAGE_,0x00,_xad_,_END_,
+#endif
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x77_,_x75_,_x7f_,_x6e_,_x6f_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xcd_,_xce_,_xcc_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_i_,_i_,_l_,_e_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_c_,_h_,_l_,_a_,_d_,_n_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xd3_,_xad_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_C_,_a_,_PAGE_,0x01,_x87_,_x73_,_x88_,_x71_,_END_,
+#endif
+};
+
+BYTE code tsOSD_WARM[] =
+{
+#if _ENGLISH_SUPPORT
+
+#if(_DEF_CT_JX)
+_6_,_5_,_0_,_0_,_END_,
+#else
+_W_,_a_,_r_,_m_,_END_,
+#endif
+#endif
+
+#if _GERMAN_SUPPORT
+_W_,_a_,_r_,_m_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_C_,_x52_,_l_,_i_,_d_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_C_,_h_,_a_,_u_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_C_,_a_,_l_,_d_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_W_,_a_,_r_,_m_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_Q_,_u_,_e_,_n_,_t_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_V_,_a_,_r_,_m_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_x61_,_c_,_a_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x85_,_x69_,_x7a_,_x78_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_M_,_e_,_l_,_e_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_i_,_e_,_p_,_x9c_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xd2_,_xad_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xd2_,_xad_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x6e_,_x7c_,_x8c_,_x87_,_x88_,_x8e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xc9_,_xca_,_xcb_,_xcc_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_l_,_x4b_,_m_,_m_,_i_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_t_,_e_,_p_,_l_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xd2_,_xad_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_PAGE_,0x01,_x8a_,_x88_,_x87_,_x88_,_END_,
+#endif
+};
+
+BYTE code tsOSD_USER[] =
+{
+#if _ENGLISH_SUPPORT
+_U_,_s_,_e_,_r_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_B_,_e_,_n_,_u_,_t_,_z_,_e_,_r_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_U_,_s_,_u_,_a_,_r_,_i_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_U_,_t_,_i_,_l_,_i_,_s_,_a_,_t_,_e_,_u_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_U_,_t_,_e_,_n_,_t_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_e_,_b_,_r_,_u_,_i_,_k_,_e_,_r_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_U_,_s_,_u_,_x52_,_r_,_i_,_o_,_END_,
+#else
+_U_,_t_,_i_,_l_,_i_,_z_,_a_,_d_,_o_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_A_,_n_,_v_,_x4b_,_n_,_d_,_a_,_r_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_u_,_l_,_l_,_a_,_n_,_x61_,_c_,_x61_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x86_,_x7a_,_x68_,_x6b_,_x70_,_x66_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_e_,_l_,_h_,_a_,_s_,_z_,_n_,_x52_,_l_,_x50_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_U_,_xa0_,_y_,_t_,_k_,_o_,_w_,_n_,_i_,_k_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xc5_,_xc6_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x3b_,_x32_,_x3c_,_x32_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8d_,_x6f_,_x87_,_x76_,_x7d_,_x6f_,_x7b_,_x78_,_x6e_,_x7c_,_x87_,_x76_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbe_,_xbf_,_xc0_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_x4b_,_y_,_t_,_t_,_x4b_,_j_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_u_,_PAGE_,0x02,_x88_,_PAGE_,0x00,_i_,_v_,_a_,_t_,_e_,_l_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xc5_,_PAGE_,0x02,0x9d,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x65_,_a_,_PAGE_,0x01,_x8e_,_x90_,_x78_,_x87_,_x78_,_x71_,_x7f_,_x85_,_x88_,_END_,
+#endif
+};
+
+BYTE code tsOSD_SRGB[] =
+{
+_s_,_R_,_G_,_B_,_END_,
+
+};
+
+BYTE code tsOSD_ADOBE[] =
+{
+	_A_,_d_,_o_,_b_,_e_,_END_,
+
+};
+
+
+BYTE code tsOSD_DCIP3[] =
+{
+	_D_,_C_,_I_,_x44_,_P_,_3_,_END_,
+    
+};
+
+
+
+
+
+BYTE code tsOSD_270[]=
+{
+	_9_,_0_,_END_,
+};
+
+
+BYTE code tsOSD_180[]=
+{
+	_1_,_8_,_0_,_END_,
+};
+
+
+BYTE code tsOSD_90[]=
+{
+	_2_,_7_,_0_,_END_,
+};
+
+/*
+BYTE code tsOSD_10[] =
+{
+    _1_,_0_,_END_,
+};
+BYTE code tsOSD_20[] =
+{
+    _2_,_0_,_END_,
+};
+
+
+BYTE code tsOSD_30[] =
+{
+    _3_,_0_,_END_,
+};
+
+
+BYTE code tsOSD_40[] =
+{
+    _4_,_0_,_END_,
+};
+
+
+BYTE code tsOSD_50[] =
+{
+    _5_,_0_,_END_,
+};
+
+BYTE code tsOSD_60[] =
+{
+    _6_,_0_,_END_,
+};
+
+BYTE code tsOSD_120[] =
+{
+    _1_,_2_,_0_,_END_,
+};
+
+BYTE code tsOSD_240[] =
+{
+    _2_,_4_,_0_,_END_,
+};
+
+
+
+*/
+BYTE code tsOSD_VGA[] =
+{
+	_V_,_G_,_A_,_END_,
+};
+BYTE code tsOSD_DVI[] =
+{
+	_D_,_V_,_I_,_END_,
+};
+#if(_PCB_TYPE==_RL6432__156PIN__HKMRT2556E11__1H1DP__LVDS)||(_PCB_TYPE==_RL6432__156PIN__HKMRT2556E02__1H1DP__LVDS)||(_PCB_TYPE==_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS)
+
+BYTE code tsOSD_HDMI2_0[] =
+{
+//	_H_,_D_,_M_,_I_,_xa5_,_2_,_x42_,_0_,_xa6_,_END_,
+_H_,_D_,_M_,_I_,_END_,
+};
+
+
+#else
+BYTE code tsOSD_HDMI2_0[] =
+{
+//	_H_,_D_,_M_,_I_,_xa5_,_2_,_x42_,_0_,_xa6_,_END_,
+_H_,_D_,_M_,_I_,_x41_,_2_,_x42_,_0_,_x43_,_END_,
+};
+
+#endif
+BYTE code tsOSD_HDMI12_0[] =
+{
+	//_H_,_D_,_M_,_I_,_1_,_xa5_,_2_,_x42_,_0_,_xa6_,_END_,
+	_H_,_D_,_M_,_I_,_1_,_x41_,_2_,_x42_,_0_,_x43_,_END_,
+	
+};
+
+BYTE code tsOSD_HDMI22_0[] =
+{
+//	_H_,_D_,_M_,_I_,_2_,_xa5_,_2_,_x42_,_0_,_xa6_,_END_,
+	_H_,_D_,_M_,_I_,_2_,_x41_,_2_,_x42_,_0_,_x43_,_END_,
+
+};
+
+
+
+BYTE code tsOSD_HDMI[] =
+{
+    _H_,_D_,_M_,_I_,_END_,
+};
+
+BYTE code tsOSD_HDMI1[] =
+{
+    _H_,_D_,_M_,_I_,_1_,_END_,
+};
+
+BYTE code tsOSD_HDMI2[] =
+{
+    _H_,_D_,_M_,_I_,_2_,_END_,
+};
+
+BYTE code tsOSD_HDMI3[] =
+{
+    _H_,_D_,_M_,_I_,_3_,_END_,
+};
+
+BYTE code tsOSD_HDMI4[] =
+{
+    _H_,_D_,_M_,_I_,_4_,_END_,
+};
+
+
+BYTE code tsOSD_DP[] =
+{
+    _D_,_P_,_END_,
+};
+
+BYTE code tsOSD_DP1[] =
+{
+    _D_,_P_,_1_,_END_,
+};
+
+BYTE code tsOSD_DP2[] =
+{
+    _D_,_P_,_2_,_END_,
+};
+
+BYTE code tsOSD_AUTO_SELECT[] =
+{
+	_A_,_u_,_t_,_o_,_,_S_,_o_,_u_,_r_,_c_,_e_,_END_,
+	_A_,_u_,_t_,_o_,_m_,_a_,_t_,_i_,_s_,_c_,_h_,_e_,_,_A_,_u_,_s_,_w_,_a_,_h_,_l_,_END_,
+	_S_,_e_,_l_,_e_,_c_,_c_,_i_,_x50_,_n_,_,_A_,_u_,_t_,_o_,_m_,_x52_,_t_,_i_,_c_,_a_,_END_,
+	_S_,_x56_,_l_,_e_,_c_,_t_,_i_,_o_,_n_,_,_A_,_u_,_t_,_o_,_m_,_a_,_t_,_i_,_q_,_u_,_e_,_END_,
+	_S_,_e_,_l_,_e_,_z_,_i_,_o_,_n_,_e_,_,_A_,_u_,_t_,_o_,_m_,_a_,_t_,_i_,_c_,_a_,_END_,
+	_A_,_u_,_t_,_o_,_m_,_a_,_t_,_i_,_s_,_c_,_h_,_e_,_,_S_,_e_,_l_,_e_,_c_,_t_,_i_,_e_,_END_,
+	_S_,_e_,_l_,_e_,_x58_,_x5a_,_o_,_,_A_,_u_,_t_,_o_,_m_,_x52_,_t_,_i_,_c_,_a_,_END_,
+};
+
+BYTE code tsOSD_NO_SIGNAL[] =
+{
+#if _ENGLISH_SUPPORT
+_N_,_o_,_,_S_,_i_,_g_,_n_,_a_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_K_,_e_,_i_,_n_,_,_S_,_i_,_g_,_n_,_a_,_l_,_,_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_n_,_,_S_,_e_,_x51_,_a_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_a_,_s_,_,_S_,_i_,_g_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_e_,_s_,_s_,_u_,_n_,_,_S_,_e_,_g_,_n_,_a_,_l_,_e_,_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_e_,_e_,_n_,_,_S_,_i_,_g_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_S_,_e_,_m_,_,_s_,_i_,_n_,_a_,_l_,_END_,
+#else
+_S_,_e_,_m_,_,_S_,_i_,_n_,_a_,_l_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_,_S_,_i_,_g_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_n_,_y_,_a_,_l_,_,_Y_,_o_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x82_,_x69_,_x71_,_,_x81_,_x7e_,_x7f_,_x7a_,_x79_,_x69_,_x6a_,_,_x6b_,_x68_,_x78_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_i_,_n_,_c_,_s_,_,_j_,_e_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_B_,_r_,_a_,_k_,_,_S_,_y_,_g_,_n_,_a_,_x9c_,_u_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+#if 1//
+   _xed_,_xee_,_xef_,_END_,
+#else
+    _N_,_o_,_,_S_,_i_,_g_,_n_,_a_,_l_,_END_,
+#endif
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217&&(_2822NJ||_MD2869||_2822NE||_2822NB))
+   _xee_,_xef_, _PAGE_,0x01,_x5f_,_x48_,_END_,
+#else
+    _N_,_o_,_,_S_,_i_,_g_,_n_,_a_,_l_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_N_,_o_,_,_S_,_i_,_g_,_n_,_a_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_N_,_o_,_,_S_,_i_,_g_,_n_,_a_,_l_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_E_,_i_,_,_s_,_i_,_g_,_n_,_a_,_a_,_l_,_i_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,0x86,_PAGE_,0x00,_x52_,_d_,_n_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_s_,_i_,_g_,_n_,_x52_,_l_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0x97,_PAGE_,0x00,_xee_,_PAGE_,0x02,0x98,_END_,
+#endif
+};
+
+BYTE code tsOSD_HZ[]=
+{
+_H_,_z_,_END_,
+
+};
+
+BYTE code tsOSD_OutOfRange[]=
+{
+#if _ENGLISH_SUPPORT
+_O_,_u_,_t_,_,_O_,_f_,_,_R_,_a_,_n_,_g_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_x4d_,_e_,_r_,_,_R_,_e_,_i_,_c_,_h_,_w_,_e_,_i_,_t_,_e_,_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_u_,_e_,_r_,_a_,_,_d_,_e_,_,_r_,_a_,_n_,_g_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_H_,_o_,_r_,_s_,_,_d_,_e_,_,_p_,_o_,_r_,_t_,_x56_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_u_,_o_,_r_,_i_,_,_d_,_a_,_l_,_,_l_,_i_,_m_,_i_,_t_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_B_,_u_,_i_,_t_,_e_,_n_,_,_b_,_e_,_r_,_e_,_i_,_k_,_END_,
+#endif
+
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_F_,_o_,_r_,_a_,_,_a_,_l_,_c_,_a_,_n_,_e_,_END_,
+#else
+_F_,_o_,_r_,_a_,_,_d_,_e_,_,_a_,_l_,_c_,_a_,_n_,_c_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_U_,_t_,_o_,_m_,_,_r_,_x4b_,_c_,_k_,_h_,_x5d_,_l_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_M_,_e_,_n_,_z_,_i_,_l_,_,_D_,_x61_,_x5f_,_x61_,_n_,_d_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x7d_,_x70_,_x72_,_x6e_,_,_x69_,_x78_,_x90_,_x92_,_x80_,_x69_,_x6a_,_x6c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_a_,_t_,_x50_,_t_,_x52_,_v_,_o_,_l_,_s_,_x52_,_g_,_o_,_n_,_,_k_,_x53_,_v_,_x4a_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_z_,_a_,_,_z_,_a_,_k_,_r_,_e_,_s_,_e_,_m_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xe7_,_xb4_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x31_,_x32_,_x62_,_x32_,_x4e_,_x63_,_x55_,_x4e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x84_,_x78_,_x7d_,_x83_,_x6f_,_x71_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xad_,_xe1_,_PAGE_,0x00,_,_PAGE_,0x01,_xe2_,_xa4_,_xe3_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_A_,_l_,_u_,_e_,_e_,_n_,_,_u_,_l_,_k_,_o_,_p_,_u_,_o_,_l_,_e_,_l_,_l_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_M_,_i_,_m_,_o_,_,_d_,_o_,_s_,_a_,_h_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xe7_,_PAGE_,0x02,_x95_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_O_,_u_,_t_,_,_O_,_f_,_,_R_,_a_,_n_,_g_,_e_,_END_,
+#endif
+
+};
+
+
+
+BYTE code tsOSD_EnterPowerSaving[]=
+{
+#if _ENGLISH_SUPPORT
+_E_,_n_,_t_,_e_,_r_,_,_P_,_o_,_w_,_e_,_r_,_,_S_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_G_,_e_,_b_,_e_,_n_,_,_S_,_i_,_e_,_,_P_,_o_,_w_,_e_,_r_,_,_S_,_a_,_v_,_i_,_n_,_g_,_,_e_,_i_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_I_,_n_,_g_,_r_,_e_,_s_,_e_,_,_A_,_h_,_o_,_r_,_r_,_o_,_,_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_x53_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_E_,_n_,_t_,_r_,_e_,_z_,_,_d_,_a_,_n_,_s_,_,_l_,_x57_,_x56_,_c_,_o_,_n_,_o_,_m_,_i_,_e_,_,_d_,_x57_,_x56_,_n_,_e_,_r_,_g_,_i_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_m_,_m_,_e_,_t_,_t_,_e_,_r_,_e_,_,_i_,_l_,_,_r_,_i_,_s_,_p_,_a_,_r_,_m_,_i_,_o_,_,_e_,_n_,_e_,_r_,_g_,_e_,_t_,_i_,_c_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_V_,_o_,_e_,_r_,_,_e_,_n_,_e_,_r_,_g_,_i_,_e_,_b_,_e_,_s_,_p_,_a_,_r_,_i_,_n_,_g_,_,_i_,_n_,_END_,
+#endif
+
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_E_,_n_,_t_,_r_,_a_,_r_,_,_e_,_m_,_,_M_,_o_,_d_,_o_,_,_d_,_e_,_,_E_,_c_,_o_,_n_,_o_,_m_,_i_,_a_,_,_d_,_e_,_,_E_,_n_,_e_,_r_,_g_,_i_,_a_,_END_,
+#else
+_E_,_n_,_t_,_r_,_a_,_r_,_,_n_,_a_,_,_e_,_c_,_o_,_n_,_o_,_m_,_i_,_a_,_,_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_G_,_x5d_,_,_i_,_n_,_,_i_,_,_e_,_n_,_e_,_r_,_g_,_i_,_b_,_e_,_s_,_p_,_a_,_r_,_i_,_n_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_x4a_,_x58_,_,_T_,_a_,_s_,_a_,_r_,_r_,_u_,_f_,_u_,_n_,_a_,_,_G_,_i_,_r_,_i_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x6a_,_x6b_,_x6c_,_x67_,_x7f_,_x67_,_x69_,_x70_,_x69_,_,_x69_,_x93_,_x7c_,_x6a_,_x7d_,_x7c_,_x71_,_x72_,_x78_,_x66_,_x6b_,_x66_,_,_x69_,_x71_,_x92_,_x7a_,_x67_,_x69_,_x6a_,_x6c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_L_,_x56_,_p_,_j_,_e_,_n_,_,_b_,_e_,_,_a_,_z_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_t_,_a_,_k_,_a_,_r_,_x56_,_k_,_o_,_s_,_s_,_x52_,_g_,_b_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_e_,_j_,_d_,_xa4_,_,_d_,_o_,_,_o_,_s_,_z_,_c_,_z_,_xa1_,_d_,_z_,_a_,_n_,_i_,_a_,_,_e_,_n_,_e_,_r_,_g_,_i_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf0_,_xa8_,_xf1_,_xce_,_xc2_,_xc3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_xf1_,_PAGE_,0x01,_x60_,_x20_,_x39_,_x32_,_x3a_,_x61_,_PAGE_,0x00,_xa8_,_PAGE_,0x01,_x21_,_PAGE_,0x00,_,_END_,
+#else
+    _E_,_n_,_t_,_e_,_r_,_,_P_,_o_,_w_,_e_,_r_,_,_S_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x6f_,_x8e_,_x90_,_x72_,_x6e_,_x7c_,_PAGE_,0x00,_,_PAGE_,0x01,_x7b_,_PAGE_,0x00,_,_PAGE_,0x01,_x75_,_x7c_,_x8a_,_x72_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x96_,_x71_,_x7c_,_x75_,_x83_,_x6f_,_x6d_,_x7e_,_x7c_,_x75_,_x7c_,_x8a_,_x7c_,_x71_,_x72_,_x99_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xe0_,_xd1_,_PAGE_,0x00,_,_PAGE_,0x01,_xba_,_xbb_,_PAGE_,0x00,_,_PAGE_,0x01,_x9b_,_x9c_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_A_,_n_,_n_,_a_,_,_v_,_i_,_r_,_r_,_a_,_n_,_s_,_x4b_,_x4b_,_s_,_t_,_x48_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_Z_,_a_,_d_,_e_,_j_,_t_,_e_,_,_x55_,_s_,_p_,_o_,_r_,_u_,_,_e_,_n_,_e_,_r_,_g_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xac,_PAGE_,0x00,_xa8_,_xf1_,_PAGE_,0x01,_x60_,_PAGE_,0x00,_xc2_,_xc3_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_E_,_n_,_t_,_e_,_r_,_,_P_,_o_,_w_,_e_,_r_,_,_S_,_a_,_v_,_i_,_n_,_g_,_END_,
+#endif
+
+};
+BYTE code tsOSD_WINDOW1[] =
+{
+#if _ENGLISH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_V_,_e_,_n_,_t_,_a_,_n_,_a_,_x40_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_c_,_i_,_x50_,_n_,_x40_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0X02,_xdf_,_xe0_,_PAGE_,0X00,_1_,_x40_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x6b_,_x25_,_x30_,_x3a_,_x6b_,_PAGE_,0x00,_1_,_x40_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x92_,_x73_,_x71_,_x6f_,_PAGE_,0x00,_1_,_x40_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0X02,_xe2_,_xe3_,_xe4_,_PAGE_,0X00,_1_,_x40_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0X02,_xdf_,_xe0_,_PAGE_,0X00,_1_,_x40_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_W_,_i_,_n_,_d_,_o_,_w_,_1_,_x40_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_RESOLUTION[] =
+{
+#if _ENGLISH_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_t_,_i_,_o_,_n_,_x40_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_u_,_f_,_l_,_x48_,_s_,_u_,_n_,_g_,_x40_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_c_,_i_,_x50_,_n_,_x40_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_x56_,_s_,_o_,_l_,_u_,_t_,_i_,_o_,_n_,_x40_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_i_,_s_,_o_,_l_,_u_,_z_,_i_,_o_,_n_,_e_,_x40_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_t_,_i_,_e_,_x40_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_x58_,_x5a_,_o_,_x40_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_U_,_p_,_p_,_l_,_x48_,_s_,_n_,_i_,_n_,_g_,_x40_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x58_,_x48_,_z_,_x4a_,_m_,_x40_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x71_,_x7f_,_x80_,_x81_,_x6b_,_x66_,_x40_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_e_,_l_,_b_,_o_,_n_,_t_,_x52_,_s_,_x40_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_R_,_o_,_z_,_k_,_x9c_,_a_,_d_,_x40_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb9_,_xba_,_xbb_,_x40_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x35_,_PAGE_,0x00,_xd8_,_xaa_,_x40_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x84_,_x78_,_x7d_,_x75_,_x7c_,_x85_,_x7c_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_x40_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xaf_,_xb0_,_xb1_,_PAGE_,0x00,_x40_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_,_,_p_,_x4b_,_x4b_,_t_,_x48_,_s_,_l_,_a_,_u_,_s_,_e_,_l_,_m_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_u_,_s_,_n_,_e_,_s_,_e_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb9_,_xba_,_xbb_,_x40_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_R_,_e_,_s_,_o_,_l_,_u_,_t_,_i_,_o_,_n_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_OSDRotation[]=
+{
+#if _ENGLISH_SUPPORT
+_O_,_S_,_D_,_,_R_,_o_,_t_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_O_,_S_,_D_,_,_R_,_o_,_t_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_o_,_t_,_a_,_c_,_i_,_x50_,_n_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_o_,_t_,_a_,_t_,_i_,_o_,_n_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_o_,_t_,_a_,_z_,_i_,_o_,_n_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_O_,_S_,_D_,_,_R_,_o_,_t_,_a_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_R_,_o_,_t_,_a_,_x58_,_x5a_,_o_,_,_d_,_o_,_,_O_,_S_,_D_,_END_,
+#else
+_R_,_o_,_t_,_a_,_x58_,_x5a_,_o_,_,_O_,_S_,_D_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_O_,_S_,_D_,_x44_,_r_,_o_,_t_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_S_,_D_,_,_R_,_o_,_t_,_a_,_s_,_y_,_o_,_n_,_u_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x69_,_x7a_,_x6a_,_x6b_,_x70_,_x7a_,_x7c_,_x88_,_x68_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_O_,_S_,_D_,_,_f_,_o_,_r_,_g_,_a_,_t_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_O_,_b_,_r_,_x50_,_t_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xb5_,_xb6_,_PAGE_,0x01,_x1c_,_x1d_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_O_,_S_,_D_,_PAGE_,0x01,_x67_,_x68_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x75_,_x7c_,_x93_,_x7c_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_,_PAGE_,0x01,_x80_,_x7c_,_x71_,_x81_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xee_,_xef_,_xf0_,_xf1_,_xd1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_x4b_,_y_,_t_,_t_,_x48_,_j_,_x4b_,_r_,_j_,_e_,_s_,_t_,_e_,_l_,_m_,_x4b_,_n_,_,_k_,_i_,_e_,_r_,_t_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_R_,_o_,_t_,_a_,_c_,_e_,_,_O_,_S_,_D_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xb5_,_PAGE_,0x02,_xb1_,_PAGE_,0x01,_x1c_,_PAGE_,0x02,0xb5,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_p_,_e_,_x8f_,_x95_,_PAGE_,0x01,_x87_,_x76_,_x7b_,_x7c_,_PAGE_,0x00,_p_,_END_,
+#endif
+};
+
+BYTE code tsOSD_DDCCI[]=
+{
+_D_,_D_,_C_,_C_,_I_,_END_,		//_ENGLISH
+};
+
+
+BYTE code tsOSD_FV_INFORMATION[]=
+{
+#if _ENGLISH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_c_,_i_,_x50_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_z_,_i_,_o_,_n_,_i_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_x58_,_PAGE_,0x02,_x3a_,_PAGE_,0x00,_e_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_F_,_v_,_,_I_,_n_,_f_,_o_,_r_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_dp_Ver[]=	//_ENGLISH
+{
+#if _ENGLISH_SUPPORT
+_D_,_P_,_,_V_,_e_,_r_,_s_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_D_,_P_,_x44_,_V_,_e_,_r_,_s_,_i_,_o_,_n_,_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_V_,_e_,_r_,_s_,_i_,_x50_,_n_,_,_D_,_P_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_V_,_e_,_r_,_s_,_i_,_o_,_n_,_,_D_,_P_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_V_,_e_,_r_,_s_,_i_,_o_,_n_,_e_,_,_D_,_P_,_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_D_,_P_,_x44_,_v_,_e_,_r_,_s_,_i_,_e_,_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_V_,_e_,_r_,_s_,_x5a_,_o_,_,_D_,_P_,_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_D_,_P_,_x44_,_v_,_e_,_r_,_s_,_i_,_o_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_P_,_,_v_,_e_,_r_,_s_,_i_,_y_,_o_,_n_,_u_,_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x91_,_x7d_,_x89_,_x7c_,_x6b_,_x66_,_,_D_,_P_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_D_,_P_,_,_v_,_e_,_r_,_z_,_i_,_x50_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_e_,_r_,_s_,_j_,_a_,_,_D_,_P_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_D_,_P_,_PAGE_,0x01,_xf8_,_xf9_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_D_,_P_,_PAGE_,0x01,_x62_,_x32_,_xfa_,_PAGE_,0x02,_x1_,_PAGE_,0x01,_x25_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x86_,_x7c_,_x75_,_x6d_,_x72_,_x99_,_PAGE_,0x00,_,_D_,_P_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_D_,_P_,_,_PAGE_,0x01,_xe1_,_xd1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_D_,_P_,_x44_,_v_,_e_,_r_,_s_,_i_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_V_,_e_,_r_,_z_,_e_,_,_D_,_P_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_D_,_P_,_PAGE_,0x01,_xf8_,_xf9_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_D_,_P_,_,_V_,_e_,_r_,_s_,_i_,_o_,_n_,_END_,
+#endif
+};
+
+BYTE code tsOSD_KVM[] =
+{
+	_K_,_V_,_M_,_END_,
+};
+
+BYTE code tsOSD_HDRCOLOR[] =
+{
+_H_,_D_,_R_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+};
+
+
+#if(_DEF_HOTKEY_REPLACE)
+
+BYTE code tsOSD_HOT_REPLACE_EXIT[] =
+{
+#if _ENGLISH_SUPPORT	
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19==_OFF)
+	_PAGE_,0x02,_x40_,_x41_,_x42_,_x43_,_x44_,_END_,
+#else
+	_PAGE_,0x02,_xe1_,_xe2_,_xe3_,_xe4_,_xe5_,_END_,
+#endif
+#endif
+
+#if _JAPANESE_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+	_E_,_x_,_i_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+};
+
+BYTE code tsOSD_HOT_REPLACE_RIGHT[] =
+{
+#if _ENGLISH_SUPPORT	
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19==_OFF)
+_PAGE_,0x02,_x3f_,_x42_,_x43_,_x44_,_END_,
+#else
+_PAGE_,0x02,_xe0_,_xe3_,_xe4_,_xe5_,_END_,
+#endif
+#endif
+
+#if _JAPANESE_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+	_R_,_i_,_g_,_h_,_t_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_HOT_REPLACE_LEFT[] =
+{
+#if _ENGLISH_SUPPORT	
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+
+#if(_LANG_19==_OFF)
+	_PAGE_,0x02,_x3e_,_x42_,_x43_,_x44_,_END_,
+#else
+	_PAGE_,0x02,_xdf_,_xe3_,_xe4_,_xe5_,_END_,
+#endif
+
+#endif
+
+#if _JAPANESE_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+	_L_,_E_,_F_,_T_,_,_H_,_o_,_t_,_,_K_,_e_,_y_,_,_R_,_e_,_p_,_l_,_a_,_c_,_e_,_END_,
+#endif
+};
+#endif
+
+
+
+
+
+
+
+BYTE code tsOSD_OVERCLOCK_HINT[] =
+{
+	_O_,_v_,_e_,_r_,_C_,_l_,_o_,_c_,_k_,_,_H_,_i_,_n_,_t_,_END_,
+};
+
+BYTE code tsOSD_AUDIO_SOU[] =
+{
+	_A_,_u_,_d_,_i_,_o_,_,_S_,_o_,_u_,_r_,_c_,_e_,_END_,
+};	
+
+BYTE code tsOSD_SuperResolution[]=
+{
+#if _ENGLISH_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_R_,_e_,_s_,_o_,_l_,_u_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_A_,_u_,_f_,_l_,_x48_,_s_,_u_,_n_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_x55_,_p_,_e_,_r_,_,_R_,_e_,_s_,_o_,_l_,_u_,_c_,_i_,_x50_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_R_,_x56_,_s_,_o_,_l_,_u_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_R_,_i_,_s_,_o_,_l_,_u_,_z_,_i_,_o_,_n_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_R_,_e_,_s_,_o_,_l_,_u_,_t_,_i_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_S_,_u_,_p_,_e_,_r_,_,_r_,_e_,_s_,_o_,_l_,_u_,_x58_,_x5a_,_o_,_END_,
+#else
+_S_,_u_,_p_,_e_,_r_,_,_R_,_e_,_s_,_o_,_l_,_u_,_x58_,_x5a_,_o_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_u_,_p_,_p_,_l_,_x48_,_s_,_n_,_i_,_n_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_x4a_,_p_,_e_,_r_,_,_x62_,_x48_,_z_,_x4a_,_n_,_x4a_,_r_,_l_,_x4a_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8d_,_x7c_,_x77_,_x7e_,_x69_,_x7a_,_,_x6c_,_x71_,_x7f_,_x80_,_x81_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_z_,_u_,_p_,_e_,_r_,_,_f_,_e_,_l_,_b_,_o_,_n_,_t_,_x52_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_r_,_o_,_z_,_d_,_z_,_i_,_e_,_l_,_c_,_z_,_o_,_x9d_,_x9e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xe7_,_xb9_,_xba_,_xbb_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xe7_,_PAGE_,0x01,_x35_,_PAGE_,0x00,_xd8_,_xaa_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8f_,_x7f_,_x8c_,_x7c_,_x75_,_PAGE_,0x00,_,_PAGE_,0x01,_x75_,_x78_,_x7d_,_x75_,_x7c_,_x85_,_x7c_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xdb_,_PAGE_,0x00,_,_PAGE_,0x01,_xdc_,_xaf_,_xb0_,_xb1_,_PAGE_,0x00,_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_x44_,_r_,_e_,_s_,_o_,_l_,_u_,_u_,_t_,_i_,_o_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_S_,_u_,_p_,_e_,_r_,_,_r_,_o_,_z_,_l_,_i_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_e_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xe7_,_xb9_,_xba_,_xbb_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_V_,_I_,_V_,_I_,_D_,_END_,
+#endif
+};
+BYTE code tsOSD_DynamicLuminousControl[]=
+{
+
+
+
+#if _ENGLISH_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_c_,_,_L_,_u_,_m_,_i_,_n_,_o_,_u_,_s_,_,_C_,_o_,_n_,_t_,_r_,_o_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_s_,_c_,_h_,_e_,_,_H_,_e_,_l_,_l_,_i_,_g_,_k_,_e_,_i_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_B_,_r_,_i_,_l_,_l_,_o_,_,_d_,_i_,_n_,_x52_,_m_,_i_,_c_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x56_,_,_d_,_y_,_n_,_a_,_m_,_i_,_q_,_u_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_u_,_m_,_i_,_n_,_o_,_s_,_i_,_t_,_x59_,_,_d_,_i_,_n_,_a_,_m_,_i_,_c_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_s_,_c_,_h_,_e_,_,_h_,_e_,_l_,_d_,_e_,_r_,_h_,_e_,_i_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_B_,_r_,_i_,_l_,_h_,_o_,_,_d_,_i_,_n_,_x5b_,_m_,_i_,_c_,_o_,_END_,
+#endif
+
+
+#if _SVENSKA_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_s_,_k_,_,_l_,_j_,_u_,_s_,_s_,_t_,_y_,_r_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_i_,_n_,_a_,_m_,_i_,_k_,_,_p_,_a_,_r_,_l_,_a_,_k_,_l_,_x61_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x82_,_x81_,_x71_,_x6c_,_x78_,_x6a_,_x7d_,_x68_,_,_x88_,_x6d_,_x70_,_x69_,_x6a_,_x71_,_x72_,_x70_,_x66_,_x70_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_D_,_i_,_n_,_a_,_m_,_i_,_k_,_u_,_s_,_,_f_,_x56_,_n_,_y_,_e_,_r_,_x99_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_c_,_z_,_n_,_a_,_,_j_,_a_,_s_,_n_,_o_,_x9d_,_x9e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xbc_,_xbd_,_xa9_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+_PAGE_,0x03,_x17_,_PAGE_,0x01,_x30_,_x37_,_x52_,_x55_,_x4e_,_PAGE_,0x03,_x9_,_xa_,_END_,
+#else
+    _D_,_y_,_n_,_a_,_m_,_i_,_c_,_,_L_,_u_,_m_,_i_,_n_,_o_,_u_,_s_,_,_C_,_o_,_n_,_t_,_r_,_o_,_l_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x82_,_x72_,_x71_,_x78_,_x80_,_x72_,_x70_,_x7c_,_x6d_,_x73_,_x78_,_x99_,_,_PAGE_,0x01,_x99_,_x75_,_x73_,_x6f_,_x6d_,_x6e_,_x76_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_c_,_,_L_,_u_,_m_,_i_,_n_,_o_,_u_,_s_,_,_C_,_o_,_n_,_t_,_r_,_o_,_l_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_D_,_y_,_n_,_a_,_a_,_m_,_i_,_n_,_e_,_n_,_,_v_,_a_,_l_,_o_,_v_,_o_,_i_,_m_,_a_,_n_,_,_o_,_h_,_j_,_a_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_D_,_y_,_n_,_a_,_m_,_i_,_c_,_k_,_x56_,_,_o_,_v_,_l_,_x52_,_d_,_x52_,_n_,_x53_,_,_j_,_a_,_s_,_u_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x51_,_PAGE_,0x02,_x99_,_xa9_,_PAGE_,0x00,_xc9_,_PAGE_,0x02,0xaa,_xab_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_D_,_C_,_C_,_END_,
+#endif
+};
+
+#if(_DEF_OPPOSITE_DCR)//_MENU_FUN_DCR_OPPOSITE
+BYTE code tsOSD_DCR_OPPOSITE[]=
+{
+#if _ENGLISH_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+
+#if _SVENSKA_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19 == _OFF)
+_PAGE_,0x02,_x47_,_x48_,_PAGE_,0x00,_xc2_,_xc3_,_END_,
+#else
+_PAGE_,0x02,_xe8_,_xe9_,_PAGE_,0x00,_xc2_,_xc3_,_END_,
+#endif
+#endif
+#if _JAPANESE_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_D_,_C_,_R_,_,_O_,_p_,_p_,_o_,_s_,_i_,_t_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+#if(_LANG_19 == _OFF)
+_PAGE_,0x02,_x47_,_x48_,_PAGE_,0x00,_xc2_,_xc3_,_END_,
+#else
+_PAGE_,0x02,_xe8_,_xe9_,_PAGE_,0x00,_xc2_,_xc3_,_END_,
+#endif
+#endif
+};
+#endif
+
+
+BYTE code tsOSD_Six_Hue[]=
+{
+#if _ENGLISH_SUPPORT
+_S_,_i_,_x_,_,_H_,_u_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_i_,_x_,_,_F_,_a_,_r_,_b_,_t_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_x_,_,_M_,_a_,_t_,_i_,_z_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_i_,_x_,_,_T_,_e_,_i_,_n_,_t_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_i_,_x_,_,_T_,_o_,_n_,_a_,_l_,_i_,_t_,_x59_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_i_,_x_,_,_T_,_i_,_n_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_S_,_i_,_x_,_,_T_,_o_,_n_,_a_,_l_,_i_,_d_,_a_,_d_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_i_,_x_,_,_H_,_u_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_x_,_,_T_,_o_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_S_,_i_,_x_,_,_x86_,_x7a_,_x7b_,_x78_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_i_,_x_,_,_S_,_z_,_x53_,_n_,_x52_,_r_,_n_,_y_,_a_,_l_,_a_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_i_,_x_,_,_O_,_d_,_c_,_i_,_e_,_xa2_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19 == _OFF)
+_PAGE_,0x02,_x45_,_x46_,_PAGE_,0x00,_xad_,_xaa_,_END_,
+#else
+_PAGE_,0x02,_xe6_,_xe7_,_PAGE_,0x00,_xad_,_xaa_,_END_,
+#endif
+#endif
+#if _JAPANESE_SUPPORT
+_xad_,_PAGE_,0x02,_xca_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_S_,_i_,_x_,_,_PAGE_,0x01,_x92_,_x6e_,_x6e_,_x7c_,_x71_,_x6f_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbc_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_S_,_i_,_x_,_,_v_,_x4b_,_r_,_i_,_s_,_x4b_,_v_,_y_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_S_,_i_,_x_,_,_o_,_d_,_s_,_t_,_x53_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_xe6_,_xe7_,_PAGE_,0x00,_xad_,_PAGE_,0x02,0xa4,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_S_,_i_,_x_,_,_p_,_e_,_x97_,_x8a_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Hue[]=
+{
+#if _ENGLISH_SUPPORT
+_H_,_u_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_a_,_r_,_b_,_t_,_o_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_M_,_a_,_t_,_i_,_z_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_e_,_i_,_n_,_t_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_o_,_n_,_a_,_l_,_i_,_t_,_x59_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_T_,_i_,_n_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_M_,_a_,_t_,_i_,_z_,_END_,
+#else
+_T_,_o_,_n_,_a_,_l_,_i_,_d_,_a_,_d_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_H_,_u_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_T_,_o_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x86_,_x7a_,_x7b_,_x78_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_z_,_x53_,_n_,_x52_,_r_,_n_,_y_,_a_,_l_,_a_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_O_,_d_,_c_,_i_,_e_,_xa2_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xad_,_xaa_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xad_,_PAGE_,0x02,_xca_,_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x92_,_x6e_,_x6e_,_x7c_,_x71_,_x6f_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xbc_,_xb1_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_v_,_x4b_,_r_,_i_,_s_,_x4b_,_v_,_y_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_o_,_d_,_s_,_t_,_x53_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xad_,_PAGE_,0x02,0xa4,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_p_,_e_,_x97_,_x8a_,_END_,
+#endif
+};
+
+#if (Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_3_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_9_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_5_,_5_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_3_,_2_,_0_,_T_,_x44_,_V_,_0_,_4_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ)
+#if (_NTQ_PRJ_TP_ENABLE == _ON)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_2_,_7_,_0_,_T_,_x44_,_V_,_0_,_5_,_END_,
+};
+#else
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_2_,_7_,_0_,_G_,_x44_,_V_,_0_,_5_,_END_,
+};
+
+#endif
+#else
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_3_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
+};
+#endif
+
+code BYTE *tOSD_STRING_MODEL_VER[] =
+{
+	tsOSD_MODEL_VER,
+};
+
+#if(_DEF_2795E06||_PCB_TYPE == _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1)
+BYTE code tsOSD_PC[] =
+{
+	_P_,_C_,_END_,
+};
+
+BYTE code tsOSD_TYPEC[] =
+{
+	_T_,_Y_,_P_,_E_,_x44_,_C_,_END_,
+};
+
+code BYTE *tOSD_SOURCE_TYPE_STATUS[] =
+{
+#if(_SOURCE_AUTO_ON)
+	tsOSD_AUTO_SELECT,tsOSD_TYPEC,tsOSD_DP,tsOSD_HDMI,
+#else
+	tsOSD_TYPEC,tsOSD_DP,tsOSD_HDMI,
+#endif
+};
+
+#elif 0//(_PCB_TYPE == _RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS)
+code BYTE *tOSD_SOURCE_TYPE_STATUS[] =
+{
+#if(_SOURCE_AUTO_ON)	
+	tsOSD_AUTO_SELECT,
+#endif
+	tsOSD_DP,
+#if(_HDMI2_SUPPORT)
+	tsOSD_HDMI2,tsOSD_HDMI1,
+#else
+	tsOSD_HDMI,
+#endif
+};
+
+
+
+#elif(_PCB_TYPE == _RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1)
+code BYTE *tOSD_SOURCE_TYPE_STATUS[] =
+{
+
+//tsOSD_AUTO_SELECT,
+	tsOSD_DP1,
+	tsOSD_DP2,
+	tsOSD_HDMI1,
+	tsOSD_HDMI2,
+};
+#elif(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+code BYTE *tOSD_SOURCE_TYPE_STATUS[] =
+{
+
+//tsOSD_AUTO_SELECT,
+	tsOSD_DP,
+	tsOSD_HDMI1,   
+	tsOSD_HDMI2,   
+
+
+
+
+};
+
+
+#else
+
+code BYTE *tOSD_SOURCE_TYPE_STATUS[] =
+{
+#if(_SOURCE_AUTO_ON)
+
+	tsOSD_AUTO_SELECT,
+#endif
+#if(_A0_INPUT_PORT_TYPE == _A0_VGA_PORT)
+    tsOSD_VGA,
+#endif
+
+#if (_D0_INPUT_PORT_TYPE == _D0_MHL_PORT)    
+    tsOSD_MHL,
+#elif(_D0_INPUT_PORT_TYPE == _D0_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D0_INPUT_PORT_TYPE == _D0_HDMI_PORT)
+    tsOSD_HDMI,
+#elif(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+	tsOSD_DP1,
+#elif(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_DP_PORT)	
+	tsOSD_DP,
+#endif
+
+#if (_D1_INPUT_PORT_TYPE == _D1_MHL_PORT)
+  //  tsOSD_MHL,
+#elif(_D1_INPUT_PORT_TYPE == _D1_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&((_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)||(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)||(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT))
+	tsOSD_HDMI1,
+#elif(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&((_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)&&(_D4_INPUT_PORT_TYPE != _D4_HDMI_PORT))
+	tsOSD_HDMI,
+#elif(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)&&(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+	tsOSD_DP2,
+#elif(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)&&(_D0_INPUT_PORT_TYPE != _D0_DP_PORT)	
+	tsOSD_DP,
+#endif
+
+#if (_D2_INPUT_PORT_TYPE == _D2_MHL_PORT)
+//    tsOSD_MHL,
+#elif (_D2_INPUT_PORT_TYPE == _D2_DVI_PORT)||(_D2_INPUT_PORT_TYPE==_D2_DUAL_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)
+    tsOSD_HDMI2,
+#elif(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&((_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)||(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT))
+	tsOSD_HDMI1,   
+#elif(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&((_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)&&(_D4_INPUT_PORT_TYPE != _D4_HDMI_PORT))
+	tsOSD_HDMI,   
+#elif (_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+    tsOSD_DP,
+#endif
+
+#if (_D3_INPUT_PORT_TYPE == _D3_MHL_PORT)
+    tsOSD_MHL,
+#elif(_D3_INPUT_PORT_TYPE == _D3_DVI_PORT)||(_D3_INPUT_PORT_TYPE==_D3_DUAL_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)
+	tsOSD_HDMI3,
+#elif(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)
+	tsOSD_HDMI2,
+#elif(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)
+	tsOSD_HDMI2,
+#elif(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)&&(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)
+	tsOSD_HDMI1,
+#elif(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)&&(_D4_INPUT_PORT_TYPE != _D4_HDMI_PORT)
+	tsOSD_HDMI,
+	
+#endif
+
+#if (_D4_INPUT_PORT_TYPE == _D4_MHL_PORT)
+    tsOSD_MHL,
+#elif(_D4_INPUT_PORT_TYPE == _D4_DVI_PORT)||(_D4_INPUT_PORT_TYPE==_D4_DUAL_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)
+    tsOSD_HDMI4,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)   
+	tsOSD_HDMI3,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)   
+	tsOSD_HDMI3,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)   
+	tsOSD_HDMI3,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT)   
+	tsOSD_HDMI2,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)   
+	tsOSD_HDMI2,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)   
+	tsOSD_HDMI2,
+#elif(_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT)&&(_D1_INPUT_PORT_TYPE != _D1_HDMI_PORT)&&(_D2_INPUT_PORT_TYPE != _D2_HDMI_PORT)&&(_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT)   
+	tsOSD_HDMI,
+	
+#endif
+
+
+
+#if (_D5_INPUT_PORT_TYPE == _D5_MHL_PORT)
+    tsOSD_MHL,
+#elif(_D5_INPUT_PORT_TYPE == _D5_DVI_PORT)
+    tsOSD_DVI,
+#elif(_D5_INPUT_PORT_TYPE == _D5_HDMI_PORT)
+    tsOSD_HDMI,
+#endif
+
+#if (_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+    tsOSD_DP,
+#endif
+};
+
+#endif
+
+
+
+
+
+
+
+
+#if 1
+
+BYTE code tsOSD_1_Hour[] =
+{
+	_1_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_2_Hour[] =
+{
+	_2_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_3_Hour[] =
+{
+	_3_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_4_Hour[] =
+{
+	_4_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_5_Hour[] =
+{
+	_5_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_6_Hour[] =
+{
+	_6_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_7_Hour[] =
+{
+	_7_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_8_Hour[] =
+{
+	_8_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_9_Hour[] =
+{
+	_9_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_10_Hour[] =
+{
+	_1_,_0_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_11_Hour[] =
+{
+	_1_,_1_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_12_Hour[] =
+{
+	_1_,_2_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_13_Hour[] =
+{
+	_1_,_3_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_14_Hour[] =
+{
+	_1_,_4_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_15_Hour[] =
+{
+	_1_,_5_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_16_Hour[] =
+{
+	_1_,_6_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_17_Hour[] =
+{
+	_1_,_7_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_18_Hour[] =
+{
+	_1_,_8_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_19_Hour[] =
+{
+	_1_,_9_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_20_Hour[] =
+{
+	_2_,_0_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_21_Hour[] =
+{
+	_2_,_1_,_,_H_,_o_,_u_,_r_,_END_,
+};
+BYTE code tsOSD_22_Hour[] =
+{
+	_2_,_2_,_,_H_,_o_,_u_,_r_,_END_,
+};
+
+BYTE code tsOSD_23_Hour[] =
+{
+	_2_,_3_,_,_H_,_o_,_u_,_r_,_END_,
+};
+
+BYTE code tsOSD_24_Hour[] =
+{
+	_2_,_4_,_,_H_,_o_,_u_,_r_,_END_,
+};
+
+
+
+#endif
+
+
+#if(_DEF_OPPOSITE_DCR)//_MENU_FUN_DCR_OPPOSITE
+BYTE code tsOSD_High_Advanced[]=
+{
+#if _ENGLISH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+#if(_LANG_19 == _OFF)
+_xe8_,_PAGE_,0x02,_x49_,_END_,
+#else
+_xe8_,_PAGE_,0x02,_xea_,_END_,
+#endif
+#endif
+
+#if _JAPANESE_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_A_,_d_,_v_,_a_,_n_,_c_,_e_,_d_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+#if(_LANG_19 == _OFF)
+_xe8_,_PAGE_,0x02,_x49_,_END_,
+#else
+_xe8_,_PAGE_,0x02,_xea_,_END_,
+#endif
+#endif
+};
+
+
+
+
+#endif
+
+
+BYTE code tsOSD_High[]=
+{
+#if _ENGLISH_SUPPORT
+#if(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+_H_,_i_,_g_,_h_,_END_,
+#else
+_S_,_t_,_r_,_o_,_n_,_g_,_END_,
+#endif
+#endif
+#if _GERMAN_SUPPORT
+_H_,_o_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_l_,_t_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_E_,_l_,_e_,_v_,_x56_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_l_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_H_,_o_,_o_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_A_,_l_,_t_,_o_,_END_,
+#else
+_F_,_o_,_r_,_t_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_t_,_a_,_r_,_k_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_x4a_,_x58_,_l_,_x4a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8e_,_x6b_,_x79_,_x81_,_x7a_,_x72_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_E_,_r_,_x99_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_i_,_l_,_n_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_xe0_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x20_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x7b_,_x88_,_x6d_,_x6f_,_x73_,_x6f_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_H_,_i_,_g_,_h_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_o_,_r_,_k_,_e_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_v_,_y_,_s_,_o_,_k_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_xe0_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x8a_,_x67_,_PAGE_,0x01,_x85_,_x9a_,_PAGE_,0x00,_x74_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Middle[]=
+{
+#if _ENGLISH_SUPPORT
+_M_,_i_,_d_,_d_,_l_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_M_,_i_,_t_,_t_,_e_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_M_,_e_,_d_,_i_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_M_,_o_,_y_,_e_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_M_,_e_,_d_,_i_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_e_,_m_,_i_,_d_,_d_,_e_,_l_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_M_,_x56_,_d_,_i_,_o_,_END_,
+#else
+_M_,_x56_,_d_,_i_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_M_,_e_,_d_,_i_,_u_,_m_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_O_,_r_,_t_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8c_,_x92_,_x70_,_x7a_,_x6a_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_x48_,_z_,_e_,_p_,_e_,_s_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_xa3_,_r_,_e_,_d_,_n_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xe9_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xe9_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_M_,_PAGE_,0x01,_x72_,_x90_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_M_,_i_,_d_,_d_,_l_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_e_,_s_,_k_,_u_,_s_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_p_,_r_,_o_,_s_,_t_,_PAGE_,0x02,0x8b,_PAGE_,0x00,_e_,_d_,_n_,_x53_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xe9_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_o_,_p_,_x87_,_a_,_x97_,_x9c_,_PAGE_,0x01,_x88_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Low[]=
+{
+#if _ENGLISH_SUPPORT
+#if(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+_L_,_o_,_w_,_END_,
+#else
+_W_,_e_,_a_,_k_,_END_,
+#endif
+#endif
+#if _GERMAN_SUPPORT
+_N_,_i_,_e_,_d_,_r_,_i_,_g_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_B_,_a_,_j_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_a_,_i_,_b_,_l_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_B_,_a_,_s_,_s_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_L_,_a_,_a_,_g_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_B_,_a_,_i_,_x_,_o_,_END_,
+#else
+_B_,_a_,_i_,_x_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_v_,_a_,_g_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Z_,_a_,_y_,_x61_,_f_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x89_,_x77_,_x71_,_x6c_,_x78_,_x7c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_G_,_y_,_e_,_n_,_g_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_x9c_,_a_,_b_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_xdf_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x21_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x71_,_x72_,_x7d_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_L_,_o_,_w_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_m_,_a_,_t_,_a_,_l_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_n_,_x53_,_z_,_k_,_PAGE_,0x02,_x85_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_xdf_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_x87_,_x85_,_x8c_,_e_,_x97_,_END_,
+#endif
+};
+
+code BYTE *tsOSD_VIVID_STATUS[] =
+{
+	tsOSD_OFF,tsOSD_Low,tsOSD_Middle,tsOSD_High,
+};
+
+code BYTE *tsOSD_AUDIO_SOURCE[] =
+{
+	tsOSD_AutoSouce,tsOSD_trumpet,tsOSD_earphone,
+};
+
+#if(_DEF_OPPOSITE_DCR)//_MENU_FUN_DCR_OPPOSITE
+code BYTE *tsOSD_STANDARD_HIGH[] =
+{
+	tsOSD_OFF,tsOSD_ECO_STANDARD,tsOSD_High_Advanced,
+};
+#endif
+
+code BYTE *tOSD_SLEEP_ON_OFF_TABLE[] =
+{
+	tsOSD_OFF,tsOSD_1_Hour,tsOSD_2_Hour,tsOSD_3_Hour,tsOSD_4_Hour,tsOSD_5_Hour,tsOSD_6_Hour,tsOSD_7_Hour,tsOSD_8_Hour,tsOSD_9_Hour,tsOSD_10_Hour,tsOSD_11_Hour,tsOSD_12_Hour,tsOSD_13_Hour,tsOSD_14_Hour,tsOSD_15_Hour,tsOSD_16_Hour,tsOSD_17_Hour,tsOSD_18_Hour,tsOSD_19_Hour,tsOSD_20_Hour,tsOSD_21_Hour,tsOSD_22_Hour,tsOSD_23_Hour,tsOSD_24_Hour,
+};
+
+code BYTE *tsOSD_OSDRotation_table[]=
+{
+tsOSD_NORMAL,
+tsOSD_90,
+tsOSD_180,
+tsOSD_270,
+};
+
+
+code BYTE *tOSD_CT_STATUS[] =
+{
+#if(_DEF_CT_JX)
+	tsOSD_COOL,
+	tsOSD_7500,
+	tsOSD_WARM, 
+	tsOSD_5800,  
+	tsOSD_SRGB,
+	tsOSD_USER,
+	tsOSD_7000,
+	tsOSD_8000,
+#else
+    tsOSD_COOL,
+    tsOSD_7500,
+    tsOSD_WARM, 
+    tsOSD_USER,
+    tsOSD_5800,  
+    tsOSD_SRGB,
+#endif
+};
+
+
+code BYTE *tsOSD_ASPECT_STATUS[] =
+{
+#if(_DEF_ASPECT_11)
+	tsOSD_ASPECT_AUTO,tsOSD_ASPECT_43,tsOSD_ASPECT_169,
+#elif(_JX_OSD_TABLE_PORTUGUESE)
+	tsOSD_ASPECT_WIDE,tsOSD_ASPECT_43,tsOSD_ASPECT_AUTO,tsOSD_ASPECT_403,
+#else
+    tsOSD_ASPECT_WIDE,tsOSD_ASPECT_43,tsOSD_ASPECT_11,tsOSD_ASPECT_AUTO,
+#endif
+};
+
+
+BYTE * code tOSD_DP_VERSION_SELECT[] =
+{
+    tOSD_1_1_STR,
+    tOSD_1_2_STR,
+    tOSD_1_3_STR,
+};
+
+code BYTE *tOSD_HDR_STATUS[] =
+{
+#if 1//
+    tsOSD_OFF,
+    tsOSD_AUTO,
+#else
+    tsOSD_OFF,
+    tsOSD_AUTO,
+    tsOSD_ON,
+#endif
+};
+
+
+#if(_DEF_2795E06)
+code BYTE *tsOSD_KVM_OPTION[] =
+{
+	tsOSD_AUTO,tsOSD_PC,tsOSD_TYPEC,
+};
+#endif
+
+#if(_DEF_STA_SIX_COLOR)
+code BYTE *tsOSD_STA_SIX_COLOR[] =
+{
+	tsOSD_RED,tsOSD_GREEN,tsOSD_BLUE,tsOSD_CYAN,tsOSD_MAGENTA,tsOSD_YELLOW,
+};
+#endif
+
+
+code BYTE *tsOSD_ON_OFF_STATUS[] =
+{
+	tsOSD_OFF,tsOSD_ON,
+};
+
+#if(_DEF_HOTKEY_REPLACE)
+code BYTE *tsOSD_HOTKEY_REPLACE[] =
+{
+	tsOSD_OFF,
+	tsOSD_BRIGHTNESS,	//����
+	tsOSD_CONTRAST,	//�Աȶ�
+	tsOSD_ECO,	//�龰ģʽ
+	tsOSD_COLOURGAMUT_MODE,	//ɫ��
+	tsOSD_LOS_TYPE1,	//��׼��
+	tsOSD_FV_INFORMATION,	//֡����ʾ
+	tsOSD_VOLUME,	//����
+	tsOSD_BLACKLEVEL,	//DCC
+	tsOSD_CT,	//ɫ��
+#if(_DEF_OPPOSITE_DCR)
+	tsOSD_DCR_OPPOSITE,//tsOSD_DCR_OPPOSITE,	//��̬����ģʽ  ����DCR
+#endif
+	tsOSD_SIGNAL_SOURCE,	//�ź�ѡ��
+};
+#endif
+
+
+code BYTE *tsOSD_YESNO[] =
+{
+	tsOSD_NO1,tsOSD_YES1,
+};
+
+#if _LONG_PRESS_MENU_LOCK_OSD_ENABLE
+BYTE code tOSD_OSD_LOCKED_STR[] =
+{
+	_O_,_S_,_D_,_,_L_,_o_,_c_,_k_,_e_,_d_,_END_,	
+};
+	
+BYTE code tOSD_OSD_UNLOCKED_STR[] =
+{
+	_O_,_S_,_D_,_,_U_,_n_,_L_,_o_,_c_,_k_,_e_,_d_,_END_,
+};
+
+code BYTE *tsOSD_LOCK_OSD_STATUS[] =
+{
+	tOSD_OSD_UNLOCKED_STR,	tOSD_OSD_LOCKED_STR,
+};
+#endif
+#if _LONG_PRESS_POWER_LOCK_POWER_KEY_ENABLE
+BYTE code tOSD_OSD_LOCKED_POWER_KEY_STR[] =
+{
+	_P_,_o_,_w_,_e_,_r_,_,_K_,_e_,_y_,_,_L_,_o_,_c_,_k_,_e_,_d_,_END_,
+};
+
+BYTE code tOSD_OSD_UNLOCKED_POWER_KEY_STR[] =
+{
+	_P_,_o_,_w_,_e_,_r_,_,_K_,_e_,_y_,_,_U_,_n_,_L_,_o_,_c_,_k_,_e_,_d_,_END_,
+};
+
+code BYTE *tsOSD_LOCK_POWER_KEY_STATUS[] =
+{
+	tOSD_OSD_UNLOCKED_POWER_KEY_STR,	tOSD_OSD_LOCKED_POWER_KEY_STR,
+};
+#endif
+
+code BYTE *tsOSD_GAMMA_STATUS[] =
+{
+	tsOSD_OFF,
+    tsGAMMA1_8,tsGAMMA2_0,tsGAMMA2_2,tsGAMMA2_4,tsGAMMA2_6,
+};
+#if(_LED_EFFECT_TJMODE14==_ON)
+
+BYTE code tsOSD_LightMODE[]=  
+{
+#if _ENGLISH_SUPPORT 
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_, 
+#endif
+#if _GERMAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,2,0xe9,0xea,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,1,0X27,0X25,0X2E,_PAGE_,2,0xeb,0xec,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_E_,_f_,_f_,_e_,_c_,_t_,_END_,
+#endif	
+	
+};
+
+
+
+BYTE code tsOSD_Color[]=  
+{
+#if _ENGLISH_SUPPORT
+    _L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,2,0xe9,0xea,0xed,_PAGE_,0,0xad,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,1,0x20,0x27,0x32,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_L_,_i_,_g_,_h_,_t_,_,_C_,_o_,_l_,_o_,_r_,_END_,
+#endif
+
+};
+
+
+
+
+
+
+BYTE code tsOSD_Light_Static[] =
+{
+#if _ENGLISH_SUPPORT
+        _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xee,0xef,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,2,0xf1,0x48,_PAGE_,1,0x44,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _S_,_t_,_a_,_t_,_i_,_c_,_END_,
+#endif
+};
+
+
+
+
+
+
+BYTE code tsOSD_Light_Breathe[] =
+{
+#if _ENGLISH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+
+#if _POLSKI_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xf1,0xf2,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,2,0xf1,0xf2,0x43,_PAGE_,1,0x21_END_,
+#endif
+
+#if _RUSSIAN_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+
+#if _FINNISH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+
+#if _CZECH_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+    _B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_B_,_r_,_e_,_a_,_t_,_h_,_e_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Light_MarqueeIn[] =
+{
+#if _ENGLISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+
+
+#if _FRENCH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+
+
+#if _DUTCH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+
+#if _SVENSKA_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xf3,0xf4,0xf5,0xf7,0xf6,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+   _PAGE_,2,0xf9,0xfa,0xf5,0xf7,0xf6,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_I_,_n_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Light_MarqueeOut[] =
+{
+#if _ENGLISH_SUPPORT
+        _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xf3,0xf4,0xf5,0xf8,0xf6,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,2,0xf9,0xfa,0xf5,0xf7,0xf6,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _M_,_a_,_r_,_q_,_u_,_e_,_e_,0x00,_O_,_u_,_t_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Light_Color[] =
+{
+#if _ENGLISH_SUPPORT
+        _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xee,0xef,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,2,0xf1,0x48,_PAGE1,0x44,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+
+#if _CZECH_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+
+#if _KAZAK_SUPPORT
+    _S_,_t_,_e_,_a_,_d_,_y_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_Light_Color_Spectrum[] =
+{
+#if _ENGLISH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,2,0xfb,_PAGE_,3,0x01,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+   _PAGE_,2,0x25,_PAGE_,3,0x04,0x05,_PAGE_,1,0x44,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _C_,_o_,_l_,_o_,_r_,_f_,_u_,_l_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_Light_Color_Purple[] =
+{
+#if _ENGLISH_SUPPORT
+        _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,3,0x02,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,3,0x02,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _P_,_u_,_r_,_p_,_l_,_e_,_END_,
+#endif
+};
+BYTE code tsOSD_Light_Color_RED[] =
+{
+#if _ENGLISH_SUPPORT
+        _R_,_e_,_d_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    0XD4,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,1,0X49,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _R_,_e_,_d_,_END_,
+#endif
+};
+BYTE code tsOSD_Light_Color_BLUE[] =
+{
+#if _ENGLISH_SUPPORT
+         _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    0xC8,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,3,0x06,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+     _B_,_l_,_u_,_e_,_END_,
+#endif
+};
+BYTE code tsOSD_Light_Color_GREEN[] =
+{
+#if _ENGLISH_SUPPORT
+        _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    0xd5,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,1,0x4a,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _G_,_r_,_e_,_e_,_n_,_END_,
+#endif
+};
+
+
+	
+
+BYTE code tsOSD_CYAN[]=  
+{
+#if _ENGLISH_SUPPORT
+        _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,1,0x3d,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+   _PAGE_,1,0x3d,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _C_,_y_,_a_,_n_,_END_,
+#endif
+};
+
+
+
+BYTE code tsOSD_YELLOW[]=  
+{
+#if _ENGLISH_SUPPORT
+        _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+    _PAGE_,3,0x03,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+    _PAGE_,3,0x03,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _CZECH_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+    _Y_,_e_,_l_,_l_,_o_,_w_,_END_,
+#endif
+};
+
+
+code BYTE *tsOSD_Light_STATUS[] =
+{
+    tsOSD_OFF,tsOSD_Light_Color,tsOSD_Light_Breathe,tsOSD_Light_MarqueeIn,tsOSD_Light_MarqueeOut,
+};
+
+code BYTE *tsOSD_Light_Color_STATUS[] =
+{
+	tsOSD_Light_Color_Spectrum,
+	tsOSD_Light_Color_RED,
+	tsOSD_Light_Color_GREEN,
+	tsOSD_Light_Color_BLUE, 
+	tsOSD_CYAN,
+	tsOSD_Light_Color_Purple,
+	tsOSD_YELLOW,
+};
+
+#endif
+
+
+code BYTE *tsOSD_COLORGAMUT_STATUS[] =
+{
+	tsOSD_SRGB,
+	tsOSD_ADOBE,
+	tsOSD_DCIP3,
+    tsOSD_OFF,
+};
+
+
+code BYTE *tsOSD_LED_STATUS[] =
+{
+	tsOSD_OFF,tsOSD_ON,tsOSD_FLICKER,
+};
+
+
+code BYTE *tsOSD_ECO_STATUS[] =
+{
+	tsOSD_ECO_STANDARD,
+    tsOSD_ECO_TEXT,
+        tsOSD_ECO_MOVIE,
+#if(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+        tsOSD_USER,
+#else
+        tsOSD_ECO_GAME,
+#endif
+#if (_EOC_RTS_FPS_SUPPORT == _ON)
+	tsOSD_ECO_FPS,
+	tsOSD_ECO_RTS,
+#endif
+
+#if(_DEF_COLORFUL)
+	tsOSD_ECO_COLORFUN,
+#endif
+      tsOSD_ECO_ENERGY_SAVING,
+	
+};
+
+
+
+
+code BYTE *tsOSD_HOTKEY_TYPE[] =
+{
+    tsOSD_BRIGHTNESS,
+    tsOSD_CONTRAST,
+    tsOSD_BLACKLEVEL,
+    tsOSD_SHARPNESS,
+    tsOSD_ECO,
+    tsOSD_DCR,
+    tsOSD_HDR_MODE,
+
+    tsOSD_H_POSITION,
+    tsOSD_V_POSITION,
+    tsOSD_PIXEL_CLOCK,
+    tsOSD_PHASE,    
+    tsOSD_ASPECT,
+
+    tsOSD_CT,
+    tsOSD_RED,
+    tsOSD_GREEN,
+    tsOSD_BLUE,  
+
+    
+    tsOSD_LANGUAGE,
+    tsOSD_OSD_H_POSITION,
+    tsOSD_OSD_V_POSITION,
+    tsOSD_OSD_TIMER,    
+    tsOSD_TRANSPARENCY,
+
+    
+    tsOSD_IMAGE_AUTO_ADJUST,
+    tsOSD_COLOR_AUTO_ADJUST,
+    tsOSD_RESET_PAGE,
+
+    
+	tsOSD_SIGNAL_SOURCE,	
+	tsOSD_LOW_BLUE,		
+	tsOSD_MUTE,
+	tsOSD_VOLUME,
+	#if _FREESYNC_SUPPORT
+	tsOSD_FREESYNC,
+	#endif
+	tsOSD_OD_PAGE,
+	tsOSD_AUTO_POWERDOWN,
+	tsOSD_LED_TYPE,
+	tsOSD_FLICKER_FREE,
+	tsOSD_MPRT,
+	tsOSD_GAMMA,
+	tsOSD_COLOURGAMUT_MODE,
+	tsOSD_SATURATION_MODE,
+	tsOSD_OVERCLOCK_MODE,
+	tsOSD_HOTKEY_LEFT,
+	tsOSD_HOTKEY_RIGHT,
+	tsOSD_NULL,
+	tsOSD_LOS_TYPE1,	
+	tsOSD_LOS_TYPE2,
+};
+
+
+code BYTE *tOSD_STRING_ITEM_TABLE[] =
+{
+    tsOSD_BRIGHTNESS,
+    tsOSD_CONTRAST,
+    tsOSD_BLACKLEVEL,
+    tsOSD_SHARPNESS,
+    tsOSD_ECO,
+    tsOSD_DCR,
+    tsOSD_HDR_MODE,
+    tsOSD_H_POSITION,
+    tsOSD_V_POSITION,
+    tsOSD_PIXEL_CLOCK,
+    tsOSD_PHASE,    
+    tsOSD_ASPECT,
+
+    tsOSD_CT,	//111 kazak
+    tsOSD_RED,
+    tsOSD_GREEN,
+    tsOSD_BLUE,  
+
+    
+    tsOSD_LANGUAGE,
+    tsOSD_OSD_H_POSITION,
+    tsOSD_OSD_V_POSITION,
+    tsOSD_OSD_TIMER,    
+    tsOSD_TRANSPARENCY,
+
+    
+    tsOSD_IMAGE_AUTO_ADJUST,
+    tsOSD_COLOR_AUTO_ADJUST,
+    tsOSD_RESET_PAGE,
+
+    
+	tsOSD_SIGNAL_SOURCE,	
+	tsOSD_LOW_BLUE,		
+	tsOSD_MUTE,
+	tsOSD_VOLUME,
+	#if _FREESYNC_SUPPORT
+	tsOSD_FREESYNC,
+	#endif
+	tsOSD_OD_PAGE,
+	tsOSD_AUTO_POWERDOWN,
+	tsOSD_LED_TYPE,
+	tsOSD_FLICKER_FREE,
+	tsOSD_MPRT,	
+	tsOSD_GAMMA,
+	tsOSD_COLOURGAMUT_MODE,
+	tsOSD_SATURATION_MODE,
+	tsOSD_OVERCLOCK_MODE,
+	tsOSD_Hue,
+	tsOSD_DynamicLuminousControl,
+
+	tsOSD_FV_INFORMATION,//_MENU_FUN_FV_INFORMATION
+    tsOSD_DDCCI,//_MENU_FUN_DDCCI
+    
+	tsOSD_dp_Ver,	//_MENU_FUN_DP_VER
+	tsOSD_OSDRotation,	//_MENU_FUN_OSD_RORATE
+	tsOSD_SuperResolution,	//_MENU_FUN_VIVID
+	tsOSD_AUDIO_SOU,	//_MENU_FUN_AUDIO_SOURCE
+	tsOSD_OVERCLOCK_HINT,	//_MENU_FUN_CHAOPING_TISHI
+	tsOSD_KVM,				//_MENU_FUN_KVM
+	tsOSD_HDRCOLOR,		//_MENU_FUN_HDR_COLOR
+	
+    tsOSD_CROSS,
+#if(_LED_EFFECT_TJMODE14)
+            tsOSD_LightMODE,
+            tsOSD_Color, 
+#endif
+#if(_DEF_HOTKEY_REPLACE)
+	tsOSD_HOT_REPLACE_LEFT,//_MENU_FUN_HOT_REPLACE_LEFT
+	tsOSD_HOT_REPLACE_RIGHT,//_MENU_FUN_HOT_REPLACE_RIGHT
+	tsOSD_HOT_REPLACE_EXIT,//_MENU_FUN_HOT_REPLACE_EXIT
+#endif
+
+#if(_DEF_STA_SIX_COLOR)
+	tsOSD_SIX_SATURATION_MODE,	//_MENU_FUN_SAT_STATE
+	tsOSD_Six_Hue,	//_MENU_FUN_HUE_STATE
+
+	NULL,//tsOSD_Red,
+	NULL,//tsOSD_Green,
+	NULL,//tsOSD_Blue,
+	NULL,//tsOSD_CYAN,
+	NULL,//tsOSD_MAGENTA,
+	NULL,//tsOSD_YELLOW,
+
+	NULL,//tsOSD_Red,
+	NULL,//tsOSD_Green,
+	NULL,//tsOSD_Blue,
+	NULL,//tsOSD_CYAN,
+	NULL,//tsOSD_MAGENTA,
+	NULL,//tsOSD_YELLOW,
+#endif
+#if(_DEF_OPPOSITE_DCR)
+	tsOSD_DCR_OPPOSITE,//_MENU_FUN_DCR_OPPOSITE
+#endif
+	tsOSD_HOTKEY_LEFT,
+	tsOSD_HOTKEY_RIGHT,
+};
+
+
+//================Language. Page ==============//
+BYTE code tsOSD_Kazak[] =
+{
+#if _ENGLISH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_K_,_a_,_z_,_a_,_k_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_a_,_PAGE_,0x01,_x7d_,_PAGE_,0x00,_a_,_x8a_,_PAGE_,0x01,_x85_,_PAGE_,0x00,_a_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_English[]=
+{
+#if _ENGLISH_SUPPORT
+_E_,_n_,_g_,_l_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_E_,_n_,_g_,_l_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_I_,_n_,_g_,_l_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_I_,_n_,_g_,_l_,_x56_,_s_,_x42_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_n_,_g_,_l_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_E_,_n_,_g_,_e_,_l_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_I_,_n_,_g_,_l_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_E_,_n_,_g_,_e_,_l_,_s_,_k_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_I_,_n_,_g_,_i_,_l_,_i_,_z_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x73_,_x67_,_x67_,_x80_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_A_,_n_,_g_,_o_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_xa1_,_z_,_y_,_k_,_,_a_,_n_,_g_,_i_,_e_,_l_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf2_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_xf2_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x02,_x29_,_PAGE_,0x01,_x71_,_x83_,_x87_,_x72_,_x8e_,_x6d_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x4f,_PAGE_,0x01,_xe5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_e_,_n_,_g_,_l_,_a_,_n_,_t_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_A_,_n_,_g_,_l_,_i_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xf2_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_E_,_n_,_g_,_l_,_i_,_s_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_German[]=
+{
+#if _ENGLISH_SUPPORT
+_D_,_e_,_u_,_t_,_s_,_c_,_h_,_END_,//_G_,_e_,_r_,_m_,_a_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_D_,_e_,_u_,_t_,_s_,_c_,_h_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_l_,_e_,_m_,_x52_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_l_,_l_,_e_,_m_,_a_,_n_,_d_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_e_,_d_,_e_,_s_,_c_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_D_,_u_,_i_,_t_,_s_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_A_,_l_,_e_,_m_,_x5a_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_T_,_y_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_A_,_l_,_m_,_a_,_n_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x94_,_x69_,_x7a_,_x78_,_x6c_,_x71_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_N_,_x56_,_m_,_e_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_i_,_e_,_m_,_i_,_e_,_c_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf4_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x3a_,_x30_,_PAGE_,0x02,0x33,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x7c_,_x80_,_x7c_,_x7a_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x50,_PAGE_,0x01,_xc5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_s_,_a_,_k_,_s_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_N_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_m_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xf4_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_D_,_e_,_u_,_t_,_s_,_c_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Spanish[]=
+{
+#if _ENGLISH_SUPPORT
+_E_,_s_,_p_,_a_,_x51_,_o_,_l_,_END_,	//_S_,_p_,_a_,_n_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_p_,_a_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_E_,_s_,_p_,_a_,_x51_,_o_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_E_,_s_,_p_,_a_,_g_,_n_,_o_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_p_,_a_,_g_,_n_,_o_,_l_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_p_,_a_,_a_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_E_,_s_,_p_,_a_,_n_,_h_,_o_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_p_,_a_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x63_,_s_,_p_,_a_,_n_,_y_,_o_,_l_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8e_,_x6b_,_x7e_,_x6c_,_x71_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_p_,_a_,_n_,_y_,_o_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_H_,_i_,_s_,_z_,_p_,_a_,_xa2_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf5_,_xf6_,_xf7_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x28_,_x4d_,_x30_,_x25_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x72_,_x6d_,_x8c_,_x78_,_x71_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x9e_,_PAGE_,0x02,0x51,_x5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_e_,_s_,_p_,_a_,_n_,_j_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8a_,_PAGE_,0x00,_p_,_a_,_n_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_l_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xf5_,_xf6_,_xf7_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_E_,_s_,_p_,_a_,_x51_,_o_,_l_,_END_,
+#endif
+};
+
+BYTE code tsOSD_French[]=
+{
+#if _ENGLISH_SUPPORT
+_F_,_r_,_a_,_n_,_x58_,_a_,_i_,_s_,_END_,	//_F_,_r_,_e_,_n_,_c_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_r_,_a_,_n_,_z_,_x48_,_s_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_r_,_a_,_n_,_x58_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_r_,_a_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_F_,_r_,_a_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_r_,_a_,_n_,_s_,_x61_,_z_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x67_,_x6c_,_x80_,_x80_,_x6a_,_x7d_,_x68_,_,_x67_,_x80_,_x7b_,_x6b_,_x6b_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_i_,_a_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_u_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf8_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x1e_,_PAGE_,0x01,_x27_,_x25_,_x28_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x02,_x2a_,_PAGE_,0x01,_x75_,_x78_,_x71_,_x7a_,_x7f_,_x7d_,_x6d_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x52,_x53_,_PAGE_,0x01,_x9e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_r_,_a_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_F_,_r_,_a_,_n_,_c_,_o_,_u_,_z_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xf8_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_F_,_r_,_a_,_n_,_x58_,_a_,_i_,_s_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Italian[]=
+{
+#if _ENGLISH_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,//_I_,_t_,_a_,_l_,_i_,_a_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_e_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_e_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_a_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_e_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x63_,_t_,_a_,_l_,_y_,_a_,_n_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x6a_,_x70_,_x6c_,_x80_,_x6a_,_x7d_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_O_,_l_,_a_,_s_,_z_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_W_,_x9c_,_o_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_xf9_,_xfa_,_PAGE_,0x01,_x1_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x30_,_x65_,_x38_,_x4c_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x72_,_x6e_,_x78_,_x87_,_x76_,_x99_,_x71_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xac_,_PAGE_,0x02,0x54,_x55_,_x56_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_i_,_t_,_a_,_l_,_i_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_I_,_t_,_a_,_l_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_xf9_,_xfa_,_PAGE_,0x01,_x1_,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Dutch[]=
+{
+#if _ENGLISH_SUPPORT
+_D_,_u_,_t_,_c_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_N_,_i_,_e_,_d_,_e_,_r_,_l_,_x4b_,_n_,_d_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_H_,_o_,_l_,_a_,_n_,_d_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_N_,_x56_,_e_,_r_,_l_,_a_,_n_,_d_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_O_,_l_,_a_,_n_,_d_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_N_,_e_,_d_,_e_,_r_,_l_,_a_,_n_,_d_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_H_,_o_,_l_,_a_,_n_,_d_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_N_,_e_,_d_,_e_,_r_,_l_,_x4b_,_n_,_d_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_l_,_e_,_m_,_e_,_n_,_k_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x95_,_x80_,_x80_,_x6c_,_x71_,_x89_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_o_,_l_,_l_,_a_,_n_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_H_,_o_,_l_,_e_,_n_,_d_,_e_,_r_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x2_,_x3_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x31_,_x27_,_x25_,_x6a_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x89_,_x6f_,_x87_,_x87_,_x78_,_x71_,_x90_,_x6d_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x57,_x58_,_x59_,_PAGE_,0x01,_xbb_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_h_,_o_,_l_,_l_,_a_,_n_,_t_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_H_,_o_,_l_,_a_,_n_,_d_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x2_,_PAGE_,0x02,0xad,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_D_,_u_,_t_,_c_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Portuguese[]=
+{
+#if _ENGLISH_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_e_,_s_,_e_,_END_,//_P_,_o_,_r_,_t_,_u_,_g_,_u_,_e_,_s_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_i_,_e_,_s_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_o_,_r_,_t_,_o_,_g_,_h_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_e_,_e_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_i_,_s_,_i_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_P_,_o_,_r_,_t_,_e_,_k_,_i_,_z_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x7c_,_x7a_,_x70_,_x7c_,_x67_,_x6c_,_x80_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_x52_,_l_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_a_,_l_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x4_,_x5_,_PAGE_,0x00,_xf7_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,0x34,_x22_,_PAGE_,0x01,_x26_,_PAGE_,0x02,_x1f_,_x22_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x8c_,_x6f_,_x75_,_x6e_,_x7f_,_x83_,_x78_,_x87_,_x76_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd0_,_PAGE_,0x02,0x5a,_PAGE_,0x01,_xe9_,_PAGE_,0x02,0x5b,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_o_,_r_,_t_,_u_,_g_,_a_,_l_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_a_,_l_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x4_,_x5_,_PAGE_,0x00,_xf7_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_e_,_s_,_e_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Swedish[]=
+{
+#if _ENGLISH_SUPPORT
+_S_,_w_,_e_,_d_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_c_,_h_,_w_,_e_,_d_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_u_,_e_,_c_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_u_,_x56_,_d_,_o_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_v_,_e_,_d_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_Z_,_w_,_e_,_e_,_d_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_S_,_u_,_e_,_c_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_v_,_e_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x63_,_s_,_v_,_e_,_x58_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8d_,_x7c_,_x81_,_x66_,_x89_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_v_,_x56_,_d_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_z_,_w_,_e_,_d_,_z_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x6_,_x7_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x28_,_x6b_,_PAGE_,0x02,0x35,_PAGE_,0x01,_x32_,_x2c_,_x25_,0x64,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x85_,_x7b_,_x7c_,_x90_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_x9e_,_PAGE_,0x02,0x5c,_x5d_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_r_,_u_,_o_,_t_,_s_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8a_,_PAGE_,0x00,_v_,_x56_,_d_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x6_,_x7_,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_S_,_w_,_e_,_d_,_i_,_s_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Turkish[]=
+{
+#if _ENGLISH_SUPPORT
+_T_,_u_,_r_,_k_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_T_,_x4a_,_r_,_k_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_T_,_u_,_r_,_q_,_u_,_x53_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_T_,_u_,_r_,_c_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_T_,_u_,_r_,_c_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_T_,_u_,_r_,_k_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_T_,_u_,_r_,_c_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_T_,_u_,_r_,_k_,_i_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_T_,_x4a_,_r_,_k_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x70_,_x7c_,_x77_,_x7a_,_x7d_,_x6a_,_x7d_,_x7c_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_T_,_x48_,_r_,_x48_,_k_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_T_,_u_,_r_,_e_,_c_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x8_,_x9_,_PAGE_,0x00,_xb7_,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x26_,_PAGE_,0x02,_x22_,_PAGE_,0x01,_x24_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x6e_,_x7f_,_x75_,_x7c_,_x7a_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x5e,_x5f_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_u_,_r_,_k_,_k_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_T_,_u_,_r_,_e_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x8_,_x9_,_PAGE_,0x00,_xb7_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_T_,_u_,_r_,_k_,_i_,_s_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Greek[]=
+{
+#if _ENGLISH_SUPPORT
+_G_,_r_,_e_,_e_,_k_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_G_,_r_,_i_,_e_,_c_,_h_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_G_,_r_,_i_,_e_,_g_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_G_,_r_,_e_,_c_,_x42_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_G_,_r_,_e_,_c_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_r_,_i_,_e_,_k_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_G_,_r_,_e_,_g_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_G_,_r_,_e_,_k_,_i_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_Y_,_u_,_n_,_a_,_n_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x83_,_x80_,_x80_,_x66_,_x71_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_G_,_x48_,_r_,_x48_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_G_,_r_,_e_,_c_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_xa_,_xb_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,0x36,_PAGE_,0x01,_x38_,_x36_,_x56_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x83_,_x75_,_x7c_,_x70_,_x7c_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x60,_x55_,_PAGE_,0x01,_x9e_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_r_,_e_,_i_,_k_,_k_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,0x8e,_PAGE_,0x00,_e_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_xa_,_PAGE_,0x02,0xae,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_G_,_r_,_e_,_e_,_k_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Hungarian[]=
+{
+#if _ENGLISH_SUPPORT
+_H_,_u_,_n_,_g_,_a_,_r_,_i_,_a_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_U_,_n_,_g_,_a_,_r_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_H_,_x55_,_n_,_g_,_a_,_r_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_H_,_o_,_n_,_g_,_r_,_i_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_U_,_n_,_g_,_h_,_e_,_r_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_H_,_o_,_n_,_g_,_a_,_a_,_r_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_H_,_x55_,_n_,_g_,_a_,_r_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_U_,_k_,_r_,_a_,_i_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_M_,_a_,_c_,_a_,_r_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_O_,_x81_,_x67_,_x67_,_x7a_,_x6a_,_x7d_,_x72_,_x6e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_M_,_a_,_g_,_y_,_a_,_r_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_xa1_,_z_,_y_,_k_,_,_w_,_xa1_,_g_,_i_,_e_,_r_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_xc_,_PAGE_,0x00,_xf7_,_PAGE_,0x01,_x1_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,0x37,_PAGE_,0x01,_x25_,_PAGE_,0x02,_x1f_,_PAGE_,0x01,_x38_,_x32_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x7b_,_x7c_,_x71_,_x83_,_x7c_,_x75_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x61,_x62_,_x55_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_u_,_n_,_k_,_a_,_r_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_M_,_a_,_PAGE_,0x02,0x8f,_PAGE_,0x00,_a_,_r_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_xc_,_PAGE_,0x00,_xf7_,_PAGE_,0x01,_x1_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_H_,_u_,_n_,_g_,_a_,_r_,_i_,_a_,_n_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Polish[]=
+{
+#if _ENGLISH_SUPPORT
+_P_,_o_,_l_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_P_,_o_,_l_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_o_,_l_,_a_,_c_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_o_,_l_,_o_,_n_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_o_,_l_,_a_,_c_,_c_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_P_,_o_,_o_,_l_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_P_,_o_,_l_,_o_,_n_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_P_,_o_,_l_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_L_,_e_,_h_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8d_,_x70_,_x74_,_x80_,_x90_,_x6d_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_x56_,_n_,_y_,_e_,_s_,_x53_,_t_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_l_,_s_,_k_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_xd_,_x3_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x34_,_PAGE_,0x01,_x32_,_x27_,_x25_,_x3a_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x8c_,_x6f_,_x87_,_x76_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x63,_x59_,_PAGE_,0x01,_xbb_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_p_,_u_,_o_,_l_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_P_,_o_,_l_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_xd_,_PAGE_,0x02,_xad_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_P_,_o_,_l_,_i_,_s_,_h_,_END_,
+#endif
+};
+
+
+BYTE code tsOSD_Chinese_JT[]=
+{
+#if _ENGLISH_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_C_,_h_,_i_,_n_,_e_,_s_,_END_,
+#else
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_xf_,_x10_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+//_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+_xe9_,_PAGE_,0x02,_x38_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+//_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+_PAGE_,0x01,_x77_,_x72_,_x6e_,_x78_,_x8e_,_x6d_,_x73_,_x72_,_x8e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_S_,_i_,_m_,_p_,_l_,_i_,_f_,_i_,_e_,_d_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+
+#if _FINNISH_SUPPORT
+_k_,_i_,_i_,_n_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8c_,_PAGE_,0x00,_x53_,_n_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xaf,_xb0_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_Chinese_FT[]=
+{
+#if _ENGLISH_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_a_,_l_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_e_,_l_,_l_,_e_,_s_,_,_C_,_h_,_i_,_n_,_e_,_s_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_C_,_h_,_i_,_n_,_o_,_,_t_,_r_,_a_,_d_,_i_,_c_,_i_,_o_,_n_,_a_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_C_,_h_,_i_,_n_,_o_,_i_,_s_,_,_t_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_n_,_e_,_l_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_C_,_i_,_n_,_e_,_s_,_e_,_,_t_,_r_,_a_,_d_,_i_,_z_,_i_,_o_,_n_,_a_,_l_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_e_,_e_,_l_,_,_C_,_h_,_i_,_n_,_e_,_e_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_C_,_h_,_i_,_n_,_x5c_,_s_,_,_t_,_r_,_a_,_d_,_i_,_c_,_i_,_o_,_n_,_a_,_l_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_e_,_l_,_l_,_,_k_,_i_,_n_,_e_,_s_,_i_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_G_,_e_,_l_,_e_,_n_,_e_,_k_,_s_,_e_,_l_,_,_x62_,_i_,_n_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x6c_,_x7a_,_x6c_,_x89_,_x7c_,_x6b_,_x6a_,_x6c_,_x7d_,_x7f_,_,_x7d_,_x6a_,_x71_,_x92_,_x96_,_x6a_,_x7d_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_H_,_a_,_g_,_y_,_o_,_m_,_x52_,_n_,_y_,_o_,_s_,_,_k_,_x53_,_n_,_a_,_i_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_h_,_i_,_xa2_,_s_,_k_,_i_,_,_t_,_r_,_a_,_d_,_y_,_c_,_y_,_j_,_n_,_y_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,0x32,_PAGE_,0x01,_x10_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x32_,_PAGE_,0x01,_x10_,_PAGE_,0x00,_xe9_,_PAGE_,0x02,_x38_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x6e_,_x75_,_x78_,_x90_,_x72_,_x7a_,_x72_,_x6f_,_x71_,_x71_,_x88_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x73_,_x72_,_x6e_,_x78_,_x8e_,_x6d_,_x73_,_x72_,_x8e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd1_,_PAGE_,0x02,0x68,_PAGE_,0x01,_xb4_,_PAGE_,0x02,_x5_,_PAGE_,0x00,_,_PAGE_,0x02,_x64_,_x3_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_P_,_e_,_r_,_i_,_n_,_t_,_e_,_i_,_n_,_e_,_n_,_,_k_,_i_,_i_,_n_,_a_,_l_,_a_,_i_,_n_,_e_,_n_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_n_,_x53_,_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_x53_,_n_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x32_,_xb0_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_T_,_r_,_a_,_d_,_i_,_t_,_i_,_o_,_n_,_a_,_l_,_,_C_,_h_,_i_,_n_,_e_,_s_,_e_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Japanese[]=
+{
+#if _ENGLISH_SUPPORT
+_J_,_a_,_p_,_a_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_J_,_a_,_p_,_a_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_J_,_a_,_p_,_o_,_n_,_x56_,_s_,_,_j_,_a_,_p_,_o_,_n_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_j_,_a_,_p_,_o_,_n_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_g_,_i_,_a_,_p_,_p_,_o_,_n_,_e_,_s_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_J_,_a_,_p_,_a_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_J_,_a_,_p_,_o_,_n_,_x5c_,_s_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_J_,_a_,_p_,_a_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_J_,_a_,_p_,_o_,_n_,_c_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8e_,_x6c_,_x7e_,_x6d_,_x71_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_j_,_a_,_p_,_x52_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_J_,_a_,_p_,_o_,_xa2_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x12_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x12_,_xf9_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x79_,_x78_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x8c_,_x6f_,_x71_,_x6d_,_x73_,_x6f_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_x7c_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xc5_,_PAGE_,0x02,0x65,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_j_,_a_,_p_,_a_,_n_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_J_,_a_,_p_,_o_,_n_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x12_,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_J_,_a_,_p_,_a_,_n_,_e_,_s_,_e_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Russia[]=
+{
+#if _ENGLISH_SUPPORT
+_R_,_u_,_s_,_s_,_i_,_a_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_R_,_u_,_s_,_s_,_l_,_a_,_n_,_d_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_R_,_u_,_s_,_i_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_R_,_u_,_s_,_s_,_i_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_R_,_u_,_s_,_s_,_i_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_R_,_u_,_s_,_l_,_a_,_n_,_d_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_R_,_u_,_s_,_s_,_i_,_a_,_END_,
+#else
+_R_,_x55_,_s_,_s_,_i_,_a_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_R_,_y_,_s_,_s_,_l_,_a_,_n_,_d_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_R_,_u_,_s_,_y_,_a_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x76_,_x6d_,_x6b_,_x74_,_x6c_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_O_,_r_,_o_,_s_,_z_,_o_,_r_,_s_,_z_,_x52_,_g_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_R_,_o_,_s_,_j_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x13_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x63_,_x36_,_x4c_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x84_,_x6f_,_x6d_,_x6d_,_x72_,_x99_,_PAGE_,0x00,_x46_,_,_PAGE_,0x02,0x4e,_PAGE_,0x01,_x6f_,_x6d_,_x73_,_x7b_,_x78_,_PAGE_,0x00,_x46_,_,_PAGE_,0x01,_x84_,_x6f_,_x6d_,_x6d_,_x72_,_x99_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xa4_,_xec_,_PAGE_,0x02,_x56_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_V_,_e_,_n_,_x4b_,_j_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_R_,_u_,_s_,_k_,_o_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x01,_x13_,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_R_,_u_,_s_,_s_,_i_,_a_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Korean[]=
+{
+#if _ENGLISH_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_c_,_o_,_r_,_e_,_a_,_n_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_c_,_o_,_r_,_x56_,_e_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_c_,_o_,_r_,_e_,_a_,_n_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_a_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_C_,_o_,_r_,_e_,_a_,_n_,_o_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_K_,_o_,_r_,_e_,_,_d_,_i_,_l_,_i_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x8a_,_x7c_,_x7a_,_x69_,_x6c_,_x70_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_k_,_o_,_r_,_e_,_a_,_i_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_xa2_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_x14_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,0x39,_x38_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+//_PAGE_,0x01,_x77_,_x6f_,_x75_,_x7c_,_x8e_,_x6d_,_x73_,_x78_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x71_,_x78_,_x75_,_x6f_,_x90_,_x71_,_x6f_,_PAGE_,0x00,_x44_,_PAGE_,0x01,_x90_,_x7c_,_x80_,_x6f_,_x73_,_x75_,_x78_,_x6e_,_x72_,_x70_,_x7c_,_x6d_,_x73_,_x78_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x75_,_x7c_,_x6d_,_x8c_,_x7f_,_x7e_,_x87_,_x72_,_x73_,_x78_,_END_,
+_PAGE_,0x01,_x77_,_x6f_,_x75_,_x7c_,_x8e_,_x6d_,_x73_,_x72_, _x8e_,_END_,
+
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,_x2_,_x3_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_k_,_o_,_r_,_e_,_a_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_K_,_o_,_r_,_e_,_j_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x39_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_o_,_r_,_e_,_a_,_n_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Finnish[]=
+{
+#if _ENGLISH_SUPPORT
+_F_,_i_,_n_,_n_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_F_,_i_,_n_,_n_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_f_,_i_,_n_,_l_,_a_,_n_,_d_,_x56_,_s_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_f_,_i_,_n_,_n_,_o_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_f_,_i_,_n_,_n_,_o_,_i_,_s_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_F_,_i_,_n_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_F_,_i_,_n_,_l_,_a_,_n_,_d_,_x5c_,_s_,_END_,
+#else
+_F_,_i_,_n_,_s_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_F_,_i_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_F_,_i_,_n_,_c_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x6f_,_x6a_,_x71_,_x80_,_x6c_,_x71_,_x89_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_f_,_i_,_n_,_n_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_F_,_i_,_xa2_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,0x2f,_PAGE_,0x01,_x3_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x1e_,_PAGE_,0x01,_x30_,_x25_,_x27_,_x25_,_x3a_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x02,_x2a_,_PAGE_,0x01,_x72_,_x71_,_x6d_,_x73_,_x72_,_x8e_,_PAGE_,0x00,_,_PAGE_,0x01,_x99_,_x7d_,_x88_,_x73_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,0x66,_x59_,_PAGE_,0x01,_xbb_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_s_,_u_,_o_,_m_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_F_,_i_,_n_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x2f_,_xad_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_F_,_i_,_n_,_n_,_i_,_s_,_h_,_END_,
+#endif
+};
+
+BYTE code tsOSD_Czech[]=
+{
+#if _ENGLISH_SUPPORT
+_C_,_z_,_e_,_c_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_T_,_s_,_c_,_h_,_e_,_c_,_h_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_c_,_h_,_e_,_c_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_t_,_c_,_h_,_PAGE_,0x02,0x2e,_PAGE_,0x00,_q_,_u_,_e_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_t_,_c_,_h_,_PAGE_,0x02,_x2e_,_PAGE_,0x00,_q_,_u_,_e_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_T_,_s_,_j_,_e_,_c_,_h_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_T_,_c_,_h_,_e_,_c_,_o_,_END_,
+#else
+_T_,_s_,_j_,_e_,_c_,_h_,_i_,_s_,_c_,_h_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_T_,_j_,_e_,_c_,_k_,_i_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_x62_,_e_,_k_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x87_,_x6b_,_x69_,_x79_,_x6a_,_x7d_,_x7f_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_c_,_s_,_e_,_h_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_C_,_z_,_e_,_s_,_k_,_i_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,0x30,_x31_,_PAGE_,0x00,_xf3_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,0x3a,_x35_,_PAGE_,0x01,_x24_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x97_,_x7c_,_x85_,_x6d_,_x73_,_x78_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x75_,_x7c_,_x6d_,_x8c_,_x7f_,_x7e_,_x87_,_x72_,_x73_,_x78_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xd2_,_PAGE_,0x02,0x67,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_PAGE_,0x02,0x84,_PAGE_,0x00,_e_,_k_,_k_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8c_,_PAGE_,0x00,_e_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x30_,_x31_,_PAGE_,0x01,_x64_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_C_,_z_,_e_,_c_,_h_,_END_,
+#endif
+};
+
+
+
+code BYTE tOSD_LANGUAGE_PAGE_TABLE_TJ[] =
+{
+#if _ENGLISH_SUPPORT
+_E_,_n_,_g_,_l_,_i_,_s_,_h_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_D_,_e_,_u_,_t_,_s_,_c_,_h_,_e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_E_,_s_,_p_,_a_,_x51_,_o_,_l_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_F_,_r_,_a_,_n_,_x58_,_a_,_i_,_s_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_I_,_t_,_a_,_l_,_i_,_a_,_n_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_N_,_e_,_d_,_e_,_r_,_l_,_a_,_n_,_d_,_s_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_x5c_,_s_,_END_,
+#else
+_P_,_o_,_r_,_t_,_u_,_g_,_u_,_x5c_,_s_,_END_,
+#endif
+#endif
+#if _SVENSKA_SUPPORT
+_S_,_v_,_e_,_n_,_s_,_k_,_a_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_T_,_x4a_,_r_,_k_,_x58_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_G_,_x48_,_r_,_x48_,_g_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_M_,_a_,_g_,_y_,_a_,_r_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_P_,_o_,_l_,_s_,_k_,_i_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x01,_xf_,_x10_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x01,_x12_,_xf9_,_x64_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_P_,_y_,_c_,_c_,_k_,_PAGE_,0X01,_x72_,_x8e_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,_x2_,_x3_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_s_,_u_,_o_,_m_,_i_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_PAGE_,0x02,_x8c_,_PAGE_,0x00,_e_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_t_,_i_,_n_,_a_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x32_,_xb0_,_PAGE_,0x00,_xe9_,_PAGE_,0x01,_x11_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_K_,_a_,_PAGE_,0x01,_x7d_,_PAGE_,0x00,_a_,_x8a_,_PAGE_,0x01,_x85_,_PAGE_,0x00,_a_,_END_,
+#endif
+};
+
+
+code BYTE *tOSD_LANGUAGE_PAGE_TABLE[] =
+{
+#if _ENGLISH_SUPPORT
+tsOSD_English,
+#endif
+#if _GERMAN_SUPPORT
+tsOSD_German,
+#endif
+#if _SPANISH_SUPPORT
+tsOSD_Spanish,
+#endif
+#if _FRENCH_SUPPORT
+tsOSD_French,
+#endif
+#if _ITALIAN_SUPPORT
+tsOSD_Italian,
+#endif
+#if _DUTCH_SUPPORT
+tsOSD_Dutch,
+#endif
+#if _PORTUGUESE_SUPPORT
+tsOSD_Portuguese,
+#endif
+#if _SVENSKA_SUPPORT
+tsOSD_Swedish,
+#endif
+#if _TURKISH_SUPPORT
+tsOSD_Turkish,
+#endif
+#if _XILAYU_SUPPORT
+tsOSD_Greek,
+#endif
+#if _MAGYAR_SUPPORT
+tsOSD_Hungarian,
+#endif
+#if _POLSKI_SUPPORT
+tsOSD_Polish,
+#endif
+#if _CHINESE_S_SUPPORT
+tsOSD_Chinese_JT,
+#endif
+#if _JAPANESE_SUPPORT
+tsOSD_Japanese,
+#endif
+#if _RUSSIAN_SUPPORT
+tsOSD_Russia,
+#endif
+#if _KOREAN_SUPPORT
+tsOSD_Korean,
+#endif
+#if _FINNISH_SUPPORT
+tsOSD_Finnish,
+#endif
+#if _CZECH_SUPPORT
+tsOSD_Czech,
+#endif
+#if _CHINESE_F_SUPPORT
+tsOSD_Chinese_FT,
+#endif
+#if _KAZAK_SUPPORT
+tsOSD_Kazak,
+#endif
+
+
+};
+
+BYTE code tsOSD_WARNIG[] =
+{
+#if _ENGLISH_SUPPORT
+_W_,_a_,_r_,_n_,_i_,_n_,_g_,_x40_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_W_,_a_,_r_,_n_,_u_,_n_,_g_,_x40_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_A_,_d_,_v_,_e_,_r_,_t_,_e_,_n_,_c_,_i_,_a_,_x40_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_A_,_t_,_t_,_e_,_n_,_t_,_i_,_o_,_n_,_x40_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_A_,_v_,_v_,_e_,_r_,_t_,_e_,_n_,_z_,_a_,_x40_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_W_,_a_,_a_,_r_,_s_,_c_,_h_,_u_,_w_,_i_,_n_,_g_,_x40_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+_A_,_v_,_i_,_s_,_o_,_x40_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+_V_,_a_,_r_,_n_,_i_,_n_,_g_,_x40_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_U_,_y_,_a_,_r_,_x61_,_x40_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x7a_,_x7c_,_x69_,_x6a_,_x89_,_x7c_,_x7e_,_x7c_,_x74_,_x66_,_x6b_,_x66_,_x40_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_F_,_i_,_g_,_y_,_e_,_l_,_e_,_m_,_x40_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_O_,_s_,_t_,_r_,_z_,_e_,_xa0_,_e_,_n_,_i_,_e_,_x40_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_x7_,_x8_,_PAGE_,0x01,_xb2_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+_PAGE_,0x02,_x7_,_x8_,_PAGE_,0x01,_xb2_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+//_PAGE_,0x01,_x86_,_x71_,_x72_,_x80_,_x78_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_x40_,_END_,
+
+_PAGE_,0x01,_x8d_,_x75_,_x7c_,_x82_,_x7f_,_x8c_,_x84_,_x7c_,_x8a_,_x82_,_x7c_,_x71_,_x72_,_x7c_,_PAGE_,0x00,_x40_,_END_,
+
+#endif
+#if _KOREAN_SUPPORT
+//_W_,_a_,_r_,_n_,_i_,_n_,_g_,_x40_,_END_,
+_PAGE_,0x01,_xc8_,_xdc_,_PAGE_,0x00,_,_x40_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_V_,_a_,_r_,_o_,_i_,_t_,_u_,_s_,_x40_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_U_,_p_,_o_,_z_,_o_,_r_,_n_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_n_,_x53_,_x40_,_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x7_,_x8_,_PAGE_,0x01,_xb2_,_END_,
+#endif
+
+#if _KAZAK_SUPPORT
+_W_,_a_,_r_,_n_,_i_,_n_,_g_,_x40_,_END_,
+#endif
+
+};
+
+#if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+BYTE code tsOSD_ENERGY_CONSUMPTION_SHOW_SHOW_1[] =
+{	
+#if _ENGLISH_SUPPORT
+	_D_,_o_,_,_y_,_o_,_u_,_,_w_,_a_,_n_,_t_,_,_t_,_o_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_x45_,_END_,	
+#endif
+#if _GERMAN_SUPPORT
+	_,_M_,_x48_,_c_,_h_,_t_,_e_,_n_,_,_S_,_i_,_e_,_,_f_,_o_,_r_,_t_,_f_,_a_,_h_,_r_,_e_,_n_,_x4e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_,_x45_,_D_,_e_,_s_,_e_,_a_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x4e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_,_V_,_o_,_u_,_l_,_e_,_z_,_x44_,_v_,_o_,_u_,_s_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_r_,_x45_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_C_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_e_,_x45_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_W_,_i_,_l_,_t_,_,_u_,_,_d_,_o_,_o_,_r_,_g_,_a_,_a_,_n_,_x45_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_D_,_e_,_s_,_e_,_j_,_a_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x45_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_V_,_i_,_l_,_l_,_,_d_,_u_,_,_f_,_o_,_r_,_t_,_s_,_x4b_,_t_,_t_,_a_,_x45_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_D_,_e_,_v_,_a_,_m_,_,_e_,_t_,_m_,_e_,_k_,_,_i_,_s_,_t_,_i_,_y_,_o_,_r_,_,_m_,_u_,_s_,_u_,_n_,_u_,_z_,_x4e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x85_,_x92_,_x80_,_x69_,_x70_,_x69_,_,_x71_,_x6c_,_,_x6b_,_x81_,_x71_,_x69_,_x79_,_x74_,_x6b_,_x69_,_x70_,_x69_,_x45_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_F_,_o_,_l_,_y_,_t_,_a_,_t_,_n_,_i_,_,_a_,_k_,_a_,_r_,_j_,_a_,_x45_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_C_,_z_,_y_,_,_c_,_h_,_c_,_e_,_s_,_z_,_,_k_,_o_,_n_,_t_,_y_,_n_,_u_,_o_,_w_,_a_,_x9e_,_x45_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+		_END_,
+#endif
+#if _JAPANESE_SUPPORT
+		_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+ _PAGE_,0x01,_x8d_,_x75_,_x6f_,_x82_,_x6f_,_x87_,_x8a_,_x78_,_x6e_,_x76_,_PAGE_,0x00,_x45_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+//	_c_,_o_,_n_,_s_,_u_,_m_,_p_,_t_,_i_,_o_,_n_,_x42_,_D_,_o_,_,_y_,_o_,_u_,_,_w_,_a_,_n_,_t_,_,_t_,_o_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_x45_,_END_,	
+_PAGE_,0x02,_x75_,_PAGE_,0x01,_xda_,_xcb_,_xec_,_PAGE_,0x02,_x76_,_x77_,_x73_,_x78_,	_PAGE_,0x00,_x45_,_END_,	
+#endif
+#if _FINNISH_SUPPORT
+_H_,_a_,_l_,_u_,_a_,_t_,_k_,_o_,_,_j_,_a_,_t_,_k_,_a_,_a_,_x4e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_C_,_h_,_c_,_e_,_t_,_e_,_,_p_,_o_,_k_,_r_,_a_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_o_,_v_,_a_,_t_,_x4e_,_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+		_END_,
+#endif
+
+};
+
+
+
+BYTE code tsOSD_ENERGY_CONSUMPTION_SHOW_SHOW_2[] =
+{
+#if _ENGLISH_SUPPORT
+    _T_,_h_,_i_,_s_,_,_o_,_p_,_t_,_i_,_o_,_n_,_,_m_,_a_,_y_,_,_r_,_e_,_s_,_u_,_l_,_t_,_,_i_,_n_,_,_h_,_i_,_g_,_h_,_e_,_r_,_,_e_,_n_,_e_,_r_,_g_,_y_,_,_c_,_o_,_n_,_s_,_u_,_m_,_p_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+	_D_,_e_,_r_,_,_a_,_k_,_t_,_u_,_e_,_l_,_l_,_e_,_,_B_,_e_,_t_,_r_,_i_,_e_,_b_,_,_e_,_r_,_h_,_x48_,_h_,_t_,_,_d_,_e_,_n_,_,_E_,_n_,_e_,_r_,_g_,_i_,_e_,_v_,_e_,_r_,_b_,_r_,_a_,_u_,_c_,_h_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+    _E_,_s_,_t_,_a_,_,_o_,_p_,_c_,_i_,_x50_,_n_,_,_p_,_u_,_e_,_d_,_e_,_,_c_,_o_,_n_,_d_,_u_,_c_,_i_,_r_,_,_a_,_,_u_,_n_,_,_m_,_a_,_y_,_o_,_r_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_,_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_x53_,_a_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_l_,_e_,_,_f_,_o_,_n_,_c_,_t_,_i_,_o_,_n_,_n_,_e_,_m_,_e_,_n_,_t_,_,_a_,_c_,_t_,_u_,_e_,_l_,_,_a_,_u_,_g_,_m_,_e_,_n_,_t_,_e_,_r_,_a_,_,_l_,_a_,_,_c_,_o_,_n_,_s_,_o_,_m_,_m_,_a_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_l_,_x57_,_o_,_p_,_e_,_r_,_a_,_z_,_i_,_o_,_n_,_e_,_,_c_,_o_,_r_,_r_,_e_,_n_,_t_,_e_,_,_a_,_u_,_m_,_e_,_n_,_t_,_e_,_r_,_x59_,_,_i_,_l_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_,_d_,_i_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_d_,_e_,_,_h_,_u_,_i_,_d_,_i_,_g_,_e_,_,_w_,_e_,_r_,_k_,_i_,_n_,_g_,_,_v_,_e_,_r_,_h_,_o_,_o_,_g_,_t_,_,_h_,_e_,_t_,_,_e_,_n_,_e_,_r_,_g_,_i_,_e_,_v_,_e_,_r_,_b_,_r_,_u_,_i_,_k_,_,_v_,_a_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_A_,_,_o_,_p_,_e_,_r_,_a_,_x58_,_x5a_,_o_,_,_a_,_t_,_u_,_a_,_l_,_,_a_,_u_,_m_,_e_,_n_,_t_,_a_,_r_,_x52_,_,_o_,_,_c_,_o_,_n_,_s_,_u_,_m_,_o_,_,_d_,_e_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_N_,_u_,_v_,_a_,_r_,_a_,_n_,_d_,_e_,_,_d_,_r_,_i_,_f_,_t_,_,_x48_,_k_,_a_,_r_,_,_p_,_r_,_o_,_d_,_u_,_k_,_t_,_e_,_n_,_s_,_,_e_,_n_,_e_,_r_,_g_,_i_,_f_,_x48_,_r_,_b_,_r_,_u_,_k_,_n_,_i_,_n_,_g_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_M_,_e_,_v_,_c_,_u_,_t_,_,_i_,_x5f_,_l_,_e_,_m_,_,_x4a_,_r_,_x4a_,_n_,_,_e_,_n_,_e_,_r_,_j_,_i_,_,_t_,_x4a_,_k_,_e_,_t_,_i_,_m_,_i_,_n_,_i_,_,_a_,_r_,_t_,_x61_,_r_,_a_,_c_,_a_,_k_,_t_,_x61_,_r_,_x42_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+	_x97_,_,_x70_,_x7a_,_x92_,_x79_,_x7c_,_x81_,_x6b_,_x6c_,_,_x80_,_x69_,_x6a_,_x70_,_x7c_,_x81_,_x7a_,_x67_,_x74_,_x6c_,_,_x75_,_x6c_,_,_x6c_,_x81_,_x93_,_x68_,_x6b_,_x69_,_x6a_,_,_x70_,_x66_,_x71_,_,_x7d_,_x6c_,_x70_,_x6c_,_x71_,_x7f_,_x80_,_x6d_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_A_,_,_j_,_e_,_l_,_e_,_n_,_l_,_e_,_g_,_i_,_,_m_,_x9a_,_v_,_e_,_l_,_e_,_t_,_,_n_,_x48_,_v_,_e_,_l_,_i_,_,_a_,_,_t_,_e_,_r_,_m_,_x56_,_k_,_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_B_,_i_,_e_,_xa0_,_x9f_,_c_,_a_,_,_o_,_p_,_e_,_r_,_a_,_c_,_j_,_a_,_,_z_,_w_,_i_,_xa1_,_k_,_s_,_z_,_y_,_,_z_,_u_,_xa0_,_y_,_c_,_i_,_e_,_,_e_,_n_,_e_,_r_,_g_,_i_,_i_,_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_x9_,_xa_,_xb_,_xc_,_xd_,_xe_,_xf_,_x10_,_x11_,_x12_,_x13_,_x14_,_PAGE_,0x00,_x45_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+
+#if _LANG_19
+_PAGE_,0x02,_x3b_,_x3c_,_PAGE_,0x01,_x34_,_PAGE_,0x02,_xb_,_xc_,_x3d_,_xd4_,_xba_,_PAGE_,0x01,_x34_,_PAGE_,0x02,_x35_,_PAGE_,0x01,_x57_,_PAGE_,0x02,_x22_,_x36_,_PAGE_,0x01,_x32_,_PAGE_,0x02,_xd6_,_xd7_,_x40_,_xe_,_xf_,_PAGE_,0x01,_x22_,_PAGE_,0x02,_x42_,_x25_,_x43_,_x12_,_x44_,_xd8_,_PAGE_,0x01,_x48_,_PAGE_,0x02,_x25_,_x43_,_xd9_,_PAGE_,0x00,_x45_,_END_,
+#else
+_PAGE_,0x02,_x3b_,_x3c_,_PAGE_,0x01,_x34_,_PAGE_,0x02,_xb_,_xc_,_x3d_,_x2e_,_x2f_,_PAGE_,0x01,_x34_,_PAGE_,0x02,_x35_,_PAGE_,0x01,_x57_,_PAGE_,0x02,_x22_,_x36_,_PAGE_,0x01,_x32_,_PAGE_,0x02,_x30_,_x31_,_x40_,_xe_,_xf_,_PAGE_,0x01,_x22_,_PAGE_,0x02,_x42_,_x25_,_x43_,_x12_,_x44_,_x32_,_PAGE_,0x01,_x48_,_PAGE_,0x02,_x25_,_x43_,_x33_,_PAGE_,0x00,_x45_,_END_,
+#endif
+
+#endif
+
+
+
+
+#if _RUSSIAN_SUPPORT
+//_C_,_u_,_r_,_r_,_e_,_n_,_t_,_,_o_,_p_,_e_,_r_,_a_,_t_,_i_,_o_,_n_,_,_w_,_i_,_l_,_l_,_,_i_,_n_,_c_,_r_,_e_,_a_,_s_,_e_,_,_p_,_r_,_o_,_d_,_u_,_c_,_t_,_,_e_,_n_,_e_,_r_,_g_,_y_,_END_,
+//��֧ܧ��ѧ�            ���֧�ѧ�ڧ�              ��ӧ֧ݧڧ�ڧ�                                                                                              �����֧ҧݧ֧ߧڧ�                                                      //        ��ߧ֧�ԧڧ�.                �����է�ݧاѧ��?
+
+
+_PAGE_,0x01,_x6e_,_x7c_,_x73_,_x7f_,_x93_,_x78_,_x99_,_,_x6f_,_x8c_,_x7c_,_x75_,_x78_,_x7a_,_x72_,_x99_,_, _x7f_,_x7b_,_x7c_,_x87_,_x72_,_x97_,_x72_,_x6e_,_,_x8c_,_x6f_,_x6e_,_x75_,_x7c_,_x7e_,_x87_,_x7c_,_x71_,_x72_,_x7c_,_END_,
+
+
+#endif
+#if _KOREAN_SUPPORT
+//_C_,_u_,_r_,_r_,_e_,_n_,_t_,_,_o_,_p_,_e_,_r_,_a_,_t_,_i_,_o_,_n_,_,_w_,_i_,_l_,_l_,_,_i_,_n_,_c_,_r_,_e_,_a_,_s_,_e_,_,_p_,_r_,_o_,_d_,_u_,_c_,_t_,_,_e_,_n_,_e_,_r_,_g_,_y_,_END_,
+_PAGE_,0x02,_x69_,_PAGE_,0x01,_xf2_,_,_PAGE_,0x02,_x6a_,_x6b_,_PAGE_,0x01,_xc2_,_,_PAGE_,0x02,_x6c_,_x6d_,_x6e_,_,_PAGE_,0x01,_x9d_,_xb5_,_PAGE_,0x02,_x6f_,_x70_,_,_x71_,_x62_,_PAGE_,0x01,_xec_,_END_,
+
+#endif
+#if _FINNISH_SUPPORT
+_N_,_y_,_k_,_y_,_i_,_n_,_e_,_n_,_,_t_,_o_,_i_,_m_,_i_,_n_,_t_,_a_,_,_l_,_i_,_s_,_x4b_,_x4b_,_,_t_,_u_,_o_,_t_,_t_,_e_,_e_,_n_,_,_e_,_n_,_e_,_r_,_g_,_i_,_a_,_n_,_k_,_u_,_l_,_u_,_t_,_u_,_s_,_t_,_a_,_x42_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_S_,_o_,_u_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_a_,_s_,_n_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_p_,_r_,_o_,_v_,_o_,_z_,_,_z_,_v_,_PAGE_,0x02,_x85_,_x84_,_PAGE_,0x00,_x53_,_,_s_,_p_,_o_,_t_,_PAGE_,0x02,_x8b_,_PAGE_,0x00,_e_,_b_,_u_,_,_e_,_n_,_e_,_r_,_g_,_i_,_e_,_,_p_,_r_,_o_,_d_,_u_,_k_,_t_,_u_,_x42_,_END_,
+#endif
+
+//��ǰ���������ӮaƷ��Դ���ġ��Ƿ��^�m��
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,0xb7,_xa_,_xb_,_xc_,_xb8_,_xe_,_xf_,_xb9_,_xba_,_x10_,_x11_,_x12_,_xbb_,_xbc_,_xbd_,_xbe_,_PAGE_,0x00,_x45_,_END_,
+#endif
+
+
+};
+
+
+
+BYTE code tsOSD_ENERGY_CONSUMPTION_SHOW_SHOW_3[] =
+{	
+#if _ENGLISH_SUPPORT
+	_c_,_o_,_n_,_s_,_u_,_m_,_p_,_t_,_i_,_o_,_n_,_x42_,_D_,_o_,_,_y_,_o_,_u_,_,_w_,_a_,_n_,_t_,_,_t_,_o_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_x45_,_END_,	
+#endif
+#if _GERMAN_SUPPORT
+	_d_,_e_,_s_,_,_P_,_r_,_o_,_d_,_u_,_k_,_t_,_s_,_x42_,_,_M_,_x48_,_c_,_h_,_t_,_e_,_n_,_,_S_,_i_,_e_,_,_f_,_o_,_r_,_t_,_f_,_a_,_h_,_r_,_e_,_n_,_x4e_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+	_d_,_e_,_l_,_,_p_,_r_,_o_,_d_,_u_,_c_,_t_,_o_,_x42_,_,_x45_,_D_,_e_,_s_,_e_,_a_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x4e_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	_d_,_x57_,_x56_,_n_,_e_,_r_,_g_,_i_,_e_,_,_d_,_u_,_,_p_,_r_,_o_,_d_,_u_,_i_,_t_,_x42_,_,_V_,_o_,_u_,_l_,_e_,_z_,_x44_,_v_,_o_,_u_,_s_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_r_,_x45_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+	_d_,_e_,_l_,_,_p_,_r_,_o_,_d_,_o_,_t_,_t_,_o_,_x42_,_,_C_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_e_,_x45_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+	_h_,_e_,_t_,_,_p_,_r_,_o_,_d_,_u_,_c_,_t_,_x42_,_,_W_,_i_,_l_,_t_,_,_u_,_,_d_,_o_,_o_,_r_,_g_,_a_,_a_,_n_,_x45_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+	_d_,_o_,_,_p_,_r_,_o_,_d_,_u_,_t_,_o_,_x42_,_,_D_,_e_,_s_,_e_,_j_,_a_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_a_,_r_,_x45_,_END_,
+#endif
+#if _SVENSKA_SUPPORT
+	_V_,_i_,_l_,_l_,_,_d_,_u_,_,_f_,_o_,_r_,_t_,_s_,_x4b_,_t_,_t_,_a_,_x45_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+	_D_,_e_,_v_,_a_,_m_,_,_e_,_t_,_m_,_e_,_k_,_,_i_,_s_,_t_,_i_,_y_,_o_,_r_,_,_m_,_u_,_s_,_u_,_n_,_u_,_z_,_x4e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+	_x69_,_x71_,_x92_,_x7a_,_x67_,_x69_,_x6a_,_x6c_,_x6e_,_,_x70_,_x7c_,_x81_,_,_x7e_,_x7a_,_x7c_,_x98_,_x72_,_x71_,_x70_,_x7c_,_x6e_,_x42_,_,_x85_,_x92_,_x80_,_x69_,_x70_,_x69_,_,_x71_,_x6c_,_,_x6b_,_x81_,_x71_,_x69_,_x79_,_x74_,_x6b_,_x69_,_x70_,_x69_,_x45_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	_e_,_n_,_e_,_r_,_g_,_i_,_a_,_f_,_o_,_g_,_y_,_a_,_s_,_z_,_t_,_x52_,_s_,_x52_,_t_,_x42_,_,_F_,_o_,_l_,_y_,_t_,_a_,_t_,_n_,_i_,_,_a_,_k_,_a_,_r_,_j_,_a_,_x45_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+	_p_,_r_,_z_,_e_,_z_,_,_p_,_r_,_o_,_d_,_u_,_k_,_t_,_x42_,_,_C_,_z_,_y_,_,_c_,_h_,_c_,_e_,_s_,_z_,_,_k_,_o_,_n_,_t_,_y_,_n_,_u_,_o_,_w_,_a_,_x9e_,_x45_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+		_END_,
+#endif
+#if _JAPANESE_SUPPORT
+		_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x7d_,_x71_,_x7c_,_x75_,_x83_,_x72_,_x72_,_PAGE_,0x00,_x42_,_, _PAGE_,0x01,_x8d_,_x75_,_x6f_,_x82_,_x6f_,_x87_,_x8a_,_x78_,_x6e_,_x76_,_PAGE_,0x00,_x45_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+//	_c_,_o_,_n_,_s_,_u_,_m_,_p_,_t_,_i_,_o_,_n_,_x42_,_D_,_o_,_,_y_,_o_,_u_,_,_w_,_a_,_n_,_t_,_,_t_,_o_,_,_c_,_o_,_n_,_t_,_i_,_n_,_u_,_e_,_x45_,_END_,	
+_PAGE_,0x02,_x72_,_x73_,_x74_,_PAGE_,0x00,_x42_,_PAGE_,0x02,_x75_,_PAGE_,0x01,_xda_,_xcb_,_xec_,_PAGE_,0x02,_x76_,_x77_,_x73_,_x78_,	_PAGE_,0x00,_x45_,_END_,	
+#endif
+#if _FINNISH_SUPPORT
+_H_,_a_,_l_,_u_,_a_,_t_,_k_,_o_,_,_j_,_a_,_t_,_k_,_a_,_a_,_x4e_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_C_,_h_,_c_,_e_,_t_,_e_,_,_p_,_o_,_k_,_r_,_a_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_o_,_v_,_a_,_t_,_x4e_,_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+		_END_,
+#endif
+
+};
+
+BYTE code tsOSD_OK[] =
+{
+	_O_,_K_,_END_,
+};
+BYTE code tsOSD_CANCEL[] =
+{
+	_C_,_a_,_n_,_c_,_e_,_l_,_END_,
+};
+
+BYTE code tsOSD_YES[] =
+{
+#if _ENGLISH_SUPPORT
+	_Y_,_e_,_s_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+	_J_,_a_,_END_,
+
+#endif
+#if _SPANISH_SUPPORT
+	_s_,_i_,_END_,
+
+//	_Y_,_E_,_S_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+	//_Y_,_E_,_S_,_END_,
+	_O_,_u_,_i_,_END_,
+
+#endif
+#if _ITALIAN_SUPPORT
+
+#if _LANG_19
+	_s_,_PAGE_,0x02,_xda_,_END_,
+#else
+	_s_,_PAGE_,0x02,_x34_,_END_,
+#endif
+
+#endif
+#if _DUTCH_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+	_J_,_a_,_END_,
+
+#endif
+#if _PORTUGUESE_SUPPORT
+	//_Y_,_E_,_S_,_END_,
+	_s_,_i_,_m_,_END_,
+	
+#endif
+#if _SVENSKA_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+	_j_,_a_,_END_,
+
+#endif
+#if _TURKISH_SUPPORT
+
+//	_Y_,_E_,_S_,_END_,
+	_E_,_v_,_e_,_t_,_END_,
+
+#endif
+#if _XILAYU_SUPPORT
+
+#if _LANG_19
+_N_,_x6c_,_PAGE_,0x02,_xdb_,_END_,
+
+#else
+	_N_,_x6c_,_PAGE_,0x02,_x35_,_END_,
+#endif
+
+#endif
+#if _MAGYAR_SUPPORT
+	//_Y_,_E_,_S_,_END_,
+	_I_,_g_,_e_,_n_,_END_,
+	
+#endif
+#if _POLSKI_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+	_t_,_a_,_k_,_END_,
+
+#endif
+#if _CHINESE_S_SUPPORT
+
+	_PAGE_,0x02,_xc5_,_END_,
+
+#endif
+#if _JAPANESE_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+
+_PAGE_,0x02,_x3d_,_PAGE_,0x01,_x44_,_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+//	_Y_,_E_,_S_,_END_,
+_PAGE_,0x01,_x90_,_x78_,_END_,
+
+#endif
+#if _KOREAN_SUPPORT
+
+#if _LANG_19
+_PAGE_,0x02,_xdc_,_END_,
+#else
+_PAGE_,0x02,_x36_,_END_,
+#endif
+
+#endif
+#if _FINNISH_SUPPORT
+//_Y_,_E_,_S_,_END_,
+	_J_,_o_,_o_,_END_,
+
+#endif
+#if _CZECH_SUPPORT
+//_Y_,_E_,_S_,_END_,
+	_A_,_n_,_o_,_END_,
+
+#endif
+
+#if _CHINESE_F_SUPPORT
+
+	_PAGE_,0x02,_xc5_,_END_,
+#endif
+
+};
+
+
+BYTE code tsOSD_NO[] =
+{
+#if _ENGLISH_SUPPORT
+	_N_,_o_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_e_,_i_,_n_,_END_,
+
+#endif
+#if _SPANISH_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_o_,_END_,
+
+#endif
+#if _FRENCH_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_o_,_n_,_END_,
+
+#endif
+#if _ITALIAN_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_o_,_END_,
+
+#endif
+#if _DUTCH_SUPPORT
+		
+//	_N_,_O_,_END_,
+	_N_,_e_,_e_,_END_,
+
+#endif
+#if _PORTUGUESE_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_x5a_,_o_,_END_,
+
+#endif
+#if _SVENSKA_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_e_,_j_,_END_,
+
+#endif
+#if _TURKISH_SUPPORT
+//	_N_,_O_,_END_,
+	_H_,_a_,_y_,_x61_,_r_,_END_,
+
+#endif
+#if _XILAYU_SUPPORT
+//	_N_,_O_,_END_,
+	_x95_,_x79_,_x6a_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+	//_N_,_O_,_END_,
+	_N_,_e_,_m_,_END_,
+
+
+#endif
+#if _POLSKI_SUPPORT
+//	_N_,_O_,_END_,
+	_N_,_i_,_e_,_END_,
+
+#endif
+
+#if _CHINESE_S_SUPPORT
+
+_PAGE_,0x02,_xc6_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+
+#if _LANG_19
+_PAGE_,0x01,_x44_,_x44_,_PAGE_,0x02,_xdd_,_END_,
+#else
+_PAGE_,0x01,_x44_,_x44_,_PAGE_,0x02,_x37_,_END_,
+#endif
+
+#endif
+#if _RUSSIAN_SUPPORT
+//	_N_,_O_,_END_,
+_PAGE_,0x01,_x79_,_x7c_,_x6e_,_END_,
+
+#endif
+#if _KOREAN_SUPPORT
+	//_N_,_O_,_END_,
+	_PAGE_,0x02,_x56_,_x73_,_END_,
+
+#endif
+
+#if _FINNISH_SUPPORT
+//_N_,_O_,_END_,
+	_E_,_i_,_END_,
+
+#endif
+#if _CZECH_SUPPORT
+//_N_,_O_,_END_,
+	_N_,_e_,_END_,
+
+#endif
+
+
+#if _CHINESE_F_SUPPORT
+
+_PAGE_,0x02,_xc6_,_END_,
+#endif
+
+
+};
+
+//��������
+
+code BYTE *tsOSD_YES_NO_STATUS[] =
+{
+//	tsOSD_NO,tsOSD_YES,
+tsOSD_CANCEL,tsOSD_OK,
+};
+
+
+
+#endif
+BYTE code tsOSD_AUTO_POWERDOWN60SEC_tishi2[] =
+{
+#if _ENGLISH_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_c_,_o_,_n_,_d_,_,_t_,_o_,_,_p_,_o_,_w_,_e_,_r_,_,_o_,_f_,_f_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_,_6_,_0_,_,_Z_,_w_,_e_,_i_,_t_,_e_,_s_,_,_z_,_u_,_m_,_,_A_,_u_,_s_,_s_,_c_,_h_,_a_,_l_,_t_,_e_,_n_,_,_D_,_r_,_x4a_,_c_,_k_,_e_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_,_6_,_0_,_,_S_,_e_,_g_,_u_,_n_,_d_,_o_,_,_p_,_a_,_r_,_a_,_,_a_,_p_,_a_,_g_,_a_,_d_,_o_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_c_,_x42_,_,_a_,_v_,_a_,_n_,_t_,_,_e_,_x_,_t_,_i_,_n_,_c_,_t_,_i_,_o_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_,_6_,_0_,_,_S_,_e_,_c_,_o_,_n_,_d_,_i_,_,_a_,_l_,_l_,_o_,_,_s_,_p_,_e_,_g_,_n_,_i_,_m_,_e_,_n_,_t_,_o_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_,_6_,_0_,_,_S_,_e_,_c_,_o_,_n_,_d_,_e_,_n_,_,_t_,_o_,_t_,_,_u_,_i_,_t_,_s_,_c_,_h_,_a_,_k_,_e_,_l_,_e_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_6_,_0_,_,_s_,_e_,_g_,_u_,_n_,_d_,_o_,_s_,_,_p_,_a_,_r_,_a_,_,_d_,_e_,_s_,_l_,_i_,_g_,_a_,_r_,_x42_,_,_P_,_o_,_r_,_,_f_,_a_,_v_,_o_,_r_,_x46_,_END_,
+#else
+_,_6_,_0_,_,_S_,_e_,_g_,_u_,_n_,_d_,_o_,_,_p_,_a_,_r_,_a_,_,_d_,_e_,_s_,_l_,_i_,_g_,_a_,_r_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_k_,_u_,_n_,_d_,_e_,_r_,_,_S_,_t_,_x4b_,_n_,_g_,_,_a_,_v_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_,_6_,_0_,_,_s_,_a_,_n_,_i_,_y_,_e_,_,_s_,_o_,_n_,_r_,_a_,_,_k_,_a_,_p_,_a_,_n_,_x61_,_r_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_,_6_,_0_,_,_x89_,_x69_,_x81_,_x70_,_x69_,_x7a_,_x72_,_x80_,_x69_,_x7e_,_x70_,_x6c_,_,_x73_,_x7e_,_x69_,_x71_,_x69_,_x7a_,_x67_,_x7c_,_x7e_,_x7c_,_x74_,_x66_,_x6b_,_x66_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_,_6_,_0_,_,_m_,_x52_,_s_,_o_,_d_,_p_,_e_,_r_,_c_,_,_e_,_l_,_t_,_e_,_l_,_t_,_x56_,_v_,_e_,_l_,_,_k_,_a_,_p_,_c_,_s_,_o_,_l_,_j_,_a_,_,_l_,_e_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_,_6_,_0_,_,_S_,_e_,_k_,_u_,_n_,_d_,_xa5_,_y_,_xa6_,_,_d_,_o_,_,_w_,_y_,_x9c_,_x9f_,_c_,_z_,_e_,_n_,_i_,_a_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+//_,_6_,_0_,_,_s_,_e_,_c_,_o_,_n_,_d_,_,_t_,_o_,_,_p_,_o_,_w_,_e_,_r_,_,_o_,_f_,_f_,_END_,
+
+_,_6_,_0_,_,_PAGE_,0x02,_x17_,_x18_,_x16_,_xd_,_PAGE_,0x00,_xbf_,_PAGE_,0x01,_x1f_,_PAGE_,0x02,_x15_,_x19_,_x1a_, _PAGE_,0x00,_xf9_,_PAGE_,0x02,_x1b_,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+
+#endif
+#if _JAPANESE_SUPPORT
+	
+//_,_6_,_0_,_,_PAGE_,0x02,0x17,_x18_,_x16_,_xd_,_PAGE_,0x00,_xbf_,_PAGE_,0x01,_x1f_,_PAGE_,0x02,_x15_,_x19_,_x1a_,_PAGE_,0x00,_xf9_,_PAGE_,0x02,0x1b,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+
+_,_PAGE_,0x01,0x60,_PAGE_,0x02,_x46_,_PAGE_,0x01,_x31_,_PAGE_,0x02,_x1e_,_x25_,_xd0_,_PAGE_,0x00,_6_,_0_,_PAGE_,0x02,_x17_,_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+_,_6_,_0_,_,_PAGE_,0x01,_x8f_,_x7c_,_x73_,_x7f_,_x71_,_x90_,_PAGE_,0x00,_,_PAGE_,0x01,_x90_,_x6f_,_PAGE_,0x00,_,_PAGE_,0x01,_x7b_,_x88_,_x73_,_x87_,_x81_,_x70_,_x7c_,_x71_,_x72_,_x99_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_,_6_,_0_,_,_PAGE_,0x01,_xdb_,_PAGE_,0x00,_,_PAGE_,0x02,0x7d,_PAGE_,0x00,_,_PAGE_,0x01,_xd1_,_PAGE_,0x02,0x7e,_PAGE_,0x01,_xac_,_PAGE_,0x00,_,_PAGE_,0x01,_xea_,_PAGE_,0x02,0x7f,_x73_,_x74_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_k_,_u_,_n_,_t_,_i_,_a_,_,_v_,_i_,_r_,_t_,_a_,_a_,_n_,_,_P_,_a_,_i_,_n_,_a_,_,_m_,_i_,_t_,_x4b_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_k_,_u_,_n_,_d_,_,_p_,_r_,_o_,_,_v_,_y_,_p_,_n_,_u_,_t_,_x53_,_,_C_,_h_,_c_,_e_,_t_,_e_,_x44_,_l_,_i_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_,_6_,_0_,_,_PAGE_,0x02,_x17_,_xc2_,_x9b_,_x28_,_x15_,_xc3_,_x19_,_x1a_,_PAGE_,0x00,_xf9_,_PAGE_,0x02,0xc4,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_,_6_,_0_,_,_s_,_e_,_c_,_o_,_n_,_d_,_,_t_,_o_,_,_p_,_o_,_w_,_e_,_r_,_,_o_,_f_,_f_,_END_,
+#endif
+
+//_,_6_,_0_,_,_s_,_a_,_n_,_i_,_y_,_e_,_,_s_,_o_,_n_,_r_,_a_,_,_k_,_a_,_p_,_a_,_n_,_x61_,_r_,_,_L_,_x4a_,_t_,_f_,_e_,_n_,_,_i_,_p_,_t_,_a_,_l_,_,_e_,_t_,_m_,_e_,_k_,_,_i_,_x58_,_i_,_n_,_,_h_,_e_,_r_,_h_,_a_,_n_,_g_,_i_,_,_b_,_i_,_r_,_,_t_,_u_,_x5f_,_a_,_,_b_,_a_,_s_,_x61_,_n_,_x4f_,_END_,
+//_,_6_,_0_,_,_x89_,_x69_,_x81_,_x70_,_x69_,_x7a_,_x72_,_x80_,_x69_,_x7e_,_x70_,_x6c_,_,_x73_,_x7e_,_x69_,_x71_,_x69_,_x7a_,_x67_,_x7c_,_x7e_,_x7c_,_x74_,_x66_,_x6b_,_x66_,_,_x65_,_x6c_,_x70_,_x68_,_x6b_,_x70_,_x69_,_,_x7c_,_x7e_,_x7c_,_x6a_,_x7c_,_x89_,_x68_,_x7e_,_x7c_,_x70_,_x69_,_,_x7e_,_x80_,_x68_,_x7d_,_x70_,_x7a_,_x7c_,_,_x67_,_x6a_,_x6c_,_,_x6c_,_x7d_,_x77_,_x7a_,_x6d_,_x6b_,_x66_,_x4f_,_END_,
+//_,_6_,_0_,_,_m_,_x52_,_s_,_o_,_d_,_p_,_e_,_r_,_c_,_,_e_,_l_,_t_,_e_,_l_,_t_,_x56_,_v_,_e_,_l_,_,_k_,_a_,_p_,_c_,_s_,_o_,_l_,_j_,_a_,_,_l_,_e_,_,_K_,_x56_,_r_,_j_,_x4a_,_k_,_x46_,_,_n_,_y_,_o_,_m_,_j_,_a_,_,_m_,_e_,_g_,_,_b_,_x52_,_r_,_m_,_e_,_l_,_y_,_i_,_k_,_,_g_,_o_,_m_,_b_,_o_,_t_,_,_a_,_,_v_,_i_,_s_,_s_,_z_,_a_,_v_,_o_,_n_,_x52_,_s_,_h_,_o_,_z_,_x4f_,_END_,
+//_,_6_,_0_,_,_S_,_e_,_k_,_u_,_n_,_d_,_xa5_,_y_,_xa6_,_,_d_,_o_,_,_w_,_y_,_x9c_,_x9f_,_c_,_z_,_e_,_n_,_i_,_a_,_,_N_,_a_,_c_,_i_,_x9d_,_n_,_i_,_j_,_,_d_,_o_,_w_,_o_,_l_,_n_,_y_,_,_k_,_l_,_a_,_w_,_i_,_s_,_z_,_x46_,_,_a_,_b_,_y_,_,_a_,_n_,_u_,_l_,_o_,_w_,_a_,_x9e_,_x4f_,_END_,
+//_,_6_,_0_,_PAGE_,0x02,0x17,_x18_,_x16_,_xd_,_PAGE_,0x00,_xbf_,_PAGE_,0x01,_x1f_,_PAGE_,0x02,_x15_,_x19_,_x1a_,_PAGE_,0x00,_xf9_,_PAGE_,0x02,0x1b,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+	
+
+};
+BYTE code tsOSD_AUTO_POWERDOWN60SEC_tishi3[] =
+{
+#if _ENGLISH_SUPPORT
+_P_,_l_,_e_,_a_,_s_,_e_,_,_p_,_u_,_s_,_h_,_,_a_,_n_,_y_,_,_k_,_e_,_y_,_,_t_,_o_,_,_c_,_a_,_n_,_c_,_e_,_l_,_x47_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_S_,_i_,_e_,_,_e_,_i_,_n_,_e_,_,_b_,_e_,_l_,_i_,_e_,_b_,_i_,_g_,_e_,_,_T_,_a_,_s_,_t_,_e_,_,_u_,_m_,_,_a_,_b_,_z_,_u_,_b_,_r_,_e_,_c_,_h_,_e_,_n_,_x47_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_P_,_r_,_e_,_s_,_i_,_o_,_n_,_e_,_,_c_,_u_,_a_,_l_,_q_,_u_,_i_,_e_,_r_,_,_t_,_e_,_c_,_l_,_a_,_,_p_,_a_,_r_,_a_,_,_c_,_a_,_n_,_c_,_e_,_l_,_a_,_r_,_x47_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_V_,_e_,_u_,_i_,_l_,_l_,_e_,_z_,_,_a_,_p_,_p_,_u_,_y_,_e_,_r_,_,_s_,_u_,_r_,_,_n_,_x57_,_i_,_m_,_p_,_o_,_r_,_t_,_e_,_,_q_,_u_,_e_,_l_,_l_,_e_,_,_t_,_o_,_u_,_c_,_h_,_e_,_,_p_,_o_,_u_,_r_,_,_a_,_n_,_n_,_u_,_l_,_e_,_r_,_x47_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_P_,_r_,_e_,_m_,_e_,_r_,_e_,_,_u_,_n_,_,_t_,_a_,_s_,_t_,_o_,_,_p_,_e_,_r_,_,_c_,_a_,_n_,_c_,_e_,_l_,_l_,_a_,_r_,_e_,_x47_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_D_,_r_,_u_,_k_,_,_o_,_p_,_,_e_,_e_,_n_,_,_t_,_o_,_e_,_t_,_s_,_,_o_,_m_,_,_t_,_e_,_,_a_,_n_,_n_,_u_,_l_,_e_,_r_,_e_,_n_,_x47_,_END_,	
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_p_,_r_,_e_,_s_,_s_,_i_,_o_,_n_,_e_,_,_q_,_u_,_a_,_l_,_q_,_u_,_e_,_r_,_,_t_,_e_,_c_,_l_,_a_,_,_p_,_a_,_r_,_a_,_,_c_,_a_,_n_,_c_,_e_,_l_,_a_,_r_,_x47_,_END_,
+#else
+_P_,_r_,_i_,_m_,_a_,_,_q_,_u_,_a_,_l_,_q_,_u_,_e_,_r_,_,_t_,_e_,_c_,_l_,_a_,_,_p_,_a_,_r_,_a_,_,_c_,_a_,_n_,_c_,_e_,_l_,_a_,_r_,_x47_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_T_,_r_,_y_,_c_,_k_,_,_p_,_x5d_,_,_v_,_a_,_l_,_f_,_r_,_i_,_,_k_,_n_,_a_,_p_,_p_,_,_f_,_x48_,_r_,_,_a_,_t_,_t_,_,_a_,_v_,_b_,_r_,_y_,_t_,_a_,_x47_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_L_,_x4a_,_t_,_f_,_e_,_n_,_,_i_,_p_,_t_,_a_,_l_,_,_e_,_t_,_m_,_e_,_k_,_,_i_,_x58_,_i_,_n_,_,_h_,_e_,_r_,_h_,_a_,_n_,_g_,_i_,_,_b_,_i_,_r_,_,_t_,_u_,_x5f_,_a_,_,_b_,_a_,_s_,_x61_,_n_,_x47_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x65_,_x6c_,_x70_,_x68_,_x6b_,_x70_,_x69_,_,_x7c_,_x7e_,_x7c_,_x6a_,_x7c_,_x89_,_x68_,_x7e_,_x7c_,_x70_,_x69_,_,_x7e_,_x80_,_x68_,_x7d_,_x70_,_x7a_,_x7c_,_,_x67_,_x6a_,_x6c_,_,_x6c_,_x7d_,_x77_,_x7a_,_x6d_,_x6b_,_x66_,_x47_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_K_,_x56_,_r_,_j_,_x4a_,_k_,_x46_,_,_n_,_y_,_o_,_m_,_j_,_a_,_,_m_,_e_,_g_,_,_b_,_x52_,_r_,_m_,_e_,_l_,_y_,_i_,_k_,_,_g_,_o_,_m_,_b_,_o_,_t_,_,_a_,_,_v_,_i_,_s_,_s_,_z_,_a_,_v_,_o_,_n_,_x52_,_s_,_h_,_o_,_z_,_x47_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_N_,_a_,_c_,_i_,_x9d_,_n_,_i_,_j_,_,_d_,_o_,_w_,_o_,_l_,_n_,_y_,_,_k_,_l_,_a_,_w_,_i_,_s_,_z_,_x46_,_,_a_,_b_,_y_,_,_a_,_n_,_u_,_l_,_o_,_w_,_a_,_x9e_,_x47_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+//	_6_,_0_,_PAGE_,0x02,0x17,_x18_,_x16_,_xd_,_PAGE_,0x00,_xbf_,_PAGE_,0x01,_x1f_,_PAGE_,0x02,_x15_,_x19_,_x1a_,_PAGE_,0x00,_xf9_,_PAGE_,0x02,0x1b,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+
+_END_,
+
+#endif
+#if _JAPANESE_SUPPORT
+//_END_,
+_PAGE_,0x02,_x4a_,_PAGE_,0x01,_x56_,_x25_,_x69_,_PAGE_,0x02,_x22_,_x43_,_PAGE_,0x01,_x21_,_x61_,_PAGE_,0x02,_x3d_,_xd1_,_PAGE_,0x01,_x43_,_PAGE_,0x02,_x4a_,_PAGE_,0x01,_x32_,_PAGE_,0x02,_x40_,_x4b_,0x00,_PAGE_,0x01,_x48_,_PAGE_,0x02,_x49_,_xd2_,_xd3_,_PAGE_,0x01,_x22_,_x44_,0x00,_PAGE_,0x00,_x47_,_END_,
+
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x82_,_x87_,_x99_,_PAGE_,0x00,_,_PAGE_,0x01,_x6f_,_x6e_,_x80_,_x7c_,_x71_,_x88_,_PAGE_,0x00,_,_PAGE_,0x01,_x71_,_x78_,_x8a_,_x80_,_x72_,_x6e_,_x7c_,_PAGE_,0x00,_,_PAGE_,0x01,_x87_,_x81_,_x7e_,_x7f_,_x81_,_PAGE_,0x00,_,_PAGE_,0x01,_x73_,_x71_,_x6f_,_x8c_,_x73_,_x7f_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x02,_x56_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_xe1_,_PAGE_,0x02,0x81,_PAGE_,0x01,_xac_,_PAGE_,0x02,0x82,_PAGE_,0x00,_,_PAGE_,0x02,0x83,_x5a_,_PAGE_,0x01,_xa6_,_PAGE_,0x00,_,_PAGE_,0x01,_xd1_,_PAGE_,0x02,_x7e_,_PAGE_,0x01,_xac_,_PAGE_,0x00,_,_PAGE_,0x01,_xea_,_PAGE_,0x02,_x7f_,_x73_,_x74_,_PAGE_,0x00,_x47_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_t_,_a_,_h_,_a_,_n_,_s_,_a_,_,_n_,_x4b_,_p_,_p_,_x4b_,_i_,_n_,_t_,_x4b_,_,_p_,_e_,_r_,_u_,_u_,_t_,_t_,_a_,_a_,_x47_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_a_,_k_,_c_,_i_,_,_z_,_r_,_u_,_PAGE_,0x02,_x84_,_PAGE_,0x00,_i_,_t_,_x46_,_s_,_t_,_i_,_s_,_k_,_n_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_t_,_e_,_,_p_,_r_,_o_,_s_,_x53_,_m_,_,_l_,_i_,_b_,_o_,_v_,_o_,_l_,_n_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_k_,_l_,_x53_,_PAGE_,0x02,_x87_,_PAGE_,0x00,_x47_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_END_,
+//_,_6_,_0_,_,_PAGE_,0x02,_x17_,_xc2_,_x9b_,_x28_,_x15_,_xc3_,_x19_,_x1a_,_PAGE_,0x00,_xf9_,_PAGE_,0x02,0xc4,_x1c_,_x1d_,_PAGE_,0x00,_x47_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_P_,_l_,_e_,_a_,_s_,_e_,_,_p_,_u_,_s_,_h_,_,_a_,_n_,_y_,_,_k_,_e_,_y_,_,_t_,_o_,_,_c_,_a_,_n_,_c_,_e_,_l_,_x47_,_END_,
+#endif
+
+};
+
+code BYTE *tOSD_POWEROFF_SHOW[] =
+{
+	 tsOSD_AUTO_POWERDOWN60SEC_tishi2,tsOSD_AUTO_POWERDOWN60SEC_tishi3
+};
+
+
+
+BYTE code tsOSD_WarningNosignalwillenterstandbymodeshortly[]=
+{
+#if _ENGLISH_SUPPORT
+_N_,_o_,_,_s_,_i_,_g_,_n_,_a_,_l_,_x46_,_,_w_,_i_,_l_,_l_,_,_e_,_n_,_t_,_e_,_r_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_K_,_e_,_i_,_n_,_,_S_,_i_,_g_,_n_,_a_,_l_,_x46_,_,_w_,_i_,_r_,_d_,_,_i_,_n_,_,_K_,_x4a_,_r_,_z_,_e_,_,_i_,_n_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_S_,_i_,_n_,_,_S_,_e_,_x51_,_a_,_l_,_x46_,_,_e_,_n_,_t_,_r_,_a_,_r_,_x52_,_,_e_,_n_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_P_,_a_,_s_,_,_S_,_i_,_g_,_n_,_x46_,_,_e_,_n_,_t_,_r_,_e_,_r_,_a_,_,_e_,_n_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_N_,_e_,_s_,_s_,_u_,_n_,_,_S_,_e_,_g_,_n_,_a_,_l_,_e_,_x46_,_,_e_,_n_,_t_,_r_,_e_,_r_,_x59_,_,_i_,_n_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_G_,_e_,_e_,_n_,_,_S_,_i_,_g_,_n_,_x46_,_,_z_,_a_,_l_,_,_b_,_i_,_n_,_n_,_e_,_n_,_k_,_o_,_r_,_t_,_,_i_,_n_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_S_,_e_,_m_,_,_s_,_i_,_n_,_a_,_l_,_x46_,_,_o_,_,_m_,_o_,_d_,_o_,_,_d_,_e_,_,_e_,_s_,_p_,_e_,_r_,_a_,_END_,
+#else
+_S_,_e_,_m_,_,_S_,_i_,_n_,_a_,_l_,_,_d_,_e_,_,_E_,_n_,_t_,_r_,_a_,_d_,_a_,_x46_,_,_e_,_n_,_t_,_r_,_a_,_r_,_x52_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_I_,_n_,_g_,_e_,_n_,_,_s_,_i_,_g_,_n_,_a_,_l_,_x46_,_,_k_,_o_,_m_,_m_,_e_,_r_,_,_a_,_t_,_t_,_,_g_,_x5d_,_,_i_,_n_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_S_,_i_,_n_,_y_,_a_,_l_,_,_Y_,_o_,_k_,_x46_,_,_k_,_x61_,_s_,_a_,_,_s_,_x4a_,_r_,_e_,_,_b_,_e_,_k_,_l_,_e_,_m_,_e_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x82_,_x69_,_x71_,_,_x81_,_x7e_,_x7f_,_x7a_,_x79_,_x69_,_x6a_,_,_x6b_,_x68_,_x78_,_x6c_,_x46_,_,_x75_,_x6c_,_,_x69_,_x6a_,_x6b_,_x92_,_x80_,_x75_,_x69_,_x6a_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_h_,_a_,_m_,_a_,_r_,_o_,_s_,_a_,_n_,_,_k_,_x56_,_s_,_z_,_e_,_n_,_l_,_x56_,_t_,_i_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_B_,_r_,_a_,_k_,_,_S_,_y_,_g_,_n_,_a_,_x9c_,_u_,_x46_,_,_w_,_k_,_r_,_x50_,_t_,_c_,_e_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+_PAGE_,0x02,_x7_,_x8_,_PAGE_,0x01,_xb2_,_PAGE_,0x00,_xed_,_xee_,_xef_,_PAGE_,0x02,0x15,_x16_,_xd_,_PAGE_,0x00,_xf0_,_xa8_,_xf1_,_xce_,_xc2_,_xc3_,_PAGE_,0x02,_x12_,_END_,
+#endif
+#if _JAPANESE_SUPPORT
+#if 1//
+_PAGE_,0x00,_xee_,_xef_,_PAGE_,0x01,_x5f_,_x48_,_END_,
+#else
+_PAGE_,0x00,_xee_,_xef_,_PAGE_,0x01,_x5f_,_x48_,_PAGE_,0x02,0x23,_x24_,_x25_,_x26_,_x27_,_x28_,_PAGE_,0x01,_x39_,_x32_,_x3a_,_x61_,_PAGE_,0x00,_xa8_,_PAGE_,0x01,_x21_,_END_,
+#endif
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x8f_,_x72_,_x83_,_x71_,_x78_,_x87_,_PAGE_,0x00,_,_PAGE_,0x01,_x6f_,_x6e_,_x6d_,_x7f_,_x6e_,_x6d_,_x6e_,_x7b_,_x7f_,_x7c_,_x6e_,_PAGE_,0x00,_x46_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+_PAGE_,0x01,_xdd_,_xde_,_PAGE_,0x02,_x62_,_PAGE_,0x00,_,_PAGE_,0x01,_xdf_,_PAGE_,0x02,_x77_,_x73_,_x74_,_PAGE_,0x00,_x42_,_,_PAGE_,0x01,_xe0_,_xd1_,_PAGE_,0x00,_,_PAGE_,0x01,_xba_,_xbb_,_PAGE_,0x02,0x79,_PAGE_,0x00,_,_PAGE_,0x02,0x7a,_PAGE_,0x01,_xe5_,_END_,
+#endif
+#if _FINNISH_SUPPORT
+_V_,_a_,_r_,_o_,_i_,_t_,_u_,_s_,_x40_,_,_E_,_i_,_,_s_,_i_,_g_,_n_,_a_,_a_,_l_,_i_,_a_,_x46_,_,_t_,_u_,_l_,_e_,_e_,_,_v_,_a_,_l_,_m_,_i_,_u_,_s_,_t_,_i_,_l_,_a_,_s_,_s_,_a_,_,_p_,_i_,_a_,_n_,_x42_,_END_,
+#endif
+#if _CZECH_SUPPORT
+_U_,_p_,_o_,_z_,_o_,_r_,_n_,_PAGE_,0x02,_x89_,_PAGE_,0x00,_n_,_x53_,_x40_,_,_PAGE_,0x02,_x86_,_PAGE_,0x00,_x52_,_d_,_n_,_PAGE_,0x02,_x85_,_PAGE_,0x00,_,_s_,_i_,_g_,_n_,_x52_,_l_,_x46_,_,_v_,_s_,_t_,_o_,_u_,_p_,_x53_,_,_p_,_o_,_h_,_o_,_t_,_o_,_v_,_o_,_s_,_t_,_n_,_x53_,_,_r_,_e_,_PAGE_,0x02,_x88_,_PAGE_,0x00,_i_,_m_,_,_v_,_,_p_,_o_,_h_,_o_,_t_,_o_,_v_,_o_,_s_,_t_,_n_,_x53_,_m_,_,_r_,_e_,_PAGE_,0x02,_x88_,_PAGE_,0x00,_i_,_m_,_u_,_x42_,_END_,
+#endif
+#if _CHINESE_F_SUPPORT
+_PAGE_,0x02,_x7_,_x8_,_PAGE_,0x01,_xb2_,_PAGE_,0x02,_x97_,_PAGE_,0x00,_xee_,_PAGE_,0x02,_x98_,_x15_,_xbf_,_xac_,_PAGE_,0x00,_xa8_,_,_PAGE_,0x02,_x27_,_x28_,_PAGE_,0x00,_xc2_,_xc3_,_PAGE_,0x02,0xc0,_xc1_,_x12_,_END_,
+#endif
+#if _KAZAK_SUPPORT
+_N_,_o_,_,_s_,_i_,_g_,_n_,_a_,_l_,_x46_,_,_w_,_i_,_l_,_l_,_,_e_,_n_,_t_,_e_,_r_,_END_,
+#endif
+
+};
+
+BYTE code tsOSD_WarningNosignalwillenterstandbymodeshortly1[]=
+{
+#if _ENGLISH_SUPPORT
+_s_,_t_,_a_,_n_,_d_,_b_,_y_,_,_m_,_o_,_d_,_e_,_,_s_,_h_,_o_,_r_,_t_,_l_,_y_,_x42_,_END_,
+#endif
+#if _GERMAN_SUPPORT
+_d_,_e_,_n_,_,_S_,_t_,_a_,_n_,_d_,_b_,_y_,_x44_,_M_,_o_,_d_,_u_,_s_,_,_w_,_e_,_c_,_h_,_s_,_e_,_l_,_n_,_x42_,_END_,
+#endif
+#if _SPANISH_SUPPORT
+_m_,_o_,_d_,_o_,_,_d_,_e_,_,_e_,_s_,_p_,_e_,_r_,_a_,_,_e_,_n_,_,_b_,_r_,_e_,_v_,_e_,_x42_,_END_,
+#endif
+#if _FRENCH_SUPPORT
+_m_,_o_,_d_,_e_,_,_v_,_e_,_i_,_l_,_l_,_e_,_,_s_,_o_,_u_,_s_,_,_p_,_e_,_u_,_x42_,_END_,
+#endif
+#if _ITALIAN_SUPPORT
+_m_,_o_,_d_,_a_,_l_,_i_,_t_,_x59_,_,_s_,_t_,_a_,_n_,_d_,_b_,_y_,_,_a_,_,_b_,_r_,_e_,_v_,_e_,_x42_,_END_,
+#endif
+#if _DUTCH_SUPPORT
+_d_,_e_,_,_s_,_t_,_a_,_n_,_d_,_b_,_y_,_x44_,_m_,_o_,_d_,_u_,_s_,_,_g_,_a_,_a_,_n_,_x42_,_END_,
+#endif
+#if _PORTUGUESE_SUPPORT
+#if(_JX_OSD_TABLE_PORTUGUESE)
+_s_,_e_,_r_,_x52_,_,_a_,_t_,_i_,_v_,_a_,_d_,_o_,_,_e_,_m_,_,_b_,_r_,_e_,_v_,_e_,_x42_,_END_,
+#else
+_n_,_o_,_,_m_,_o_,_d_,_o_,_,_d_,_e_,_,_e_,_s_,_p_,_e_,_r_,_a_,_,_e_,_m_,_,_b_,_r_,_e_,_v_,_e_,_x42_,_END_,
+#endif
+#endif
+
+#if _SVENSKA_SUPPORT
+_i_,_,_v_,_x4b_,_n_,_t_,_e_,_l_,_x4b_,_g_,_e_,_,_i_,_n_,_o_,_m_,_,_k_,_o_,_r_,_t_,_x42_,_END_,
+#endif
+#if _TURKISH_SUPPORT
+_m_,_o_,_d_,_u_,_n_,_a_,_,_g_,_i_,_r_,_e_,_c_,_e_,_k_,_x42_,_END_,
+#endif
+#if _XILAYU_SUPPORT
+_x6b_,_x77_,_x71_,_x70_,_x7c_,_x78_,_x6c_,_,_x6b_,_x69_,_,_x7d_,_x6c_,_x70_,_x7f_,_x6b_,_x70_,_x6c_,_x6b_,_x66_,_,_x6c_,_x71_,_x6c_,_x78_,_x7c_,_x71_,_x68_,_x6e_,_x42_,_END_,
+#endif
+#if _MAGYAR_SUPPORT
+_x52_,_l_,_l_,_a_,_p_,_o_,_t_,_b_,_a_,_,_l_,_x56_,_p_,_x42_,_END_,
+#endif
+#if _POLSKI_SUPPORT
+_p_,_r_,_z_,_e_,_j_,_d_,_z_,_i_,_e_,_,_w_,_,_t_,_r_,_y_,_b_,_,_c_,_z_,_u_,_w_,_a_,_n_,_i_,_a_,_x42_,_END_,
+#endif
+#if _CHINESE_S_SUPPORT
+	_END_,
+#endif
+#if _JAPANESE_SUPPORT
+	_END_,
+#endif
+#if _RUSSIAN_SUPPORT
+_PAGE_,0x01,_x80_,_x6f_,_x71_,_x72_,_x6e_,_x6f_,_x75_,_PAGE_,0x00,_,_PAGE_,0x01,_x8c_,_x7c_,_x75_,_x7c_,_x8e_,_x90_,_x7c_,_x6e_,_PAGE_,0x00,_,_PAGE_,0x01,_x7b_,_PAGE_,0x00,_,_PAGE_,0x01,_x75_,_x7c_,_x8a_,_x72_,_x80_,_PAGE_,0x00,_,_PAGE_,0x01,_x6f_,_x8a_,_x72_,_x90_,_x78_,_x71_,_x72_,_x99_,_PAGE_,0x00,_x42_,_END_,
+#endif
+#if _KOREAN_SUPPORT
+//_s_,_t_,_a_,_n_,_d_,_b_,_y_,_,_m_,_o_,_d_,_e_,_,_s_,_h_,_o_,_r_,_t_,_l_,_y_,_x42_,_END_,
+_PAGE_,0x02,_x62_,_x7b_,_PAGE_,0x01,_xdc_,_,_PAGE_,0x02,_x7c_,_PAGE_,0x02,_x73_,_PAGE_,0x02,_x74_,_PAGE_,0x00,_x42_,_END_,
+#endif
+
+#if _FINNISH_SUPPORT
+_END_,
+#endif
+#if _CZECH_SUPPORT
+_END_,
+#endif
+
+#if _CHINESE_F_SUPPORT
+	_END_,
+#endif
+#if _KAZAK_SUPPORT
+_s_,_t_,_a_,_n_,_d_,_b_,_y_,_,_m_,_o_,_d_,_e_,_,_s_,_h_,_o_,_r_,_t_,_l_,_y_,_x42_,_END_,
+#endif
+
+
+};
+code BYTE *tsOSD_WarningNosignalwillenterstandbymodeshortly_table[]=
+{
+	tsOSD_WarningNosignalwillenterstandbymodeshortly,tsOSD_WarningNosignalwillenterstandbymodeshortly1
+};
+
+
+#endif // End of #if(_OSD_TYPE == _REALTEK_2014_OSD)
+

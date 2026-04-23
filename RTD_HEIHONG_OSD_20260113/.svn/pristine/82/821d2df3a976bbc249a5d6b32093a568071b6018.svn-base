@@ -1,0 +1,2771 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : RTD2014OsdFunc.c No.0000
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+
+#define __RTD_OSDFUNC__
+
+#include "UserCommonInclude.h"
+
+#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+//****************************************************************************
+// DEFINITIONS / MACROS
+//****************************************************************************
+
+//****************************************************************************
+// STRUCT / TYPE / ENUM DEFINITTIONS
+//****************************************************************************
+
+//****************************************************************************
+// CODE TABLES
+//****************************************************************************
+
+//****************************************************************************
+// VARIABLE DECLARATIONS
+//****************************************************************************
+WORD g_usFontSelectStart;
+WORD g_usFontTableStart;
+BYTE g_ucOsdWidth;
+BYTE g_ucOsdHeight;
+BYTE g_ucOsdWidthB;
+BYTE g_ucOsdHeightB;
+BYTE g_ucFontPointer0 = _OSD_PAGE_0_START;
+BYTE g_ucFontPointer1 = _OSD_PAGE_1_START;
+BYTE g_ucFontPointer2 = _OSD_PAGE_2_START;
+
+#if(_LED_EFFECT_TJMODE14==_ON)
+extern BYTE led_start;
+#endif
+
+//****************************************************************************
+// FUNCTION DECLARATIONS
+//****************************************************************************
+void OsdFuncApplyMap(BYTE ucWidth, BYTE ucHeight, BYTE ucColor);
+void OsdFuncSetPosition(EnumOsdPositionType enumOsdPositionType, WORD usX, WORD usY);
+void OsdFuncTransparency(BYTE ucTrans);
+void OsdFuncBlending(BYTE ucType);
+void OsdFuncCloseWindow(EnumOsdWindowsType enumWinIndex);
+void OsdFuncDisableOsd(void);
+void OsdFuncEnableOsd(void);
+void OsdFuncChangeColor1Bit(BYTE ucRow, BYTE ucCol, BYTE ucWidth, BYTE ucHeight, BYTE ucColor, BYTE ucFontSelectFrom);
+void OsdFuncSet2BitIconOffset(BYTE ucOffset);
+void OsdFuncClearOsd(BYTE ucRow, BYTE ucCol, BYTE ucWidth, BYTE ucHeight);
+void OsdHdrAdj(void);
+
+
+extern void UserCommonHDRAdjustHDR10ColorEffect(void);
+
+#if(_PCM_FUNCTION == _ON)
+void OsdFuncColorPcmAdjust(void);
+#endif
+void OsdFuncSetOsdItemFlag(void);
+
+#if(_FREEZE_SUPPORT == _ON)
+bit OsdFuncCheckFreezeDisable(void);
+#endif
+
+#if(_HDMI_MULTI_EDID_SUPPORT == _ON)
+BYTE OsdFuncGetHdmiPortVersion(EnumSourceSearchPort enumSearchPort);
+void OsdFuncSetHdmiPortVersion(EnumSourceSearchPort enumSearchPort,BYTE ucValue);
+#endif
+BYTE OsdFuncGetOsdItemFlag(void);
+void OsdFuncAdj(void);
+void OsdFuncAdjHotKey(void);
+void OsdHotKeyFuncSpacialProc(void);
+#if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+void OsdFuncPutIcon1BitAndColorWidthHeight(BYTE ucRow, BYTE ucCol, BYTE ucIcon, BYTE ucWidth , BYTE ucHeight, BYTE ucColor);
+#endif
+
+#if(_DEF_2795E06)
+extern BYTE xdata g_SouceSelect;
+#endif
+
+
+//****************************************************************************
+// FUNCTION DEFINITIONS
+//****************************************************************************
+//--------------------------------------------------
+// Description	:
+// Input Value	: None
+// Output Value : None
+//--------------------------------------------------
+
+void OsdHotKeyFuncSpacialProc(void)
+{
+	switch(OSD_SubMenuCur)
+	{ 
+		#if _FREESYNC_SUPPORT
+		case _MENU_FUN_FREESYNC:
+			if((GET_KEYMESSAGE() == _MENU_KEY_MESSAGE) && (g_usBackupValue != g_usAdjustValue))
+			{
+				#if(_FREESYNC_SUPPORT == _ON)
+					UserCommonInterfaceFreeSyncSupportSwitch();
+				#endif
+			}
+			else if(GET_KEYMESSAGE() == _EXIT_KEY_MESSAGE)
+			{
+				SET_OSD_FREE_SYNC_STATUS(g_usBackupValue);
+			}
+			break;
+		#endif
+	
+    case _MENU_FUN_CROSS:
+        if((GET_KEYMESSAGE() == _MENU_KEY_MESSAGE) && (g_usBackupValue != g_usAdjustValue))
+        {
+                if(GET_OSD_CROSS_STATUS()==_ON)
+                {
+                	MenuCross();
+                }
+        }
+        else if((GET_KEYMESSAGE() == _EXIT_KEY_MESSAGE) && (g_usBackupValue != g_usAdjustValue))
+        {   
+    
+            SET_OSD_CROSS_STATUS(g_usBackupValue);
+    
+        
+        }
+        
+        break;
+		case _MENU_FUN_SIGNAL:	
+			
+			if((GET_KEYMESSAGE() == _MENU_KEY_MESSAGE) && (g_usBackupValue != g_usAdjustValue))
+			{
+			 
+#if(_DEF_2795E06)
+				g_SouceSelect = 0;
+#endif
+
+				SET_FORCE_POW_SAV_STATUS(_FALSE);
+				SysModeSetResetTarget(_MODE_ACTION_RESET_TO_SEARCH);
+		
+	#if(_SOURCE_AUTO_ON)
+				if(GET_OSD_INPUT_PORT_OSD_ITEM() == _OSD_INPUT_AUTO)
+				{
+					SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+					
+					if(UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType())
+					{
+						UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+						SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+					}
+				}
+				else
+				{		
+					SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+					SysSourceSetScanType(_SOURCE_SWITCH_FIXED_PORT);
+					if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+					   (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+					{
+						UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+						UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+						SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+					}
+				}
+	#else					
+				SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+				SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+				if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+				   (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+				{
+					UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+					UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+					SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+				}						
+	#endif				
+			}
+			else
+			{
+				
+				SET_OSD_INPUT_PORT_OSD_ITEM(g_usBackupValue);
+			}
+				break;
+				
+#if(_VGA_SUPPORT == _ON)
+
+		case _MENU_FUN_AUTO_ADJUST:
+			if(GET_KEYMESSAGE() == _MENU_KEY_MESSAGE)
+			{
+				if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+				{
+					SET_OSD_EVENT_MESSAGE(_OSDEVENT_DO_AUTO_CONFIG_MSG);
+				}
+			}
+			break;
+		
+		case _MENU_FUN_AUTO_COLOR:
+			if(GET_KEYMESSAGE() == _MENU_KEY_MESSAGE)
+			{
+				if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+				{
+					OsdDisplayAutoBalanceProc();
+				}
+			}
+			break;	
+#endif
+		case _MENU_FUN_RESET:
+		
+			if(GET_KEYMESSAGE() == _MENU_KEY_MESSAGE)
+			{
+				OsdDispOsdReset();
+			}
+			break;
+
+		case _MENU_FUN_LANGUAGE:		
+			
+			if(GET_KEYMESSAGE() == _EXIT_KEY_MESSAGE)
+			{		
+				SET_OSD_LANGUAGE(g_usBackupValue);
+			}
+			break;
+	}
+	
+	SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_OSDUSERDATA_MSG);
+}
+
+//--------------------------------------------------
+// Description	:
+// Input Value	: None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncAdjHotKey(void)
+{
+#if(_DEF_STA_SIX_COLOR)
+	BYTE i = 0;
+#endif
+	BYTE OSD_fun_hot_num = 0;
+
+	g_usAdjustValue = GetOsdValue(OSD_SubMenuCur);
+
+	switch(OSD_SubMenuCur)
+	{ 
+		case _MENU_FUN_ECO:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _COLOREFFECT_AMOUNT, _COLOREFFECT_STANDARD, _ON);
+			SET_OSD_COLOR_EFFECT(g_usAdjustValue);		
+			if((GET_OSD_COLOR_EFFECT()!= _COLOREFFECT_STANDARD))
+			{
+				SET_OSD_DCR_STATUS(_OFF);
+			}
+		
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+
+#if(_DEF_STA_SIX_COLOR)&&(_SIX_COLOR_SUPPORT == _ON)
+			ScalerColorICMEnable(_FUNCTION_ON);//�޸���ɫ����ʧЧ
+			for(i = 0; i < 6; i++)
+			{
+				SET_OSD_SIX_COLOR(i);
+				OsdDisplaySixColorGetOneColor(i);
+				ScalerColorSixColorAdjust(i, GET_OSD_SIX_COLOR_HUE(), GET_OSD_SIX_COLOR_SATURATION());
+			}
+
+#endif
+
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+	break;
+		
+		case _MENU_FUN_DCR:
+			
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _ON, _OFF, _ON);
+			SET_OSD_DCR_STATUS(g_usAdjustValue);
+#if(_DEF_ECO_SET)
+			if(GET_OSD_DCR_STATUS())
+			{
+				SET_OSD_DCROFF_ECO(GET_OSD_COLOR_EFFECT());
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+			}
+			else
+			{
+				SET_OSD_COLOR_EFFECT(GET_OSD_DCROFF_ECO());
+			}	
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+			UserCommonAdjustSharpness(SysSourceGetInputPort()); 		
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GetOsdValue(_MENU_FUN_SATURATION)); //GetSaturationValue());
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+
+#else
+			
+			if(GET_OSD_DCR_STATUS() != _OFF)
+			{
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+
+#if(_DEF_COLORFUL)
+				UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+				UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+				UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+				UserAdjustColorEffectMode();
+#endif
+			}	
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#endif
+			break;
+
+
+#if(_DEF_OPPOSITE_DCR)
+		case _MENU_FUN_DCR_OPPOSITE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 2, _OFF, _ON);
+			SET_OSD_DCR_OPPOSITE(g_usAdjustValue);
+#if(_DEF_ECO_SET)
+			if(GET_OSD_DCR_OPPOSITE())
+			{
+				SET_OSD_DCROFF_ECO(GET_OSD_COLOR_EFFECT());
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+			}
+			else
+			{
+				SET_OSD_COLOR_EFFECT(GET_OSD_DCROFF_ECO());
+			}	
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+			UserCommonAdjustSharpness(SysSourceGetInputPort()); 		
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GetOsdValue(_MENU_FUN_SATURATION)); //GetSaturationValue());
+			
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+
+#else
+			
+			if(GET_OSD_DCR_OPPOSITE() != _OFF)
+			{
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+
+#if(_DEF_COLORFUL)
+				UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+				UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+				UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+				UserAdjustColorEffectMode();
+#endif
+			}	
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#endif
+			break;
+#endif
+
+
+		case _MENU_FUN_DCC:
+		  g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_ON,_OFF,_ON);
+		  
+		  SET_OSD_DCC(g_usAdjustValue);
+		  UserAdjustDCC(GET_OSD_DCC());
+		  ScalerColorDCCEnable(GET_OSD_DCC());
+		break;
+		case _MENU_FUN_VIVID:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _ULTRA_VIVID_AMOUNT, _ULTRA_VIVID_OFF, _ON);			
+			SET_OSD_ULTRA_VIVID_STATUS(g_usAdjustValue);
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+				break;
+
+		case _MENU_FUN_AUDIO_SOURCE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 2, _OFF, _ON);
+			SET_FUN_AUDIO_SOURCE(g_usAdjustValue);
+			break;
+			
+		case _MENU_FUN_HDR:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _HDR10_MODE_AUTO, _HDR10_MODE_OFF, _ON);			
+			SET_OSD_HDR_MODE(g_usAdjustValue);
+			
+			if(GET_OSD_HDR_MODE() != _HDR10_MODE_OFF)
+			{	
+			
+#if(!_TJ_GAMMA)
+                SET_OSD_GAMMA(_GAMMA_OFF);
+#endif
+				SET_OSD_PCM_STATUS(_PCM_OSD_NATIVE);
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+				SET_OSD_DCR_STATUS(_OFF);
+				
+				UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+				UserAdjustColorEffectMode();
+#endif
+			}
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+			
+#if(_HDR10_SUPPORT == _ON)						
+			ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+			UserCommonHDRAdjust(_HDR_FLOW_OSD_MODE_CHANGE);
+			UserCommonHDR10SupportSwitch(); 
+#endif	
+
+#if((_HDR10_SUPPORT == _OFF)&&(_PROJECT == _RL6463_PROJECT))
+			MockHdrEffect();
+#endif
+
+			break;
+		case _MENU_FUN_ASPECT:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _OSD_ASPECT_RATIO_AMOUNT, 0, _ON);			
+			
+			SET_OSD_ASPECT_RATIO_TYPE(g_usAdjustValue);
+
+
+	    // Set Backlight OFF to prevent garbage
+    #if(_PANEL_TYPE==_AUO_M270HVR01_0_LVDS_FHD_144)
+    UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+   #endif
+		
+			SysModeSetResetTarget(_MODE_ACTION_RESET_TO_DISPLAY_SETTING);
+				break;
+		
+		case _MENU_FUN_COLORTEMP:	
+			if(_CT_7500_5800_sRGB_SUPPRT)
+			{
+				g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _CT_USER, _CT_9300, _ON);
+			}
+			else
+			{
+				switch(GET_KEYMESSAGE())
+				{
+					case _LEFT_KEY_MESSAGE:
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_9300;
+						}
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							g_usAdjustValue = _CT_6500;
+						}	
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_USER;
+						}
+
+						
+						break;
+					case _RIGHT_KEY_MESSAGE:
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_6500;
+						}
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_9300;
+						}						
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							g_usAdjustValue = _CT_USER;
+						}
+
+						
+						break;
+
+					default:
+						break;
+				}
+			}	
+			
+			SET_COLOR_TEMP_TYPE(g_usAdjustValue);
+			
+			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			g_usAdjustValue = GET_COLOR_TEMP_TYPE(); 
+			break;
+		
+		case _MENU_FUN_LED:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(GET_OSD_LED_TYPE() , _OSDLedType_END, _OSDLedType_OFF, _ON));
+			SET_OSD_LED_TYPE(g_usAdjustValue);
+
+			if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+			{
+				ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+				OSD_LED_CONTRL(_OSD_LED_OFF);
+			}
+			else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+			{
+				ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+				OSD_LED_CONTRL(_OSD_LED_ON);
+
+			}
+			else if(GET_OSD_LED_TYPE() == _OSDLedType_FLASH)
+			{
+				ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+				
+			}
+			break;
+			
+		case _MENU_FUN_POWER_OFF:
+		
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _AutoPowerOff_END, _AutoPowerOff_OFF, _ON));
+			SET_OSD_AUTO_POWEROFF(g_usAdjustValue);
+				break;
+            case _MENU_FUN_LOWBLUE: 
+                g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , 3, _OFF, _ON));
+//                if(g_usAdjustValue = 0)
+//                    SET_OSD_LOW_BLUE(0);
+//                else if(g_usAdjustValue = 1)
+//                    SET_OSD_LOW_BLUE(33);
+//                else if(g_usAdjustValue = 2)
+//                    SET_OSD_LOW_BLUE(66);
+//                else if(g_usAdjustValue = 3)
+//                    SET_OSD_LOW_BLUE(100);
+                SET_OSD_LOW_BLUE(g_usAdjustValue);
+#if(_DEF_COLORFUL)
+                UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+                UserAdjustContrast(GET_OSD_CONTRAST()); 
+#endif
+
+                SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_OSDUSERDATA_MSG);
+                break;  
+		
+		case _MENU_FUN_OD:
+#if(_OD_WEAK_MID_HIGH)
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , 3, _OFF, _ON));
+#else
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+#endif
+
+			SET_OSD_OD_STATUS(g_usAdjustValue); 		
+#if(_OD_SUPPORT == _ON)
+			ScalerODEnable(GET_OSD_OD_STATUS());
+
+#if(_OD_WEAK_MID_HIGH)
+			if(GET_OSD_OD_STATUS() == 1)
+			{
+				SET_OSD_OD_GAIN(_OD_WEAK);
+
+			}
+			else if(GET_OSD_OD_STATUS() == 2)
+			{
+				SET_OSD_OD_GAIN(_OD_MID);
+
+			}
+			else if(GET_OSD_OD_STATUS() == 3)
+			{
+				SET_OSD_OD_GAIN(_OD_STRONG);
+
+			}
+			ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+#endif
+#endif
+			break;
+		#if _FREESYNC_SUPPORT
+		case _MENU_FUN_FREESYNC:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_FREE_SYNC_STATUS(g_usAdjustValue);
+			break;
+		#endif
+		
+		case _MENU_FUN_AUDOIMUTE:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_VOLUME_MUTE(g_usAdjustValue);
+			UserAdjustAudioMuteSwitch();
+			break;
+
+		case _MENU_FUN_HOTLEFT:
+			g_usAdjustValue = (BYTE)(DetOverRangeForHotkeySelect(g_usAdjustValue , _MENU_HOT_KEY_FUNC- _MENU_FUN_BACKLIGHT-1, 0, _ON));
+			SET_OSD_HOTKEY_LEFT(g_usAdjustValue);
+			break;
+
+		case _MENU_FUN_HOTRIGHT:
+			g_usAdjustValue = (BYTE)(DetOverRangeForHotkeySelect(g_usAdjustValue , _MENU_HOT_KEY_FUNC- _MENU_FUN_BACKLIGHT-1, 0, _ON));
+			SET_OSD_HOTKEY_RIGHT(g_usAdjustValue);
+			break;
+
+    	
+        case _MENU_FUN_CROSS:
+            g_usAdjustValue = (BYTE)(OsdDisplayDetOverRange(g_usAdjustValue , _ON, _OFF, _ON));
+            SET_OSD_CROSS_STATUS(g_usAdjustValue);
+            RTDNVRamSaveOSDData();
+            break;
+		case _MENU_FUN_SIGNAL:	
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _OSD_INPUT_AMOUNT-1, 0, _ON));
+			SET_OSD_INPUT_PORT_OSD_ITEM(g_usAdjustValue);
+			break;
+				
+#if(_VGA_SUPPORT == _ON)
+
+		case _MENU_FUN_AUTO_ADJUST:
+			if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+			{
+				SET_OSD_EVENT_MESSAGE(_OSDEVENT_DO_AUTO_CONFIG_MSG);
+			}
+			break;
+		
+		case _MENU_FUN_AUTO_COLOR:
+			if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+			{
+				OsdDisplayAutoBalanceProc();
+			}
+			break;	
+#endif
+		case _MENU_FUN_RESET:
+			OsdDispOsdReset();
+			break;
+
+		case _MENU_FUN_LANGUAGE:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _LANGUAGE_AMOUNT, 0, _ON));
+			SET_OSD_LANGUAGE(g_usAdjustValue);			
+			break;
+			
+		case _MENU_FUN_FLICKER_FREE:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_FLICKER_FREE_STATUS(g_usAdjustValue);
+			ScalerMcuPwmAdjustFrequency(_BACKLIGHT_PWM, GET_OSD_FLICKER_FREE_STATUS()? 20000: (((DWORD)_PANEL_TYP_FRAME_RATE * 160) / 100));
+			break;
+			
+		case _MENU_FUN_MPRT:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_MPRT(g_usAdjustValue);
+
+
+
+			#if(_CAIXIAOLI)
+			PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_OFF);
+			PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_ON);
+			#endif
+
+
+			
+#if(_MPRT_SUPPORT == _ON)
+			
+			if(GET_OSD_MPRT())
+			{
+				UserAdjustLowMotionBlurDisplay(GET_OSD_MPRT());
+	
+			}
+			else
+			{
+				PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_OFF);
+				UserAdjustLowMotionBlurDisplay(GET_OSD_MPRT());
+				ScalerTimerActiveTimerEvent(SEC(0.1), _USER_TIMER_EVENT_MPRT);
+			}
+	
+			 
+			  SET_OSD_OD_STATUS(g_usAdjustValue);		  
+#if(_OD_SUPPORT == _ON)
+			  ScalerODEnable(GET_OSD_OD_STATUS());
+#endif		
+#endif
+			break;
+
+
+		case _MENU_FUN_GAMMA:
+		   g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_GAMMA_26,_GAMMA_OFF,_ON);
+		   
+		   SET_OSD_GAMMA(g_usAdjustValue);
+	
+    if(GET_OSD_GAMMA() != _GAMMA_OFF||_TJ_GAMMA)
+			{
+				UserAdjustGamma(GET_OSD_GAMMA());
+				ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+				UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+			}
+			else
+			{
+				UserCommonAdjustGammaRegionEnable(_FUNCTION_OFF);
+	
+			}
+		 break;
+
+		case _MENU_FUN_COLORGAMUT:
+#if(_OCC_SUPPORT == _ON)
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_PCM_OSD_NATIVE,_PCM_OSD_SRGB,_ON);
+			SET_OSD_PCM_STATUS(g_usAdjustValue);
+			OsdFuncColorPcmAdjust();
+#endif
+
+		break;
+
+		case _MENU_FUN_FV_INFORMATION:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRange(g_usAdjustValue , _ON, _OFF, _ON);
+			SET_OSD_FV_INFORMATION(g_usAdjustValue);
+#if(_DEF_REAL_TIME_HZ)
+			if(GET_OSD_FV_INFORMATION())
+				SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT1));
+#endif
+			break;
+
+		case _MENU_FUN_OVERCLOCK:
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_ON,_OFF,_ON);
+			SET_OSD_OVERCLOCK(g_usAdjustValue);
+
+		break;
+
+	}
+
+	OSD_fun_hot_num = OSD_SubMenuCur;
+	UpdateItemMaskValue();
+	OSD_SubMenuCur = OSD_fun_hot_num;
+	RTDNVRamSaveOSDData();
+}
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#if((_HDR10_SUPPORT == _OFF)&&((_PROJECT == _RL6463_PROJECT)||(_PROJECT == _RL6369_PROJECT)))
+
+extern void ScalerGetDataPortByte(WORD usAddr, BYTE ucValue, WORD usLength, BYTE *pucArray, bit bAutoInc);
+
+void ScalerGetHDR10Data_MOCK(BYTE *pucHDRData)
+{
+    ScalerGetDataPortByte(0x02CD, 0xAC, 2, &pucHDRData[0], _AUTOINC);
+    ScalerGetDataPortByte(0x02CD, 0xAF, 2, &pucHDRData[2], _AUTOINC);
+    ScalerGetDataPortByte(0x02CD, 0xB1, 24, &pucHDRData[4], _AUTOINC);
+}
+
+void UserCommonHDRContrast(BYTE ucContrast)
+{
+    WORD pusData[4] = {0};
+
+    pusData[3] = 0x80;
+
+    pusData[0] = (WORD)(((DWORD)pusData[3] * (ucContrast + 200) / 200) > 4095) ? 4095 : (WORD)((DWORD)pusData[3] * (ucContrast + 200) / 200);
+    pusData[1] = pusData[0];
+    pusData[2] = pusData[0];
+
+    ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+    ScalerColorContrastAdjust(_CONTRAST_COEF_A, pusData);
+    ScalerColorContrastEnable(_FUNCTION_ON);
+}
+
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void MockHdrEffect(void)
+{
+	/*BYTE i = 0;
+	BYTE pucHDRInfoData[_HW_DP_INFOFRAME_RSV0_LENGTH];
+
+	ScalerGetHDR10Data_MOCK(pucHDRInfoData);
+
+	
+    ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+
+    ScalerColorOutputGammaEnable(_FUNCTION_OFF);
+    ScalerColorSRGBEnable(_FUNCTION_OFF);
+    ScalerColorPCMInputGammaEnable(_FUNCTION_OFF);
+
+	
+	if(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084)
+	{
+		
+		ScalerColorPCMInputGammaAdjust(0,_OGC_FLASH_BANK);
+		ScalerColorPCMOutputGammaAdjust(880, _OGC_FLASH_BANK);
+		ScalerColorPCMSRGBAdjust(_SRGB_0_BIT_SHIFT_LEFT, 862, _OGC_FLASH_BANK, _OCC_COLORMATRIX_TABLE_SIZE);
+		ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+		ScalerColorOutputGammaEnable(_FUNCTION_ON);
+		ScalerColorSRGBEnable(_FUNCTION_ON);
+		ScalerColorPCMInputGammaEnable(_FUNCTION_ON);
+		UserAdjustBacklight(100);
+		
+#if(_CONTRAST_SUPPORT == _ON)
+		UserCommonHDRContrast(0);
+#endif
+	}
+
+	if((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(pucHDRInfoData[0] == 1)&&(pucHDRInfoData[1] == 0x1A)&&(pucHDRInfoData[2] == 2))
+	{
+
+		ScalerColorPCMInputGammaAdjust(606,_OGC_FLASH_BANK);
+		ScalerColorPCMOutputGammaAdjust(880, _OGC_FLASH_BANK);
+		ScalerColorPCMSRGBAdjust(_SRGB_0_BIT_SHIFT_LEFT, 862, _OGC_FLASH_BANK, _OCC_COLORMATRIX_TABLE_SIZE);
+		ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+		ScalerColorOutputGammaEnable(_FUNCTION_ON);
+		ScalerColorSRGBEnable(_FUNCTION_ON);
+		ScalerColorPCMInputGammaEnable(_FUNCTION_ON);
+		UserAdjustBacklight(100);
+		
+#if(_CONTRAST_SUPPORT == _ON)
+		UserCommonHDRContrast(0);
+#endif
+	}	*/
+		    BYTE i = 0; 
+			BYTE pucHDRInfoData[_HW_DP_INFOFRAME_RSV0_LENGTH]; 
+			ScalerGetHDR10Data_MOCK(pucHDRInfoData);	 
+			ScalerTimerWaitForEvent(_EVENT_DEN_STOP);  
+			if(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084) 
+			{
+			ScalerColorOutputGammaEnable(_FUNCTION_OFF);  
+			ScalerColorSRGBEnable(_FUNCTION_OFF);  
+			ScalerColorPCMInputGammaEnable(_FUNCTION_OFF);	 
+			ScalerColorPCMInputGammaAdjust(0,_OGC_FLASH_BANK);	
+			ScalerColorPCMOutputGammaAdjust(880, _OGC_FLASH_BANK);	
+			ScalerColorPCMSRGBAdjust(_SRGB_0_BIT_SHIFT_LEFT, 862, _OGC_FLASH_BANK, _OCC_COLORMATRIX_TABLE_SIZE);  
+			ScalerTimerWaitForEvent(_EVENT_DEN_STOP);  
+			ScalerColorOutputGammaEnable(_FUNCTION_ON);  
+			ScalerColorSRGBEnable(_FUNCTION_ON);  
+			ScalerColorPCMInputGammaEnable(_FUNCTION_ON);  
+			UserAdjustBacklight(100);
+		#if(_CONTRAST_SUPPORT == _ON)  
+			UserCommonHDRContrast(0);
+		#endif
+			} 
+			else if((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(pucHDRInfoData[0] == 1)&&(pucHDRInfoData[1] == 0x1A)&&(pucHDRInfoData[2] == 2)) 
+			{  ScalerColorOutputGammaEnable(_FUNCTION_OFF);
+			ScalerColorSRGBEnable(_FUNCTION_OFF); 
+			ScalerColorPCMInputGammaEnable(_FUNCTION_OFF); 
+			ScalerColorPCMInputGammaAdjust(606,_OGC_FLASH_BANK);
+			ScalerColorPCMOutputGammaAdjust(880, _OGC_FLASH_BANK);	
+			ScalerColorPCMSRGBAdjust(_SRGB_0_BIT_SHIFT_LEFT, 862, _OGC_FLASH_BANK, _OCC_COLORMATRIX_TABLE_SIZE);
+			ScalerTimerWaitForEvent(_EVENT_DEN_STOP); 
+			ScalerColorOutputGammaEnable(_FUNCTION_ON); 
+			ScalerColorSRGBEnable(_FUNCTION_ON); 
+			ScalerColorPCMInputGammaEnable(_FUNCTION_ON); 
+			UserAdjustBacklight(100); 
+#if(_CONTRAST_SUPPORT == _ON)
+			UserCommonHDRContrast(0);
+#endif 
+			}  
+			else 
+			{
+			ScalerColorOutputGammaEnable(_FUNCTION_OFF); 
+			ScalerColorPCMInputGammaEnable(_FUNCTION_OFF);
+#if(_GLOBAL_HUE_SATURATION == _ON) 
+			if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_VIVID) 
+			{  
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), 140);
+			}  
+			else 
+			{
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GET_OSD_SATURATION());
+			}
+			}
+#endif
+}
+
+#endif
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#if 0//
+WORD GetSaturationValue()
+{
+	if(GET_OSD_DCR_STATUS() == _OFF)
+	{
+		switch(GET_OSD_COLOR_EFFECT())
+		{
+			case _COLOREFFECT_MOVIE :
+				return 58;
+				break;
+				
+			case _COLOREFFECT_GAME:
+				return 63;
+				break;
+				
+	
+			default:
+				return GET_OSD_SATURATION();
+				break;
+		}
+	}
+	return GET_OSD_SATURATION();
+}
+
+#endif
+
+void OsdHdrAdj(void)
+{
+#if 0//(_DEF_CT_JX)
+	BYTE i = 0;
+	if(GET_OSD_GAMMA() != _GAMMA_OFF)
+	{
+		i = _CT_GAMMA18+GET_OSD_GAMMA();
+	}
+#endif
+
+#if(!_TJ_GAMMA)
+    SET_OSD_GAMMA(_GAMMA_OFF);
+#endif
+	SET_OSD_PCM_STATUS(_PCM_OSD_NATIVE);
+
+#if(_DEF_COLORFUL)
+	SET_OSD_COLOR_EFFECT(_COLOREFFECT_COLORFUL);
+#else
+	SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+#endif
+
+	SET_OSD_DCR_STATUS(_OFF);	
+	UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+	UserAdjustContrast(GET_OSD_CONTRAST());
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+	UserAdjustColorEffectMode();
+#endif
+
+}
+
+
+void OsdFuncAdj(void)
+{
+#if(_DEF_STA_SIX_COLOR || _DEF_HOTKEY_REPLACE)
+	BYTE i = 0;
+#endif
+#if(_DEF_PAGE8)
+	BYTE OSD_PAGE_2 = 0;
+#endif
+    DebugMessageOsd("OsdFuncAdj",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+
+	g_usAdjustValue = GetOsdValue(OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+
+	switch(OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur])
+	{ 
+		case _MENU_FUN_ECO:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _COLOREFFECT_AMOUNT, _COLOREFFECT_STANDARD, _ON);
+			SET_OSD_COLOR_EFFECT(g_usAdjustValue);
+			if((GET_OSD_COLOR_EFFECT()!= _COLOREFFECT_STANDARD))
+			{
+				SET_OSD_DCR_STATUS(_OFF);
+			}	
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+			UserAdjustContrast(GET_OSD_CONTRAST());
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+			
+#if(_DEF_ECO_SET)
+			//UserInterfaceAdjustUltraVivid();
+			UserCommonAdjustSharpness(SysSourceGetInputPort());			
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(),GetOsdValue(_MENU_FUN_SATURATION)); //GetSaturationValue());
+#endif
+
+#if(_DEF_STA_SIX_COLOR)
+			ScalerColorICMEnable(_FUNCTION_ON);//�޸���ɫ����ʧЧ
+			for(i = 0; i < 6; i++)
+			{
+				SET_OSD_SIX_COLOR(i);
+				OsdDisplaySixColorGetOneColor(i);
+				ScalerColorSixColorAdjust(i, GET_OSD_SIX_COLOR_HUE(), GET_OSD_SIX_COLOR_SATURATION());
+			}
+#endif
+
+
+
+#if(_GLOBAL_HUE_SATURATION == _ON && _DEF_COLORFUL)
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GET_OSD_SATURATION());
+#endif
+
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+				break;
+		
+#if(_LED_EFFECT_TJMODE14)
+                    
+            case _MENU_FUN_LIGHTMODE:
+                g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(GET_OSD_LED_LIGHTMODE() , LightMode_END, LightMode_OFF, _ON);
+                SET_OSD_LED_LIGHTMODE(g_usAdjustValue);
+                SET_OSD_LED_PRE_LIGHTMODE(g_usAdjustValue);
+    
+           //     SysModeSetResetTarget(_MODE_ACTION_RESET_TO_DISPLAY_SETTING);
+                led_start = 1;  //������Ч
+                
+                ScalerTimerDelayXms(150);// 50 30
+
+
+    
+                break;
+    
+    
+    
+            case _MENU_FUN_COLOR:
+                g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(GET_OSD_LED_COLOR() , LightColorMode_END, LightColorMode_Spectrum, _ON));
+                SET_OSD_LED_COLOR(g_usAdjustValue);
+                SET_OSD_LED_PRE_COLOR(g_usAdjustValue);
+    
+          //    SysModeSetResetTarget(_MODE_ACTION_RESET_TO_DISPLAY_SETTING);
+                led_start = 1;  //������Ч
+                ScalerTimerDelayXms(150);// 50 30
+    
+
+              break;
+#endif
+        case _MENU_FUN_LOWBLUE: 
+            g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , 3, _OFF, _ON));
+//                if(g_usAdjustValue = 0)
+//                    SET_OSD_LOW_BLUE(0);
+//                else if(g_usAdjustValue = 1)
+//                    SET_OSD_LOW_BLUE(33);
+//                else if(g_usAdjustValue = 2)
+//                    SET_OSD_LOW_BLUE(66);
+//                else if(g_usAdjustValue = 3)
+//                    SET_OSD_LOW_BLUE(100);
+            SET_OSD_LOW_BLUE(g_usAdjustValue);
+#if(_DEF_COLORFUL)
+            UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+            UserAdjustContrast(GET_OSD_CONTRAST()); 
+#endif
+
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_OSDUSERDATA_MSG);
+            break;  
+		case _MENU_FUN_DCR:
+			
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _ON, _OFF, _ON);
+			SET_OSD_DCR_STATUS(g_usAdjustValue);
+#if(_DEF_ECO_SET)
+			if(GET_OSD_DCR_STATUS())
+			{
+				SET_OSD_DCROFF_ECO(GET_OSD_COLOR_EFFECT());
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+			}
+			else
+			{
+				SET_OSD_COLOR_EFFECT(GET_OSD_DCROFF_ECO());
+			}	
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+			UserCommonAdjustSharpness(SysSourceGetInputPort());			
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GetOsdValue(_MENU_FUN_SATURATION)); //GetSaturationValue());
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+
+#else
+			
+			if(GET_OSD_DCR_STATUS() != _OFF)
+			{
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+
+#if(_DEF_COLORFUL)
+				UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+				UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+				UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+				UserAdjustColorEffectMode();
+#endif
+			}	
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#endif
+			break;
+		
+		case _MENU_FUN_HDR:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _HDR10_MODE_AUTO, _HDR10_MODE_OFF, _ON);	//UserCommonHDRGetHDR10Status	
+			SET_OSD_HDR_MODE(g_usAdjustValue);
+			
+			//��������HDR����HDRģʽΪǿ��
+#if(_HDR10_SUPPORT == _ON)
+			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+#else
+			if(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084)
+#endif
+			{
+				OsdHdrAdj();
+			}
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+			
+#if(_HDR10_SUPPORT == _ON)
+
+#if(_DEF_HDR_COLOR_6432)
+
+			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+			{
+				UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+
+				
+				ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+				UserCommonHDRAdjust(_HDR_FLOW_OSD_MODE_CHANGE);
+				UserCommonHDR10SupportSwitch(); 
+
+				
+				UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+			}
+			else
+			{
+				ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+				UserCommonHDRAdjust(_HDR_FLOW_OSD_MODE_CHANGE);
+				UserCommonHDR10SupportSwitch(); 
+			}
+										
+
+
+
+
+#else
+			ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+			UserCommonHDRAdjust(_HDR_FLOW_OSD_MODE_CHANGE);
+			UserCommonHDR10SupportSwitch(); 
+
+#endif	//(_DEF_HDR_COLOR_6432)
+
+
+
+#endif	
+
+
+
+
+
+#if((_HDR10_SUPPORT == _OFF)&&(_PROJECT == _RL6463_PROJECT))
+			MockHdrEffect();
+#endif
+
+			break;
+
+		case _MENU_FUN_DDCCI:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRange(g_usAdjustValue, _ON, _OFF, _ON);
+			SET_OSD_DDCCI_STATUS(g_usAdjustValue);
+			break;
+			
+		case _MENU_FUN_FV_INFORMATION:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRange(g_usAdjustValue , _ON, _OFF, _ON);
+			SET_OSD_FV_INFORMATION(g_usAdjustValue);
+#if(_DEF_REAL_TIME_HZ)
+			if(GET_OSD_FV_INFORMATION())
+				SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT1));
+#endif
+			break;
+					
+
+		case _MENU_FUN_VIVID:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _ULTRA_VIVID_AMOUNT, _ULTRA_VIVID_OFF, _ON);			
+			SET_OSD_ULTRA_VIVID_STATUS(g_usAdjustValue);
+
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+				break;
+
+		case _MENU_FUN_AUDIO_SOURCE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 2, _OFF, _ON);
+			SET_FUN_AUDIO_SOURCE(g_usAdjustValue);
+			break;
+
+		case _MENU_FUN_CHAOPING_TISHI:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _ON, _OFF, _ON);
+			SET_FUN_OVERCLOCK_HINT(g_usAdjustValue);
+			break;
+
+#if(_DEF_STA_SIX_COLOR)
+		case _MENU_FUN_SAT_STATE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 5, _OFF, _ON);
+			SET_SAT_STATE(g_usAdjustValue);
+			break;
+
+		case _MENU_FUN_HUE_STATE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 5, _OFF, _ON);
+			SET_HUE_STATE(g_usAdjustValue);
+			break;
+#endif
+
+		case _MENU_FUN_KVM:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 2, _OFF, _ON);
+			SET_FUN_KVM(g_usAdjustValue);
+
+#if(_DEF_2795E06)
+			if(GET_FUN_KVM() == _OFF)//�Զ�
+			{
+				if(SysSourceGetInputPort()== _D0_INPUT_PORT )
+				  HUB_SWITCH(0);
+				else
+				  HUB_SWITCH(1);
+			}
+			else
+			{
+				if(GET_FUN_KVM() == 1)	//PC
+					HUB_SWITCH(1);
+				else if(GET_FUN_KVM() == 2)	//Type-c
+					HUB_SWITCH(0);
+				else
+					HUB_SWITCH(0);
+			}
+#endif
+			break;
+				
+		case _MENU_FUN_ASPECT:
+		
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _OSD_ASPECT_RATIO_AMOUNT, 0, _ON);			
+			SET_OSD_ASPECT_RATIO_TYPE(g_usAdjustValue);
+// Set Backlight OFF to prevent garbage
+#if(_PANEL_TYPE==_AUO_M270HVR01_0_LVDS_FHD_144 )
+   		 	UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+#endif
+
+#if 0//
+			UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+#endif
+
+#if(_DEF_SCREEN_SWITCHING)	//�л�����������
+			UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+#endif
+
+			SysModeSetResetTarget(_MODE_ACTION_RESET_TO_DISPLAY_SETTING);
+				break;
+		
+		case _MENU_FUN_COLORTEMP:
+#if(_DEF_CT_JX)
+			if(g_usAdjustValue >= _CT_GAMMA18 && g_usAdjustValue <= _CT_GAMMA26)
+			{
+				g_usAdjustValue = _CT_USER;
+			}
+#endif
+			if(_CT_7500_5800_sRGB_SUPPRT)
+			{
+				g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, _CT_USER, _CT_9300, _ON);
+			}
+			else
+			{
+			    switch(GET_KEYMESSAGE())
+				{
+#if(_DEF_CT_JX)
+					case _LEFT_KEY_MESSAGE:
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_9300;
+						}
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							g_usAdjustValue = _CT_8000;
+						}
+						else if(g_usAdjustValue == _CT_8000)
+						{
+							g_usAdjustValue = _CT_7500;
+						}
+						else if(g_usAdjustValue == _CT_7500)
+						{
+							g_usAdjustValue = _CT_7000;
+						}	
+						else if(g_usAdjustValue == _CT_7000)
+						{
+							g_usAdjustValue = _CT_6500;
+						}						
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_5800;
+						}
+						else if(g_usAdjustValue == _CT_5800)
+						{
+							if(GET_OSD_GAMMA())
+							{
+								if(GET_OSD_GAMMA() == _GAMMA_18)
+								{
+									g_usAdjustValue = _CT_GAMMA18;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_20)
+								{
+									g_usAdjustValue = _CT_GAMMA20;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_22)
+								{
+									g_usAdjustValue = _CT_GAMMA22;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_24)
+								{
+									g_usAdjustValue = _CT_GAMMA24;
+								}
+								else
+								{
+									g_usAdjustValue = _CT_GAMMA26;
+								}
+							}
+							else
+							{
+								g_usAdjustValue = _CT_USER;
+							}
+						}
+						break;
+						
+					case _RIGHT_KEY_MESSAGE:
+					
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_5800;
+						}
+						else if(g_usAdjustValue == _CT_5800)
+						{
+							g_usAdjustValue = _CT_6500;
+						}	
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_7000;
+						}
+						else if(g_usAdjustValue == _CT_7000)
+						{
+							g_usAdjustValue = _CT_7500;
+						}
+						else if(g_usAdjustValue == _CT_7500)
+						{
+							g_usAdjustValue = _CT_8000;
+						}
+						else if(g_usAdjustValue == _CT_8000)
+						{
+							g_usAdjustValue = _CT_9300;
+						}
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							if(GET_OSD_GAMMA())
+							{
+								if(GET_OSD_GAMMA() == _GAMMA_18)
+								{
+									g_usAdjustValue = _CT_GAMMA18;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_20)
+								{
+									g_usAdjustValue = _CT_GAMMA20;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_22)
+								{
+									g_usAdjustValue = _CT_GAMMA22;
+								}
+								else if(GET_OSD_GAMMA() == _GAMMA_24)
+								{
+									g_usAdjustValue = _CT_GAMMA24;
+								}
+								else
+								{
+									g_usAdjustValue = _CT_GAMMA26;
+								}
+							}
+							else
+							{
+								g_usAdjustValue = _CT_USER;
+							}
+						}
+						break;
+
+
+
+#else
+					case _LEFT_KEY_MESSAGE:
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_9300;
+						}
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							g_usAdjustValue = _CT_7500;
+						}
+						else if(g_usAdjustValue == _CT_7500)
+						{
+							g_usAdjustValue = _CT_6500;
+						}	
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_USER;
+						}
+						break;
+					case _RIGHT_KEY_MESSAGE:
+					
+						if(g_usAdjustValue == _CT_USER)
+						{
+							g_usAdjustValue = _CT_6500;
+						}
+						else if(g_usAdjustValue == _CT_6500)
+						{
+							g_usAdjustValue = _CT_7500;
+						}						
+						else if(g_usAdjustValue == _CT_7500)
+						{
+							g_usAdjustValue = _CT_9300;
+						}						
+						else if(g_usAdjustValue == _CT_9300)
+						{
+							g_usAdjustValue = _CT_USER;
+						}
+						break;
+#endif
+
+					default:
+						break;
+				}
+			}	
+			
+			SET_COLOR_TEMP_TYPE(g_usAdjustValue);
+			
+		    RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+
+			/*
+		    if(OSD_ITEM(_MENU_FUN_R)>>4 == OSD_MAIN_MENU_ITEM)
+		    OsdDispSliderAndNumber(_ITEM_1_ROW + (OSD_ITEM(_MENU_FUN_R)& 0x0f)*3, _MENU_FUN_R,GET_COLOR_TEMP_TYPE_USER_R());
+		    if(OSD_ITEM(_MENU_FUN_G)>>4 == OSD_MAIN_MENU_ITEM)
+		    OsdDispSliderAndNumber(_ITEM_1_ROW + (OSD_ITEM(_MENU_FUN_G)& 0x0f)*3, _MENU_FUN_G,GET_COLOR_TEMP_TYPE_USER_G());
+		    if(OSD_ITEM(_MENU_FUN_B)>>4 == OSD_MAIN_MENU_ITEM)
+		    OsdDispSliderAndNumber(_ITEM_1_ROW + (OSD_ITEM(_MENU_FUN_B)& 0x0f)*3, _MENU_FUN_B,GET_COLOR_TEMP_TYPE_USER_B());
+		 */
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			g_usAdjustValue = GET_COLOR_TEMP_TYPE(); 
+			break;
+		
+		case _MENU_FUN_LED:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(GET_OSD_LED_TYPE() , _OSDLedType_END, _OSDLedType_OFF, _ON));
+			SET_OSD_LED_TYPE(g_usAdjustValue);
+
+			if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+			{
+				ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+				OSD_LED_CONTRL(_OSD_LED_OFF);
+#if 0//
+				LED_LOWBIT(0);
+#endif
+			}
+			else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+			{
+				ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+				OSD_LED_CONTRL(_OSD_LED_ON);
+#if 0//
+				LED_LOWBIT(0);
+				ScalerTimerDelayXms(300);
+				LED_LOWBIT(1);
+#endif
+
+			}
+			else if(GET_OSD_LED_TYPE() == _OSDLedType_FLASH)
+			{
+				ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+				
+			}
+
+			break;
+		
+		case _MENU_FUN_POWER_OFF:
+		
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _AutoPowerOff_END, _AutoPowerOff_OFF, _ON));
+			SET_OSD_AUTO_POWEROFF(g_usAdjustValue);
+			
+			if(g_ucPowerPage!=g_usAdjustValue/_HENG_COUNT)
+			{
+				BYTE i = 0;
+				g_ucPowerPage = g_usAdjustValue/_HENG_COUNT;
+				//_PFONT_PAGE_ITEM_1 + (i%_HENG_COUNT)
+				for(i=0; i<_HENG_COUNT; i++)
+					OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+				for(i=_HENG_COUNT*g_ucPowerPage; i<(g_ucPowerPage+1)*_HENG_COUNT; i++ )					
+					{
+						RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+(i%_HENG_COUNT)*2, _ITEM_3_COL, _PFONT_PAGE_2, _MENU_FUN_POWER_OFF,  i, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+						if(i==_AutoPowerOff_END)
+							break;
+					}
+			}
+			if(GET_OSD_AUTO_POWEROFF() == _AutoPowerOff_OFF||GET_OSD_FACTORY_MODE())
+			{					
+					ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+					ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+			}
+			else
+			{
+				g_usPowerDownCount =g_usAdjustValue * 60;
+				ScalerTimerActiveTimerEvent(SEC(60), _USER_TIMER_EVENT_AUTO_POWER_DOWN);
+			}
+
+				break;
+
+		case _MENU_FUN_HDR_COLOR:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue ,_HDR10_COLORENHANCE_TYPE_3,_HDR10_COLORENHANCE_OFF, _ON));
+#if(_HDR10_COLOR_ENHANCE_SUPPORT == _ON)
+			SET_OSD_HDR_COLOR_ENHANCE(g_usAdjustValue);
+#endif
+
+#if(_ICM_SUPPORT == _ON&&_HDR10_SUPPORT == _ON)
+			UserCommonHDRAdjustHDR10ColorEffect();
+
+	//		ScalerColorICMLoadTable(UserInterfaceHDRGetHDR10ICMTable(), UserInterfaceHDRGetHDR10ICMTableBank());
+//ScalerColorICMEnable(_FUNCTION_ON);
+#endif
+
+#if 0//(_ICM_SUPPORT == _ON)
+			if(UserInterfaceHDRGetHDR10ICMTable() != NULL)
+			{
+				ScalerColorICMEnable(_FUNCTION_ON);
+			}
+#endif
+
+
+			break;
+
+		
+		case _MENU_FUN_OD:
+
+#if(_OD_WEAK_MID_HIGH)
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , 3, _OFF, _ON));
+#else
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+#endif
+
+			SET_OSD_OD_STATUS(g_usAdjustValue);			
+#if(_OD_SUPPORT == _ON)
+
+
+
+
+#if(_OD_WEAK_MID_HIGH)
+			if(GET_OSD_OD_STATUS() == 1)
+			{
+				SET_OSD_OD_GAIN(_OD_WEAK);
+			}
+			else if(GET_OSD_OD_STATUS() == 2)
+			{
+				SET_OSD_OD_GAIN(_OD_MID);
+			}
+			else if(GET_OSD_OD_STATUS() == 3)
+			{
+				SET_OSD_OD_GAIN(_OD_STRONG);
+			}
+			ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+#endif
+#if(_OD_WEAK_MID_HIGH)
+			if(GET_OSD_OD_STATUS())
+				ScalerODEnable(_ON);
+			else
+            	ScalerODEnable(_OFF);
+#else
+            ScalerODEnable(GET_OSD_OD_STATUS());
+#endif
+
+#endif
+
+				break;
+		#if _FREESYNC_SUPPORT
+		case _MENU_FUN_FREESYNC:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_FREE_SYNC_STATUS(g_usAdjustValue);
+			break;
+		#endif
+		
+		case _MENU_FUN_AUDOIMUTE:
+		
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_VOLUME_MUTE(g_usAdjustValue);
+			UserAdjustAudioMuteSwitch();
+				break;
+				
+		case _MENU_FUN_HOTLEFT:
+		
+			g_usAdjustValue = (BYTE)(DetOverRangeForHotkeySelect(g_usAdjustValue , _MENU_HOT_KEY_FUNC- _MENU_FUN_BACKLIGHT-1, 0, _ON));
+			SET_OSD_HOTKEY_LEFT(g_usAdjustValue);
+				break;
+		case _MENU_FUN_CROSS:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRange(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_CROSS_STATUS(g_usAdjustValue);
+			RTDNVRamSaveOSDData();
+
+			
+				break;
+		case _MENU_FUN_HOTRIGHT:
+		
+			g_usAdjustValue = (BYTE)(DetOverRangeForHotkeySelect(g_usAdjustValue , _MENU_HOT_KEY_FUNC- _MENU_FUN_BACKLIGHT-1, 0, _ON));
+			SET_OSD_HOTKEY_RIGHT(g_usAdjustValue);
+				break;
+		
+		case _MENU_FUN_SIGNAL:	
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _OSD_INPUT_AMOUNT-1, 0, _ON));
+			SET_OSD_INPUT_PORT_OSD_ITEM(g_usAdjustValue);
+				break;
+				
+#if(_VGA_SUPPORT == _ON)
+
+		case _MENU_FUN_AUTO_ADJUST:
+		
+            if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+            {
+                SET_OSD_EVENT_MESSAGE(_OSDEVENT_DO_AUTO_CONFIG_MSG);
+            }
+			break;
+		
+		case _MENU_FUN_AUTO_COLOR:
+		
+			if((SysModeGetModeState() == _MODE_STATUS_ACTIVE)&& (SysSourceGetSourceType() == _SOURCE_VGA))
+			{
+				OsdDisplayAutoBalanceProc();
+			}
+			break;	
+#endif
+		case _MENU_FUN_RESET:
+		
+			OsdDispOsdReset();
+			break;
+
+		case _MENU_FUN_LANGUAGE:		
+            DebugMessageOsd("_MENU_FUN_LANGUAGE1",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _LANGUAGE_AMOUNT, 0, _ON));
+			SET_OSD_LANGUAGE(g_usAdjustValue);
+
+			if(g_ucLanguage!=g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT)
+			{
+				BYTE i = 0;
+				g_ucLanguage = g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT;
+				//_PFONT_PAGE_ITEM_1 + (i%_PAGE_MAX_LANGUAGE_COUNT)
+				for(i=0; i<_HENG_COUNT+1; i++)
+					OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+				for(i=_PAGE_MAX_LANGUAGE_COUNT*g_ucLanguage; i<(g_ucLanguage+1)*_PAGE_MAX_LANGUAGE_COUNT; i++ )					
+					{RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+(i%_PAGE_MAX_LANGUAGE_COUNT)*2, _ITEM_3_COL, _PFONT_PAGE_2, _MENU_FUN_LANGUAGE,  0, COLOR(_COLOR_MENU_FONT, _CP_BG),  i);
+						if(i==_LANGUAGE_AMOUNT)
+							break;
+					}
+			}
+            DebugMessageOsd("_MENU_FUN_LANGUAGE2",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+			break;
+		case _MENU_FUN_FLICKER_FREE:
+			
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+			SET_OSD_FLICKER_FREE_STATUS(g_usAdjustValue);
+			ScalerMcuPwmAdjustFrequency(_BACKLIGHT_PWM, GET_OSD_FLICKER_FREE_STATUS()? 20000: (((DWORD)_PANEL_TYP_FRAME_RATE * 160) / 100));
+			break;
+
+		case _MENU_FUN_MPRT:
+			
+#if(_MPRT_WEAK_MID_HIGH)
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , 3, _OFF, _ON));
+#else
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _ON, _OFF, _ON));
+#endif
+			SET_OSD_MPRT(g_usAdjustValue);
+
+
+
+
+#if(_CAIXIAOLI)
+
+
+
+PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_OFF);
+
+ScalerTimerActiveTimerEvent(SEC(0.1), _USER_TIMER_EVENT_MPRT);
+
+
+break;
+
+
+#endif
+
+#if(_MPRT_SUPPORT == _ON)
+	
+			if(GET_OSD_MPRT())
+			{
+				SET_OSD_OD_STATUS(_ON); 
+#if(_MPRT_WEAK_MID_HIGH && _OD_SUPPORT)
+				SET_OSD_OD_STATUS(g_usAdjustValue); 
+				if(GET_OSD_MPRT()==1)
+					SET_OSD_OD_GAIN(_OD_WEAK);
+				else if(GET_OSD_MPRT()==2)
+					SET_OSD_OD_GAIN(_OD_MID);
+				else if(GET_OSD_MPRT()==3)
+					SET_OSD_OD_GAIN(_OD_STRONG);
+				ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+#elif(_OD_WEAK_MID_HIGH && _OD_SUPPORT)
+				SET_OSD_OD_STATUS(3); 
+				SET_OSD_OD_GAIN(_OD_STRONG);
+#endif
+				ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+				UserAdjustLowMotionBlurDisplay(GET_OSD_MPRT());
+	
+			}
+			else
+			{
+				SET_OSD_OD_STATUS(_OFF); 		
+				PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_OFF);
+				UserAdjustLowMotionBlurDisplay(GET_OSD_MPRT());
+				ScalerTimerActiveTimerEvent(SEC(0.1), _USER_TIMER_EVENT_MPRT);
+			}
+	
+			 
+			  SET_OSD_OD_STATUS(g_usAdjustValue);		  
+#if(_OD_SUPPORT == _ON)
+
+#if(_CUSTOMER_TYPE == _HUASHUOHUI_CUSTOMER)
+			SET_OSD_OD_GAIN(0x3A);
+			ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+#endif
+
+			  ScalerODEnable(GET_OSD_OD_STATUS());
+#endif	
+#endif
+			break;
+
+        case _MENU_FUN_OSD_RORATE:
+             //g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _OSD_ROTATE_DEGREE_MAX, 0, _ON));
+
+             switch(GET_KEYMESSAGE())
+			 {
+				 case _LEFT_KEY_MESSAGE:
+					 if(g_usAdjustValue == _OSD_ROTATE_DEGREE_0)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_90;
+					 }
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_90)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_180;
+					 }
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_180)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_270;
+					 }	 
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_270)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_0;
+					 }
+					 
+					 break;
+				 case _RIGHT_KEY_MESSAGE:
+				 
+					 if(g_usAdjustValue == _OSD_ROTATE_DEGREE_0)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_270;
+					 }
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_270)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_180;
+					 }						 
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_180)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_90;
+					 }						 
+					 else if(g_usAdjustValue == _OSD_ROTATE_DEGREE_90)
+					 {
+						 g_usAdjustValue = _OSD_ROTATE_DEGREE_0;
+					 }
+			 
+					 
+					 break;
+			 
+				 default:
+					 break;
+			 }
+			 
+             g_ucOsdRorateState = (g_usAdjustValue);
+
+			if(g_usAdjustValue != _OSD_ROTATE_DEGREE_0)
+			{
+			 	SET_OSD_FV_INFORMATION(0);
+			 	SET_OSD_HZ_XZ(_ON);
+			}
+			else
+		 	{
+				if(GET_OSD_HZ_XZ() == _ON)
+					SET_OSD_FV_INFORMATION(_ON);
+				SET_OSD_HZ_XZ(_OFF);
+		 	}
+			 //SET_OSD_ROTATE_STATUS(g_ucOsdRorateState);
+			break;
+
+
+		case _MENU_FUN_DP_VER:
+			g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeSelect(g_usAdjustValue , _DP_VER_AMOUNT , _DP_VER_1_DOT_1, _ON));
+			SET_OSD_DP_MST(_MST_OFF);
+#if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+			SET_OSD_DP_D1_VERSION(g_usAdjustValue);
+#endif
+		
+#if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+			SET_OSD_DP_D0_VERSION(g_usAdjustValue);
+#endif
+		 
+#if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+			SET_OSD_DP_D6_VERSION(g_usAdjustValue);
+#endif
+			break;
+
+		case _MENU_FUN_DCC:
+		  g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_ON,_OFF,_ON);
+		  
+		  SET_OSD_DCC(g_usAdjustValue);
+		  UserAdjustDCC(GET_OSD_DCC());
+		  ScalerColorDCCEnable(GET_OSD_DCC());
+		break;
+
+
+		case _MENU_FUN_GAMMA:
+		   g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_GAMMA_26,_GAMMA_OFF,_ON);
+		   
+		   SET_OSD_GAMMA(g_usAdjustValue);
+           if(GET_OSD_GAMMA() != _GAMMA_OFF||_TJ_GAMMA)
+			{
+				UserAdjustGamma(GET_OSD_GAMMA());
+				ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+				UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+			}
+			else
+			{
+				UserCommonAdjustGammaRegionEnable(_FUNCTION_OFF);
+		
+			}
+#if(_DEF_CT_JX)
+			if(GET_OSD_GAMMA() == _GAMMA_OFF && GET_COLOR_TEMP_TYPE() >= _CT_GAMMA18)
+			{
+				SET_COLOR_TEMP_TYPE(_CT_USER);
+			}
+			else if(GET_OSD_GAMMA() != _GAMMA_OFF && GET_COLOR_TEMP_TYPE() == _CT_USER)
+			{
+				SET_COLOR_TEMP_TYPE(_CT_8000+GET_OSD_GAMMA());
+			}
+			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+#endif
+
+			
+		 break;
+
+		case _MENU_FUN_COLORGAMUT:
+#if(_OCC_SUPPORT == _ON)
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_PCM_OSD_NATIVE,_PCM_OSD_SRGB,_ON);
+			SET_OSD_PCM_STATUS(g_usAdjustValue);
+			OsdFuncColorPcmAdjust();
+#endif
+	
+			break;
+
+		case _MENU_FUN_OVERCLOCK:
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,_ON,_OFF,_ON);
+			SET_OSD_OVERCLOCK(g_usAdjustValue);
+		
+		break;
+
+#if(_DEF_OPPOSITE_DCR)
+		case _MENU_FUN_DCR_OPPOSITE:
+			g_usAdjustValue = (BYTE)OsdDisplayDetOverRangeSelect(g_usAdjustValue, 2, _OFF, _ON);
+			SET_OSD_DCR_OPPOSITE(g_usAdjustValue);
+#if(_DEF_ECO_SET)
+			if(GET_OSD_DCR_OPPOSITE())
+			{
+				SET_OSD_DCROFF_ECO(GET_OSD_COLOR_EFFECT());
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+			}
+			else
+			{
+				SET_OSD_COLOR_EFFECT(GET_OSD_DCROFF_ECO());
+			}	
+			
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+#if(_DEF_COLORFUL)
+			UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+			UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+			UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+			UserInterfaceAdjustUltraVivid();
+#endif
+			UserCommonAdjustSharpness(SysSourceGetInputPort()); 		
+			UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GetOsdValue(_MENU_FUN_SATURATION)); //GetSaturationValue());
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+			UserAdjustColorEffectMode();
+#endif
+
+#else
+			
+			if(GET_OSD_DCR_OPPOSITE() != _OFF)
+			{
+				SET_OSD_COLOR_EFFECT(_COLOREFFECT_STANDARD);
+
+#if(_DEF_COLORFUL)
+				UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+				UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+
+				UserAdjustBrightness(GET_OSD_BRIGHTNESS()); 
+#if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON))    
+				UserAdjustColorEffectMode();
+#endif
+			}	
+			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#endif
+			break;
+#endif
+
+#if(_DEF_HOTKEY_REPLACE)
+		case _MENU_FUN_HOT_REPLACE_LEFT:
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,11,_OFF,_ON);
+			SET_OSD_HOT_REPLACE_LEFT(g_usAdjustValue);								
+			if(g_ucHotKey_Left !=g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT)
+			{
+				g_ucHotKey_Left = g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT;
+				for(i=0; i<_HENG_COUNT; i++)
+					OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+				for(i=_PAGE_MAX_LANGUAGE_COUNT*g_ucHotKey_Left; i<(g_ucHotKey_Left+1)*_PAGE_MAX_LANGUAGE_COUNT; i++ )				
+				{
+					RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+(i%_PAGE_MAX_LANGUAGE_COUNT)*2, _ITEM_3_COL, _PFONT_PAGE_2, _MENU_FUN_HOT_REPLACE_LEFT,	i, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+					if(i==11)
+						break;
+				}
+			}
+			break;
+
+		case _MENU_FUN_HOT_REPLACE_RIGHT:
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,11,_OFF,_ON);
+			SET_OSD_HOT_REPLACE_RIGHT(g_usAdjustValue);
+			if(g_ucHotKey_Right !=g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT)
+			{
+				g_ucHotKey_Right = g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT;
+				for(i=0; i<_HENG_COUNT; i++)
+					OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+				for(i=_PAGE_MAX_LANGUAGE_COUNT*g_ucHotKey_Right; i<(g_ucHotKey_Right+1)*_PAGE_MAX_LANGUAGE_COUNT; i++ ) 				
+				{
+					RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+(i%_PAGE_MAX_LANGUAGE_COUNT)*2, _ITEM_3_COL, _PFONT_PAGE_2, _MENU_FUN_HOT_REPLACE_RIGHT,	i, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+					if(i==11)
+						break;
+				}
+			}
+			break;
+
+		case _MENU_FUN_HOT_REPLACE_EXIT:
+			g_usAdjustValue = OsdDisplayDetOverRangeSelect(g_usAdjustValue,11,_OFF,_ON);
+			SET_OSD_HOT_REPLACE_EXIT(g_usAdjustValue);
+			if(g_ucHotKey_Exit!=g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT)
+			{
+				g_ucHotKey_Exit = g_usAdjustValue/_PAGE_MAX_LANGUAGE_COUNT;
+				for(i=0; i<_HENG_COUNT; i++)
+					OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+				for(i=_PAGE_MAX_LANGUAGE_COUNT*g_ucHotKey_Exit; i<(g_ucHotKey_Exit+1)*_PAGE_MAX_LANGUAGE_COUNT; i++ )				
+				{
+					RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+(i%_PAGE_MAX_LANGUAGE_COUNT)*2, _ITEM_3_COL, _PFONT_PAGE_2, _MENU_FUN_HOT_REPLACE_EXIT,	i, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+					if(i==11)
+						break;
+				}
+			}
+			break;
+#endif
+
+
+
+
+
+
+
+
+
+		
+
+	}
+    DebugMessageOsd("_MENU_FUN_LANGUAGE3",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+#if(_DEF_PAGE8)
+		OSD_PAGE_2 = OSD_SubMenuCur;
+#endif
+        UpdateItemMaskValue();
+        DebugMessageOsd("_MENU_FUN_LANGUAGE4",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+
+		UpdateMaskValue();
+        DebugMessageOsd("_MENU_FUN_LANGUAGE5",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+#if(_DEF_PAGE8)
+		OSD_SubMenuCur = OSD_PAGE_2;
+#endif
+		
+		RTDNVRamSaveOSDData();
+DebugMessageOsd("_MENU_FUN_LANGUAGE6",OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+}
+
+
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+BYTE OsdFuncGetOsdItemFlag(void)
+{    
+    switch(GET_OSD_INPUT_PORT_OSD_ITEM())
+    {
+#if(_A0_INPUT_PORT_TYPE != _A0_NO_PORT)        
+        case _OSD_INPUT_A0 :
+            return _A0_INPUT_PORT;
+            break;
+#endif
+#if(_D0_INPUT_PORT_TYPE != _D0_NO_PORT)        
+        case _OSD_INPUT_D0 :
+            return _D0_INPUT_PORT;
+            break;
+#endif
+
+#if(_D1_INPUT_PORT_TYPE != _D1_NO_PORT)        
+		case _OSD_INPUT_D1:
+            return _D1_INPUT_PORT;
+			break;
+#endif
+
+#if(_D2_INPUT_PORT_TYPE != _D2_NO_PORT)        
+		case _OSD_INPUT_D2:
+            return _D2_INPUT_PORT;
+			break;
+#endif
+
+#if(_D3_INPUT_PORT_TYPE != _D3_NO_PORT)        
+		case _OSD_INPUT_D3:
+            return _D3_INPUT_PORT;
+			break;
+#endif
+
+#if(_D4_INPUT_PORT_TYPE != _D4_NO_PORT)        
+		case _OSD_INPUT_D4:
+            return _D4_INPUT_PORT;
+			break;
+#endif
+
+#if(_D5_INPUT_PORT_TYPE != _D5_NO_PORT)        
+		case _OSD_INPUT_D5:
+            return _D5_INPUT_PORT;
+			break;
+#endif
+
+#if(_D6_INPUT_PORT_TYPE != _D6_NO_PORT)        
+		case _OSD_INPUT_D6:
+            return _D6_INPUT_PORT;
+			break;
+#endif
+
+        default:
+            break;
+    }
+	#if(_D0_INPUT_PORT_TYPE != _D0_NO_PORT) 
+        return _D0_INPUT_PORT;
+	#endif
+}
+
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncApplyMap(BYTE ucWidth, BYTE ucHeight, BYTE ucColor)
+{
+    BYTE ucI = 0;
+    BYTE ucTmp = 17; // Row Height = 18
+
+#if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_SOFTWARE)
+    if((GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_90) ||
+       (GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_270))
+    {
+        ucI = ucWidth;
+        ucWidth = ucHeight;
+        ucHeight = ucI;
+        ucTmp = 11;  // Row Height = 12
+    }
+#endif
+
+    // Row Command
+    
+    for(ucI = 0; ucI < ucHeight; ucI++)
+    {
+        ScalerOsdCommandAllByte(ucI, 0x80, ucTmp, ucWidth);
+    }
+    
+    // Row Command end
+    ScalerOsdCommandByte(ucHeight, _OSD_BYTE0, 0x00);
+
+    // Frame Control (set font start address)
+    g_usFontSelectStart = ucHeight + 1;
+    g_usFontTableStart = g_usFontSelectStart + (WORD)(ucWidth * ucHeight);
+    ScalerOsdSramBaseAddressSet(_OSD_A, 0, g_usFontSelectStart, g_usFontTableStart);
+
+    // Character Command initial
+#if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_SOFTWARE)
+    if((GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_90) ||
+       (GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_270))
+    {
+        ucTmp = 0x4E;  // 18 Pixel
+    }
+    else
+#endif
+    {
+        ucTmp = 0x4C;  // 12 Pixel
+    }
+
+    ScalerOsdCharCommandAllByteSeries(g_usFontSelectStart, ucTmp, 0, ucColor, (WORD)ucWidth * ucHeight);
+
+    g_ucOsdWidth = ucWidth; // for calculation (unit: word count)
+    g_ucOsdHeight = ucHeight;
+    SET_OSD_MAPA_COL_MAX(WIDTH(g_ucOsdWidth));
+
+    ScalerOsdVerticalStartSelect(_OSD_VSYNC_SELECT_DVS);
+    ScalerOsdDoubleFunction(GET_OSD_DOUBLE_SIZE(), GET_OSD_DOUBLE_SIZE());
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncSetPosition(EnumOsdPositionType enumOsdPositionType, WORD usX, WORD usY)
+{
+#if(_D_DOMAIN_PATH == _D_DOMAIN_4_PATH)
+    WORD usShiftValue = 0;
+    BYTE ucXdouble = 1;
+    WORD usTemp = 0;
+
+    if(GET_OSD_DOUBLE_SIZE() == _ON)
+    {
+        ucXdouble = 2;
+    }
+
+    if(ScalerOsdGetHorizontalDelayStep() == _OSD_HORIZONTAL_DELAY_STEP_4_PIXEL)
+    {
+        // change horizontal delay step to 1 pixel for FB shift
+        ScalerOsdHorizontalDelayStep(_OSD_HORIZONTAL_DELAY_STEP_1_PIXEL);
+        usX *= 4;
+    }
+
+    if(enumOsdPositionType == _OSD_POSITION_GLOBAL_A)
+    {
+        if((usX * ucXdouble) <= 100)
+        {
+//            ScalerOsdPosition(enumOsdPositionType, (usX * ucXdouble), usY);
+            ScalerOsdPosition(enumOsdPositionType, (usX), usY);
+            ScalerOsdFBShiftValue(_OSD_FRONT_BACK_SHIFT_OUTSIDE, 0);
+        }
+        else if((usX * ucXdouble) <= (4094 + 100))
+        {
+            ScalerOsdPosition(enumOsdPositionType, 100 / ucXdouble, usY);
+            ScalerOsdFBShiftValue(_OSD_FRONT_BACK_SHIFT_OUTSIDE, (usX * ucXdouble) - 100);
+        }
+        else // > 4095+100
+        {
+            ScalerOsdPosition(enumOsdPositionType, ((usX * ucXdouble) - 4094) / ucXdouble, usY);
+            ScalerOsdFBShiftValue(_OSD_FRONT_BACK_SHIFT_OUTSIDE, 4094);
+        }
+
+        ScalerOsdFBShiftValue(_OSD_FRONT_BACK_SHIFT_INSIDE, 0x00);
+        ScalerOsdFBShiftBoundarySize(0x00, 0x00);
+        ScalerOsdFBShiftEn(_ENABLE);
+    }
+    else if(enumOsdPositionType == _OSD_POSITION_GLOBAL_B)
+    {
+        usShiftValue = ScalerOsdGetFBShiftValue(_OSD_FRONT_BACK_SHIFT_OUTSIDE);
+
+        if((GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_0) ||
+           (GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_180))
+        {
+            usTemp = g_ucOsdWidthB * 12;
+        }
+        else
+        {
+            usTemp = g_ucOsdHeightB * 18;
+        }
+
+        // if HPOS over halt of Panel width + shift value, adjust to adaptable HPOS
+        if((usX * ucXdouble) > ((_PANEL_DH_WIDTH / 2 + usShiftValue) - (usTemp * ucXdouble)))
+        {
+            ScalerOsdPosition(enumOsdPositionType, (((_PANEL_DH_WIDTH / 2 + usShiftValue) - (usTemp * ucXdouble)) / ucXdouble), usY);
+        }
+        else
+        {
+            ScalerOsdPosition(enumOsdPositionType, ((usX * ucXdouble) - usShiftValue) / ucXdouble, usY);
+        }
+    }
+#else
+    ScalerOsdPosition(enumOsdPositionType, usX, usY);
+#endif
+
+    ScalerTimerWaitForEvent(_EVENT_DVS);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncTransparency(BYTE ucTrans)
+{
+    ScalerOsdSetTransparency(ucTrans);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : Blending type1:Only windows blending.
+//                Blending type2:All blending.
+//                Blending type3:Windows & Character background blending.
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncBlending(BYTE ucType)
+{
+    ScalerOsdVerticalStartSelect(_OSD_VSYNC_SELECT_DVS);
+    ScalerOsdWindow7SpecialFunction(_OSD_WINDOW_7_FUNCTION_MASK_REGION_TRANSPARENT_ALL);
+    ScalerOsdSetTransparencyType(ucType);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncCloseWindow(EnumOsdWindowsType enumWinIndex)
+{
+    ScalerOsdWindowDisable(enumWinIndex);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncDisableOsd(void)
+{
+    ScalerOsdDisableOsd();
+#if(_INTERNAL_AUDIO_TEST_SUPPORT == _ON)
+    if(ScalerAudioGetInternalAudioGenEnable(SysSourceGetInputPort()) == _ENABLE)
+        SysAudioInternalGenTestProc(_OFF);
+#endif
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncEnableOsd(void)
+{
+    ScalerOsdEnableOsd();
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncChangeColor1Bit(BYTE ucRow, BYTE ucCol, BYTE ucWidth, BYTE ucHeight, BYTE ucColor, BYTE ucFontSelectFrom)
+{
+    WORD usOsdAddr = (WORD)ucRow * g_ucOsdWidth + ucCol + g_usFontSelectStart;
+    BYTE ucHeightCount = 0;
+	ucFontSelectFrom = ucFontSelectFrom;
+#if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_SOFTWARE)
+    BYTE ucWidthCount = 0;
+
+    if(GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_90)
+    {
+        for(ucWidthCount = 0; ucWidthCount < ucWidth; ucWidthCount++)
+        {
+            usOsdAddr = (WORD)(g_ucOsdWidth - ucRow - ucHeight) + g_ucOsdWidth * (ucCol + ucWidthCount) + g_usFontSelectStart;
+          //  ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, (0x4E | ucFontSelectFrom), ucHeight);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE2, ucColor, ucHeight);
+        }
+    }
+    else if(GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_270)
+    {
+        for(ucWidthCount = 0; ucWidthCount < ucWidth; ucWidthCount++)
+        {
+            usOsdAddr = (WORD)(g_ucOsdHeight - 1 - ucCol - ucWidthCount) * g_ucOsdWidth + ucRow + g_usFontSelectStart;
+          //  ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, (0x4E | ucFontSelectFrom), ucHeight);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE2, ucColor, ucHeight);
+        }
+    }
+    else
+#endif
+    {
+        for(ucHeightCount = 0; ucHeightCount < ucHeight; ucHeightCount++)
+        {
+          //  ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, (0x4C | ucFontSelectFrom), ucWidth);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE2, ucColor, ucWidth);
+            usOsdAddr += g_ucOsdWidth;
+        }
+    }
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncSet2BitIconOffset(BYTE ucOffset)
+{
+    ScalerOsd2BitFontOffset(ucOffset);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncSet4BitIconOffset(WORD ucOffset)
+{
+	ScalerOsd4BitFontOffset(ucOffset);
+}
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncClearOsd(BYTE ucRow, BYTE ucCol, BYTE ucWidth, BYTE ucHeight)
+{
+    WORD usOsdAddr = (WORD)ucRow * g_ucOsdWidth + ucCol + g_usFontSelectStart;
+    BYTE ucHeightCount = 0;
+
+#if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_SOFTWARE)
+    BYTE ucWidthCount = 0;
+
+    if(GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_90)
+    {
+        for(ucWidthCount = 0; ucWidthCount < ucWidth; ucWidthCount++)
+        {
+            usOsdAddr = (WORD)(g_ucOsdWidth - ucRow - ucHeight) + g_ucOsdWidth * (ucCol + ucWidthCount) + g_usFontSelectStart;
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, 0x4E, ucHeight);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE1, 0x00, ucHeight);
+        }
+    }
+    else if(GET_OSD_ROTATE_STATUS() == _OSD_ROTATE_DEGREE_270)
+    {
+        for(ucWidthCount = 0; ucWidthCount < ucWidth; ucWidthCount++)
+        {
+            usOsdAddr = (WORD)(g_ucOsdHeight - 1 - ucCol - ucWidthCount) * g_ucOsdWidth + ucRow + g_usFontSelectStart;
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, 0x4E, ucHeight);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE1, 0x00, ucHeight);
+        }
+    }
+    else
+#endif
+    {
+        for(ucHeightCount = 0; ucHeightCount < ucHeight; ucHeightCount++)
+        {
+            // 1 Bit Font
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, 0x4C, ucWidth);
+            ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE1, 0x00, ucWidth);
+            usOsdAddr += g_ucOsdWidth;
+        }
+    }
+}
+
+
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#if(_PCM_FUNCTION == _ON)
+
+void OsdFuncColorPcmAdjust(void)
+{
+#if(_PCM_FUNCTION == _ON)
+    ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+
+    UserCommonAdjustGammaRegionEnable(_FUNCTION_OFF);
+    ScalerColorSRGBEnable(_FUNCTION_OFF);
+    ScalerColorPCMInputGammaEnable(_FUNCTION_OFF);
+
+#if((_OCC_SUPPORT == _ON) && (_RGB_3D_GAMMA == _ON))
+    ScalerColorRGB3DGammaEnable(_FUNCTION_OFF);
+
+#endif
+    if(GET_OSD_PCM_STATUS() != _PCM_OSD_NATIVE)
+    {
+#if((_OCC_SUPPORT == _ON) && (_RGB_3D_GAMMA == _ON))
+        if(GET_OSD_PCM_STATUS() == _PCM_OSD_SOFT_PROFT)
+        {
+            UserAdjust3DGamma(GET_OSD_PCM_SOFT_PROFT_MODE());
+        }
+#endif
+        UserAdjustPCM(GET_OSD_PCM_STATUS());
+        ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+
+#if(_BRIGHTNESS_SUPPORT == _ON)
+        ScalerColorBrightnessEnable(_FUNCTION_OFF);
+#endif
+
+#if(_CONTRAST_SUPPORT == _ON)
+        ScalerColorContrastEnable(_FUNCTION_OFF);
+#endif
+        UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+        ScalerColorSRGBEnable(_FUNCTION_ON);
+        ScalerColorPCMInputGammaEnable(_FUNCTION_ON);
+
+#if((_OCC_SUPPORT == _ON) && (_RGB_3D_GAMMA == _ON))
+        if(GET_OSD_PCM_STATUS() == _PCM_OSD_SOFT_PROFT)
+        {
+            ScalerColorRGB3DGammaEnable(_FUNCTION_ON);
+        }
+#endif
+    }
+    else
+    {
+#if(_GAMMA_FUNCTION == _ON)
+        UserAdjustGamma(GET_OSD_GAMMA());
+#endif
+
+#if(_GLOBAL_HUE_SATURATION == _ON)
+        UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GET_OSD_SATURATION());
+#endif
+
+#if((_GAMMA_FUNCTION == _ON) || (_GLOBAL_HUE_SATURATION == _ON))
+        ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+
+#if(_GAMMA_FUNCTION == _ON)
+        if(GET_OSD_GAMMA() != _GAMMA_OFF)
+        {
+            UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+
+#if(_RGB_GAMMA_FUNCTION == _ON)
+            ScalerColorRGBOutputGammaEnable(_FUNCTION_ON);
+#endif
+        }
+#endif
+
+#if(_GLOBAL_HUE_SATURATION == _ON)
+        ScalerColorSRGBEnable(_FUNCTION_ON);
+#endif
+
+#if(_CONTRAST_SUPPORT == _ON)
+#if(_DEF_COLORFUL)
+		UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+		UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+#endif
+
+#if(_BRIGHTNESS_SUPPORT == _ON)
+        UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#endif
+#endif  // End of #if((_GAMMA_FUNCTION == _ON) || (_GLOBAL_HUE_SATURATION == _ON))
+
+    }
+#endif  // End of #if(_PCM_FUNCTION == _ON)
+}
+#endif
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncSetOsdItemFlag(void)
+{
+    // input port
+#if(_SOURCE_AUTO_ON)
+    if(SysSourceGetScanType() == _SOURCE_SWITCH_AUTO_IN_GROUP)
+    {
+        SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_AUTO);
+    }
+    else
+#endif    
+    {
+        switch(SysSourceGetInputPort())
+        {
+#if(_A0_INPUT_PORT_TYPE != _A0_NO_PORT)        
+            case _A0_INPUT_PORT:
+                SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_A0);
+                break;
+#endif
+#if(_D0_INPUT_PORT_TYPE != _D0_NO_PORT)        
+            case _D0_INPUT_PORT:
+                SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D0);
+                break;
+#endif
+
+#if(_D1_INPUT_PORT_TYPE != _D1_NO_PORT)        
+			case _D1_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D1);
+				break;
+#endif
+
+#if(_D2_INPUT_PORT_TYPE != _D2_NO_PORT)        
+			case _D2_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D2);
+				break;
+#endif
+
+#if(_D3_INPUT_PORT_TYPE != _D3_NO_PORT)        
+			case _D3_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D3);
+				break;
+#endif
+
+#if(_D4_INPUT_PORT_TYPE != _D4_NO_PORT)        
+			case _D4_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D4);
+				break;
+#endif
+
+#if(_D5_INPUT_PORT_TYPE != _D5_NO_PORT)        
+			case _D5_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D5);
+				break;
+#endif
+
+#if(_D6_INPUT_PORT_TYPE != _D6_NO_PORT)        
+			case _D6_INPUT_PORT:
+				SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_D6);
+				break;
+#endif
+
+            default:
+                break;
+        }
+    }
+}
+
+#if(_FREEZE_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : _TRUE / _FALSE
+//--------------------------------------------------
+bit OsdFuncCheckFreezeDisable(void)
+{
+    if(((((GET_OSD_STATE() >= _MENU_DISPLAY_AUTO) &&
+          (GET_OSD_STATE() <= _MENU_DISPLAY_PHASE)) ||
+         (GET_OSD_STATE() == _MENU_COLOR_FORMAT) ||
+         (GET_OSD_STATE() == _MENU_ADVANCE_ITEM) ||
+         (GET_OSD_STATE() == _MENU_OTHER_RESET) ||
+         (GET_OSD_STATE() == _MENU_DISPLAY_LATENCY)) &&
+        (GET_KEYMESSAGE() == _MENU_KEY_MESSAGE)) ||
+       ((GET_OSD_STATE() == _MENU_ADVANCE_ULTRA_VIVID_ADJUST) && (GET_OSD_ULTRA_VIVID_STATUS() == _ULTRA_VIVID_OFF) && (GET_KEYMESSAGE() == _RIGHT_KEY_MESSAGE)) ||
+       ((GET_OSD_STATE() == _MENU_ADVANCE_ULTRA_VIVID_ADJUST) && (GET_OSD_ULTRA_VIVID_STATUS() == _ULTRA_VIVID_L) && (GET_KEYMESSAGE() == _LEFT_KEY_MESSAGE)))
+    {
+        OsdDispOsdMessage(_OSD_DISP_DISABLE_FREEZE_MSG);
+        ScalerTimerActiveTimerEvent(SEC(1), _USER_TIMER_EVENT_OSD_DISABLE_FREEZE_MSG);
+        SET_OSD_STATE(GET_OSD_STATE_PREVIOUS());
+        SET_OSD_FREEZE_STATUS(_OFF);
+        UserCommonAdjustDisplayFreeze(_OFF);
+#if(_URGENT_EVENT_CHECK_MODE == _OFF)
+        SET_FREEZE_DISABLE_MSG_STATE(_ON);
+#endif
+        return _TRUE;
+    }
+    return _FALSE;
+}
+
+
+#endif
+
+#if(_HDMI_MULTI_EDID_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+BYTE OsdFuncGetHdmiPortVersion(EnumSourceSearchPort enumSearchPort)
+{
+    switch(enumSearchPort)
+    {
+#if(_D0_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D0_INPUT_PORT:
+            return (GET_OSD_D0_HDMI_VER());
+            break;
+#endif
+
+#if(_D1_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D1_INPUT_PORT:
+            return (GET_OSD_D1_HDMI_VER());
+            break;
+#endif
+
+#if(_D2_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D2_INPUT_PORT:
+            return (GET_OSD_D2_HDMI_VER());
+            break;
+#endif
+
+#if(_D3_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D3_INPUT_PORT:
+            return (GET_OSD_D3_HDMI_VER());
+            break;
+#endif
+
+#if(_D4_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D4_INPUT_PORT:
+            return (GET_OSD_D4_HDMI_VER());
+            break;
+#endif
+
+#if(_D5_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D5_INPUT_PORT:
+            return (GET_OSD_D5_HDMI_VER());
+            break;
+#endif
+
+        default:
+            return 0;
+            break;
+    }
+}
+//--------------------------------------------------
+// Description  :
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void OsdFuncSetHdmiPortVersion(EnumSourceSearchPort enumSearchPort,BYTE ucValue)
+{
+    ucValue = ucValue;
+
+    switch(enumSearchPort)
+    {
+#if(_D0_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D0_INPUT_PORT:
+            SET_OSD_D0_HDMI_VER(ucValue);
+            break;
+#endif
+
+#if(_D1_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D1_INPUT_PORT:
+            SET_OSD_D1_HDMI_VER(ucValue);
+            break;
+#endif
+
+#if(_D2_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D2_INPUT_PORT:
+            SET_OSD_D2_HDMI_VER(ucValue);
+            break;
+#endif
+
+#if(_D3_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D3_INPUT_PORT:
+            SET_OSD_D3_HDMI_VER(ucValue);
+            break;
+#endif
+
+#if(_D4_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D4_INPUT_PORT:
+            SET_OSD_D4_HDMI_VER(ucValue);
+            break;
+#endif
+
+#if(_D5_HDMI_MULTI_EDID_SUPPORT == _ON)
+        case _D5_INPUT_PORT:
+            SET_OSD_D5_HDMI_VER(ucValue);
+            break;
+#endif
+        default:
+            break;
+    }
+}
+#endif
+
+
+#if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+
+void OsdFuncPutIcon1BitAndColorWidthHeight(BYTE ucRow, BYTE ucCol, BYTE ucIcon, BYTE ucWidth , BYTE ucHeight, BYTE ucColor)
+{
+    WORD usOsdAddr = (WORD)ucRow * g_ucOsdWidth + ucCol + g_usFontSelectStart;
+    BYTE ucHeightCount = 0;
+    BYTE ucWidthCount = 0;
+	bit MAPB = _FALSE;
+
+	if(ucRow >= _OSD_MAP_B_ROW_OFFSET)
+	{
+		ucRow -= _OSD_MAP_B_ROW_OFFSET;
+		usOsdAddr = ((WORD)g_ucOsdWidth * g_ucOsdHeight) + (WORD)ucRow * g_ucOsdWidthB + ucCol+ g_usFontSelectStart;
+		MAPB = _TRUE;
+	}
+
+	#if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_SOFTWARE)
+    if(GET_OSD_ROTATE_STATUS() != _OSD_ROTATE_DEGREE_0)
+    {
+        if(ucHeight > 0)
+        {
+            for(ucWidthCount = 0; ucWidthCount < ucWidth; ucWidthCount++)
+            {
+                usOsdAddr = (WORD)(g_ucOsdHeight - 1 - ucCol - ucWidthCount) * g_ucOsdWidth + ucRow + g_usFontSelectStart;
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, 0x8E, ucHeight);
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE1, ucIcon, ucHeight);
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE2, ucColor, ucHeight);
+            }
+        }
+    }
+    else
+    #endif
+    {
+        if(ucWidth > 0)
+        {
+            for(ucHeightCount = 0; ucHeightCount < ucHeight; ucHeightCount++)
+            {
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE1, ucIcon, ucWidth);
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE2, ucColor, ucWidth);
+                ScalerOsdCharCommandByteSeries(usOsdAddr, _OSD_BYTE0, 0x4C, ucWidth);
+
+				if(MAPB == _TRUE)
+				{
+                	usOsdAddr += g_ucOsdWidthB;
+				}
+				else
+				{
+					usOsdAddr += g_ucOsdWidth;
+				}
+            }
+        }
+    }
+}
+
+#endif
+
+
+#endif // End of #if(_OSD_TYPE == _REALTEK_2014_OSD)
+

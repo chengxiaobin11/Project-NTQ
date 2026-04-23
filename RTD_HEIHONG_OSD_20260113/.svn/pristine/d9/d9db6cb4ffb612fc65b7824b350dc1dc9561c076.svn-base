@@ -1,0 +1,3719 @@
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SCALERCOMMONTIMERFUNCTION
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\ScalerCommonTimerFunction.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\Scaler\ScalerCommonFunction\Code\ScalerCommonTimerFunction.c LARG
+                    -E OPTIMIZE(9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common
+                    -;.\Kernel\System\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scale
+                    -r\ScalerFunction\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;
+                    -.\Kernel\Scaler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Serie
+                    -s_Common\Lib\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2
+                    -014Osd\Header;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\
+                    -None Factory\Header) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL64
+                    -49_Project\ScalerCommonTimerFunction.lst) TABS(2) OBJECT(.\Output\RL6449_Project\ScalerCommonTimerFunction.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : ScalerCommonTimerFunction.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #define __SCALER_COMMON_TIMERFUNCTION__
+  18          
+  19          #include "ScalerCommonFunctionInclude.h"
+  20          
+  21          //****************************************************************************
+  22          // DEFINITIONS / MACROS
+  23          //****************************************************************************
+  24          //--------------------------------------------------
+  25          // Definitions of Instant Timer0/1
+  26          //--------------------------------------------------
+  27          /////////////////
+  28          // Active Mode //
+  29          /////////////////
+  30          
+  31          #if(_M2PLL_STRUCT_TYPE == _M2PLL_STRUCT_M_N)
+  32          #define _TIMER_COUNT_TEMP1                      ((DWORD)_M2PLL_PLL_N * _M2PLL_PLL_O)
+  33          #define _TIMER_COUNT_TEMP2                      ((DWORD)_EXT_XTAL * _M2PLL_PLL_M)
+  34          #elif(_M2PLL_STRUCT_TYPE == _M2PLL_STRUCT_N_F)
+              #define _TIMER_COUNT_TEMP1                      1
+              #define _TIMER_COUNT_TEMP2                      ((DWORD)_M2PLL_CLK_KHZ)
+              #endif
+  38          
+  39          #define _TIMER_COUNT_TEMP                       ((DWORD)12 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_DIV * _MCU_CL
+             -K_DIV)
+  40          
+  41          ////////////////////////////
+  42          // Power Saving/Down Mode //
+  43          ////////////////////////////
+  44          #define _TIMER_COUNT_PS_TEMP                    ((DWORD)12 * _FLASH_CLK_PS_DIV * _MCU_CLK_PS_DIV)
+  45          
+  46          //////////////////////////////////////////////////////
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 2   
+
+  47          // Power Saving/Down Fast Mode for DP Aux Handshake //
+  48          //////////////////////////////////////////////////////
+  49          #define _TIMER_COUNT_PS_FAST_TEMP               ((DWORD)12 * _FLASH_CLK_PS_FAST_DIV * _MCU_CLK_PS_DIV)
+  50          
+  51          //////////////////
+  52          // Initial Mode //
+  53          //////////////////
+  54          #define _TIMER_COUNT_IN_TEMP                    ((DWORD)12 * _FLASH_CLK_IN_DIV * _MCU_CLK_DIV)
+  55          
+  56          ////////////////////////////////////////////////////////////////////////////
+  57          // Active Mode --> for switching to a higher flash speed when OSD is used //
+  58          ////////////////////////////////////////////////////////////////////////////
+  59          #if(_FLASH_CLK_SPEED == _FLASH_LOW_SPEED)
+              #define _TIMER_COUNT_OSD_TEMP                   ((DWORD)12 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_FAST_DIV * _M
+             -CU_CLK_DIV)
+              #endif
+  62          
+  63          #define _TIMER_COUNT_TEMP_PS_FAST1              (_IDLE_TIME * _FLASH_CLK_PS_FAST_DIV / _FLASH_CLK_PS_DIV)
+  64          #define _TIMER_COUNT_TEMP_PS_FAST2              ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER2_COUNT_PS_FAS
+             -T_TEMP / 2)) / _TIMER2_COUNT_PS_FAST_TEMP))
+  65          #define _TIMER_COUNT_TEMP_IDLE                  ((_SYS_PS_TIMER_PRECISION_SUPPPORT == _ON) ? ((WORD)(((DWO
+             -RD)_EXT_XTAL + (_TIMER2_COUNT_IN_TEMP / 2)) / _TIMER2_COUNT_IN_TEMP)) : ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER2_CO
+             -UNT_PS_TEMP / 2)) / _TIMER2_COUNT_PS_TEMP)))
+  66          
+  67          #define _TIMER01_TEMP_COUNT_M2PLL               (((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER_COUNT_TEMP / 2)) / _
+             -TIMER_COUNT_TEMP)
+  68          
+  69          #define _TIMER01_TEMP_COUNT_IOSC_FAST           (((DWORD)_INTERNAL_OSC_XTAL + (_TIMER_COUNT_PS_FAST_TEMP /
+             - 2)) / _TIMER_COUNT_PS_FAST_TEMP)
+  70          #define _TIMER01_TEMP_COUNT_IOSC                (((DWORD)_INTERNAL_OSC_XTAL + (_TIMER_COUNT_PS_TEMP / 2)) 
+             -/ _TIMER_COUNT_PS_TEMP)
+  71          #define _TIMER01_TEMP_COUNT_XTAL                (((DWORD)_EXT_XTAL + (_TIMER_COUNT_IN_TEMP / 2)) / _TIMER_
+             -COUNT_IN_TEMP)
+  72          
+  73          #define _TIMER01_TEMP_COUNT_OSD                 (((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER_COUNT_OSD_TEMP / 2))
+             - / _TIMER_COUNT_OSD_TEMP)
+  74          
+  75          //--------------------------------------------------
+  76          // Definitions of Timer1 for Serial Port
+  77          //--------------------------------------------------
+  78          /////////////////
+  79          // Active Mode //
+  80          /////////////////
+  81          #define _TIMER1_UART_COUNT_TEMP                 ((DWORD)4 * _UART_SMOD0_NORMAL * _TIMER_COUNT_TEMP1 * _FLA
+             -SH_CLK_DIV * _MCU_CLK_DIV * _UART_BAUD_RATE_POWER_NORMAL / 1000)
+  82          #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+  83          #define _TIMER1_UART_COUNT_BYTE                 (0x100 - ((BYTE)(((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER1_UAR
+             -T_COUNT_TEMP / 2)) / _TIMER1_UART_COUNT_TEMP)))
+  84          #else
+              #define _TIMER1_UART_COUNT_WORD                 (0xFFFF - ((WORD)(((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER1_UA
+             -RT_COUNT_TEMP / 2)) / _TIMER1_UART_COUNT_TEMP)))
+              #endif
+  87          
+  88          ////////////////////////////
+  89          // Power Saving/Down Mode //
+  90          ////////////////////////////
+  91          #define _TIMER1_UART_COUNT_PS_TEMP              ((DWORD)4 * _UART_SMOD0_SAVING * _FLASH_CLK_PS_DIV * _MCU_
+             -CLK_PS_DIV * _UART_BAUD_RATE_POWER_SAVING / 1000)
+  92          #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+  93          #define _TIMER1_UART_COUNT_PS_BYTE              (0x100 - ((BYTE)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER1_UAR
+             -T_COUNT_PS_TEMP / 2)) / _TIMER1_UART_COUNT_PS_TEMP)))
+  94          #else
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 3   
+
+              #define _TIMER1_UART_COUNT_PS_WORD              (0xFFFF - ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER1_UA
+             -RT_COUNT_PS_TEMP / 2)) / _TIMER1_UART_COUNT_PS_TEMP)))
+              #endif
+  97          
+  98          //////////////////////////////////////////////////////
+  99          // Power Saving/Down Fast Mode for DP Aux Handshake //
+ 100          //////////////////////////////////////////////////////
+ 101          #define _TIMER1_UART_COUNT_PS_FAST_TEMP         ((DWORD)4 * _UART_SMOD0_SAVING * _FLASH_CLK_PS_FAST_DIV * 
+             -_MCU_CLK_PS_DIV * _UART_BAUD_RATE_POWER_SAVING / 1000)
+ 102          #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+ 103          #define _TIMER1_UART_COUNT_PS_FAST_BYTE         (0x100 - ((BYTE)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER1_UAR
+             -T_COUNT_PS_FAST_TEMP / 2)) / _TIMER1_UART_COUNT_PS_FAST_TEMP)))
+ 104          #else
+              #define _TIMER1_UART_COUNT_PS_FAST_WORD         (0xFFFF - ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER1_UA
+             -RT_COUNT_PS_FAST_TEMP / 2)) / _TIMER1_UART_COUNT_PS_FAST_TEMP)))
+              #endif
+ 107          
+ 108          //////////////////
+ 109          // Initial Mode //
+ 110          //////////////////
+ 111          #define _TIMER1_UART_COUNT_IN_TEMP              ((DWORD)4 * _UART_SMOD0_NORMAL * _FLASH_CLK_IN_DIV * _MCU_
+             -CLK_DIV * _UART_BAUD_RATE_POWER_NORMAL / 1000)
+ 112          #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+ 113          #define _TIMER1_UART_COUNT_IN_BYTE              (0x100 - ((BYTE)(((DWORD)_EXT_XTAL + (_TIMER1_UART_COUNT_I
+             -N_TEMP / 2)) / _TIMER1_UART_COUNT_IN_TEMP)))
+ 114          #else
+              #define _TIMER1_UART_COUNT_IN_WORD              (0xFFFF - ((WORD)(((DWORD)_EXT_XTAL + (_TIMER1_UART_COUNT_
+             -IN_TEMP / 2)) / _TIMER1_UART_COUNT_IN_TEMP)))
+              #endif
+ 117          
+ 118          //////////////////
+ 119          // Idle Mode //
+ 120          //////////////////
+ 121          #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+ 122          #define _TIMER1_UART_COUNT_IDLE_BYTE            ((_SYS_PS_TIMER_PRECISION_SUPPPORT == _ON) ? (_TIMER1_UART
+             -_COUNT_IN_BYTE) : (_TIMER1_UART_COUNT_PS_BYTE))
+ 123          #else
+              #define _TIMER1_UART_COUNT_IDLE_WORD            ((_SYS_PS_TIMER_PRECISION_SUPPPORT == _ON) ? (_TIMER1_UART
+             -_COUNT_IN_WORD) : (_TIMER1_UART_COUNT_PS_WORD))
+              #endif
+ 126          
+ 127          ////////////////////////////////////////////////////////////////////////////
+ 128          // Active Mode --> for switching to a higher flash speed when OSD is used //
+ 129          ////////////////////////////////////////////////////////////////////////////
+ 130          #if(_FLASH_CLK_SPEED == _FLASH_LOW_SPEED)
+              #define _TIMER1_UART_COUNT_OSD_TEMP             ((DWORD)4 * _UART_SMOD0_NORMAL * _TIMER_COUNT_TEMP1 * _FLA
+             -SH_CLK_FAST_DIV * _MCU_CLK_DIV * _UART_BAUD_RATE_POWER_NORMAL / 1000)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _OFF)
+              #define _TIMER1_UART_COUNT_OSD_BYTE             (0x100 - ((BYTE)((((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER1_UA
+             -RT_COUNT_OSD_TEMP / 2)) / _TIMER1_UART_COUNT_OSD_TEMP))))
+              #else
+              #define _TIMER1_UART_COUNT_OSD_WORD             (0xFFFF - ((WORD)((((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER1_U
+             -ART_COUNT_OSD_TEMP / 2)) / _TIMER1_UART_COUNT_OSD_TEMP))))
+              #endif
+              #endif
+ 138          
+ 139          //--------------------------------------------------
+ 140          // Definitions of Timer2
+ 141          //--------------------------------------------------
+ 142          #define _EVENT_TIME_MAX                         61000
+ 143          
+ 144          /////////////////
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 4   
+
+ 145          // Active Mode //
+ 146          /////////////////
+ 147          #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              #define _TIMER2_COUNT_TEMP                      ((DWORD)12 * 4 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_DIV * _MC
+             -U_CLK_DIV)
+              #else
+ 150          #define _TIMER2_COUNT_TEMP                      ((DWORD)12 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_DIV * _MCU_CL
+             -K_DIV)
+ 151          #endif
+ 152          
+ 153          #define _TIMER2_COUNT_NUM                       (0xFFFF - ((WORD)(((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER2_CO
+             -UNT_TEMP / 2)) / _TIMER2_COUNT_TEMP)))
+ 154          
+ 155          #define _TIMER2_COUNT_LBYTE                     (_TIMER2_COUNT_NUM & 0x00FF)
+ 156          #define _TIMER2_COUNT_HBYTE                     (_TIMER2_COUNT_NUM >> 8)
+ 157          
+ 158          ////////////////////////////
+ 159          // Power Saving/Down Mode //
+ 160          ////////////////////////////
+ 161          #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              #define _TIMER2_COUNT_PS_TEMP                   ((DWORD)12 * 4 * _FLASH_CLK_PS_DIV * _MCU_CLK_PS_DIV)
+              #else
+ 164          #define _TIMER2_COUNT_PS_TEMP                   ((DWORD)12 * _FLASH_CLK_PS_DIV * _MCU_CLK_PS_DIV)
+ 165          #endif
+ 166          #define _TIMER2_COUNT_PS_NUM                    (0xFFFF - ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER2_CO
+             -UNT_PS_TEMP / 2)) / _TIMER2_COUNT_PS_TEMP)))
+ 167          
+ 168          #define _TIMER2_COUNT_PS_LBYTE                  (_TIMER2_COUNT_PS_NUM & 0x00FF)
+ 169          #define _TIMER2_COUNT_PS_HBYTE                  (_TIMER2_COUNT_PS_NUM >> 8)
+ 170          
+ 171          //////////////////////////////////////////////////////
+ 172          // Power Saving/Down Fast Mode for DP Aux Handshake //
+ 173          //////////////////////////////////////////////////////
+ 174          #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              #define _TIMER2_COUNT_PS_FAST_TEMP              ((DWORD)12 * 4 * _FLASH_CLK_PS_FAST_DIV * _MCU_CLK_PS_DIV)
+              #else
+ 177          #define _TIMER2_COUNT_PS_FAST_TEMP              ((DWORD)12 * _FLASH_CLK_PS_FAST_DIV * _MCU_CLK_PS_DIV)
+ 178          #endif
+ 179          #define _TIMER2_COUNT_PS_FAST_NUM               (0xFFFF - ((WORD)(((DWORD)_INTERNAL_OSC_XTAL + (_TIMER2_CO
+             -UNT_PS_FAST_TEMP / 2)) / _TIMER2_COUNT_PS_FAST_TEMP)))
+ 180          
+ 181          #define _TIMER2_COUNT_PS_FAST_LBYTE             (_TIMER2_COUNT_PS_FAST_NUM & 0x00FF)
+ 182          #define _TIMER2_COUNT_PS_FAST_HBYTE             (_TIMER2_COUNT_PS_FAST_NUM >> 8)
+ 183          
+ 184          //////////////////
+ 185          // Initial Mode //
+ 186          //////////////////
+ 187          #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              #define _TIMER2_COUNT_IN_TEMP                   ((DWORD)12 * 4 * _FLASH_CLK_IN_DIV * _MCU_CLK_DIV)
+              #else
+ 190          #define _TIMER2_COUNT_IN_TEMP                   ((DWORD)12 * _FLASH_CLK_IN_DIV * _MCU_CLK_DIV)
+ 191          #endif
+ 192          #define _TIMER2_COUNT_IN_NUM                    (0xFFFF - ((WORD)(((DWORD)_EXT_XTAL + (_TIMER2_COUNT_IN_TE
+             -MP / 2)) / _TIMER2_COUNT_IN_TEMP)))
+ 193          
+ 194          #define _TIMER2_COUNT_IN_LBYTE                  (_TIMER2_COUNT_IN_NUM & 0x00FF)
+ 195          #define _TIMER2_COUNT_IN_HBYTE                  (_TIMER2_COUNT_IN_NUM >> 8)
+ 196          
+ 197          ///////////////
+ 198          // Idle Mode //
+ 199          ///////////////
+ 200          #define _IDLE_TIME_TEMP                         ((_SYS_PS_TIMER_PRECISION_SUPPPORT == _ON) ? ((DWORD)0x000
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 5   
+
+             -0FFFF / (((DWORD)_EXT_XTAL + _TIMER2_COUNT_IN_TEMP) / _TIMER2_COUNT_IN_TEMP)) : ((DWORD)0x0000FFFF / (((DWORD)_INTERNAL_
+             -OSC_XTAL + _TIMER2_COUNT_PS_TEMP) / _TIMER2_COUNT_PS_TEMP)))
+ 201          
+ 202          #define _IDLE_TIME                              ((_IDLE_TIME_TEMP < 100) ? _IDLE_TIME_TEMP : 100) // Avoid
+             -_TIMER2_COUNT_IDLE_NUM Overflow
+ 203          
+ 204          #define _TIMER2_COUNT_IDLE_NUM                  ((_SYS_PS_TIMER_PRECISION_SUPPPORT == _ON) ? (0xFFFF - ((W
+             -ORD)((((DWORD)_EXT_XTAL + (_TIMER2_COUNT_IN_TEMP / 2)) / _TIMER2_COUNT_IN_TEMP) * _IDLE_TIME))) : (0xFFFF - ((WORD)((((D
+             -WORD)_INTERNAL_OSC_XTAL + (_TIMER2_COUNT_PS_TEMP / 2)) / _TIMER2_COUNT_PS_TEMP) * _IDLE_TIME))))
+ 205          
+ 206          #define _TIMER2_COUNT_IDLE_LBYTE                (_TIMER2_COUNT_IDLE_NUM & 0x00FF)
+ 207          #define _TIMER2_COUNT_IDLE_HBYTE                (_TIMER2_COUNT_IDLE_NUM >> 8)
+ 208          
+ 209          ////////////////////////////////////////////////////////////////////////////
+ 210          // Active Mode --> for switching to a higher flash speed when OSD is used //
+ 211          ////////////////////////////////////////////////////////////////////////////
+ 212          #if(_FLASH_CLK_SPEED == _FLASH_LOW_SPEED)
+              
+              #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              #define _TIMER2_COUNT_OSD_TEMP                  ((DWORD)12 * 4 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_FAST_DIV 
+             -* _MCU_CLK_DIV)
+              #else
+              #define _TIMER2_COUNT_OSD_TEMP                  ((DWORD)12 * _TIMER_COUNT_TEMP1 * _FLASH_CLK_FAST_DIV * _M
+             -CU_CLK_DIV)
+              #endif
+              
+              #define _TIMER2_COUNT_OSD_NUM                   (0xFFFF - ((WORD)(((DWORD)_TIMER_COUNT_TEMP2 + (_TIMER2_CO
+             -UNT_OSD_TEMP / 2)) / _TIMER2_COUNT_OSD_TEMP)))
+              
+              #define _TIMER2_COUNT_OSD_LBYTE                 (_TIMER2_COUNT_OSD_NUM & 0x00FF)
+              #define _TIMER2_COUNT_OSD_HBYTE                 (_TIMER2_COUNT_OSD_NUM >> 8)
+              #endif
+ 225          
+ 226          //--------------------------------------------------
+ 227          // Definitions of Watch Dog Timer Default Trigger Time
+ 228          //--------------------------------------------------
+ 229          #define _TIEMR_WD_DEFAULT_COUNT                 0xFFF // about 586ms with 14.318MHz Reference Clk
+ 230          
+ 231          #define GET_TIMER_WD_THRESHOLD_COUNT()          (((WORD)(MCU_FFB0_WATCHDOG_TIMER_H_THRESHOLD_MASK & 0xF0) 
+             -<< 4) | MCU_FFAE_WATCHDOG_TIMER_THRESHOLD)
+ 232          #define SET_TIMER_WD_THRESHOLD_COUNT(x)         {\
+ 233                                                              if((x) == 0)\
+ 234                                                              {\
+ 235                                                                  MCU_FFB0_WATCHDOG_TIMER_H_THRESHOLD_MASK = (MCU_FF
+             -B0_WATCHDOG_TIMER_H_THRESHOLD_MASK & 0x0F) | (((1) >> 4) & 0xF0);\
+ 236                                                                  MCU_FFAE_WATCHDOG_TIMER_THRESHOLD = (BYTE)(1);\
+ 237                                                              }\
+ 238                                                              else\
+ 239                                                              {\
+ 240                                                                  MCU_FFB0_WATCHDOG_TIMER_H_THRESHOLD_MASK = (MCU_FF
+             -B0_WATCHDOG_TIMER_H_THRESHOLD_MASK & 0x0F) | (((x) >> 4) & 0xF0);\
+ 241                                                                  MCU_FFAE_WATCHDOG_TIMER_THRESHOLD = (BYTE)(x);\
+ 242                                                              }\
+ 243                                                          }
+ 244          
+ 245          //--------------------------------------------------
+ 246          // Macro of Timer Event Structure
+ 247          //--------------------------------------------------
+ 248          #define GET_EVENT_VALID(x)                      (g_pstTimerEvent[x].enumEventID != _SCALER_TIMER_EVENT_INV
+             -ALID)
+ 249          #define CLR_EVENT_VALID(x)                      (g_pstTimerEvent[x].enumEventID = _SCALER_TIMER_EVENT_INVA
+             -LID)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 6   
+
+ 250          
+ 251          #define GET_EVENT_ID(x)                         (g_pstTimerEvent[x].enumEventID)
+ 252          #define SET_EVENT_ID(x, y)                      (g_pstTimerEvent[x].enumEventID = (y))
+ 253          
+ 254          #define GET_EVENT_TIME(x)                       (g_pstTimerEvent[x].usTime)
+ 255          #define SET_EVENT_TIME(x, y)                    (g_pstTimerEvent[x].usTime = (y))
+ 256          
+ 257          #define GET_EVENT_RESUME_TIME(x)                (g_pstTimerEvent[x].usTime)
+ 258          #define SET_EVENT_RESUME_TIME(x, y)             (g_pstTimerEvent[x].usTime = (y))
+ 259          
+ 260          #if(_WD_TIMER_INT_SUPPORT == _ON)
+ 261          //--------------------------------------------------
+ 262          // Macro of WD Timer Event Structure
+ 263          //--------------------------------------------------
+ 264          #define GET_WD_EVENT_VALID(x)                   (g_pstWDTimerEvent[x].enumEventID != _SCALER_WD_TIMER_EVEN
+             -T_INVALID)
+ 265          #define CLR_WD_EVENT_VALID(x)                   (g_pstWDTimerEvent[x].enumEventID = _SCALER_WD_TIMER_EVENT
+             -_INVALID)
+ 266          
+ 267          #define GET_WD_EVENT_ID(x)                      (g_pstWDTimerEvent[x].enumEventID)
+ 268          #define SET_WD_EVENT_ID(x, y)                   (g_pstWDTimerEvent[x].enumEventID = (y))
+ 269          
+ 270          #define GET_WD_EVENT_TIME(x)                    (g_pstWDTimerEvent[x].usTime)
+ 271          #define SET_WD_EVENT_TIME(x, y)                 (g_pstWDTimerEvent[x].usTime = (y))
+ 272          #endif
+ 273          
+ 274          //****************************************************************************
+ 275          // STRUCT / TYPE / ENUM DEFINITTIONS
+ 276          //****************************************************************************
+ 277          
+ 278          //****************************************************************************
+ 279          // CODE TABLES
+ 280          //****************************************************************************
+ 281          
+ 282          //****************************************************************************
+ 283          // VARIABLE DECLARATIONS
+ 284          //****************************************************************************
+ 285          bit g_bNotifyTimer2Int = _FALSE;
+ 286          StructTimerEventTableType g_pstTimerEvent[_TIMER_EVENT_COUNT];
+ 287          
+ 288          #if(_RECORD_TIMER_SUPPORT == _ON)
+              WORD g_usTimerRecordStartTime;
+              #endif
+ 291          
+ 292          #if(_WD_TIMER_INT_SUPPORT == _ON)
+ 293          bit g_bWDTimer2Update = _FALSE;
+ 294          StructWDTimerEventType g_pstWDTimerEvent[_WD_TIMER_EVENT_COUNT];
+ 295          #endif
+ 296          
+ 297          volatile WORD data g_usTimerCounter;
+ 298          
+ 299          #if(_DEBUG_MESSAGE_SUPPORT == _ON)
+              volatile WORD data g_usMeasureCounter;
+              #endif
+ 302          
+ 303          #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+              BYTE data g_ucTimerQuarterCount;
+              #endif
+ 306          
+ 307          #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+ 308          EnumScalerTimerOperationMode g_enumTimerMode = _TIMER_OPERATION_INITIAL_MODE;
+ 309          #endif
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 7   
+
+ 310          
+ 311          #if(_INSTANT_TIMER_EVENT_0 == _ON)
+ 312          BYTE g_ucTimerCountHByte0;
+ 313          BYTE g_ucTimerCountLByte0;
+ 314          WORD g_usTimerPreviousCount0;
+ 315          WORD g_usTimerBackupCount0;
+ 316          WORD g_usTimerEventPeriod0;
+ 317          WORD g_usTimerAxisCnt0;
+ 318          #endif
+ 319          
+ 320          #if(_INSTANT_TIMER_EVENT_1 == _ON)
+              BYTE g_ucTimerCountHByte1;
+              BYTE g_ucTimerCountLByte1;
+              WORD g_usTimerPreviousCount1;
+              WORD g_usTimerBackupCount1;
+              WORD g_usTimerEventPeriod1;
+              WORD g_usTimerAxisCnt1;
+              #endif
+ 328          
+ 329          #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+              BYTE g_ucTimerCountHByte1_Uart;
+              BYTE g_ucTimerCountLByte1_Uart;
+              #endif
+              #endif
+ 335          
+ 336          //****************************************************************************
+ 337          // FUNCTION DECLARATIONS
+ 338          //****************************************************************************
+ 339          #if(_RECORD_TIMER_SUPPORT == _ON)
+              void ScalerTimerResetRecordTimer_WDINT(void);
+              BYTE ScalerTimerGetRecordTimer_EXINT0(void);
+              #endif
+ 343          
+ 344          #if(_WD_TIMER_INT_SUPPORT == _ON)
+ 345          void ScalerTimerWDInitial(void);
+ 346          void ScalerTimerWDEventProc_WDINT(void);
+ 347          void ScalerTimerWDActivateTimerEvent_EXINT0(WORD usTime, EnumScalerWDTimerEventID enumEventID);
+ 348          void ScalerTimerWDActivateTimerEvent_WDINT(WORD usTime, EnumScalerWDTimerEventID enumEventID);
+ 349          void ScalerTimerWDCancelTimerEvent(EnumScalerWDTimerEventID enumEventID);
+ 350          
+ 351          #if((_DP_SUPPORT == _ON) || ((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT =
+             -= _ON)) || (_TMDS_HDCP_2_2_SUPPORT == _ON))
+ 352          void ScalerTimerWDCancelTimerEvent_EXINT0(EnumScalerWDTimerEventID enumEventID);
+ 353          #endif
+ 354          #endif
+ 355          
+ 356          #if(_INSTANT_TIMER_EVENT_0 == _ON)
+ 357          void ScalerTimer0SetTimerCount(WORD usTimerMs);
+ 358          #endif
+ 359          
+ 360          #if(_INSTANT_TIMER_EVENT_1 == _ON)
+              void ScalerTimer1SetTimerCount(WORD usTimerMs);
+              #endif
+ 363          
+ 364          #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+ 365          WORD ScalerTimerGetCommonDivisor(WORD usPar1, WORD usPar2);
+ 366          #endif
+ 367          void ScalerTimerSetTimerCount(EnumScalerTimerOperationMode enumOperationMode);
+ 368          
+ 369          #if(_SYSTEM_LOW_POWER_IDLE_SUPPORT == _ON)
+              void ScalerTimerAddTimerCounter(void);
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 8   
+
+              #endif
+ 372          
+ 373          void ScalerTimerEventProc(EnumScalerTimerEventID enumEventID);
+ 374          WORD ScalerTimerGetEventTime(BYTE ucEventIndex);
+ 375          void ScalerTimerClrEventValid(BYTE ucEventIndex);
+ 376          bit ScalerTimerCheckEventValid(BYTE ucEventIndex);
+ 377          void ScalerTimerActiveTimerEvent(WORD usTime, EnumScalerTimerEventID enumEventID);
+ 378          void ScalerTimerReactiveTimerEvent(WORD usTime, EnumScalerTimerEventID enumEventID);
+ 379          void ScalerTimerCancelTimerEvent(EnumScalerTimerEventID enumEventID);
+ 380          WORD ScalerTimerGetEventRemainTime(EnumScalerTimerEventID enumEventID);
+ 381          bit ScalerTimerSearchActiveTimerEvent(EnumScalerTimerEventID enumEventID);
+ 382          
+ 383          #if((_DP_SUPPORT == _ON) || (_TMDS_HDCP_2_2_SUPPORT == _ON) || ((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (
+             -_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)))
+ 384          void ScalerTimerCancelTimerEvent_EXINT0(EnumScalerTimerEventID enumEventID);
+ 385          #endif
+ 386          
+ 387          #if(((_DDCCI_CODE_REDUCTION == _OFF) && (_DEBUG_MESSAGE_SUPPORT == _OFF) && (_DDCCI_AUTO_SWITCH_SUPPORT ==
+             - _ON)) || (_SMBUS_BLOCK_READ_WRITE_COMMAND_SUPPORT == _ON))
+ 388          void ScalerTimerCancelTimerEvent_EXINT1(EnumScalerTimerEventID enumEventID);
+ 389          #endif
+ 390          WORD ScalerTimerCheckTimerEvent(WORD usTime);
+ 391          WORD ScalerTimerGetTimerCounter(void);
+ 392          BYTE ScalerTimerGetEventID(BYTE ucEventIndex);
+ 393          void ScalerTimerInitialTimerEvent(void);
+ 394          void ScalerTimerDelayXms(WORD usNum);
+ 395          bit ScalerTimerPollingFlagProc(WORD usTimeout, WORD usRegister, BYTE ucBit, bit bSuccess);
+ 396          
+ 397          #if(((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON) && (_TYPE_C_PMIC_
+             -TYPE != _PMIC_NONE)) || (_HDCP_2_2_SUPPORT == _ON))
+ 398          BYTE ScalerTimerPollingFlagProc_EXINT0(BYTE ucTimeout, WORD usRegister, BYTE ucBit, bit bSuccess);
+ 399          WORD ScalerTimerTimer2Count_EXINT0(WORD usTimer);
+ 400          #endif
+ 401          
+ 402          #if(((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)) || ((_TMDS_HDCP_
+             -2_2_SUPPORT == _ON) && (_HDMI_PORT_EXIST == _ON)))
+ 403          BYTE ScalerTimerPollingFlagProc_WDINT(BYTE ucTimeout, WORD usRegister, BYTE ucBit, bit bSuccess);
+ 404          WORD ScalerTimerTimer2Count_WDINT(WORD usTimer);
+ 405          #endif
+ 406          void ScalerTimerWaitForActiveTimerEvent(EnumScalerTimerEventID enumEventID);
+ 407          
+ 408          //****************************************************************************
+ 409          // FUNCTION DEFINITIONS
+ 410          //****************************************************************************
+ 411          
+ 412          #if(_RECORD_TIMER_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Record Timer Start Time
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerTimerResetRecordTimer_WDINT(void) using 3
+              {
+                  LOAD_TIMER_COUNTER(&g_usTimerRecordStartTime);
+              }
+              
+              
+              //--------------------------------------------------
+              // Description  : Get Recorded Time
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 9   
+
+              BYTE ScalerTimerGetRecordTimer_EXINT0(void) using 1
+              {
+                  WORD usRecordTime = 0;
+                  LOAD_TIMER_COUNTER(&usRecordTime);
+              
+                  if(g_usTimerRecordStartTime == usRecordTime)
+                  {
+                      usRecordTime = 0x00;
+                  }
+                  else if(g_usTimerRecordStartTime < usRecordTime)
+                  {
+                      usRecordTime = usRecordTime - g_usTimerRecordStartTime;
+                  }
+                  else
+                  {
+                      usRecordTime = (0xFFFF - g_usTimerRecordStartTime) + 1 + usRecordTime;
+                  }
+              
+                  return (BYTE)usRecordTime;
+              }
+              #endif
+ 450          
+ 451          
+ 452          #if(_WD_TIMER_INT_SUPPORT == _ON)
+ 453          //--------------------------------------------------
+ 454          // Description  : Watch Dog Timer Initial
+ 455          // Input Value  : None
+ 456          // Output Value : None
+ 457          //--------------------------------------------------
+ 458          void ScalerTimerWDInitial(void)
+ 459          {
+ 460   1          // Select WD Timer INT to EXINT2
+ 461   1          MCU_FFC4_IRQ_PRIORITY_3 = (MCU_FFC4_IRQ_PRIORITY_3 & ~(_BIT5 | _BIT4 | _BIT3)) | _BIT4;
+ 462   1      
+ 463   1          EX2 = 1;
+ 464   1      
+ 465   1          // Set WD Timer Threshold
+ 466   1          SET_TIMER_WD_THRESHOLD_COUNT(0xFFF);
+ 467   1      
+ 468   1          // Enable WD Timer Mode
+ 469   1          MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT4;
+ 470   1      
+ 471   1          // Clear Counter
+ 472   1          MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+ 473   1      
+ 474   1          // Clear WD Timer IRQ flag
+ 475   1          MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT7;
+ 476   1      
+ 477   1          // Enable WD Timer IRQ
+ 478   1          MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT2;
+ 479   1      }
+ 480          
+ 481          //--------------------------------------------------
+ 482          // Description  : Watch Dog Timer Event Processor
+ 483          // Input Value  : None
+ 484          // Output Value : None
+ 485          //--------------------------------------------------
+ 486          void ScalerTimerWDEventProc_WDINT(void) using 3
+ 487          {
+ 488   1          BYTE ucIndex = 0;
+ 489   1          WORD usNextTime = 0xFFF;
+ 490   1          BYTE ucActiveWDID = _SCALER_WD_TIMER_EVENT_NULL;
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 10  
+
+ 491   1          BYTE ucActiveWDTime = 0;
+ 492   1          BYTE ucWDTimeMSB = 0;
+ 493   1          BYTE ucWDTimeLSB = 0;
+ 494   1          WORD usWDLatchedTime = 0;
+ 495   1      
+ 496   1          if(((MCU_FFEB_WDT_TEST & (_BIT7 | _BIT2)) == (_BIT7 | _BIT2)) || (GET_GLOBAL_XTAL_CLK_SWITCH() != _GLO
+             -BAL_XTAL_CLK_SEL_UNCHANGE))
+ 497   1          {
+ 498   2              // Latch Current Count
+ 499   2              MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+ 500   2      
+ 501   2              g_bWDTimer2Update = _FALSE;
+ 502   2      
+ 503   2              // Backup Register Value
+ 504   2              ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+ 505   2              ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+ 506   2      
+ 507   2              // Timer 2 Interrupt and Change Latched Value
+ 508   2              if(g_bWDTimer2Update == _TRUE)
+ 509   2              {
+ 510   3                  // Backup Register Value
+ 511   3                  ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+ 512   3                  ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+ 513   3              }
+ 514   2      
+ 515   2              usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+ 516   2      
+ 517   2              // Clear Counter and Latch Current Count
+ 518   2              MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+ 519   2      
+ 520   2              // Clear Overflow Flag
+ 521   2              MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT7;
+ 522   2      
+ 523   2              for(ucIndex = 0; ucIndex < _WD_TIMER_EVENT_COUNT; ucIndex++)
+ 524   2              {
+ 525   3                  if(GET_WD_EVENT_VALID(ucIndex) == _TRUE)
+ 526   3                  {
+ 527   4                      if(GET_WD_EVENT_TIME(ucIndex) <= usWDLatchedTime)
+ 528   4                      {
+ 529   5                          switch(GET_WD_EVENT_ID(ucIndex))
+ 530   5                          {
+ 531   6      #if(_D0_DP_EXIST == _ON)
+ 532   6                              case _SCALER_WD_TIMER_EVENT_RX0_DP_LINK_TRAINING_REBUILD_PHY:
+ 533   6      
+ 534   6                                  ScalerDpWDTimerEventProc_WDINT(GET_WD_EVENT_ID(ucIndex));
+ 535   6      
+ 536   6                                  break;
+ 537   6      #endif // #if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+ 538   6      
+ 539   6      #if(_D1_DP_EXIST == _ON)
+ 540   6                              case _SCALER_WD_TIMER_EVENT_RX1_DP_LINK_TRAINING_REBUILD_PHY:
+ 541   6      
+ 542   6                                  ScalerDpWDTimerEventProc_WDINT(GET_WD_EVENT_ID(ucIndex));
+ 543   6      
+ 544   6                                  break;
+ 545   6      #endif // End of #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+ 546   6      
+ 547   6      #if(_HDMI_2_0_SUPPORT == _ON)
+ 548   6      
+ 549   6                              case _SCALER_WD_TIMER_EVENT_RX0_HDMI_RR_RETRY:
+ 550   6                              case _SCALER_WD_TIMER_EVENT_RX1_HDMI_RR_RETRY:
+ 551   6                              case _SCALER_WD_TIMER_EVENT_RX2_HDMI_RR_RETRY:
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 11  
+
+ 552   6                              case _SCALER_WD_TIMER_EVENT_RX3_HDMI_RR_RETRY:
+ 553   6                              case _SCALER_WD_TIMER_EVENT_RX4_HDMI_RR_RETRY:
+ 554   6                              case _SCALER_WD_TIMER_EVENT_RX5_HDMI_RR_RETRY:
+ 555   6      
+ 556   6                                  ScalerTMDSHdmiReadRequestTimerEnable_WDINT(_ENABLE);
+ 557   6      
+ 558   6                                  break;
+ 559   6      #endif
+ 560   6      
+ 561   6      #if((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON))
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+                                      case _SCALER_WD_TIMER_EVENT_CC_RX0_DETECT_VBUS:
+              #if(_TYPE_C_PMIC_TYPE != _PMIC_NONE)
+                                      case _SCALER_WD_TIMER_EVENT_CC_RX0_CHECK_VBUS_0V:
+              #endif
+              #if((_HW_TYPE_C_SUPPORT_VERSION == _TYPE_C_VERSION_1_2) && (_TYPE_C_EMB_CTS_FLOW == _ON))
+                                      case _SCALER_WD_TIMER_EVENT_CC_RX0_CHANGE_VBUS_OFF_THRESHOLD:
+              #endif
+                                          ScalerTypeCRx0CcWDTimerEventProc_WDINT(GET_WD_EVENT_ID(ucIndex), &ucActiveWDID
+             -, &ucActiveWDTime);
+              
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_CBL_TIMEOUT:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SEND_HARD_RST:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SENDER_RESP_TIMEOUT:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_PS_TRANSITION_TIMEOUT:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SRC_TURN_OFF_POWER:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SRC_TURN_ON_POWER:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_CHECK_PSRDY:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SEND_MSG:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_STATE_TO_READY:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SNK_SWITCH_TO_SRC:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SEND_EPR_ENTER_FAILED:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SEND_VCONN_SWAP:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_CHUNK_SENDER_REQ_TIMEOUT:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_SEND_EPR_SRC_CAP:
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_TX_AVALIABLE:
+              #if(_TYPE_C_VENDOR_ALT_MODE == _TYPE_C_DELL_ALT_MODE)
+                                      case _SCALER_WD_TIMER_EVENT_PD_RX0_DELL_AM_ENTER_TIMEOUT:
+              #endif
+              
+                                          ScalerTypeCRx0PdWDTimerEventProc_WDINT(GET_WD_EVENT_ID(ucIndex), &ucActiveWDID
+             -, &ucActiveWDTime);
+              
+                                          break;
+              #endif
+              #if((_TYPE_C_PMIC_TYPE != _PMIC_NONE) && (_TYPE_C_PMIC_FW_OCP_PROTECT_METHOD == _TYPE_C_PMIC_FW_OCP_BY_SCA
+             -LER_SARADC))
+                                      case _SCALER_WD_TIMER_EVENT_PMIC_RX0_FW_OCP_DELAY:
+              
+                                          ScalerTypeCPmicRx0WDTimerEventProc_WDINT(GET_WD_EVENT_ID(ucIndex));
+              
+                                          break;
+              #endif
+              #endif
+ 605   6      
+ 606   6      #if((_DP_HDCP_2_2_SUPPORT == _ON) && (_D0_DP_EXIST == _ON))
+ 607   6                              case _SCALER_WD_TIMER_EVENT_DP_RX0_HDCP2_AKE_INIT:
+ 608   6      
+ 609   6                                  ScalerDpRx0Hdcp2AkeInitProc_WDINT();
+ 610   6      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 12  
+
+ 611   6                                  break;
+ 612   6      #endif
+ 613   6      #if((_DP_HDCP_2_2_SUPPORT == _ON) && (_D1_DP_EXIST == _ON))
+ 614   6                              case _SCALER_WD_TIMER_EVENT_DP_RX1_HDCP2_AKE_INIT:
+ 615   6      
+ 616   6                                  ScalerDpRx1Hdcp2AkeInitProc_WDINT();
+ 617   6      
+ 618   6                                  break;
+ 619   6      #endif
+ 620   6      
+ 621   6      #if((_DP_HDCP_2_2_SUPPORT == _ON) && (_D0_DP_EXIST == _ON))
+ 622   6                              case _SCALER_WD_TIMER_EVENT_DP_RX0_HDCP2_SKE:
+ 623   6      
+ 624   6                                  ScalerDpRx0Hdcp2SkeProc_WDINT();
+ 625   6      
+ 626   6                                  break;
+ 627   6      #endif
+ 628   6      #if((_DP_HDCP_2_2_SUPPORT == _ON) && (_D1_DP_EXIST == _ON))
+ 629   6                              case _SCALER_WD_TIMER_EVENT_DP_RX1_HDCP2_SKE:
+ 630   6      
+ 631   6                                  ScalerDpRx1Hdcp2SkeProc_WDINT();
+ 632   6      
+ 633   6                                  break;
+ 634   6      #endif
+ 635   6      
+ 636   6      #if(_TMDS_HDCP_2_2_SUPPORT == _ON)
+ 637   6      
+ 638   6      #if((_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT) || (_D1_INPUT_PORT_TYPE == _D1_MHL_PORT))
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX1_HDCP2_RSA_CAL_START:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT7) == 0x00) // RSA = Idle
+                                              {
+                                                  ScalerTMDSRx1Hdcp2RxRsaCalculate_WDINT();
+              
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX1_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                              else
+                                              {
+                                                  // Reactive WD Timer to Start RSA Cal
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX1_HDCP2_RSA_CAL_START;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX1_HDCP2_CHECK_RSA_CAL_DONE:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT2) == _BIT2) // RSA done
+                                              {
+                                                  // Disable RSA Module
+                                                  ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+              
+                                                  if(ScalerHdcp2RxRsaOaepCalculate_WDINT(g_pucTmdsRx1Hdcp2Km) == _TRUE)
+                                                  {
+                                                      ScalerTMDSRx1Hdcp2HPrime_WDINT();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 13  
+
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX1_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          else
+                                          {
+                                              // Disable RSA Module
+                                              ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_RX1_HDCP2_SET_REAUTH:
+              
+                                          if(GET_TMDS_RX1_HDCP2_AUTHENTICATION_DONE() == _TRUE)
+                                          {
+                                              ScalerTMDSRx1Hdcp2SetReAuth_WDINT();
+                                          }
+              
+                                          break;
+              #endif
+ 697   6      
+ 698   6      #if((_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT) || (_D2_INPUT_PORT_TYPE == _D2_MHL_PORT))
+ 699   6                              case _SCALER_WD_TIMER_EVENT_TMDS_RX2_HDCP2_RSA_CAL_START:
+ 700   6      
+ 701   6                                  if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+ 702   6                                  {
+ 703   7                                      if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT7) == 0x00) // RSA = Idle
+ 704   7                                      {
+ 705   8                                          ScalerTMDSRx2Hdcp2RxRsaCalculate_WDINT();
+ 706   8      
+ 707   8                                          // Active Timer Event to Check RSA Done
+ 708   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX2_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+ 709   8                                          ucActiveWDTime = 10;
+ 710   8                                      }
+ 711   7                                      else
+ 712   7                                      {
+ 713   8                                          // Reactive WD Timer to Start RSA Cal
+ 714   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX2_HDCP2_RSA_CAL_START;
+ 715   8                                          ucActiveWDTime = 10;
+ 716   8                                      }
+ 717   7                                  }
+ 718   6                                  break;
+ 719   6      
+ 720   6                              case _SCALER_WD_TIMER_EVENT_TMDS_RX2_HDCP2_CHECK_RSA_CAL_DONE:
+ 721   6      
+ 722   6                                  if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+ 723   6                                  {
+ 724   7                                      if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT2) == _BIT2) // RSA done
+ 725   7                                      {
+ 726   8                                          // Disable RSA Module
+ 727   8                                          ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+ 728   8      
+ 729   8                                          if(ScalerHdcp2RxRsaOaepCalculate_WDINT(g_pucTmdsRx2Hdcp2Km) == _TRUE)
+ 730   8                                          {
+ 731   9                                              ScalerTMDSRx2Hdcp2HPrime_WDINT();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 14  
+
+ 732   9                                          }
+ 733   8                                      }
+ 734   7                                      else
+ 735   7                                      {
+ 736   8                                          // Active Timer Event to Check RSA Done
+ 737   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX2_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+ 738   8                                          ucActiveWDTime = 10;
+ 739   8                                      }
+ 740   7                                  }
+ 741   6                                  else
+ 742   6                                  {
+ 743   7                                      // Disable RSA Module
+ 744   7                                      ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+ 745   7                                  }
+ 746   6                                  break;
+ 747   6      
+ 748   6                              case _SCALER_WD_TIMER_EVENT_RX2_HDCP2_SET_REAUTH:
+ 749   6      
+ 750   6                                  if(GET_TMDS_RX2_HDCP2_AUTHENTICATION_DONE() == _TRUE)
+ 751   6                                  {
+ 752   7                                      ScalerTMDSRx2Hdcp2SetReAuth_WDINT();
+ 753   7                                  }
+ 754   6      
+ 755   6                                  break;
+ 756   6      #endif
+ 757   6      
+ 758   6      #if((_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT) || (_D3_INPUT_PORT_TYPE == _D3_MHL_PORT))
+ 759   6                              case _SCALER_WD_TIMER_EVENT_TMDS_RX3_HDCP2_RSA_CAL_START:
+ 760   6      
+ 761   6                                  if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+ 762   6                                  {
+ 763   7                                      if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT7) == 0x00) // RSA = Idle
+ 764   7                                      {
+ 765   8                                          ScalerTMDSRx3Hdcp2RxRsaCalculate_WDINT();
+ 766   8      
+ 767   8                                          // Active Timer Event to Check RSA Done
+ 768   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX3_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+ 769   8                                          ucActiveWDTime = 10;
+ 770   8                                      }
+ 771   7                                      else
+ 772   7                                      {
+ 773   8                                          // Reactive WD Timer to Start RSA Cal
+ 774   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX3_HDCP2_RSA_CAL_START;
+ 775   8                                          ucActiveWDTime = 10;
+ 776   8                                      }
+ 777   7                                  }
+ 778   6                                  break;
+ 779   6      
+ 780   6                              case _SCALER_WD_TIMER_EVENT_TMDS_RX3_HDCP2_CHECK_RSA_CAL_DONE:
+ 781   6      
+ 782   6                                  if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+ 783   6                                  {
+ 784   7                                      if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT2) == _BIT2) // RSA done
+ 785   7                                      {
+ 786   8                                          // Disable RSA Module
+ 787   8                                          ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+ 788   8      
+ 789   8                                          if(ScalerHdcp2RxRsaOaepCalculate_WDINT(g_pucTmdsRx3Hdcp2Km) == _TRUE)
+ 790   8                                          {
+ 791   9                                              ScalerTMDSRx3Hdcp2HPrime_WDINT();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 15  
+
+ 792   9                                          }
+ 793   8                                      }
+ 794   7                                      else
+ 795   7                                      {
+ 796   8                                          // Active Timer Event to Check RSA Done
+ 797   8                                          ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX3_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+ 798   8                                          ucActiveWDTime = 10;
+ 799   8                                      }
+ 800   7                                  }
+ 801   6                                  else
+ 802   6                                  {
+ 803   7                                      // Disable RSA Module
+ 804   7                                      ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+ 805   7                                  }
+ 806   6                                  break;
+ 807   6      
+ 808   6                              case _SCALER_WD_TIMER_EVENT_RX3_HDCP2_SET_REAUTH:
+ 809   6      
+ 810   6                                  if(GET_TMDS_RX3_HDCP2_AUTHENTICATION_DONE() == _TRUE)
+ 811   6                                  {
+ 812   7                                      ScalerTMDSRx3Hdcp2SetReAuth_WDINT();
+ 813   7                                  }
+ 814   6      
+ 815   6                                  break;
+ 816   6      #endif
+ 817   6      
+ 818   6      #if((_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT) || (_D4_INPUT_PORT_TYPE == _D4_MHL_PORT))
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX4_HDCP2_RSA_CAL_START:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT7) == 0x00) // RSA = Idle
+                                              {
+                                                  ScalerTMDSRx4Hdcp2RxRsaCalculate_WDINT();
+              
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX4_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                              else
+                                              {
+                                                  // Reactive WD Timer to Start RSA Cal
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX4_HDCP2_RSA_CAL_START;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX4_HDCP2_CHECK_RSA_CAL_DONE:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT2) == _BIT2) // RSA done
+                                              {
+                                                  // Disable RSA Module
+                                                  ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+              
+                                                  if(ScalerHdcp2RxRsaOaepCalculate_WDINT(g_pucTmdsRx4Hdcp2Km) == _TRUE)
+                                                  {
+                                                      ScalerTMDSRx4Hdcp2HPrime_WDINT();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 16  
+
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX4_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          else
+                                          {
+                                              // Disable RSA Module
+                                              ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_RX4_HDCP2_SET_REAUTH:
+              
+                                          if(GET_TMDS_RX4_HDCP2_AUTHENTICATION_DONE() == _TRUE)
+                                          {
+                                              ScalerTMDSRx4Hdcp2SetReAuth_WDINT();
+                                          }
+                                          break;
+              #endif
+ 876   6      
+ 877   6      #if((_D5_INPUT_PORT_TYPE == _D5_HDMI_PORT) || (_D5_INPUT_PORT_TYPE == _D5_MHL_PORT))
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX5_HDCP2_RSA_CAL_START:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT7) == 0x00) // RSA = Idle
+                                              {
+                                                  ScalerTMDSRx5Hdcp2RxRsaCalculate_WDINT();
+              
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX5_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                              else
+                                              {
+                                                  // Reactive WD Timer to Start RSA Cal
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX5_HDCP2_RSA_CAL_START;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_TMDS_RX5_HDCP2_CHECK_RSA_CAL_DONE:
+              
+                                          if(ScalerHdcp2RsaAvailable_WDINT() == _TRUE)
+                                          {
+                                              if(ScalerGetBit_EXINT(P63_10_HDCP_RSA_CTRL0, _BIT2) == _BIT2) // RSA done
+                                              {
+                                                  // Disable RSA Module
+                                                  ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+              
+                                                  if(ScalerHdcp2RxRsaOaepCalculate_WDINT(g_pucTmdsRx5Hdcp2Km) == _TRUE)
+                                                  {
+                                                      ScalerTMDSRx5Hdcp2HPrime_WDINT();
+                                                  }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 17  
+
+                                              }
+                                              else
+                                              {
+                                                  // Active Timer Event to Check RSA Done
+                                                  ucActiveWDID = _SCALER_WD_TIMER_EVENT_TMDS_RX5_HDCP2_CHECK_RSA_CAL_DON
+             -E;
+                                                  ucActiveWDTime = 10;
+                                              }
+                                          }
+                                          else
+                                          {
+                                              // Disable RSA Module
+                                              ScalerSetBit_EXINT(P63_10_HDCP_RSA_CTRL0, ~_BIT7, 0x00);
+                                          }
+                                          break;
+              
+                                      case _SCALER_WD_TIMER_EVENT_RX5_HDCP2_SET_REAUTH:
+              
+                                          if(GET_TMDS_RX5_HDCP2_AUTHENTICATION_DONE() == _TRUE)
+                                          {
+                                              ScalerTMDSRx5Hdcp2SetReAuth_WDINT();
+                                          }
+                                          break;
+              #endif
+ 935   6      
+ 936   6      #endif // End of #if(_TMDS_HDCP_2_2_SUPPORT == _ON)
+ 937   6                              default:
+ 938   6                                  break;
+ 939   6                          }
+ 940   5      
+ 941   5                          // Clear Event Valid After Event Processed
+ 942   5                          CLR_WD_EVENT_VALID(ucIndex);
+ 943   5                      }
+ 944   4                      else
+ 945   4                      {
+ 946   5                          if(GET_GLOBAL_XTAL_CLK_SWITCH() == _GLOBAL_XTAL_CLK_SEL_UNCHANGE)
+ 947   5                          {
+ 948   6                              // Calculate Remain Event Time
+ 949   6                              SET_WD_EVENT_TIME(ucIndex, ((GET_WD_EVENT_TIME(ucIndex) > usWDLatchedTime) ? (GET_
+             -WD_EVENT_TIME(ucIndex) - usWDLatchedTime) : 0));
+ 950   6                          }
+ 951   5                          else if(GET_GLOBAL_XTAL_CLK_SWITCH() == _GLOBAL_XTAL_CLK_SEL_TO_INTERNAL)
+ 952   5                          {
+ 953   6                              // Calculate Remain Event Time; xtal -> iosc
+ 954   6                              SET_WD_EVENT_TIME(ucIndex, ((GET_WD_EVENT_TIME(ucIndex) > usWDLatchedTime) ? ((DWO
+             -RD)(GET_WD_EVENT_TIME(ucIndex) - usWDLatchedTime) * _INTERNAL_OSC_XTAL / _EXT_XTAL) : 0));
+ 955   6                          }
+ 956   5                          else if(GET_GLOBAL_XTAL_CLK_SWITCH() == _GLOBAL_XTAL_CLK_SEL_TO_EXTERNAL)
+ 957   5                          {
+ 958   6                              // Calculate Remain Event Time; iosc -> xtal
+ 959   6                              SET_WD_EVENT_TIME(ucIndex, ((GET_WD_EVENT_TIME(ucIndex) > usWDLatchedTime) ? ((DWO
+             -RD)(GET_WD_EVENT_TIME(ucIndex) - usWDLatchedTime) * _EXT_XTAL / _INTERNAL_OSC_XTAL) : 0));
+ 960   6                          }
+ 961   5      
+ 962   5                          // Set Next Execute Time
+ 963   5                          if(GET_WD_EVENT_TIME(ucIndex) < usNextTime)
+ 964   5                          {
+ 965   6                              usNextTime = GET_WD_EVENT_TIME(ucIndex);
+ 966   6                          }
+ 967   5                      }
+ 968   4                  }
+ 969   3              }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 18  
+
+ 970   2      
+ 971   2              if(usNextTime == 0)
+ 972   2              {
+ 973   3                  // Threshold Set 0 will Induce HW IRQ can't happen
+ 974   3                  SET_TIMER_WD_THRESHOLD_COUNT(1);
+ 975   3              }
+ 976   2              else
+ 977   2              {
+ 978   3                  SET_TIMER_WD_THRESHOLD_COUNT(usNextTime);
+ 979   3              }
+ 980   2      
+ 981   2              SET_GLOBAL_XTAL_CLK_SWITCH(_GLOBAL_XTAL_CLK_SEL_UNCHANGE);
+ 982   2          }
+ 983   1      
+ 984   1          if((ucActiveWDTime != 0x00) && (ucActiveWDID != _SCALER_WD_TIMER_EVENT_NULL))
+ 985   1          {
+ 986   2              ScalerTimerWDActivateTimerEvent_WDINT(ucActiveWDTime, ucActiveWDID);
+ 987   2          }
+ 988   1      }
+ 989          
+ 990          //--------------------------------------------------
+ 991          // Description  : Activate Watch Dog Timer (Only for EXINT0)
+ 992          //                Acceptable Event Time should be between 10 ~ 500ms (for 14.318M) or 5 ~ 250ms (for 27M)
+ 993          // Input Value  : None
+ 994          // Output Value : None
+ 995          //--------------------------------------------------
+ 996          void ScalerTimerWDActivateTimerEvent_EXINT0(WORD usTime, EnumScalerWDTimerEventID enumEventID) using 1
+ 997          {
+ 998   1          BYTE ucIndex = 0;
+ 999   1          BYTE ucEventIndex = 0;
+1000   1          BYTE ucWDTimeMSB = 0;
+1001   1          BYTE ucWDTimeLSB = 0;
+1002   1          WORD usWDLatchedTime = 0;
+1003   1          WORD usWDThresholdTemp = 0;
+1004   1      
+1005   1          // Calculate Target WD Count
+1006   1          usTime = ((DWORD)usTime * (_SYS_USE_ISO_CLK ? _INTERNAL_OSC_XTAL : _EXT_XTAL)) >> 11;
+1007   1      
+1008   1          for(ucIndex = 0; ucIndex < _WD_TIMER_EVENT_COUNT; ucIndex++)
+1009   1          {
+1010   2              if(GET_WD_EVENT_VALID(ucIndex) == _FALSE)
+1011   2              {
+1012   3                  // Latch Current Count
+1013   3                  MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1014   3      
+1015   3                  g_bWDTimer2Update = _FALSE;
+1016   3      
+1017   3                  // Backup Register Value
+1018   3                  ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1019   3                  ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1020   3      
+1021   3                  // Timer 2 Interrupt and Change Latched Value
+1022   3                  if(g_bWDTimer2Update == _TRUE)
+1023   3                  {
+1024   4                      // Backup Register Value
+1025   4                      ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1026   4                      ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1027   4                  }
+1028   3      
+1029   3                  usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1030   3      
+1031   3                  SET_WD_EVENT_ID(ucIndex, enumEventID);
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 19  
+
+1032   3      
+1033   3                  // If Target WD Count overflows
+1034   3                  if((usWDLatchedTime + usTime) >= 0xFFF)
+1035   3                  {
+1036   4                      if(GET_TIMER_WD_THRESHOLD_COUNT() > usWDLatchedTime)
+1037   4                      {
+1038   5                          usWDThresholdTemp = GET_TIMER_WD_THRESHOLD_COUNT() - usWDLatchedTime;
+1039   5      
+1040   5                          SET_TIMER_WD_THRESHOLD_COUNT(usWDThresholdTemp);
+1041   5                      }
+1042   4                      else
+1043   4                      {
+1044   5                          // Threshold Set 0 will Induce HW IRQ can't happen
+1045   5                          SET_TIMER_WD_THRESHOLD_COUNT(1);
+1046   5                      }
+1047   4      
+1048   4                      // Latch Current Count
+1049   4                      MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1050   4      
+1051   4                      g_bWDTimer2Update = _FALSE;
+1052   4      
+1053   4                      // Backup Register Value
+1054   4                      ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1055   4                      ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1056   4      
+1057   4                      // Timer 2 Interrupt and Change Latched Value
+1058   4                      if(g_bWDTimer2Update == _TRUE)
+1059   4                      {
+1060   5                          // Backup Register Value
+1061   5                          ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1062   5                          ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1063   5                      }
+1064   4      
+1065   4                      usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1066   4      
+1067   4                      // Clear WD Timer Count
+1068   4                      MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+1069   4      
+1070   4                      SET_WD_EVENT_TIME(ucIndex, usTime);
+1071   4      
+1072   4                      // Modify the Remain Time of Every Other Valid Event (Use Event ID as Temporariy Variable)
+1073   4                      for(ucEventIndex = 0; ucEventIndex < _WD_TIMER_EVENT_COUNT; ucEventIndex++)
+1074   4                      {
+1075   5                          if((GET_WD_EVENT_VALID(ucEventIndex) == _FALSE) || (ucEventIndex == ucIndex))
+1076   5                          {
+1077   6                              continue;
+1078   6                          }
+1079   5                          else
+1080   5                          {
+1081   6                              SET_WD_EVENT_TIME(ucEventIndex, ((GET_WD_EVENT_TIME(ucEventIndex) > usWDLatchedTim
+             -e) ? (GET_WD_EVENT_TIME(ucEventIndex) - usWDLatchedTime) : 0));
+1082   6                          }
+1083   5                      }
+1084   4                  }
+1085   3                  else
+1086   3                  {
+1087   4                      // The Target Event should happen before previous event
+1088   4                      if((usWDLatchedTime + usTime) < GET_TIMER_WD_THRESHOLD_COUNT())
+1089   4                      {
+1090   5                          if(usTime == 0)
+1091   5                          {
+1092   6                              // Threshold Set 0 will Induce HW IRQ can't happen
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 20  
+
+1093   6                              SET_TIMER_WD_THRESHOLD_COUNT(1);
+1094   6                          }
+1095   5                          else
+1096   5                          {
+1097   6                              // Change Target WD Threshold to Current Event
+1098   6                              SET_TIMER_WD_THRESHOLD_COUNT(usTime);
+1099   6                          }
+1100   5      
+1101   5                          // Latch Current Count
+1102   5                          MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1103   5      
+1104   5                          g_bWDTimer2Update = _FALSE;
+1105   5      
+1106   5                          // Backup Register Value
+1107   5                          ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1108   5                          ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1109   5      
+1110   5                          // Timer 2 Interrupt and Change Latched Value
+1111   5                          if(g_bWDTimer2Update == _TRUE)
+1112   5                          {
+1113   6                              // Backup Register Value
+1114   6                              ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1115   6                              ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1116   6                          }
+1117   5      
+1118   5                          usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1119   5      
+1120   5                          // Clear WD Timer Count
+1121   5                          MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+1122   5      
+1123   5                          SET_WD_EVENT_TIME(ucIndex, usTime);
+1124   5      
+1125   5                          // Modify the Remain Time of Every Other Valid Event (Use Event ID as Temporariy Varia
+             -ble)
+1126   5                          for(ucEventIndex = 0; ucEventIndex < _WD_TIMER_EVENT_COUNT; ucEventIndex++)
+1127   5                          {
+1128   6                              if((GET_WD_EVENT_VALID(ucEventIndex) == _FALSE) || (ucEventIndex == ucIndex))
+1129   6                              {
+1130   7                                  continue;
+1131   7                              }
+1132   6                              else
+1133   6                              {
+1134   7                                  SET_WD_EVENT_TIME(ucEventIndex, ((GET_WD_EVENT_TIME(ucEventIndex) > usWDLatche
+             -dTime) ? (GET_WD_EVENT_TIME(ucEventIndex) - usWDLatchedTime) : 0));
+1135   7                              }
+1136   6                          }
+1137   5                      }
+1138   4                      else
+1139   4                      {
+1140   5                          SET_WD_EVENT_TIME(ucIndex, (usWDLatchedTime + usTime));
+1141   5                      }
+1142   4                  }
+1143   3                  break;
+1144   3              }
+1145   2          }
+1146   1      }
+1147          
+1148          //--------------------------------------------------
+1149          // Description  : Activate Watch Dog Timer (Only for WDINT0)
+1150          //                Acceptable Event Time should be between 10 ~ 500ms (for 14.318M) or 5 ~ 250ms (for 27M)
+1151          // Input Value  : usTime, enumEventID
+1152          // Output Value : None
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 21  
+
+1153          //--------------------------------------------------
+1154          void ScalerTimerWDActivateTimerEvent_WDINT(WORD usTime, EnumScalerWDTimerEventID enumEventID) using 3
+1155          {
+1156   1          BYTE ucIndex = 0;
+1157   1          BYTE ucEventIndex = 0;
+1158   1          BYTE ucWDTimeMSB = 0;
+1159   1          BYTE ucWDTimeLSB = 0;
+1160   1          WORD usWDLatchedTime = 0;
+1161   1          WORD usWDThresholdTemp = 0;
+1162   1      
+1163   1          // Calculate Target WD Count
+1164   1          usTime = ((DWORD)usTime * (_SYS_USE_ISO_CLK ? _INTERNAL_OSC_XTAL : _EXT_XTAL)) >> 11;
+1165   1      
+1166   1          for(ucIndex = 0; ucIndex < _WD_TIMER_EVENT_COUNT; ucIndex++)
+1167   1          {
+1168   2              if(GET_WD_EVENT_VALID(ucIndex) == _FALSE)
+1169   2              {
+1170   3                  // Latch Current Count
+1171   3                  MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1172   3      
+1173   3                  g_bWDTimer2Update = _FALSE;
+1174   3      
+1175   3                  // Backup Register Value
+1176   3                  ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1177   3                  ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1178   3      
+1179   3                  // Timer 2 Interrupt and Change Latched Value
+1180   3                  if(g_bWDTimer2Update == _TRUE)
+1181   3                  {
+1182   4                      // Backup Register Value
+1183   4                      ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1184   4                      ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1185   4                  }
+1186   3      
+1187   3                  usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1188   3      
+1189   3                  SET_WD_EVENT_ID(ucIndex, enumEventID);
+1190   3      
+1191   3                  // If Target WD Count overflows
+1192   3                  if((usWDLatchedTime + usTime) >= 0xFFF)
+1193   3                  {
+1194   4                      if(GET_TIMER_WD_THRESHOLD_COUNT() > usWDLatchedTime)
+1195   4                      {
+1196   5                          usWDThresholdTemp = GET_TIMER_WD_THRESHOLD_COUNT() - usWDLatchedTime;
+1197   5      
+1198   5                          SET_TIMER_WD_THRESHOLD_COUNT(usWDThresholdTemp);
+1199   5                      }
+1200   4                      else
+1201   4                      {
+1202   5                          // Threshold Set 0 will Induce HW IRQ can't happen
+1203   5                          SET_TIMER_WD_THRESHOLD_COUNT(1);
+1204   5                      }
+1205   4      
+1206   4                      // Latch Current Count
+1207   4                      MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1208   4      
+1209   4                      g_bWDTimer2Update = _FALSE;
+1210   4      
+1211   4                      // Backup Register Value
+1212   4                      ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1213   4                      ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1214   4      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 22  
+
+1215   4                      // Timer 2 Interrupt and Change Latched Value
+1216   4                      if(g_bWDTimer2Update == _TRUE)
+1217   4                      {
+1218   5                          // Backup Register Value
+1219   5                          ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1220   5                          ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1221   5                      }
+1222   4      
+1223   4                      usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1224   4      
+1225   4                      // Clear WD Timer Count
+1226   4                      MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+1227   4      
+1228   4                      SET_WD_EVENT_TIME(ucIndex, usTime);
+1229   4      
+1230   4                      // Modify the Remain Time of Every Other Valid Event (Use Event ID as Temporariy Variable)
+1231   4                      for(ucEventIndex = 0; ucEventIndex < _WD_TIMER_EVENT_COUNT; ucEventIndex++)
+1232   4                      {
+1233   5                          if((GET_WD_EVENT_VALID(ucEventIndex) == _FALSE) || (ucEventIndex == ucIndex))
+1234   5                          {
+1235   6                              continue;
+1236   6                          }
+1237   5                          else
+1238   5                          {
+1239   6                              SET_WD_EVENT_TIME(ucEventIndex, ((GET_WD_EVENT_TIME(ucEventIndex) > usWDLatchedTim
+             -e) ? (GET_WD_EVENT_TIME(ucEventIndex) - usWDLatchedTime) : 0));
+1240   6                          }
+1241   5                      }
+1242   4                  }
+1243   3                  else
+1244   3                  {
+1245   4                      // The Target Event should happen before previous event
+1246   4                      if((usWDLatchedTime + usTime) < GET_TIMER_WD_THRESHOLD_COUNT())
+1247   4                      {
+1248   5                          if(usTime == 0)
+1249   5                          {
+1250   6                              // Threshold Set 0 will Induce HW IRQ can't happen
+1251   6                              SET_TIMER_WD_THRESHOLD_COUNT(1);
+1252   6                          }
+1253   5                          else
+1254   5                          {
+1255   6                              // Change Target WD Threshold to Current Event
+1256   6                              SET_TIMER_WD_THRESHOLD_COUNT(usTime);
+1257   6                          }
+1258   5      
+1259   5                          // Latch Current Count
+1260   5                          MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+1261   5      
+1262   5                          g_bWDTimer2Update = _FALSE;
+1263   5      
+1264   5                          // Backup Register Value
+1265   5                          ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1266   5                          ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1267   5      
+1268   5                          // Timer 2 Interrupt and Change Latched Value
+1269   5                          if(g_bWDTimer2Update == _TRUE)
+1270   5                          {
+1271   6                              // Backup Register Value
+1272   6                              ucWDTimeMSB = MCU_FFAC_WATCHDOG_CNT3_VALUE;
+1273   6                              ucWDTimeLSB = MCU_FFAB_WATCHDOG_CNT23_VALUE;
+1274   6                          }
+1275   5      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 23  
+
+1276   5                          usWDLatchedTime = ((WORD)((ucWDTimeMSB & 0x7F) << 5) | (ucWDTimeLSB >> 3));
+1277   5      
+1278   5                          // Clear WD Timer Count
+1279   5                          MCU_FFEA_WATCHDOG_TIMER |= _BIT6;
+1280   5      
+1281   5                          SET_WD_EVENT_TIME(ucIndex, usTime);
+1282   5      
+1283   5                          // Modify the Remain Time of Every Other Valid Event (Use Event ID as Temporariy Varia
+             -ble)
+1284   5                          for(ucEventIndex = 0; ucEventIndex < _WD_TIMER_EVENT_COUNT; ucEventIndex++)
+1285   5                          {
+1286   6                              if((GET_WD_EVENT_VALID(ucEventIndex) == _FALSE) || (ucEventIndex == ucIndex))
+1287   6                              {
+1288   7                                  continue;
+1289   7                              }
+1290   6                              else
+1291   6                              {
+1292   7                                  SET_WD_EVENT_TIME(ucEventIndex, ((GET_WD_EVENT_TIME(ucEventIndex) > usWDLatche
+             -dTime) ? (GET_WD_EVENT_TIME(ucEventIndex) - usWDLatchedTime) : 0));
+1293   7                              }
+1294   6                          }
+1295   5                      }
+1296   4                      else
+1297   4                      {
+1298   5                          SET_WD_EVENT_TIME(ucIndex, (usWDLatchedTime + usTime));
+1299   5                      }
+1300   4                  }
+1301   3                  break;
+1302   3              }
+1303   2          }
+1304   1      }
+1305          
+1306          //--------------------------------------------------
+1307          // Description  : Cancel WD Timer Event (Only for EXINT0)
+1308          // Input Value  : ucEventID => Event ID
+1309          // Output Value : None
+1310          //--------------------------------------------------
+1311          void ScalerTimerWDCancelTimerEvent(EnumScalerWDTimerEventID enumEventID)
+1312          {
+1313   1          BYTE ucIndex = 0;
+1314   1      
+1315   1          for(ucIndex = 0; ucIndex < _WD_TIMER_EVENT_COUNT; ucIndex++)
+1316   1          {
+1317   2              if(GET_WD_EVENT_ID(ucIndex) == enumEventID)
+1318   2              {
+1319   3                  CLR_WD_EVENT_VALID(ucIndex);
+1320   3                  break;
+1321   3              }
+1322   2          }
+1323   1      }
+1324          
+1325          #if((_DP_SUPPORT == _ON) || ((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT =
+             -= _ON)) || (_TMDS_HDCP_2_2_SUPPORT == _ON))
+1326          //--------------------------------------------------
+1327          // Description  : Cancel WD Timer Event in Interrupt (Only for EXINT0)
+1328          // Input Value  : ucEventID => Event ID
+1329          // Output Value : None
+1330          //--------------------------------------------------
+1331          void ScalerTimerWDCancelTimerEvent_EXINT0(EnumScalerWDTimerEventID enumEventID) using 1
+1332          {
+1333   1          BYTE ucIndex = 0;
+1334   1      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 24  
+
+1335   1          for(ucIndex = 0; ucIndex < _WD_TIMER_EVENT_COUNT; ucIndex++)
+1336   1          {
+1337   2              if(GET_WD_EVENT_ID(ucIndex) == enumEventID)
+1338   2              {
+1339   3                  CLR_WD_EVENT_VALID(ucIndex);
+1340   3                  break;
+1341   3              }
+1342   2          }
+1343   1      }
+1344          #endif
+1345          #endif // End of #if(_WD_TIMER_INT_SUPPORT == _ON)
+1346          
+1347          #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1348          //--------------------------------------------------
+1349          // Description  : Timer0 Set Timer Counter
+1350          // Input Value  : ucTimerMs --> Counter in ms (1~65535ms)
+1351          //                Stops Timer0 if ucTimerMs = 0 or _TIMER_OFF
+1352          // Output Value : None
+1353          //--------------------------------------------------
+1354          void ScalerTimer0SetTimerCount(WORD usTimerMs)
+1355          {
+1356   1          BYTE ucTemp = 0;
+1357   1      
+1358   1          if(usTimerMs == _TIMER_OFF)
+1359   1          {
+1360   2              // Stop Timer 0
+1361   2              TR0 = _OFF;
+1362   2          }
+1363   1          else
+1364   1          {
+1365   2              if(usTimerMs <= _TIMER01_STEP_TIME_MS)
+1366   2              {
+1367   3                  // Record the timer event period is going to happen
+1368   3                  g_usTimerEventPeriod0 = 1;
+1369   3      
+1370   3                  // An intermediate variable
+1371   3                  PDATA_WORD(0) = usTimerMs * 1000;
+1372   3      
+1373   3                  // Back up timer event period
+1374   3                  g_usTimerPreviousCount0 = PDATA_WORD(0);
+1375   3              }
+1376   2              else
+1377   2              {
+1378   3                  // Get common divisor of integer number (_TIMER01_STEP_TIME_MS, usTimerMs)
+1379   3                  ucTemp = ScalerTimerGetCommonDivisor(_TIMER01_STEP_TIME_MS, usTimerMs);
+1380   3      
+1381   3                  // Record the timer event period is going to happen
+1382   3                  g_usTimerEventPeriod0 = usTimerMs / ucTemp;
+1383   3      
+1384   3                  // An intermediate variable
+1385   3                  PDATA_WORD(0) = ucTemp * 1000;
+1386   3      
+1387   3                  // Back up timer event period
+1388   3                  g_usTimerPreviousCount0 = PDATA_WORD(0);
+1389   3              }
+1390   2      
+1391   2              // Check if MCU Clk Source
+1392   2              if((MCU_FFED_MCU_CONTROL & _BIT1) == _BIT1)
+1393   2              {
+1394   3                  PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_M2PLL * PDATA_WORD(0)) / 1000));
+1395   3              }
+1396   2              else
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 25  
+
+1397   2              {
+1398   3                  if(GET_REG_XTAL_CLK_SEL() == _IOSC_CLK)
+1399   3                  {
+1400   4                      if(((MCU_FFED_MCU_CONTROL & 0x3C) >> 2) == _FLASH_CLK_PS_FAST_DIV)
+1401   4                      {
+1402   5                          PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC_FAST * PDATA_WORD(0)) / 100
+             -0));
+1403   5                      }
+1404   4                      else
+1405   4                      {
+1406   5                          PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC * PDATA_WORD(0)) / 1000));
+1407   5                      }
+1408   4                  }
+1409   3                  else
+1410   3                  {
+1411   4                      PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_XTAL * PDATA_WORD(0)) / 1000));
+1412   4                  }
+1413   3              }
+1414   2      
+1415   2              // Disable Timer 0
+1416   2              ET0 = _DISABLE;
+1417   2      
+1418   2              // Stop Timer 0
+1419   2              TR0 = _OFF;
+1420   2      
+1421   2              // Clear overflow flag
+1422   2              TF0 = 0;
+1423   2      
+1424   2              g_ucTimerCountLByte0 = PDATA_WORD(0) & 0x00FF;
+1425   2              g_ucTimerCountHByte0 = PDATA_WORD(0) >> 8;
+1426   2      
+1427   2              TL0 = g_ucTimerCountLByte0;
+1428   2              TH0 = g_ucTimerCountHByte0;
+1429   2      
+1430   2              // Enable interrupt of Timer0
+1431   2              ET0 = _ENABLE;
+1432   2      
+1433   2              // Reset Timer0 Axis Counter
+1434   2              g_usTimerAxisCnt0 = 0;
+1435   2      
+1436   2              // Run Timer 0
+1437   2              TR0 = _ON;
+1438   2          }
+1439   1      }
+1440          #endif // End of #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1441          
+1442          #if(_INSTANT_TIMER_EVENT_1 == _ON)
+              //--------------------------------------------------
+              // Description  : Timer1 Set Timer Counter
+              // Input Value  : ucTimerMs --> Counter in ms (1~65535ms)
+              //                Stops Timer0 if ucTimerMs = 0 or _TIMER_OFF
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerTimer1SetTimerCount(WORD usTimerMs)
+              {
+                  BYTE ucTemp = 0;
+              
+                  if(usTimerMs == _TIMER_OFF)
+                  {
+                      // Stop Timer 1
+                      TR1 = _OFF;
+                  }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 26  
+
+                  else
+                  {
+                      if(usTimerMs <= _TIMER01_STEP_TIME_MS)
+                      {
+                          // Record the timer event period is going to happen
+              
+                          // An intermediate variable
+              #if(_IR_VIRTUAL)    
+                              PDATA_WORD(0) = usTimerMs*100;
+                              g_usTimerEventPeriod1 = 1;
+                          
+              #elif(_LED_EFFECT_TJMODE14==_ON)
+                              PDATA_WORD(0) = usTimerMs * 100;  //100
+                              g_usTimerEventPeriod1 = 10;
+              #else
+                              // Record the timer event period is going to happen
+                              g_usTimerEventPeriod1 = 1;
+                          
+                              // An intermediate variable
+                              PDATA_WORD(0) = usTimerMs * 1000;
+                          
+                          
+                          
+              #endif
+                          // Back up timer event period
+                          g_usTimerPreviousCount1 = PDATA_WORD(0);
+                      }
+                      else
+                      {
+                          // Get common divisor of integer number (_TIMER01_STEP_TIME_MS, usTimerMs)
+                          ucTemp = ScalerTimerGetCommonDivisor(_TIMER01_STEP_TIME_MS, usTimerMs);
+              
+                          // Record the timer event period is going to happen
+                          g_usTimerEventPeriod1 = usTimerMs / ucTemp;
+              
+                          // An intermediate variable
+                          PDATA_WORD(0) = ucTemp * 1000;
+              
+                          // Back up timer event period
+                          g_usTimerPreviousCount1 = PDATA_WORD(0);
+                      }
+              
+                      // Check if MCU Clk Source
+                      if((MCU_FFED_MCU_CONTROL & _BIT1) == _BIT1)
+                      {
+                          PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_M2PLL * PDATA_WORD(0)) / 1000));
+                      }
+                      else
+                      {
+                          if(GET_REG_XTAL_CLK_SEL() == _IOSC_CLK)
+                          {
+                              if(((MCU_FFED_MCU_CONTROL & 0x3C) >> 2) == _FLASH_CLK_PS_FAST_DIV)
+                              {
+                                  PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC_FAST * PDATA_WORD(0)) / 100
+             -0));
+                              }
+                              else
+                              {
+                                  PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC * PDATA_WORD(0)) / 1000));
+                              }
+                          }
+                          else
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 27  
+
+                          {
+                              PDATA_WORD(0) = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_XTAL * PDATA_WORD(0)) / 1000));
+                          }
+                      }
+              
+                      // Disable Timer 1
+                      ET1 = _DISABLE;
+              
+                      // Stop Timer 1
+                      TR1 = _OFF;
+              
+                      // Clear overflow flag
+                      TF1 = 0;
+              
+                      g_ucTimerCountLByte1 = PDATA_WORD(0) & 0x00FF;
+                      g_ucTimerCountHByte1 = PDATA_WORD(0) >> 8;
+              
+                      TL1 = g_ucTimerCountLByte1;
+                      TH1 = g_ucTimerCountHByte1;
+              
+                      // Enable interrupt of Timer1
+                      ET1 = _ENABLE;
+              
+                      // Reset Timer1 Axis Counter
+                      g_usTimerAxisCnt1 = 0;
+              
+                      // Run Timer 1
+                      TR1 = _ON;
+                  }
+              }
+              #endif // End of #if(_INSTANT_TIMER_EVENT_1 == _ON)
+1550          
+1551          #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+1552          
+1553          //--------------------------------------------------
+1554          // Description  : Seeking common divisor of two numbers
+1555          // Input Value  : usPar1 --> Paramater 2
+1556          //                usPar2 --> Paramater 2
+1557          // Output Value : None
+1558          //--------------------------------------------------
+1559          WORD ScalerTimerGetCommonDivisor(WORD usPar1, WORD usPar2)
+1560          {
+1561   1          WORD usTemp = 0;
+1562   1      
+1563   1          while(usPar2 != 0)
+1564   1          {
+1565   2              usTemp = usPar2;
+1566   2              usPar2 = usPar1 % usPar2;
+1567   2              usPar1 = usTemp;
+1568   2          }
+1569   1      
+1570   1          return usPar1;
+1571   1      }
+1572          #endif // End of #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+1573          
+1574          //--------------------------------------------------
+1575          // Description  : Set Time Count for Timer2
+1576          // Input Value  : OperationMode --> Initial/Normal/Saving
+1577          // Output Value : None
+1578          //--------------------------------------------------
+1579          void ScalerTimerSetTimerCount(EnumScalerTimerOperationMode enumOperationMode)
+1580          {
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 28  
+
+1581   1      #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1582   1          bit bTR0Info = TR0;
+1583   1      #endif
+1584   1      
+1585   1      #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                  bit bTR1Info = TR1;
+              #endif
+1588   1      
+1589   1          BYTE pucTimercounter[5];
+1590   1      
+1591   1          memset(pucTimercounter, 0, sizeof(pucTimercounter));
+1592   1      
+1593   1          switch(enumOperationMode)
+1594   1          {
+1595   2              case _TIMER_OPERATION_INITIAL_MODE:
+1596   2      
+1597   2                  pucTimercounter[0] = _TIMER2_COUNT_IN_LBYTE;
+1598   2                  pucTimercounter[1] = _TIMER2_COUNT_IN_HBYTE;
+1599   2                  pucTimercounter[2] = _TIMER2_COUNT_IN_LBYTE;
+1600   2                  pucTimercounter[3] = _TIMER2_COUNT_IN_HBYTE;
+1601   2      
+1602   2      #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                          g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_IN_WORD);
+                          g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_IN_WORD);
+              #else
+                          pucTimercounter[4] = _TIMER1_UART_COUNT_IN_BYTE;
+              #endif
+              #endif
+1610   2                  break;
+1611   2      
+1612   2              case _TIMER_OPERATION_POWER_NORMAL_MODE:
+1613   2                  pucTimercounter[0] = _TIMER2_COUNT_LBYTE;
+1614   2                  pucTimercounter[1] = _TIMER2_COUNT_HBYTE;
+1615   2                  pucTimercounter[2] = _TIMER2_COUNT_LBYTE;
+1616   2                  pucTimercounter[3] = _TIMER2_COUNT_HBYTE;
+1617   2      
+1618   2      #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+1619   2                  if(g_enumTimerMode != _TIMER_OPERATION_POWER_NORMAL_MODE)
+1620   2                  {
+1621   3                      g_enumTimerMode = _TIMER_OPERATION_POWER_NORMAL_MODE;
+1622   3      
+1623   3      #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1624   3                      if(bTR0Info == _ON)
+1625   3                      {
+1626   4                          g_usTimerBackupCount0 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_M2PLL * g_usTimerPreviou
+             -sCount0) / 1000));
+1627   4                      }
+1628   3      #endif
+1629   3      
+1630   3      #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                              if(bTR1Info == _ON)
+                              {
+                                  g_usTimerBackupCount1 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_M2PLL * g_usTimerPreviou
+             -sCount1) / 1000));
+                              }
+              #endif
+1636   3                  }
+1637   2      #endif
+1638   2      
+1639   2      #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 29  
+
+                          g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_WORD);
+                          g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_WORD);
+              #else
+                          pucTimercounter[4] = _TIMER1_UART_COUNT_BYTE;
+              #endif
+              #endif
+1647   2                  break;
+1648   2      
+1649   2              case _TIMER_OPERATION_POWER_SAVING_MODE:
+1650   2      
+1651   2                  if(((MCU_FFED_MCU_CONTROL & 0x3C) >> 2) == _FLASH_CLK_PS_FAST_DIV)
+1652   2                  {
+1653   3                      pucTimercounter[0] = _TIMER2_COUNT_PS_FAST_LBYTE;
+1654   3                      pucTimercounter[1] = _TIMER2_COUNT_PS_FAST_HBYTE;
+1655   3                      pucTimercounter[2] = _TIMER2_COUNT_PS_FAST_LBYTE;
+1656   3                      pucTimercounter[3] = _TIMER2_COUNT_PS_FAST_HBYTE;
+1657   3      
+1658   3      #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+1659   3                      if(g_enumTimerMode != _TIMER_OPERATION_POWER_SAVING_FAST_MODE)
+1660   3                      {
+1661   4                          g_enumTimerMode = _TIMER_OPERATION_POWER_SAVING_FAST_MODE;
+1662   4      
+1663   4      #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1664   4                          if(bTR0Info == _ON)
+1665   4                          {
+1666   5                              g_usTimerBackupCount0 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC_FAST * g_usTime
+             -rPreviousCount0) / 1000));
+1667   5                          }
+1668   4      #endif
+1669   4      
+1670   4      #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                                  if(bTR1Info == _ON)
+                                  {
+                                      g_usTimerBackupCount1 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC_FAST * g_usTime
+             -rPreviousCount1) / 1000));
+                                  }
+              #endif
+1676   4                      }
+1677   3      #endif
+1678   3      
+1679   3      #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                              g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_PS_FAST_WORD);
+                              g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_PS_FAST_WORD);
+              #else
+                              pucTimercounter[4] = _TIMER1_UART_COUNT_PS_FAST_BYTE;
+              #endif
+              #endif
+1687   3                  }
+1688   2                  else
+1689   2                  {
+1690   3                      pucTimercounter[0] = _TIMER2_COUNT_PS_LBYTE;
+1691   3                      pucTimercounter[1] = _TIMER2_COUNT_PS_HBYTE;
+1692   3                      pucTimercounter[2] = _TIMER2_COUNT_PS_LBYTE;
+1693   3                      pucTimercounter[3] = _TIMER2_COUNT_PS_HBYTE;
+1694   3      
+1695   3      #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+1696   3                      if(g_enumTimerMode != _TIMER_OPERATION_POWER_SAVING_MODE)
+1697   3                      {
+1698   4                          g_enumTimerMode = _TIMER_OPERATION_POWER_SAVING_MODE;
+1699   4      #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1700   4                          if(bTR0Info == _ON)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 30  
+
+1701   4                          {
+1702   5                              g_usTimerBackupCount0 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC * g_usTimerPrev
+             -iousCount0) / 1000));
+1703   5                          }
+1704   4      #endif
+1705   4      
+1706   4      #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                                  if(bTR1Info == _ON)
+                                  {
+                                      g_usTimerBackupCount1 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_IOSC * g_usTimerPrev
+             -iousCount1) / 1000));
+                                  }
+              #endif
+1712   4                      }
+1713   3      #endif
+1714   3      
+1715   3      #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                              g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_PS_WORD);
+                              g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_PS_WORD);
+              #else
+                              pucTimercounter[4] = _TIMER1_UART_COUNT_PS_BYTE;
+              #endif
+              #endif
+1723   3                  }
+1724   2      
+1725   2                  break;
+1726   2      
+1727   2              case _TIMER_OPERATION_POWER_IDLE_MODE:
+1728   2      
+1729   2                  pucTimercounter[0] = _TIMER2_COUNT_IDLE_LBYTE;
+1730   2                  pucTimercounter[1] = _TIMER2_COUNT_IDLE_HBYTE;
+1731   2      
+1732   2      #if(_SYS_PS_TIMER_PRECISION_SUPPPORT == _OFF)
+1733   2                  pucTimercounter[2] = _TIMER2_COUNT_PS_LBYTE;
+1734   2                  pucTimercounter[3] = _TIMER2_COUNT_PS_HBYTE;
+1735   2      #else
+                          pucTimercounter[2] = _TIMER2_COUNT_IN_LBYTE;
+                          pucTimercounter[3] = _TIMER2_COUNT_IN_HBYTE;
+              #endif
+1739   2      
+1740   2      #if(_UART_SUPPORT == _ON)
+              #if(_SYS_PS_TIMER_PRECISION_SUPPPORT == _OFF)
+                          if(((MCU_FFED_MCU_CONTROL & 0x3C) >> 2) == _FLASH_CLK_PS_FAST_DIV)
+                          {
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                              g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_PS_FAST_WORD);
+                              g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_PS_FAST_WORD);
+              #else
+                              pucTimercounter[4] = _TIMER1_UART_COUNT_PS_FAST_BYTE;
+              #endif
+                          }
+                          else
+              #endif
+                          {
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                              g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_IDLE_WORD);
+                              g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_IDLE_WORD);
+              #else
+                              pucTimercounter[4] = _TIMER1_UART_COUNT_IDLE_BYTE;
+              #endif
+                          }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 31  
+
+              #endif
+1762   2                  break;
+1763   2      
+1764   2      #if(_FLASH_CLK_SPEED == _FLASH_LOW_SPEED)
+                      case _TIMER_OPERATION_OSD_MODE:
+                          pucTimercounter[0] = _TIMER2_COUNT_OSD_LBYTE;
+                          pucTimercounter[1] = _TIMER2_COUNT_OSD_HBYTE;
+                          pucTimercounter[2] = _TIMER2_COUNT_OSD_LBYTE;
+                          pucTimercounter[3] = _TIMER2_COUNT_OSD_HBYTE;
+              
+              #if((_INSTANT_TIMER_EVENT_0 == _ON) || (_INSTANT_TIMER_EVENT_1 == _ON))
+                          if(g_enumTimerMode != _TIMER_OPERATION_OSD_MODE)
+                          {
+                              g_enumTimerMode = _TIMER_OPERATION_OSD_MODE;
+              #if(_INSTANT_TIMER_EVENT_0 == _ON)
+                              if(bTR0Info == _ON)
+                              {
+                                  g_usTimerBackupCount0 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_OSD * g_usTimerPreviousC
+             -ount0) / 1000));
+                              }
+              #endif
+              
+              #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                              if(bTR1Info == _ON)
+                              {
+                                  g_usTimerBackupCount1 = 0xFFFF - ((WORD)((_TIMER01_TEMP_COUNT_OSD * g_usTimerPreviousC
+             -ount1) / 1000));
+                              }
+              #endif
+                          }
+              #endif
+              
+              #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                          g_ucTimerCountLByte1_Uart = LOBYTE(_TIMER1_UART_COUNT_OSD_WORD);
+                          g_ucTimerCountHByte1_Uart = HIBYTE(_TIMER1_UART_COUNT_OSD_WORD);
+              #else
+                          pucTimercounter[4] = _TIMER1_UART_COUNT_OSD_BYTE;
+              #endif
+              #endif
+                          break;
+              #endif
+1801   2      
+1802   2              default:
+1803   2                  // Default case set to initial mode
+1804   2                  pucTimercounter[0] = _TIMER2_COUNT_IN_LBYTE;
+1805   2                  pucTimercounter[1] = _TIMER2_COUNT_IN_HBYTE;
+1806   2                  pucTimercounter[2] = _TIMER2_COUNT_IN_LBYTE;
+1807   2                  pucTimercounter[3] = _TIMER2_COUNT_IN_HBYTE;
+1808   2      
+1809   2                  break;
+1810   2          }
+1811   1      
+1812   1          // Disable Timer 2
+1813   1          ET2 = _DISABLE;
+1814   1      
+1815   1          // Stop Timer 2
+1816   1          TR2 = _OFF;
+1817   1      
+1818   1          // Clear overflow flag
+1819   1          TF2 = 0;
+1820   1      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 32  
+
+1821   1          TL2 = pucTimercounter[0];
+1822   1          TH2 = pucTimercounter[1];
+1823   1          RCAP2L = pucTimercounter[2];
+1824   1          RCAP2H = pucTimercounter[3];
+1825   1      
+1826   1          g_bNotifyTimer2Int = _FALSE;
+1827   1      
+1828   1          // Enable interrupt of Timer2
+1829   1          ET2 = _ENABLE;
+1830   1      
+1831   1          // Run Timer2
+1832   1          TR2 = _ON;
+1833   1      
+1834   1      #if(_INSTANT_TIMER_EVENT_0 == _ON)
+1835   1          if((bTR0Info == _ON) && (enumOperationMode != _TIMER_OPERATION_INITIAL_MODE) && (enumOperationMode != 
+             -_TIMER_OPERATION_POWER_IDLE_MODE))
+1836   1          {
+1837   2              // Do not load Timer Counter if Calculated Timer Counter is the same as Previous Timer Counter
+1838   2              if(g_usTimerBackupCount0 != (((WORD)g_ucTimerCountHByte0 << 8) | g_ucTimerCountLByte0))
+1839   2              {
+1840   3                  // Disable Timer 0
+1841   3                  ET0 = _DISABLE;
+1842   3      
+1843   3                  // Stop Timer 0
+1844   3                  TR0 = _OFF;
+1845   3      
+1846   3                  // Clear overflow flag
+1847   3                  TF0 = 0;
+1848   3      
+1849   3                  // Load Timer Counter
+1850   3                  g_ucTimerCountLByte0 = g_usTimerBackupCount0 & 0x00FF;
+1851   3                  g_ucTimerCountHByte0 = g_usTimerBackupCount0 >> 8;
+1852   3                  TL0 = g_ucTimerCountLByte0;
+1853   3                  TH0 = g_ucTimerCountHByte0;
+1854   3      
+1855   3                  // Enable interrupt of Timer0
+1856   3                  ET0 = _ENABLE;
+1857   3      
+1858   3                  // Run Timer 0
+1859   3                  TR0 = _ON;
+1860   3              }
+1861   2          }
+1862   1      #endif
+1863   1      
+1864   1      #if(_INSTANT_TIMER_EVENT_1 == _ON)
+                  if((bTR1Info == _ON) && (enumOperationMode != _TIMER_OPERATION_INITIAL_MODE) && (enumOperationMode != 
+             -_TIMER_OPERATION_POWER_IDLE_MODE))
+                  {
+                      // Do not load Timer Counter if Calculated Timer Counter is the same as Previous Timer Counter
+                      if(g_usTimerBackupCount1 != (((WORD)g_ucTimerCountHByte1 << 8) | g_ucTimerCountLByte1))
+                      {
+                          // Disable Timer 1
+                          ET1 = _DISABLE;
+              
+                          // Stop Timer 1
+                          TR1 = _OFF;
+              
+                          // Clear overflow flag
+                          TF1 = 0;
+              
+                          // Load Timer Counter
+                          g_ucTimerCountLByte1 = g_usTimerBackupCount1 & 0x00FF;
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 33  
+
+                          g_ucTimerCountHByte1 = g_usTimerBackupCount1 >> 8;
+                          TL1 = g_ucTimerCountLByte1;
+                          TH1 = g_ucTimerCountHByte1;
+              
+                          // Enable interrupt of Timer1
+                          ET1 = _ENABLE;
+              
+                          // Run Timer 1
+                          TR1 = _ON;
+                      }
+                  }
+              #endif
+1893   1      
+1894   1      #if(_UART_SUPPORT == _ON)
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                  // Disable Timer 1
+                  ET1 = _DISABLE;
+              #endif
+              
+                  // Stop Timer1
+                  TR1 = _OFF;
+              
+                  // Clear overflow flag
+                  TF1 = 0;
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                  TL1 = g_ucTimerCountLByte1_Uart;
+                  TH1 = g_ucTimerCountHByte1_Uart;
+              #else
+                  TL1 = pucTimercounter[4];
+                  TH1 = pucTimercounter[4];
+              #endif
+              
+                  switch(enumOperationMode)
+                  {
+                      case _TIMER_OPERATION_INITIAL_MODE:
+                      case _TIMER_OPERATION_POWER_NORMAL_MODE:
+              #if(_FLASH_CLK_SPEED == _FLASH_LOW_SPEED)
+                      case _TIMER_OPERATION_OSD_MODE:
+              #endif
+              #if(_UART_SMOD0_NORMAL == 16)
+                          // SMOD0 Set to 1
+                          PCON |= _BIT7;
+              #else
+                          // SMOD0 Set to 0
+                          PCON &= ~_BIT7;
+              #endif
+                          break;
+              
+                      case _TIMER_OPERATION_POWER_SAVING_MODE:
+                      case _TIMER_OPERATION_POWER_IDLE_MODE:
+              #if(_UART_SMOD0_SAVING == 16)
+                          // SMOD0 Set to 1
+                          PCON |= _BIT7;
+              #else
+                          // SMOD0 Set to 0
+                          PCON &= ~_BIT7;
+              #endif
+                          break;
+              
+                      default:
+                          break;
+                  }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 34  
+
+              
+              #if(_UART_LOW_BAUD_RATE_SUPPORT == _ON)
+                  // Enable interrupt of Timer1
+                  ET1 = _ENABLE;
+              #endif
+              
+                  // Run Timer1
+                  TR1 = _ON;
+              #endif
+1952   1      }
+1953          
+1954          #if(_SYSTEM_LOW_POWER_IDLE_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Add Timer Counter according to timer2
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerTimerAddTimerCounter(void)
+              {
+                  WORD usOffset = 0;
+              
+              #if(_SYS_PS_TIMER_PRECISION_SUPPPORT == _OFF)
+                  if(((MCU_FFED_MCU_CONTROL & 0x3C) >> 2) == _FLASH_CLK_PS_FAST_DIV)
+                  {
+                      if(g_bNotifyTimer2Int == _TRUE)
+                      {
+                          usOffset = _TIMER_COUNT_TEMP_PS_FAST1 - 1;
+                      }
+                      else
+                      {
+                          usOffset = (((WORD)(_TIMER2_COUNT_IDLE_HBYTE << 8) & 0xFF00) | (_TIMER2_COUNT_IDLE_LBYTE));
+                          usOffset = (((WORD)(TH2 << 8) & 0xFF00) | (TL2)) - usOffset;
+                          usOffset = usOffset / _TIMER_COUNT_TEMP_PS_FAST2;
+                      }
+                  }
+                  else
+              #endif
+                  {
+                      if(g_bNotifyTimer2Int == _TRUE)
+                      {
+                          usOffset = _IDLE_TIME - 1;
+                      }
+                      else
+                      {
+                          usOffset = (((WORD)(_TIMER2_COUNT_IDLE_HBYTE << 8) & 0xFF00) | (_TIMER2_COUNT_IDLE_LBYTE));
+                          usOffset = (((WORD)(TH2 << 8) & 0xFF00) | (TL2)) - usOffset;
+                          usOffset = usOffset / _TIMER_COUNT_TEMP_IDLE;
+                      }
+                  }
+              
+                  usOffset += ScalerTimerGetTimerCounter();
+                  STORE_TIMER_COUNTER(usOffset);
+              }
+              #endif // End of #if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _OFF)
+1997          
+1998          //--------------------------------------------------
+1999          // Description  : Scaler Timer Event Process
+2000          // Input Value  : enumEventID --> Event to be processed
+2001          // Output Value : None
+2002          //--------------------------------------------------
+2003          void ScalerTimerEventProc(EnumScalerTimerEventID enumEventID)
+2004          {
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 35  
+
+2005   1      #if(_DP_MST_SUPPORT == _ON)
+                  BYTE ucDebounceCnt = 0;
+              #endif
+2008   1      
+2009   1          switch(enumEventID)
+2010   1          {
+2011   2      #if((_DVI_SUPPORT == _ON) || (_HDMI_SUPPORT == _ON))
+2012   2      
+2013   2      #if(_DVI_SUPPORT == _ON)
+2014   2              case _SCALER_TIMER_EVENT_RX0_TMDS_VIDEO_DETECT:
+2015   2      #endif
+2016   2      
+2017   2      #if(_D1_TMDS_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX1_TMDS_VIDEO_DETECT:
+              #endif
+2020   2      
+2021   2      #if(_D2_TMDS_SUPPORT == _ON)
+2022   2              case _SCALER_TIMER_EVENT_RX2_TMDS_VIDEO_DETECT:
+2023   2      #endif
+2024   2      
+2025   2      #if(_D3_TMDS_SUPPORT == _ON)
+2026   2              case _SCALER_TIMER_EVENT_RX3_TMDS_VIDEO_DETECT:
+2027   2      #endif
+2028   2      
+2029   2      #if(_D4_TMDS_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX4_TMDS_VIDEO_DETECT:
+              #endif
+2032   2      
+2033   2      #if(_D5_TMDS_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX5_TMDS_VIDEO_DETECT:
+              #endif
+2036   2              ScalerTMDSVideoDetectEvent(enumEventID);
+2037   2      
+2038   2              break;
+2039   2      
+2040   2      #if(_HDMI_SUPPORT == _ON)
+2041   2      
+2042   2      #if(_HDMI_2_0_SUPPORT == _ON)
+2043   2              case _SCALER_TIMER_EVENT_RX0_HDMI2_FORMAT_RESET_WAIT:
+2044   2      
+2045   2      #if(_D1_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX1_HDMI2_FORMAT_RESET_WAIT:
+              #endif
+2048   2      
+2049   2      #if(_D2_HDMI_2_0_SUPPORT == _ON)
+2050   2              case _SCALER_TIMER_EVENT_RX2_HDMI2_FORMAT_RESET_WAIT:
+2051   2      #endif
+2052   2      
+2053   2      #if(_D3_HDMI_2_0_SUPPORT == _ON)
+2054   2              case _SCALER_TIMER_EVENT_RX3_HDMI2_FORMAT_RESET_WAIT:
+2055   2      #endif
+2056   2      
+2057   2      #if(_D4_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX4_HDMI2_FORMAT_RESET_WAIT:
+              #endif
+2060   2      
+2061   2      #if(_D5_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX5_HDMI2_FORMAT_RESET_WAIT:
+              #endif
+2064   2                  ScalerTMDSHdmi2FormatResetEvent(enumEventID);
+2065   2      
+2066   2                  break;
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 36  
+
+2067   2      #endif
+2068   2      
+2069   2      #if(_HDMI_SUPPORT == _ON)
+2070   2              case _SCALER_TIMER_EVENT_RX0_TMDS_HDMI_PACKET_DETECT:
+2071   2      #endif
+2072   2      
+2073   2      #if(_D1_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX1_TMDS_HDMI_PACKET_DETECT:
+              #endif
+2076   2      
+2077   2      #if(_D2_HDMI_SUPPORT == _ON)
+2078   2              case _SCALER_TIMER_EVENT_RX2_TMDS_HDMI_PACKET_DETECT:
+2079   2      #endif
+2080   2      
+2081   2      #if(_D3_HDMI_SUPPORT == _ON)
+2082   2              case _SCALER_TIMER_EVENT_RX3_TMDS_HDMI_PACKET_DETECT:
+2083   2      #endif
+2084   2      
+2085   2      #if(_D4_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX4_TMDS_HDMI_PACKET_DETECT:
+              #endif
+2088   2      
+2089   2      #if(_D5_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX5_TMDS_HDMI_PACKET_DETECT:
+              #endif
+2092   2              ScalerTMDSHdmiPacketDetectEvent(enumEventID);
+2093   2      
+2094   2              break;
+2095   2      
+2096   2      #if(_D0_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX0_HDMI_HPD_ASSERTED:
+                          PCB_D0_HOTPLUG(_D0_HOT_PLUG_HIGH);
+                          break;
+              #endif
+2101   2      
+2102   2      #if(_D1_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX1_HDMI_HPD_ASSERTED:
+                          PCB_D1_HOTPLUG(_D1_HOT_PLUG_HIGH);
+                          break;
+              #endif
+2107   2      
+2108   2      #if(_D2_HDMI_SUPPORT == _ON)
+2109   2              case _SCALER_TIMER_EVENT_RX2_HDMI_HPD_ASSERTED:
+2110   2                  PCB_D2_HOTPLUG(_D2_HOT_PLUG_HIGH);
+2111   2                  break;
+2112   2      #endif
+2113   2      
+2114   2      #if(_D3_HDMI_SUPPORT == _ON)
+2115   2              case _SCALER_TIMER_EVENT_RX3_HDMI_HPD_ASSERTED:
+2116   2                  PCB_D3_HOTPLUG(_D3_HOT_PLUG_HIGH);
+2117   2                  break;
+2118   2      #endif
+2119   2      
+2120   2      #if(_TMDS_Z0_POWER_SAVING_TOGGLE_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_TMDS_Z0_POWER_SAVING_TOGGLE_LOW_DUTY:
+              
+                          ScalerTMDSClkLaneZ0HighProc();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_TMDS_Z0_POWER_SAVING_TOGGLE_HIGH_DUTY:
+              
+                          ScalerTMDSClkLaneZ0LowProc();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 37  
+
+                          break;
+              #endif
+2131   2      
+2132   2      #if(_HDMI_2_0_SUPPORT == _ON)
+2133   2              case _SCALER_TIMER_EVENT_RX0_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+2134   2      
+2135   2      #if(_D1_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX1_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+              #endif
+2138   2      
+2139   2      #if(_D2_HDMI_2_0_SUPPORT == _ON)
+2140   2              case _SCALER_TIMER_EVENT_RX2_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+2141   2      #endif
+2142   2      
+2143   2      #if(_D3_HDMI_2_0_SUPPORT == _ON)
+2144   2              case _SCALER_TIMER_EVENT_RX3_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+2145   2      #endif
+2146   2      
+2147   2      #if(_D4_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX4_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+              #endif
+2150   2      
+2151   2      #if(_D5_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_RX5_HDMI2_SCRAMBLE_DETECT_TIMEOUT:
+              #endif
+2154   2                  ScalerTMDSHdmiScrambleDetectTimeoutTimerEvent(enumEventID);
+2155   2                  break;
+2156   2      #endif
+2157   2      
+2158   2      #if(_HDMI_2_0_SUPPORT == _ON)
+2159   2      
+2160   2      #if(_D1_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_D1_TMDS_HDMI_HPD_5VPIN_CHECK:
+                          ScalerTMDSHdmiHpd5vPinCheckProc(_D1_INPUT_PORT);
+                          break;
+              #endif
+2165   2      
+2166   2      #if(_D2_HDMI_2_0_SUPPORT == _ON)
+2167   2              case _SCALER_TIMER_EVENT_D2_TMDS_HDMI_HPD_5VPIN_CHECK:
+2168   2                  ScalerTMDSHdmiHpd5vPinCheckProc(_D2_INPUT_PORT);
+2169   2                  break;
+2170   2      #endif
+2171   2      
+2172   2      #if(_D3_HDMI_2_0_SUPPORT == _ON)
+2173   2              case _SCALER_TIMER_EVENT_D3_TMDS_HDMI_HPD_5VPIN_CHECK:
+2174   2                  ScalerTMDSHdmiHpd5vPinCheckProc(_D3_INPUT_PORT);
+2175   2                  break;
+2176   2      #endif
+2177   2      
+2178   2      #if(_D4_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_D4_TMDS_HDMI_HPD_5VPIN_CHECK:
+                          ScalerTMDSHdmiHpd5vPinCheckProc(_D4_INPUT_PORT);
+                          break;
+              #endif
+2183   2      
+2184   2      #if(_D5_HDMI_2_0_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_D5_TMDS_HDMI_HPD_5VPIN_CHECK:
+                          ScalerTMDSHdmiHpd5vPinCheckProc(_D5_INPUT_PORT);
+                          break;
+              #endif
+2189   2      
+2190   2      #endif // End of #if(_HDMI_2_0_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 38  
+
+2191   2      
+2192   2      #endif // End of #if(_HDMI_SUPPORT == _ON)
+2193   2      
+2194   2      #endif // End of #if((_DVI_SUPPORT == _ON) || (_HDMI_SUPPORT == _ON))
+2195   2      
+2196   2      #if((_TMDS_HDCP_2_2_SUPPORT == _ON) && (_HDMI_PORT_EXIST == _ON))
+2197   2      
+2198   2      #if((_D0_INPUT_PORT_TYPE == _D0_HDMI_PORT) || (_D0_INPUT_PORT_TYPE == _D0_MHL_PORT))
+                      case _SCALER_TIMER_EVENT_RX0_HDCP2_REAUTH:
+              #endif
+2201   2      
+2202   2      #if((_D1_INPUT_PORT_TYPE == _D1_HDMI_PORT) || (_D1_INPUT_PORT_TYPE == _D1_MHL_PORT))
+                      case _SCALER_TIMER_EVENT_RX1_HDCP2_REAUTH:
+              #endif
+2205   2      
+2206   2      #if((_D2_INPUT_PORT_TYPE == _D2_HDMI_PORT) || (_D2_INPUT_PORT_TYPE == _D2_MHL_PORT))
+2207   2              case _SCALER_TIMER_EVENT_RX2_HDCP2_REAUTH:
+2208   2      #endif
+2209   2      
+2210   2      #if((_D3_INPUT_PORT_TYPE == _D3_HDMI_PORT) || (_D3_INPUT_PORT_TYPE == _D3_MHL_PORT))
+2211   2              case _SCALER_TIMER_EVENT_RX3_HDCP2_REAUTH:
+2212   2      #endif
+2213   2      
+2214   2      #if((_D4_INPUT_PORT_TYPE == _D4_HDMI_PORT) || (_D4_INPUT_PORT_TYPE == _D4_MHL_PORT))
+                      case _SCALER_TIMER_EVENT_RX4_HDCP2_REAUTH:
+              #endif
+2217   2      
+2218   2      #if((_D5_INPUT_PORT_TYPE == _D5_HDMI_PORT) || (_D5_INPUT_PORT_TYPE == _D5_MHL_PORT))
+                      case _SCALER_TIMER_EVENT_RX5_HDCP2_REAUTH:
+              #endif
+2221   2              ScalerHdcp2ReAuthEvent(enumEventID);
+2222   2      
+2223   2              break;
+2224   2      #endif // End of #if(_TMDS_HDCP_2_2_SUPPORT == _ON)
+2225   2      
+2226   2      #if(_AUDIO_SUPPORT == _ON)
+2227   2      #if((_HDMI_SUPPORT == _ON) || (_DP_SUPPORT == _ON))
+2228   2              case _SCALER_TIMER_EVENT_AUDIO_D0_LOAD_STABLE_I_CODE:
+2229   2      #endif
+2230   2      
+2231   2      #if((_D1_HDMI_SUPPORT == _ON) || (_D1_INPUT_PORT_TYPE == _D1_DP_PORT))
+2232   2              case _SCALER_TIMER_EVENT_AUDIO_D1_LOAD_STABLE_I_CODE:
+2233   2      #endif
+2234   2      
+2235   2      #if((_D2_HDMI_SUPPORT == _ON) || (_D2_INPUT_PORT_TYPE == _D2_DP_PORT))
+2236   2              case _SCALER_TIMER_EVENT_AUDIO_D2_LOAD_STABLE_I_CODE:
+2237   2      #endif
+2238   2      
+2239   2      #if(_D3_HDMI_SUPPORT == _ON)
+2240   2              case _SCALER_TIMER_EVENT_AUDIO_D3_LOAD_STABLE_I_CODE:
+2241   2      #endif
+2242   2      
+2243   2      #if(_D4_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D4_LOAD_STABLE_I_CODE:
+              #endif
+2246   2      
+2247   2      #if(_D5_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D5_LOAD_STABLE_I_CODE:
+              #endif
+2250   2      
+2251   2              ScalerAudioLoadStableICodeEvent(enumEventID);
+2252   2      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 39  
+
+2253   2              break;
+2254   2      
+2255   2      #if(_HDMI_AUDIO_FW_TRACKING_MODE_SUPPORT == _ON)
+              #if(_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D0_FW_TRACKING_PREPARING:
+              #endif
+              #if(_D1_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D1_FW_TRACKING_PREPARING:
+              #endif
+              #if(_D2_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D2_FW_TRACKING_PREPARING:
+              #endif
+              #if(_D3_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D3_FW_TRACKING_PREPARING:
+              #endif
+              #if(_D4_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D4_FW_TRACKING_PREPARING:
+              #endif
+              #if(_D5_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D5_FW_TRACKING_PREPARING:
+              #endif
+              
+                      ScalerAudioFwTrackingEventSet(enumEventID);
+                      break;
+              
+              #if(_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D0_FW_TRACKING_TIMEOUT:
+              #endif
+              #if(_D1_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D1_FW_TRACKING_TIMEOUT:
+              #endif
+              #if(_D2_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D2_FW_TRACKING_TIMEOUT:
+              #endif
+              #if(_D3_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D3_FW_TRACKING_TIMEOUT:
+              #endif
+              #if(_D4_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D4_FW_TRACKING_TIMEOUT:
+              #endif
+              #if(_D5_HDMI_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_AUDIO_D5_FW_TRACKING_TIMEOUT:
+              #endif
+              
+                      ScalerAudioTimeoutEventSet(enumEventID);
+                      break;
+              #endif
+2300   2      #endif // End of #if(_AUDIO_SUPPORT == _ON)
+2301   2      
+2302   2      #if(_DP_SUPPORT == _ON)
+2303   2      
+2304   2      #if((_D0_INPUT_PORT_TYPE == _D0_DP_PORT) || (_D6_INPUT_PORT_TYPE != _D6_NO_PORT))
+2305   2      
+2306   2              case _SCALER_TIMER_EVENT_DP_RX0_HOTPLUG_ASSERTED:
+2307   2              case _SCALER_TIMER_EVENT_DP_RX0_HDCP_LONG_HOTPLUG_EVENT:
+2308   2              case _SCALER_TIMER_EVENT_DP_RX0_LONG_HOTPLUG_EVENT:
+2309   2              case _SCALER_TIMER_EVENT_DP_RX0_LINK_STATUS_IRQ:
+2310   2      
+2311   2                  ScalerDpTimerEventProc(enumEventID);
+2312   2                  break;
+2313   2      #endif // End of #if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+2314   2      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 40  
+
+2315   2      #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+2316   2      
+2317   2              case _SCALER_TIMER_EVENT_DP_RX1_HOTPLUG_ASSERTED:
+2318   2              case _SCALER_TIMER_EVENT_DP_RX1_HDCP_LONG_HOTPLUG_EVENT:
+2319   2              case _SCALER_TIMER_EVENT_DP_RX1_LONG_HOTPLUG_EVENT:
+2320   2              case _SCALER_TIMER_EVENT_DP_RX1_LINK_STATUS_IRQ:
+2321   2      
+2322   2                  ScalerDpTimerEventProc(enumEventID);
+2323   2                  break;
+2324   2      #endif // End of #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+2325   2      
+2326   2      #if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+              
+                      case _SCALER_TIMER_EVENT_DP_RX2_HOTPLUG_ASSERTED:
+                      case _SCALER_TIMER_EVENT_DP_RX2_HDCP_LONG_HOTPLUG_EVENT:
+                      case _SCALER_TIMER_EVENT_DP_RX2_LONG_HOTPLUG_EVENT:
+                      case _SCALER_TIMER_EVENT_DP_RX2_LINK_STATUS_IRQ:
+              
+                          ScalerDpTimerEventProc(enumEventID);
+                          break;
+              #endif // End of #if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+2336   2      
+2337   2      #if(_D0_DP_EXIST == _ON)
+2338   2      
+2339   2              case _SCALER_TIMER_EVENT_DP_RX0_VALID_SIGNAL_DETECT_CHECK:
+2340   2      
+2341   2                  SET_DP_RX0_VALID_VIDEO_CHECK();
+2342   2      
+2343   2                  break;
+2344   2      
+2345   2      #if(_DP_ULTRA_HDR_SUPPORT == _ON)
+2346   2              case _SCALER_TIMER_EVENT_DP_RX0_RSV0_PACKET_DETECT:
+2347   2      
+2348   2                  ScalerDpRx0RSV0PacketDetectEvent();
+2349   2                  break;
+2350   2      #endif
+2351   2      
+2352   2      #if((_DP_VSC_SDP_EXT_FOR_COLORIMETRY_SUPPORT == _ON) && (_HW_DP_VSC_SDP_REG_SUPPORT != _ON))
+2353   2      
+2354   2              case _SCALER_TIMER_EVENT_DP_RX0_RSV1_PACKET_DETECT:
+2355   2      
+2356   2                  ScalerDpRx0RSV1PacketDetectEvent();
+2357   2                  break;
+2358   2      #endif
+2359   2      
+2360   2      #if(_DP_MST_SUPPORT == _ON)
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_AUX_CH_NO_POWER_CHECK_DEBOUNCE:
+              
+                          CLR_DP_RX0_CHECK_AUX_CH_NO_POWER_DEBOUNCE();
+              
+                          if(ScalerDpRx0AuxChSourcePowerCheck() == _OFF)
+                          {
+                              // Debounce for 20ms
+                              for(ucDebounceCnt = 0; ucDebounceCnt < 10; ucDebounceCnt++)
+                              {
+                                  ScalerTimerDelayXms(2);
+              
+                                  if(ScalerDpRx0AuxChSourcePowerCheck() == _ON)
+                                  {
+                                      break;
+                                  }
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 41  
+
+                              }
+              
+                              if(ucDebounceCnt == 10)
+                              {
+                                  SET_DP_RX0_CHECK_AUX_CH_POWER_STATUS(_DP_RX_AUX_POWER_STATUS_OFF);
+              
+                                  // Do Mst Reset If Source Has Disconnected.
+                                  // (Reading 00111h = 0x00 is necessary for AMD RX480 waking up. If not so, the OS migh
+             -t not recognize all the audio device.)
+                                  ScalerDpMstReset(_DP_MST_RX0_PORT);
+                              }
+                          }
+              
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_SOURCE_WRITE_POWER_UP_TIMEOUT:
+              
+                          if(GET_DP_RX0_SOURCE_WRITE_POWER_UP() == _DP_SOURCE_WRITE_POWER_UP_TIMER_ACTIVE)
+                          {
+                              CLR_DP_RX0_SOURCE_WRITE_POWER_UP();
+                          }
+              
+                          break;
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_HDCP_CPIRQ_EVENT:
+                          CLR_DP_RX0_HDCP_AUTH_CPIRQ_TIMRE();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_HDCP_REPEATER_PROC_TIMEOUT:
+              
+                          ScalerDpRx0HDCPSetRepeaterProcTimeout();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_HDCP_READ_IRQ_TIMEOUT:
+              
+                          ScalerDpRx0HDCPSetReadIrqTimeout();
+                          break;
+              
+              #if((_DP_VSC_SDP_EXT_FOR_COLORIMETRY_SUPPORT == _ON) && (_HW_DP_VSC_SDP_REG_SUPPORT != _ON))
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_MST2SST_RSV1_PACKET_DETECT:
+              
+                          ScalerDpRx0MstToSstRSV1PacketDetectEvent();
+                          break;
+              #endif
+              
+              #if(_DP_HDCP_2_2_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_RX0_HDCP2_CPIRQ_EVENT:
+                          CLR_DP_RX0_HDCP2_AUTH_CPIRQ_TIMRE();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX0_HDCP2_REPEATER_PROC_TIMEOUT:
+              
+                          ScalerDpRx0Hdcp2SetRepeaterProcTimeout();
+                          break;
+              
+              #endif // End of #if(_DP_HDCP_2_2_SUPPORT == _ON)
+              #endif // End if #if(_DP_TX_SUPPORT == _ON)
+              #endif // End of #if(_DP_MST_SUPPORT == _ON)
+2437   2      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 42  
+
+2438   2      #endif // End of #if(_D0_DP_EXIST == _ON)
+2439   2      
+2440   2      #if(_D1_DP_EXIST == _ON)
+2441   2      
+2442   2              case _SCALER_TIMER_EVENT_DP_RX1_VALID_SIGNAL_DETECT_CHECK:
+2443   2      
+2444   2                  SET_DP_RX1_VALID_VIDEO_CHECK();
+2445   2      
+2446   2                  break;
+2447   2      
+2448   2      #if(_DP_ULTRA_HDR_SUPPORT == _ON)
+2449   2              case _SCALER_TIMER_EVENT_DP_RX1_RSV0_PACKET_DETECT:
+2450   2      
+2451   2                  ScalerDpRx1RSV0PacketDetectEvent();
+2452   2                  break;
+2453   2      #endif
+2454   2      
+2455   2      #if((_DP_VSC_SDP_EXT_FOR_COLORIMETRY_SUPPORT == _ON) && (_HW_DP_VSC_SDP_REG_SUPPORT != _ON))
+2456   2      
+2457   2              case _SCALER_TIMER_EVENT_DP_RX1_RSV1_PACKET_DETECT:
+2458   2      
+2459   2                  ScalerDpRx1RSV1PacketDetectEvent();
+2460   2                  break;
+2461   2      #endif
+2462   2      
+2463   2      #if(_DP_MST_SUPPORT == _ON)
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_AUX_CH_NO_POWER_CHECK_DEBOUNCE:
+              
+                          CLR_DP_RX1_CHECK_AUX_CH_NO_POWER_DEBOUNCE();
+              
+                          if(ScalerDpRx1AuxChSourcePowerCheck() == _OFF)
+                          {
+                              // Debounce for 20ms
+                              for(ucDebounceCnt = 0; ucDebounceCnt < 10; ucDebounceCnt++)
+                              {
+                                  ScalerTimerDelayXms(2);
+              
+                                  if(ScalerDpRx1AuxChSourcePowerCheck() == _ON)
+                                  {
+                                      break;
+                                  }
+                              }
+              
+                              if(ucDebounceCnt == 10)
+                              {
+                                  SET_DP_RX1_CHECK_AUX_CH_POWER_STATUS(_DP_RX_AUX_POWER_STATUS_OFF);
+              
+                                  // Do Mst Reset If Source Has Disconnected.
+                                  // (Reading 00111h = 0x00 is necessary for AMD RX480 waking up. If not so, the OS migh
+             -t not recognize all the audio device.)
+                                  ScalerDpMstReset(_DP_MST_RX1_PORT);
+                              }
+                          }
+              
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_SOURCE_WRITE_POWER_UP_TIMEOUT:
+              
+                          if(GET_DP_RX1_SOURCE_WRITE_POWER_UP() == _DP_SOURCE_WRITE_POWER_UP_TIMER_ACTIVE)
+                          {
+                              CLR_DP_RX1_SOURCE_WRITE_POWER_UP();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 43  
+
+                          }
+              
+                          break;
+              
+              #if(_DP_TX_SUPPORT == _ON)
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_HDCP_CPIRQ_EVENT:
+                          CLR_DP_RX1_HDCP_AUTH_CPIRQ_TIMRE();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_HDCP_REPEATER_PROC_TIMEOUT:
+              
+                          ScalerDpRx1HDCPSetRepeaterProcTimeout();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_HDCP_READ_IRQ_TIMEOUT:
+              
+                          ScalerDpRx1HDCPSetReadIrqTimeout();
+                          break;
+              
+              #if((_DP_VSC_SDP_EXT_FOR_COLORIMETRY_SUPPORT == _ON) && (_HW_DP_VSC_SDP_REG_SUPPORT != _ON))
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_MST2SST_RSV1_PACKET_DETECT:
+              
+                          ScalerDpRx1MstToSstRSV1PacketDetectEvent();
+                          break;
+              #endif
+              
+              #if(_DP_HDCP_2_2_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_RX1_HDCP2_CPIRQ_EVENT:
+                          CLR_DP_RX1_HDCP2_AUTH_CPIRQ_TIMRE();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX1_HDCP2_REPEATER_PROC_TIMEOUT:
+              
+                          ScalerDpRx1Hdcp2SetRepeaterProcTimeout();
+                          break;
+              
+              #endif // End of #if(_DP_HDCP_2_2_SUPPORT == _ON)
+              #endif // End if #if(_DP_TX_SUPPORT == _ON)
+              #endif // End of #if(_DP_MST_SUPPORT == _ON)
+2540   2      
+2541   2      #endif // End of #if(_D1_DP_EXIST == _ON)
+2542   2      
+2543   2      #if(_DP_MST_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_MSG_TIMEOUT_EVENT:
+                          ScalerDpRxMstMsgTimeoutEvent();
+                          break;
+              #endif // End of #if(_DP_MST_SUPPORT == _ON)
+2548   2      
+2549   2      #if(_DP_TX_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_TX_CABLE_STATUS_CHANGE_EVENT:
+              
+                          if(GET_DP_RX_REPORT_DOWNSTREAM_UNPLUG_EVENT() == _TRUE)
+                          {
+                              // Regen Unplug event
+                              SET_DP_RX_REPORT_DOWNSTREAM_DP_CABLE_STATUS(_DP_UNPLUG);
+                          }
+                          else
+                          {
+                              // Align Reported Cable Status with Tx Cable Status
+                              SET_DP_RX_REPORT_DOWNSTREAM_DP_CABLE_STATUS(GET_DP_TX_DOWNSTREAM_DPPLUG_STATUS());
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 44  
+
+                          }
+              
+                          // Initiate Connection Status Notify
+                          SET_DP_GEN_UP_REQUEST_MSG(_DP_MSG_CONNECTION_STATUS_NOTIFY);
+              
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_FORCE_REBUILD_TOPOLOGY_EVENT:
+              
+                          SET_DP_TX_WAIT_TOPOLOGY_REBUILD_MSG();
+              
+                          if(GET_REG_DP_RX_MST_ENABLE() == _TRUE)
+                          {
+                              switch(g_enumDpMSTCapablePort)
+                              {
+              #if(_D0_DP_EXIST == _ON)
+                                  case _DP_MST_RX0_PORT:
+              
+                                      ScalerDpRx0SetHotPlugEvent(_DP_MST_LONG_HPD_EVENT);
+              
+                                      break;
+              #endif
+              
+              #if(_D1_DP_EXIST == _ON)
+                                  case _DP_MST_RX1_PORT:
+              
+                                      ScalerDpRx1SetHotPlugEvent(_DP_MST_LONG_HPD_EVENT);
+              
+                                      break;
+              #endif
+              
+                                  default:
+                                      break;
+                              }
+                          }
+              
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_RX_MSG_COUNT_RESET_EVENT:
+              
+                          ScalerDpRxMstMsgCountResetEvent();
+                          ScalerDpTxMstMsgCountResetEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_MSG_COUNT_RESET_EVENT:
+              
+                          ScalerDpTxMstMsgCountResetEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP_WAITING_TO_READ_R0:
+              
+                          ScalerDpTxHDCPTimeoutToReadR0Event();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP_WAITING_FOR_V_READY:
+              
+                          ScalerDpTxHDCPTimeoutForVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP_POLLING_V_READY:
+              
+                          ScalerDpTxHDCPPollingVReadyEvent();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 45  
+
+                          break;
+              
+              #if(_DP_TX_HPD_HIGH_DEBOUNCE_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_TX_HPD_DEBOUNCE:
+              
+                          SET_DP_TX_HPD_DEBOUNCE();
+              
+                          break;
+              #endif
+              
+              #if(_DP_HDCP_2_2_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_TO_READ_CERTIFICATE:
+              
+                          ScalerDpTxHdcp2TimeoutToReadCertificateEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_TO_READ_H_PRIME:
+              
+                          ScalerDpTxHdcp2TimeoutToReadHPrimeEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_TO_READ_PAIRING_INFO:
+              
+                          ScalerDpTxHdcp2TimeoutToReadPairingInfoEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_TO_ENCRYPT_DATA:
+              
+                          ScalerDpTxHdcp2TimeoutToEncyptDataEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_FOR_V_READY:
+              
+                          ScalerDpTxHdcp2TimeoutForVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_POLLING_V_READY:
+              
+                          ScalerDpTxHdcp2PollingVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_DP_TX_HDCP2_WAITING_TO_READ_M_PRIME:
+              
+                          ScalerDpTxHdcp2TimeoutToReadMPrimeEvent();
+                          break;
+              #endif // End of #if(_DP_HDCP_2_2_SUPPORT == _ON)
+              #endif // End if #if(_DP_TX_SUPPORT == _ON)
+2670   2      
+2671   2      #if(_HDMI_TX_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP_WAITING_TO_READ_R0:
+              
+                          ScalerHdmiTxHDCPTimeoutToReadR0Event();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP_WAITING_FOR_V_READY:
+              
+                          ScalerHdmiTxHDCPTimeoutForVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP_POLLING_V_READY:
+              
+                          ScalerHdmiTxHDCPPollingVReadyEvent();
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 46  
+
+                          break;
+              
+              #if(_HDMI_TX_HDCP_2_2_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_WAITING_TO_READ_CERTIFICATE:
+              
+                          ScalerHdmiTxHdcp2TimeoutToReadCertificateEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_WAITING_TO_READ_H_PRIME:
+              
+                          ScalerHdmiTxHdcp2TimeoutToReadHPrimeEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_WAITING_TO_ENCRYPT_DATA:
+              
+                          ScalerHdmiTxHdcp2TimeoutToEncyptDataEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_WAITING_FOR_V_READY:
+              
+                          ScalerHdmiTxHdcp2TimeoutForVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_POLLING_V_READY:
+              
+                          ScalerHdmiTxHdcp2PollingVReadyEvent();
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_HDMI_TX_HDCP2_WAITING_TO_READ_M_PRIME:
+              
+                          ScalerHdmiTxHdcp2TimeoutToReadMPrimeEvent();
+                          break;
+              #endif
+              #endif // End of #if(_HDMI_TX_SUPPORT == _ON)
+2719   2      
+2720   2      #endif // End of #if(_DP_SUPPORT == _ON)
+2721   2      
+2722   2      #if(_SDRAM_PHASE_CALIBRATION == _ON)
+              
+                      case _SCALER_TIMER_EVENT_SDRAM_PHASE_CNT_CHECK:
+              
+                          // Check phase count every 60 minute
+                          ScalerSdramOnLinePhaseCntCheck();
+                          break;
+              #endif
+2730   2      
+2731   2      #if(_DDR1_PHASE_CALIBRATION == _ON)
+                      case _SCALER_TIMER_EVENT_DDR_PHASE_CNT_CHECK:
+              
+                          // Check phase count every 60 minute
+                          ScalerDDR1OnLinePhaseCntCheck();
+                          break;
+              #endif
+2738   2      
+2739   2      #if(_D0_INPUT_PORT_TYPE == _D0_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX0_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX0_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX0_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 47  
+
+                          break;
+              
+              #endif // End of #if(_D0_INPUT_PORT_TYPE == _D0_MHL_PORT)
+2750   2      
+2751   2      #if(_D1_INPUT_PORT_TYPE == _D1_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX1_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX1_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX1_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+                          break;
+              
+              #endif // End of #if(_D1_INPUT_PORT_TYPE == _D1_MHL_PORT)
+2762   2      
+2763   2      #if(_D2_INPUT_PORT_TYPE == _D2_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX2_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX2_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX2_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+                          break;
+              
+              #endif // End of #if(_D2_INPUT_PORT_TYPE == _D2_MHL_PORT)
+2774   2      
+2775   2      #if(_D3_INPUT_PORT_TYPE == _D3_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX3_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX3_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX3_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+                          break;
+              
+              #endif // End of #if(_D3_INPUT_PORT_TYPE == _D3_MHL_PORT)
+2786   2      
+2787   2      #if(_D4_INPUT_PORT_TYPE == _D4_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX4_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX4_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX4_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+                          break;
+              
+              #endif // End of #if(_D4_INPUT_PORT_TYPE == _D4_MHL_PORT)
+2798   2      
+2799   2      #if(_D5_INPUT_PORT_TYPE == _D5_MHL_PORT)
+              
+                      case _SCALER_TIMER_EVENT_MHL_RX5_READY_TO_TRANSMIT:
+                      case _SCALER_TIMER_EVENT_MHL_RX5_RECONNECT_1K:
+                      case _SCALER_TIMER_EVENT_MHL_RX5_SWITCH_PORT_DISCOVERY_DONE:
+              
+                          ScalerMHLTimerEventProc(enumEventID);
+              
+                          break;
+              
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 48  
+
+              #endif // End of #if(_D5_INPUT_PORT_TYPE == _D5_MHL_PORT)
+2810   2      
+2811   2      #if((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON))
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+              
+                      case _SCALER_TIMER_EVENT_PD_RX0_CBL_RESP_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_VDM_RESP_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_STATE_TO_READY:
+                      case _SCALER_TIMER_EVENT_PD_RX0_SRC_TURN_ON_POWER:
+                      case _SCALER_TIMER_EVENT_PD_RX0_SRC_TURN_OFF_POWER:
+                      case _SCALER_TIMER_EVENT_PD_RX0_SEND_HARD_RST:
+                      case _SCALER_TIMER_EVENT_PD_RX0_SNK_HARD_RST_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_TPC_ERR_RECOVER:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_SRC_CAP_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_REQ_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_PARTNER_ALT_SUPPORT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_T480_ERROR_RECOVERY:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_PRS_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_DRS_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_VCS_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_CBL_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_PPS_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_SRC_EPR_KEEP_ALIVE_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_S8_HRST:
+                      case _SCALER_TIMER_EVENT_PD_RX0_DFP_START_ALT_MODE:
+                      case _SCALER_TIMER_EVENT_PD_RX0_LENOVO_RESP_TIMEOUT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_ATTENTION_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_GET_SNK_CAP_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_VDMMSG_WAIT:
+                      case _SCALER_TIMER_EVENT_PD_RX0_CLR_VDM_BUSY_FLAG:
+              #if(_TYPE_C_VENDOR_ALT_MODE == _TYPE_C_DELL_ALT_MODE)
+                      case _SCALER_TIMER_EVENT_PD_RX0_DELL_ATTEN_RETRY:
+              #endif
+              
+                          ScalerTypeCRx0PdTimerEventProc(enumEventID);
+              
+                          break;
+              
+                      case _SCALER_TIMER_EVENT_CC_RX0_STATE_TO_UNATTACH:
+                      case _SCALER_TIMER_EVENT_CC_RX0_CLEAR_AC_ON_DEVICE_DETECT:
+                          ScalerTypeCRx0CcTimerEventProc(enumEventID);
+              
+                          break;
+              
+              #if(_TYPE_C_PMIC_TYPE != _PMIC_NONE)
+                      case _SCALER_TIMER_EVENT_PMIC_TRACKING:
+                      case _SCALER_TIMER_EVENT_PMIC_SAFETY_PROTECT:
+                      case _SCALER_TIMER_EVENT_PMIC_POLLING_OCP:
+              
+                          ScalerTypeCPmicRx0TimerEventProc(enumEventID);
+              
+                          break;
+              #endif // End of #if(_TYPE_C_PMIC_TYPE != _PMIC_NONE)
+              #endif // End of #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+              #endif // End of #if((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON))
+2864   2      
+2865   2      #if(_SMBUS_BLOCK_READ_WRITE_COMMAND_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_SMBUS_BLOCK_READ_WRITE:
+                          SET_SMBUS_BLOCK_RW_STATUS(_FALSE);
+                          break;
+              #endif
+2870   2      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 49  
+
+2871   2      #if(_FW_UPDATE_BACKGROUND_SUPPORT == _ON)
+              #if(_DP_TX_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_BACKGROUND_FW_UPDATE_DPTX_BUSY:
+                          ScalerFwUpdateBackgroundSetBusyStatus(_AFFECTED_IP_DPTX, _STATUS_IDLE, 0);
+                          break;
+              #endif
+              #if(_DP_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_BACKGROUND_FW_UPDATE_DPRX_BUSY:
+                          ScalerFwUpdateBackgroundSetBusyStatus(_AFFECTED_IP_DPRX, _STATUS_IDLE, 0);
+                          break;
+              #endif
+              
+              #if(_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_BACKGROUND_FW_UPDATE_TYPEC_BUSY:
+                          ScalerFwUpdateBackgroundSetBusyStatus(_AFFECTED_IP_TYPEC, _STATUS_IDLE, 0);
+                          break;
+              #endif
+              #if(_DIGITAL_PORT_SUPPORT == _ON)
+                      case _SCALER_TIMER_EVENT_BACKGROUND_FW_UPDATE_MCCS_BUSY:
+                          ScalerFwUpdateBackgroundSetBusyStatus(_AFFECTED_IP_MCCS, _STATUS_IDLE, 0);
+                          break;
+              #endif
+                      case _SCALER_TIMER_EVENT_BACKGROUND_FW_UPDATE_HDCP_BUSY:
+                          ScalerFwUpdateBackgroundSetBusyStatus(_AFFECTED_IP_HDCP, _STATUS_IDLE, 0);
+                          break;
+              #endif
+2897   2              default:
+2898   2                  break;
+2899   2          }
+2900   1      }
+2901          
+2902          //--------------------------------------------------
+2903          // Description  : Get Event Time
+2904          // Input Value  : ucEventIndex --> Event which time is needed
+2905          // Output Value : Event Time
+2906          //--------------------------------------------------
+2907          WORD ScalerTimerGetEventTime(BYTE ucEventIndex)
+2908          {
+2909   1          return GET_EVENT_TIME(ucEventIndex);
+2910   1      }
+2911          
+2912          //--------------------------------------------------
+2913          // Description  : Clear Event Time
+2914          // Input Value  : ucEventIndex --> Event which time is needed to be cleared
+2915          // Output Value : None
+2916          //--------------------------------------------------
+2917          void ScalerTimerClrEventValid(BYTE ucEventIndex)
+2918          {
+2919   1          CLR_EVENT_VALID(ucEventIndex);
+2920   1      }
+2921          
+2922          //--------------------------------------------------
+2923          // Description  : Check if Event is Valid
+2924          // Input Value  : ucEventIndex --> Event to be checked
+2925          // Output Value : Validity(_TRUE/_FALSE)
+2926          //--------------------------------------------------
+2927          bit ScalerTimerCheckEventValid(BYTE ucEventIndex)
+2928          {
+2929   1          return (GET_EVENT_VALID(ucEventIndex) == _TRUE);
+2930   1      }
+2931          
+2932          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 50  
+
+2933          // Description  : Active Timer Event
+2934          // Input Value  : usTime --> Time to active Timer Event (unit is ms)
+2935          //                ucEventID --> Event to be actived
+2936          // Output Value : None
+2937          //--------------------------------------------------
+2938          void ScalerTimerActiveTimerEvent(WORD usTime, EnumScalerTimerEventID enumEventID)
+2939          {
+2940   1          BYTE ucEventIndex = 0;
+2941   1      
+2942   1          // Search for Existing Event with the same Event ID
+2943   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+2944   1          {
+2945   2              if(GET_EVENT_VALID(ucEventIndex) == _TRUE)
+2946   2              {
+2947   3                  if(GET_EVENT_ID(ucEventIndex) == enumEventID)
+2948   3                  {
+2949   4                      return;
+2950   4                  }
+2951   3              }
+2952   2          }
+2953   1      
+2954   1          // Choose any Vacant Storage for Event
+2955   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+2956   1          {
+2957   2              if(GET_EVENT_VALID(ucEventIndex) == _FALSE)
+2958   2              {
+2959   3                  SET_EVENT_ID(ucEventIndex, enumEventID);
+2960   3                  SET_EVENT_TIME(ucEventIndex, (WORD)((DWORD)(ScalerTimerCheckTimerEvent(usTime)) + usTime));
+2961   3                  return;
+2962   3              }
+2963   2          }
+2964   1      
+2965   1          DebugMessageSystem("No More Available Storage for Simultaneous Event!!!!!!", 0x00);
+2966   1      }
+2967          
+2968          //--------------------------------------------------
+2969          // Description  : Reactive a timer for an event. If the event is exist,
+2970          //                this function will reset the executing time and restart.
+2971          // Input Value  : usTime    --> Unit in 1ms, range in 0.01 ~ 61 sec
+2972          //                Event     --> Execute Event while timeup
+2973          // Output Value : None
+2974          //--------------------------------------------------
+2975          void ScalerTimerReactiveTimerEvent(WORD usTime, EnumScalerTimerEventID enumEventID)
+2976          {
+2977   1          BYTE ucEventIndex = 0;
+2978   1      
+2979   1          // Search for Existing Event with the same Event ID
+2980   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+2981   1          {
+2982   2              if(GET_EVENT_VALID(ucEventIndex) == _TRUE)
+2983   2              {
+2984   3                  if(GET_EVENT_ID(ucEventIndex) == enumEventID)
+2985   3                  {
+2986   4                      SET_EVENT_TIME(ucEventIndex, (WORD)((DWORD)(ScalerTimerCheckTimerEvent(usTime)) + usTime))
+             -;
+2987   4      
+2988   4                      return;
+2989   4                  }
+2990   3              }
+2991   2          }
+2992   1      
+2993   1          // Choose any Vacant Storage for Event
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 51  
+
+2994   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+2995   1          {
+2996   2              if(GET_EVENT_VALID(ucEventIndex) == _FALSE)
+2997   2              {
+2998   3                  SET_EVENT_ID(ucEventIndex, enumEventID);
+2999   3                  SET_EVENT_TIME(ucEventIndex, (WORD)((DWORD)(ScalerTimerCheckTimerEvent(usTime)) + usTime));
+3000   3                  return;
+3001   3              }
+3002   2          }
+3003   1      }
+3004          
+3005          //--------------------------------------------------
+3006          // Description  : Cancel an event
+3007          // Input Value  : Event     --> Event which we want to cancel
+3008          // Output Value : None
+3009          //--------------------------------------------------
+3010          void ScalerTimerCancelTimerEvent(EnumScalerTimerEventID enumEventID)
+3011          {
+3012   1          BYTE ucEventIndex = 0;
+3013   1      
+3014   1          // Search for Existing Event with the same Event ID
+3015   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+3016   1          {
+3017   2              if(GET_EVENT_VALID(ucEventIndex) == _TRUE)
+3018   2              {
+3019   3                  if(GET_EVENT_ID(ucEventIndex) == enumEventID)
+3020   3                  {
+3021   4                      CLR_EVENT_VALID(ucEventIndex);
+3022   4      
+3023   4                      return;
+3024   4                  }
+3025   3              }
+3026   2          }
+3027   1      }
+3028          
+3029          //--------------------------------------------------
+3030          // Description  : Get Event Remain Time
+3031          // Input Value  : ucEventID --> Event which has been activated
+3032          // Output Value : Event ID Time
+3033          //--------------------------------------------------
+3034          WORD ScalerTimerGetEventRemainTime(EnumScalerTimerEventID enumEventID)
+3035          {
+3036   1          BYTE ucEventIndex = 0;
+3037   1          WORD usTime = 0;
+3038   1      
+3039   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+3040   1          {
+3041   2              if(ScalerTimerGetEventID(ucEventIndex) == enumEventID)
+3042   2              {
+3043   3                  if(GET_EVENT_VALID(ucEventIndex) == _TRUE)
+3044   3                  {
+3045   4                      if(ScalerTimerGetEventTime(ucEventIndex) > ScalerTimerGetTimerCounter())
+3046   4                      {
+3047   5                          usTime = (ScalerTimerGetEventTime(ucEventIndex) - ScalerTimerGetTimerCounter());
+3048   5                      }
+3049   4      
+3050   4                      break;
+3051   4                  }
+3052   3              }
+3053   2          }
+3054   1      
+3055   1          return usTime;
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 52  
+
+3056   1      }
+3057          
+3058          //--------------------------------------------------
+3059          // Description  : Search a timer event
+3060          // Input Value  : ucEventID --> Event which has been activated
+3061          // Output Value : None
+3062          //--------------------------------------------------
+3063          bit ScalerTimerSearchActiveTimerEvent(EnumScalerTimerEventID enumEventID)
+3064          {
+3065   1          BYTE ucEventIndex = 0;
+3066   1      
+3067   1          // Search Correponding EventID and wait until it finished
+3068   1          for(ucEventIndex = 0; ucEventIndex < _TIMER_EVENT_COUNT; ucEventIndex++)
+3069   1          {
+3070   2              if(GET_EVENT_ID(ucEventIndex) == enumEventID)
+3071   2              {
+3072   3                  if(GET_EVENT_VALID(ucEventIndex) == _TRUE)
+3073   3                  {
+3074   4                      return _TRUE;
+3075   4                  }
+3076   3              }
+3077   2          }
+3078   1      
+3079   1          return _FALSE;
+3080   1      }
+3081          
+3082          #if((_DP_SUPPORT == _ON) || ((_TMDS_HDCP_2_2_SUPPORT == _ON) && (_HDMI_PORT_EXIST == _ON)) || ((_DP_TYPE_C
+             -_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)))
+3083          //--------------------------------------------------
+3084          // Description  : Cancel an event
+3085          // Input Value  : Event     --> Event which we want to cancel
+3086          // Output Value : None
+3087          //--------------------------------------------------
+3088          void ScalerTimerCancelTimerEvent_EXINT0(EnumScalerTimerEventID enumEventID) using 1
+3089          {
+3090   1          // Search for Existing Event with the same Event ID
+3091   1          for(pData_EXINT[0] = 0; pData_EXINT[0] < _TIMER_EVENT_COUNT; pData_EXINT[0]++)
+3092   1          {
+3093   2              if(GET_EVENT_VALID(pData_EXINT[0]) == _TRUE)
+3094   2              {
+3095   3                  if(GET_EVENT_ID(pData_EXINT[0]) == enumEventID)
+3096   3                  {
+3097   4                      CLR_EVENT_VALID(pData_EXINT[0]);
+3098   4                      return;
+3099   4                  }
+3100   3              }
+3101   2          }
+3102   1      }
+3103          #endif
+3104          
+3105          #if(((_DDCCI_CODE_REDUCTION == _OFF) && (_DEBUG_MESSAGE_SUPPORT == _OFF) && (_DDCCI_AUTO_SWITCH_SUPPORT ==
+             - _ON)) || (_SMBUS_BLOCK_READ_WRITE_COMMAND_SUPPORT == _ON))
+3106          //--------------------------------------------------
+3107          // Description  : Cancel a Timer Event in Int1
+3108          // Input Value  : enumEventID --> Event which we want to cancel
+3109          // Output Value : None
+3110          //--------------------------------------------------
+3111          void ScalerTimerCancelTimerEvent_EXINT1(EnumScalerTimerEventID enumEventID) using 2
+3112          {
+3113   1          // Search for Existing Event with the same Event ID
+3114   1          for(pData_EXINT[0] = 0; pData_EXINT[0] < _TIMER_EVENT_COUNT; pData_EXINT[0]++)
+3115   1          {
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 53  
+
+3116   2              if(GET_EVENT_VALID(pData_EXINT[0]) == _TRUE)
+3117   2              {
+3118   3                  if(GET_EVENT_ID(pData_EXINT[0]) == enumEventID)
+3119   3                  {
+3120   4                      CLR_EVENT_VALID(pData_EXINT[0]);
+3121   4                      return;
+3122   4                  }
+3123   3              }
+3124   2          }
+3125   1      }
+3126          #endif
+3127          
+3128          //--------------------------------------------------
+3129          // Description  : Check timer and events. We have to run this function when setting up a timer for an even
+             -t.
+3130          // Input Value  : usTime    --> Unit in 1ms, range in 0.001 ~ 61sec
+3131          // Output Value : Return usPresentTime
+3132          //--------------------------------------------------
+3133          WORD ScalerTimerCheckTimerEvent(WORD usTime)
+3134          {
+3135   1          BYTE ucTimerEventCnt = 0;
+3136   1          WORD usPresentTime = 0;
+3137   1      
+3138   1          usPresentTime = ScalerTimerGetTimerCounter();
+3139   1      
+3140   1          if(usTime > _EVENT_TIME_MAX)
+3141   1          {
+3142   2              usTime = _EVENT_TIME_MAX;
+3143   2          }
+3144   1      
+3145   1          if(((usPresentTime + usTime) > _EVENT_TIME_MAX) || // Size Limit of Timer Counter
+3146   1             ((usPresentTime + usTime) < usPresentTime)) // Timer Counter Overflow
+3147   1          {
+3148   2              STORE_TIMER_COUNTER(0);
+3149   2      
+3150   2              // Reset Timer Event Counter
+3151   2              for(ucTimerEventCnt = 0; ucTimerEventCnt < _TIMER_EVENT_COUNT; ucTimerEventCnt++)
+3152   2              {
+3153   3                  if(GET_EVENT_VALID(ucTimerEventCnt) == _TRUE)
+3154   3                  {
+3155   4                      if(GET_EVENT_TIME(ucTimerEventCnt) > usPresentTime)
+3156   4                      {
+3157   5                          SET_EVENT_TIME(ucTimerEventCnt, (GET_EVENT_TIME(ucTimerEventCnt) - usPresentTime));
+3158   5                      }
+3159   4                      else
+3160   4                      {
+3161   5                          SET_EVENT_TIME(ucTimerEventCnt, 0);
+3162   5                      }
+3163   4                  }
+3164   3              }
+3165   2      
+3166   2              usPresentTime = 0;
+3167   2          }
+3168   1      
+3169   1          return usPresentTime;
+3170   1      }
+3171          
+3172          
+3173          //--------------------------------------------------
+3174          // Description  : Get Timer Counter.
+3175          // Input Value  : None
+3176          // Output Value : Timer Counter
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 54  
+
+3177          //--------------------------------------------------
+3178          WORD ScalerTimerGetTimerCounter(void)
+3179          {
+3180   1          WORD usPresentTime = g_usTimerCounter;
+3181   1      
+3182   1          // When get counter,timer interrupt maybe change counter.
+3183   1          // Get twice to avoid it.
+3184   1          if(abs(g_usTimerCounter - usPresentTime) > 0x7F)
+3185   1          {
+3186   2              usPresentTime = g_usTimerCounter;
+3187   2          }
+3188   1      
+3189   1          return usPresentTime;
+3190   1      }
+3191          
+3192          //--------------------------------------------------
+3193          // Description  : Get Event ID
+3194          // Input Value  : Referenced Event Index
+3195          // Output Value : Stored Event ID
+3196          //--------------------------------------------------
+3197          BYTE ScalerTimerGetEventID(BYTE ucEventIndex)
+3198          {
+3199   1          return GET_EVENT_ID(ucEventIndex);
+3200   1      }
+3201          
+3202          //--------------------------------------------------
+3203          // Description  : Initial timer and events. We have to run this function at firmware startup
+3204          // Input Value  : None
+3205          // Output Value : None
+3206          //--------------------------------------------------
+3207          void ScalerTimerInitialTimerEvent(void)
+3208          {
+3209   1          BYTE ucTimerEventCnt = 0;
+3210   1      
+3211   1          for(ucTimerEventCnt = 0; ucTimerEventCnt < _TIMER_EVENT_COUNT; ucTimerEventCnt++)
+3212   1          {
+3213   2              CLR_EVENT_VALID(ucTimerEventCnt);
+3214   2          }
+3215   1      
+3216   1          TR2 = 1;
+3217   1      }
+3218          
+3219          //--------------------------------------------------
+3220          // Description  : Timer Delay
+3221          // Input Value  : usNum --> Delay in ms
+3222          // Output Value : None
+3223          //--------------------------------------------------
+3224          void ScalerTimerDelayXms(WORD usNum)
+3225          {
+3226   1          if(usNum != 0)
+3227   1          {
+3228   2              // Avoid dead lock under timer2 interrupt function disable condition
+3229   2              if(TR2 == _OFF)
+3230   2              {
+3231   3                  return;
+3232   3              }
+3233   2      
+3234   2              g_bNotifyTimer2Int = _FALSE;
+3235   2      
+3236   2              while(_TRUE)
+3237   2              {
+3238   3                  if(g_bNotifyTimer2Int == _TRUE)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 55  
+
+3239   3                  {
+3240   4                      g_bNotifyTimer2Int = _FALSE;
+3241   4      
+3242   4                      if(--usNum)
+3243   4                      {
+3244   5                      }
+3245   4                      else
+3246   4                      {
+3247   5                          return;
+3248   5                      }
+3249   4                  }
+3250   3              }
+3251   2          }
+3252   1      }
+3253          
+3254          //----------------------------------------------------------------------
+3255          // Description  : Polling Scaler Flag Process
+3256          // Input Value  : usTimeout --> Timeout number (Max: 65,535 ms)
+3257          //                usRegister--> Current Register
+3258          //                ucBit     --> Polling Bit
+3259          //                bSuccess  --> 1 or 0 when finished for Polling Bit
+3260          // Output Value : Return _TRUE while polling success, _FALSE for timeout
+3261          //----------------------------------------------------------------------
+3262          bit ScalerTimerPollingFlagProc(WORD usTimeout, WORD usRegister, BYTE ucBit, bit bSuccess)
+3263          {
+3264   1          WORD usTimeElapsed = 0;
+3265   1          WORD usPreviousTime = 0;
+3266   1      
+3267   1          usPreviousTime = g_usTimerCounter;
+3268   1      
+3269   1          do
+3270   1          {
+3271   2              if(((bit)ScalerGetBit(usRegister, ucBit) ^ bSuccess) == _FALSE)
+3272   2              {
+3273   3                  return _TRUE;
+3274   3              }
+3275   2      
+3276   2              if(usPreviousTime != g_usTimerCounter)
+3277   2              {
+3278   3                  usTimeElapsed++;
+3279   3                  usPreviousTime = g_usTimerCounter;
+3280   3              }
+3281   2          }
+3282   1          while(usTimeElapsed <= usTimeout);
+3283   1      
+3284   1          return _FALSE;
+3285   1      }
+3286          
+3287          #if(((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON) && (_TYPE_C_PMIC_
+             -TYPE != _PMIC_NONE)) || (_HDCP_2_2_SUPPORT == _ON))
+3288          //----------------------------------------------------------------------
+3289          // Description  : Polling Scaler Flag Process in INT
+3290          // Input Value  : ucTimeout --> Timeout number (Max: 255 ms)
+3291          //                usRegister--> Current Register
+3292          //                ucBit     --> Polling Bit
+3293          //                bSuccess  --> 1 or 0 when finished for Polling Bit
+3294          // Output Value : Return _TRUE while polling success, _FALSE for timeout
+3295          //----------------------------------------------------------------------
+3296          BYTE ScalerTimerPollingFlagProc_EXINT0(BYTE ucTimeout, WORD usRegister, BYTE ucBit, bit bSuccess) using 1
+3297          {
+3298   1          WORD usTimeElapsed = 0;
+3299   1      
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 56  
+
+3300   1          // if EXINT0 Proirity > Timer2
+3301   1          if(PX0 == 1)
+3302   1          {
+3303   2              TF2 = 0;
+3304   2      
+3305   2              do
+3306   2              {
+3307   3                  usTimeElapsed = ScalerTimerTimer2Count_EXINT0(usTimeElapsed);
+3308   3      
+3309   3                  if(((bit)ScalerGetBit_EXINT(usRegister, ucBit) ^ bSuccess) == _FALSE)
+3310   3                  {
+3311   4                      return _TRUE;
+3312   4                  }
+3313   3              }
+3314   2              while(usTimeElapsed <= ucTimeout);
+3315   2          }
+3316   1          else
+3317   1          {
+3318   2              WORD usPreviousTime = g_usTimerCounter;
+3319   2      
+3320   2              do
+3321   2              {
+3322   3                  if(((bit)ScalerGetBit_EXINT(usRegister, ucBit) ^ bSuccess) == _FALSE)
+3323   3                  {
+3324   4                      return _TRUE;
+3325   4                  }
+3326   3      
+3327   3                  if(usPreviousTime != g_usTimerCounter)
+3328   3                  {
+3329   4                      usTimeElapsed++;
+3330   4                      usPreviousTime = g_usTimerCounter;
+3331   4                  }
+3332   3              }
+3333   2              while(usTimeElapsed <= ucTimeout);
+3334   2          }
+3335   1      
+3336   1          return _FALSE;
+3337   1      }
+3338          
+3339          //----------------------------------------------------------------------
+3340          // Description  : FW Detect 1ms flag for timer2 counter
+3341          // Input Value  :
+3342          // Output Value :
+3343          //----------------------------------------------------------------------
+3344          WORD ScalerTimerTimer2Count_EXINT0(WORD usTimer) using 1
+3345          {
+3346   1          if(TF2 == 1)
+3347   1          {
+3348   2              // Clear Timer2 flag
+3349   2              TF2 = 0;
+3350   2      
+3351   2      #if(_WD_TIMER_INT_SUPPORT == _OFF)
+                      // Clear watchdog
+                      CLR_MCU_WATCH_DOG();
+              #else
+3355   2              // Latch Current Counter and not clear any WD timer counter
+3356   2              MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+3357   2      
+3358   2              g_bWDTimer2Update = _TRUE;
+3359   2      
+3360   2              // Add to Prevent INT Lock Reset
+3361   2              if((MCU_FFAD_WATCHDOG_CNT1_VALUE & 0x07) > 0x04)
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 57  
+
+3362   2              {
+3363   3                  // Clear watchdog
+3364   3                  CLR_MCU_WATCH_DOG();
+3365   3              }
+3366   2      #endif
+3367   2              g_bNotifyTimer2Int = _TRUE;
+3368   2      
+3369   2              usTimer += 1;
+3370   2          }
+3371   1      
+3372   1          return usTimer;
+3373   1      }
+3374          #endif
+3375          
+3376          #if(((_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON) && (_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)) || ((_TMDS_HDCP_
+             -2_2_SUPPORT == _ON) && (_HDMI_PORT_EXIST == _ON)))
+3377          //----------------------------------------------------------------------
+3378          // Description  : Polling Scaler Flag Process in WDINT0
+3379          // Input Value  : ucTimeout --> Timeout number (Max: 255 ms)
+3380          //                usRegister--> Current Register
+3381          //                ucBit     --> Polling Bit
+3382          //                bSuccess  --> 1 or 0 when finished for Polling Bit
+3383          // Output Value : Return _TRUE while polling success, _FALSE for timeout
+3384          //----------------------------------------------------------------------
+3385          BYTE ScalerTimerPollingFlagProc_WDINT(BYTE ucTimeout, WORD usRegister, BYTE ucBit, bit bSuccess) using 3
+3386          {
+3387   1          WORD usTimeElapsed = 0;
+3388   1      
+3389   1          // if WDINT Proirity > Timer2
+3390   1          if(PX2 == 1)
+3391   1          {
+3392   2              TF2 = 0;
+3393   2      
+3394   2              do
+3395   2              {
+3396   3                  usTimeElapsed = ScalerTimerTimer2Count_WDINT(usTimeElapsed);
+3397   3      
+3398   3                  if(((bit)ScalerGetBit_EXINT(usRegister, ucBit) ^ bSuccess) == _FALSE)
+3399   3                  {
+3400   4                      return _TRUE;
+3401   4                  }
+3402   3              }
+3403   2              while(usTimeElapsed <= ucTimeout);
+3404   2          }
+3405   1          else
+3406   1          {
+3407   2              WORD usPreviousTime = g_usTimerCounter;
+3408   2      
+3409   2              do
+3410   2              {
+3411   3                  if(((bit)ScalerGetBit_EXINT(usRegister, ucBit) ^ bSuccess) == _FALSE)
+3412   3                  {
+3413   4                      return _TRUE;
+3414   4                  }
+3415   3      
+3416   3                  if(usPreviousTime != g_usTimerCounter)
+3417   3                  {
+3418   4                      usTimeElapsed++;
+3419   4                      usPreviousTime = g_usTimerCounter;
+3420   4                  }
+3421   3              }
+3422   2              while(usTimeElapsed <= ucTimeout);
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 58  
+
+3423   2          }
+3424   1      
+3425   1          return _FALSE;
+3426   1      }
+3427          
+3428          //----------------------------------------------------------------------
+3429          // Description  : FW Detect 1ms flag for timer2 counter
+3430          // Input Value  :
+3431          // Output Value :
+3432          //----------------------------------------------------------------------
+3433          WORD ScalerTimerTimer2Count_WDINT(WORD usTimer) using 3
+3434          {
+3435   1          if(TF2 == 1)
+3436   1          {
+3437   2              // Clear Timer2 flag
+3438   2              TF2 = 0;
+3439   2      
+3440   2      #if(_WD_TIMER_INT_SUPPORT == _OFF)
+                      // Clear watchdog
+                      CLR_MCU_WATCH_DOG();
+              #else
+3444   2              // Latch Current Counter and not clear any WD timer counter
+3445   2              MCU_FFEB_WDT_TEST = (MCU_FFEB_WDT_TEST & (~_BIT7)) | _BIT3;
+3446   2      
+3447   2              g_bWDTimer2Update = _TRUE;
+3448   2      
+3449   2              // Add to Prevent INT Lock Reset
+3450   2              if((MCU_FFAD_WATCHDOG_CNT1_VALUE & 0x07) > 0x04)
+3451   2              {
+3452   3                  // Clear watchdog
+3453   3                  CLR_MCU_WATCH_DOG();
+3454   3              }
+3455   2      #endif
+3456   2              g_bNotifyTimer2Int = _TRUE;
+3457   2      
+3458   2              usTimer += 1;
+3459   2          }
+3460   1      
+3461   1          return usTimer;
+3462   1      }
+3463          #endif
+3464          
+3465          //--------------------------------------------------
+3466          // Description  : Check if Event is Valid
+3467          // Input Value  : ucEventID --> Event which has been activated
+3468          // Output Value : None
+3469          //--------------------------------------------------
+3470          void ScalerTimerWaitForActiveTimerEvent(EnumScalerTimerEventID enumEventID)
+3471          {
+3472   1          ScalerTimerDelayXms(ScalerTimerGetEventRemainTime(enumEventID));
+3473   1          ScalerTimerCancelTimerEvent(enumEventID);
+3474   1      }
+3475          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   4612    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    107      80
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   SCALERCOMMONTIMERFUNCTION                                         10/18/2025 16:25:30 PAGE 59  
+
+   BIT SIZE         =      2       4
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

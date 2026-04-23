@@ -1,0 +1,27 @@
+---- GET_HDR10_EOTF_SETTING Matches (26 in 13 files) ----
+RL6449_Project.build_log.htm (output\rl6449_project):User\RTD Series\RTD2014Osd\Code\RTD2014OsdDisplay.c(3240): warning C206: 'GET_HDR10_EOTF_SETTING': missing function-prototype
+RL6449_Project.build_log.htm (output\rl6449_project):    SYMBOL:  GET_HDR10_EOTF_SETTING
+RL6449_Project.build_log.htm (output\rl6449_project):    SYMBOL:  GET_HDR10_EOTF_SETTING
+RL6449_Project.build_log.htm (output\rl6449_project):    SYMBOL:  GET_HDR10_EOTF_SETTING
+RL6851_Series_ScalerCommonSync.c (kernel\scaler_group2\rl6851_series_scaler\code):    if(GET_HDR10_EOTF_SETTING() != _HDR_INFO_EOTF_TRADITIONAL_GAMMA_SDR)
+RL6851_Series_ScalerCommonSyncInclude.h (kernel\scaler_group2\rl6851_series_scaler\header):#define GET_HDR10_EOTF_SETTING()                            (g_stHDR10Setting.enumHDR10EOTFSetting)
+RL6851_Series_ScalerCommonSyncInterface.h (kernel\scaler_group2\rl6851_series_scaler\header):#define GET_HDR10_EOTF_SETTING()                                (g_stHDR10Setting.enumHDR10EOTFSetting)
+RTD2014OsdDisplay.c (user\rtd series\rtd2014osd\code):			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdDisplay.c (user\rtd series\rtd2014osd\code):	if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdDisplay.c (user\rtd series\rtd2014osd\code):	if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdFontProp.c (user\rtd series\rtd2014osd\code):			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdFontProp.c (user\rtd series\rtd2014osd\code):			if(0)//((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdFunc.c (user\rtd series\rtd2014osd\code):			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014OsdFunc.c (user\rtd series\rtd2014osd\code):			if(((GET_OSD_HDR_MODE() == _HDR10_MODE_AUTO)&&(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084))||(GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+RTD2014UserInterface.c (user\rtd series\rtd2014function\code):			if(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084)
+ScalerCommonSync.c (kernel\scaler\scalercommonfunction\code):    if(GET_HDR10_EOTF_SETTING() != _HDR_INFO_EOTF_TRADITIONAL_GAMMA_SDR)
+ScalerCommonSyncInclude.h (kernel\scaler\scalercommonfunction\header):#define GET_HDR10_EOTF_SETTING()                            (g_stHDR10Setting.enumHDR10EOTFSetting)
+ScalerCommonSyncInterface.h (kernel\scaler\scalercommonfunction\header):#define GET_HDR10_EOTF_SETTING()                                (g_stHDR10Setting.enumHDR10EOTFSetting)
+UserCommonHDR.c (kernel\user common function\code):                    if(GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084)
+UserCommonHDR.c (kernel\user common function\code):               (GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084))
+UserCommonHDR.c (kernel\user common function\code):                if(GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084) // HDR SMPTE ST 2084
+UserCommonHDR.c (kernel\user common function\code):        if((UserInterfaceHDRGetHDR10ModeStatus(SysSourceGetInputPort()) != _HDR10_MODE_OFF) && (GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084))
+UserCommonHDR.c (kernel\user common function\code):    if(GET_HDR10_EOTF_SETTING() != (g_stHDR10SaticMetadata.ucEOTF))
+UserCommonHDR.c (kernel\user common function\code):        if(GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084)
+UserCommonHDR.c (kernel\user common function\code):    if((GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084) &&
+UserCommonSeamlessChg.c (kernel\user common function\code):                    if((UserInterfaceHDRGetHDR10ModeStatus(SysSourceGetInputPort()) == _HDR10_MODE_AUTO) && (GET_HDR10_EOTF_SETTING() == _HDR_INFO_EOTF_SMPTE_ST_2084))

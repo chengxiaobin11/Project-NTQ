@@ -1,0 +1,2203 @@
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TPVFACTORYCOMMAND
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\TPVFactoryCommand.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Factory\Code\TPVFactoryCommand.c LARGE OPTIMIZE(9,SPEED) INCDIR
+                    -(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Header;.\
+                    -Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\Lib\Heade
+                    -r;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL6449_Ser
+                    -ies_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Header;.\Kern
+                    -el\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User\RTD F
+                    -actory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header;.\User
+                    -\RTD Factory\Code) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449
+                    -_Project\TPVFactoryCommand.lst) TABS(2) OBJECT(.\Output\RL6449_Project\TPVFactoryCommand.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          //----------------------------------------------------------------------------------------------------
+  16          // ID Code      : TPVFactoryCommand.c No.0000
+  17          // Update Note  :
+  18          //----------------------------------------------------------------------------------------------------
+  19          
+  20          
+  21          #define __FACTORY_COMMAND__
+  22          
+  23          #include "UserCommonInclude.h"
+  24          #if(_DEF_DDCCI_EDID_TOOL)
+  25          
+  26          BYTE Visonic_Sn[19];
+  27          
+  28          #ifndef _ENE_LED_CONTROL
+  29          #define _ENE_LED_CONTROL                        _OFF
+  30          #endif
+  31          
+  32          
+  33          #ifdef _ENE_LED_CONTROL
+  34          #if (_ENE_LED_CONTROL != _OFF)
+              #include "ENE_LED_CONTROL.h" // Led test
+              #endif
+  37          #endif
+  38          
+  39          #if 1//(_FACTORY_MODE_OWNER == _OWNER_TPV)
+  40          
+  41          #ifndef _TPV_FACTORY_SELECT
+  42          #define _TPV_FACTORY_SELECT         _TPV_FQ_FACTORY
+  43          #endif
+  44          #ifndef _PANEL_VCOM_ADJUST_FUNCTION
+  45          #define _PANEL_VCOM_ADJUST_FUNCTION     _OFF
+  46          #endif
+  47          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 2   
+
+  48          // Definitions of Panel VCOM Function
+  49          //--------------------------------------------------
+  50          #define _PANEL_VCOM_I2C_ADDRESS                 0x50
+  51          #define _PANEL_VCOM_DAC_ADDRESS                 0x80
+  52          #define _PANEL_VCOM_OTP_ADDRESS                 0x00
+  53          
+  54          //-----------------------------------------------------
+  55          //DFM MODE
+  56          //-----------------------------------------------------
+  57          
+  58          #define _TPV_FQ_FACTORY               1
+  59          #define _TPV_LT_FACTORY               2
+  60          #define _TPV_WH_FACTORY               3
+  61          #define _TPV_BJ_FACTORY               4
+  62          
+  63          #define _PRODUCT_ON                             0x55aa
+  64          #define _PRODUCT_OFF                            0xaa55
+  65          #define _FORCE_LOGO_OFF                                 _OFF
+  66          
+  67          //-----------------------------------------------------
+  68          #define _DDC_SOURCE               0
+  69          #define _DDC_LENGTH               1
+  70          #define _FC_BYTE2               2
+  71          #define _FC_BYTE3                               3
+  72          #define _FC_BYTE4               4
+  73          #define _FC_BYTE5               5
+  74          #define _FC_BYTE6               6
+  75          #define _FC_BYTE7               7
+  76          #define _FC_BYTE8               8
+  77          //===========================================
+  78          // Definitions of Factory Command
+  79          //===========================================
+  80          #define CMD_FC_TPVFactory           0xFE
+  81          //===========AOC  Factory Command===============
+  82          #define VCP_FC_ADJUST_R_GAIN          0x16
+  83          //===========================================
+  84          #define VCP_FC_ADJUST_G_GAIN          0x18
+  85          //===========================================
+  86          #define VCP_FC_ADJUST_B_GAIN          0x1a
+  87          //===========================================
+  88          #define VCP_FC_ADJUST_CONTRAST            0x12
+  89          //===========================================
+  90          #define VCP_FC_ADJUST_BL_BRIGHTNESS         0x10
+  91          //===========================================
+  92          #define VCP_FC_SAVE_COLORTEMP                   0x14
+  93          //===========================================
+  94          #define VCP_FC_RANGE_GAIN                       0x16
+  95          
+  96          #define VCP_FC_FACTORY_CEC_MODE_RESET     0x08//Add CEC Command Function
+  97          
+  98          //-----Sub Item of VCP_FC_SAVE_COLORTEMP (_FC_BYTE5)
+  99          #if (_TPV_FACTORY_SELECT == _TPV_WH_FACTORY)
+              #define SUB_VCP_FC_SAVE_COLORTEMP_All       0x81
+              #else
+ 102          #define SUB_VCP_FC_SAVE_COLORTEMP_All           0x00
+ 103          #endif
+ 104          #define SUB_VCP_FC_SAVE_COLORTEMP_sRGB      0x01
+ 105          #define SUB_VCP_FC_SAVE_COLORTEMP_Native      0x02
+ 106          #define SUB_VCP_FC_SAVE_COLORTEMP_4000      0x03
+ 107          #define SUB_VCP_FC_SAVE_COLORTEMP_5000      0x04
+ 108          #define SUB_VCP_FC_SAVE_COLORTEMP_6500      0x05
+ 109          #define SUB_VCP_FC_SAVE_COLORTEMP_7300      0x06
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 3   
+
+ 110          #define SUB_VCP_FC_SAVE_COLORTEMP_8200      0x07
+ 111          #define SUB_VCP_FC_SAVE_COLORTEMP_9300      0x08
+ 112          #define SUB_VCP_FC_SAVE_COLORTEMP_10000     0x09
+ 113          #define SUB_VCP_FC_SAVE_COLORTEMP_11500     0x0a
+ 114          #define SUB_VCP_FC_SAVE_COLORTEMP_User      0x0b
+ 115          #define SUB_VCP_FC_SAVE__ECO_TEXT_MODE      0x10//DELL only
+ 116          
+ 117          //===========================================   _FC_BYTE4
+ 118          #define VCP_FC_AUTO_ADJUST            0x1E
+ 119          //===========================================
+ 120          #define VCP_FC_AUTO_LEVEL           0x1F
+ 121          //===========================================
+ 122          #define VCP_FC_RESET                            0x04
+ 123          //-----------------------------------------------------
+ 124          #define VCP_FC_SET_LANGUAGE                     0xCC
+ 125          //===========================================
+ 126          #define VCP_FC_SET_SOURCE                       0x60
+ 127          //===========================================
+ 128          #define VCP_FC_ENTER_POWERSAVING        0xD6
+ 129          //===========================================
+ 130          #define VCP_FC_DC_FUNC                        0xDC
+ 131          //===========================================
+ 132          #define VCP_FC_Code01                           0xe1
+ 133          
+ 134          //-----------------------------------------------------(_FC_BYTE5)
+ 135          #define SUB_VCP_FC_FACTORY_MODE_A0          0xa0
+ 136          #define SUB1_VCP_FC_ENTER_FACTORY_MODE          0x01
+ 137          #define SUB1_VCP_FC_EXIT_FACTORY_MODE         0x00
+ 138          //-----------------------------------------------------
+ 139          #define SUB_VCP_FC_NVRAW_RESTORE_A1         0xa1
+ 140          #if 1//(ENABLE_OTA_FUNCTION == _ON)
+ 141          #define VCP_FC_FACTORY_DUAL_BANK_START          0x01
+ 142          #endif
+ 143          #define SUB1_VCP_FC_NVRAW_RESTORE_A1_ON         0x00
+ 144          //-----------------------------------------------------
+ 145          #define SUB_VCP_FC_FACTORY_MODE_A2          0xa2
+ 146          #define SUB1_VCP_FC_SET_BURNIN_OFF              0x00
+ 147          #define SUB1_VCP_FC_SET_BURNIN_ON               0x01
+ 148          #define SUB1_VCP_FC_SET_WR_START        0x01
+ 149          #define SUB1_VCP_FC_SET_WR_END            0x00
+ 150          //-----------------------------------------------------
+ 151          #define SUB_VCP_FC_FACTORY_MODE_A3          0xa3
+ 152          //-----------------------------------------------------
+ 153          #define SUB_VCP_FC_FACTORY_MODE_A4          0xa4//for WH MANUFACTORY only
+ 154          //-----------------------------------------------------
+ 155          #define SUB_VCP_FC_FACTORY_MODE_A5          0xa5
+ 156          #define SUB1_VCP_FC_ENTER_DFM                   0x01
+ 157          #define SUB1_VCP_FC_EXIT_DFM                    0x00
+ 158          //-----------------------------------------------------
+ 159          #define SUB_VCP_FC_FACTORY_MODE_A6          0xa6
+ 160          //-----------------------------------------------------
+ 161          #define SUB_VCP_FC_FACTORY_MODE_A7          0xa7
+ 162          #define VCP_FC_FACTORY_LOGO_OFF             0x06
+ 163          #define VCP_FC_FACTORY_LOGO_OFF_ENABLE          0x00
+ 164          #define VCP_FC_FACTORY_LOGO_OFF_DISABLE         0x01
+ 165          #define VCP_FC_FACTORY_DCR_MODE             0x03  // DCR Mode
+ 166          #define VCP_FC_FACTORY_DCR_OFF              0x00
+ 167          #define VCP_FC_FACTORY_DCR_ON               0x01
+ 168          //-----------------------------------------------------
+ 169          #define SUB_VCP_FC_FACTORY_MODE_A9        0xa9
+ 170          //-----------------------------------------------------
+ 171          #define SUB_VCP_FC_SET_HDCP_WRITE_START         0xe0
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 4   
+
+ 172          //-----------------------------------------------------
+ 173          #define SUB_VCP_FC_SET_HDCP_TX_WRITE_START      0xe1
+ 174          //-----------------------------------------------------
+ 175          #define SUB_VCP_FC_READ_HDCP_CRC        0xe2
+ 176          //-----------------------------------------------------
+ 177          #define SUB_VCP_FC_READ_DEVICE_ID       0xe6
+ 178          #define SUB_VCP_FC_READ_SCALER_ID               0xe8
+ 179          #if 1//(ENABLE_OTA_FUNCTION == _ON)
+ 180          #define VCP_FC_FACTORY_FW_SCALER_TYPE           0x00
+ 181          #define VCP_FC_FACTORY_FW_VERSION               0x06
+ 182          #define VCP_FC_FACTORY_FW_BOM_STRING            0x1D
+ 183          #endif
+ 184          //===========================================
+ 185          #define VCP_FC_Code02                           0xe2
+ 186          #define SUB_VCP_FC_ADJUST_ADC_R_GAIN          0x01
+ 187          #define SUB_VCP_FC_ADJUST_ADC_G_GAIN          0x02
+ 188          #define SUB_VCP_FC_ADJUST_ADC_B_GAIN          0x03
+ 189          #define SUB_VCP_FC_ADJUST_ADC_R_OFFSET      0x04
+ 190          #define SUB_VCP_FC_ADJUST_ADC_G_OFFSET      0x05
+ 191          #define SUB_VCP_FC_ADJUST_ADC_B_OFFSET      0x06
+ 192          #define SUB_VCP_FC_COLORTMP_GAIN_MAX      0x02
+ 193          //===========================================
+ 194          #define VCP_FC_Code04                           0xe4
+ 195          #define SUB_VCP_FC_VIRTUAL_KEY                  0x01
+ 196          //===========================================
+ 197          #define VCP_FC_Code09             0xe9
+ 198          //===========================================
+ 199          #define VCP_FC_Code0A             0xea
+ 200          //===========================================
+ 201          #define VCP_FC_Code0F                       0xef
+ 202          #define SUB_VCP_FC_VGA1_EDID              0x00
+ 203          #define SUB_VCP_FC_DVI1_EDID              0x01
+ 204          #define SUB_VCP_FC_HDMI1_EDID             0x02
+ 205          #define SUB_VCP_FC_DP1_EDID               0x03
+ 206          #define SUB_VCP_FC_VGA2_EDID              0x04
+ 207          #define SUB_VCP_FC_DVI2_EDID              0x05
+ 208          #define SUB_VCP_FC_HDMI2_EDID             0x06
+ 209          #define SUB_VCP_FC_DP2_EDID               0x07
+ 210          #define SUB_VCP_FC_HDMI3_EDID             0x08
+ 211          #define SUB_VCP_FC_HDMI4_EDID             0x09
+ 212          #define SUB_VCP_FC_MHL1_EDID              0x0A
+ 213          #define SUB_VCP_FC_MHL2_EDID              0x0B
+ 214          #define SUB_VCP_FC_MHL3_EDID              0x0C
+ 215          #define SUB_VCP_FC_MHL4_EDID              0x0D
+ 216          #define SUB_VCP_FC_EEPROM                 0x10
+ 217          #define SUB_VCP_FC_HDCP1                  0x11
+ 218          #define SUB_VCP_FC_HDCP2                  0x12
+ 219          #define SUB_VCP_FC_OSDSN                  0x13
+ 220          #define SUB_VCP_FC_OSDMODELNAME           0x14
+ 221          
+ 222          #define SUB_VCP_FC_HDMI20_HDMI1_EDID      0x40
+ 223          #define SUB_VCP_FC_HDMI20_HDMI2_EDID      0x41
+ 224          #define SUB_VCP_FC_HDMI20_HDMI3_EDID      0x42
+ 225          #define SUB_VCP_FC_HDMI20_HDMI4_EDID      0x43
+ 226          #define SUB_VCP_FC_DP3_EDID           0x44
+ 227          //===========================================
+ 228          #define VCP_FC_Code13             0xF3
+ 229          //===========================================
+ 230          //===========================================
+ 231          #define _AWB_COMMAND_LEN_CRC                4
+ 232          #define _REPLY_RESULT_00                    0x00
+ 233          #define _REPLY_RESULT_02                    0x02//PASS
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 5   
+
+ 234          #define _REPLY_RESULT_04                    0x04//Fail
+ 235          #define SUB_VCP_FC_PWM_MIN                      0x00
+ 236          #define SUB_VCP_FC_PWM_DEF                      0x01
+ 237          #define SUB_VCP_FC_PWM_MAX                      0x02
+ 238          
+ 239          //-----------------------------------------------------
+ 240          //HDCP Key Writeing Size one Times
+ 241          //-----------------------------------------------------
+ 242          #define _HDCP_BLOCK_SIZE                    20
+ 243          #define _HDCP_2_2_BLOCK_SIZE                    32
+ 244          
+ 245          #if(_A0_INPUT_PORT_TYPE == _A0_VGA_PORT)
+                #define _DFM_VGA_PORT             _A0_INPUT_PORT
+              #else
+ 248            #define _DFM_VGA_PORT             _NO_INPUT_PORT
+ 249          #endif
+ 250          
+ 251          
+ 252          
+ 253          #define _DFM_VGA_PORT             _NO_INPUT_PORT
+ 254          #define _DFM_DVI1_PORT              _NO_INPUT_PORT
+ 255          #define _DFM_DVI2_PORT              _NO_INPUT_PORT
+ 256          #define _DFM_HDMI1_PORT                         _D2_INPUT_PORT
+ 257          #define _DFM_HDMI2_PORT             _D3_INPUT_PORT
+ 258          #define _DFM_HDMI3_PORT             _NO_INPUT_PORT
+ 259          #define _DFM_HDMI4_PORT             _NO_INPUT_PORT
+ 260          #define _DFM_DP1_PORT                           _D1_INPUT_PORT
+ 261          #define _DFM_DP2_PORT             _NO_INPUT_PORT
+ 262          #define _DFM_MHL1_PORT              _NO_INPUT_PORT
+ 263          #define _DFM_MHL2_PORT              _NO_INPUT_PORT
+ 264          #define _DFM_MHL3_PORT              _NO_INPUT_PORT
+ 265          #define _DFM_MHL4_PORT              _NO_INPUT_PORT
+ 266            //-------------------------------------------------------------
+ 267            //define HDMI2.0 Port
+ 268            //-------------------------------------------------------------
+ 269          #define _DFM_HDMI20_HDMI1_PORT                  _NO_INPUT_PORT
+ 270          #define _DFM_HDMI20_HDMI2_PORT                  _NO_INPUT_PORT
+ 271          #define _DFM_HDMI20_HDMI3_PORT          _NO_INPUT_PORT
+ 272          #define _DFM_HDMI20_HDMI4_PORT          _NO_INPUT_PORT
+ 273          #define _DFM_DP3_PORT             _NO_INPUT_PORT
+ 274          
+ 275          
+ 276          StructFactoryType g_stFactoryData;
+ 277          // 20111109 by jerry,  for TPV factory data
+ 278          
+ 279          code StructFactoryType g_stFactoryDataDefault=
+ 280          {
+ 281            _ON,                   // b1OsdFactory  //工厂
+ 282              _ON,      // b1BurnIn : 1;    //老化
+ 283            _FORCE_LOGO_OFF,// b1LogoOff :1;//DFM rev04 patch note 2
+ 284            _FAIL,      // b1InternalAutoColor :1;//DFM rev05 patch note 2
+ 285            _OFF,     // b1EnergyLogo :1;
+ 286            _ON,            // b1AutoSource :1;   //自动信号检测
+ 287            _OFF,   // b1Resetoff:1;
+ 288              100,      // ucsRGBBacklight;
+ 289              64,       // ucVcomValue
+ 290            _PRODUCT_ON,  // usDFMProductMode;
+ 291            _ENGLISH,
+ 292            0xFF,//dummy1
+ 293            0xFF,//dummy2
+ 294          };
+ 295          
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 6   
+
+ 296          void TPVNVRamSaveFactoryDate(void)
+ 297          {
+ 298   1        #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+                  UserCommonEepromWrite(_TPV_FACTORY_ADDRESS, sizeof(StructFactoryType), (BYTE *)(&g_stFactoryData));
+              
+                #else
+ 302   1        UserCommonFlashSaveItem(_FLASH_ITEMID_FACTORY_DATA, (BYTE *)(&g_stFactoryData), sizeof(StructFactoryType)
+             -);
+ 303   1        #endif
+ 304   1      }
+ 305          
+ 306          void TPVNVRamLoadFactoryDate(void)
+ 307          {
+ 308   1        #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+                  UserCommonEepromRead(_TPV_FACTORY_ADDRESS, sizeof(StructFactoryType), (BYTE *)(&g_stFactoryData));
+                //UserNVRamCheckRange(g_stFactoryData);
+              
+                #else
+ 313   1        if(UserCommonFlashLoadItem(_FLASH_ITEMID_FACTORY_DATA, pData, sizeof(StructFactoryType)) == _TRUE)
+ 314   1        {
+ 315   2          memcpy(&g_stFactoryData, pData, sizeof(StructFactoryType));
+ 316   2        }
+ 317   1        else
+ 318   1        {
+ 319   2          g_stFactoryData = g_stFactoryDataDefault;
+ 320   2        }
+ 321   1        #endif
+ 322   1      }
+ 323          
+ 324          void TPVNVRamRestoreFactoryDate(void)
+ 325          {
+ 326   1        g_stFactoryData = g_stFactoryDataDefault;
+ 327   1      
+ 328   1        #if(_SYSTEM_EEPROM_EMULATION_SUPPORT == _OFF)
+                UserCommonEepromWrite(_TPV_FACTORY_ADDRESS, sizeof(StructFactoryType), (BYTE *)(&g_stFactoryData));
+              
+                #else
+ 332   1        if(UserCommonFlashLoadItem(_FLASH_ITEMID_FACTORY_DATA, pData, 1) == _TRUE)
+ 333   1        {
+ 334   2          TPVNVRamSaveFactoryDate();
+ 335   2        }
+ 336   1        #endif
+ 337   1      }
+ 338          
+ 339          #define BurnIn_On()       {\
+ 340                            SET_FACTORY_BURNIN(_ON);\
+ 341                            TPVNVRamSaveFactoryDate();\
+ 342                          }
+ 343          //--------------------------------------------------
+ 344          #define BurnIn_Off()      {\
+ 345                          SET_FACTORY_BURNIN(_OFF);\
+ 346                          TPVNVRamSaveFactoryDate();\
+ 347                          }
+ 348          
+ 349          
+ 350          #define IIC_VGA_DDC_WRITE()   {\
+ 351                          ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_GPIO);\
+ 352                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, ((g_pucDdcciRxBuf[_DDC_LENGTH]-0x86)), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_VGA_DDC, _SW_IIC_PIN_GPIO, _WRITE_SIZ
+             -E_8);\
+ 353                          ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_DDC);\
+ 354                          }
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 7   
+
+ 355          
+ 356          #define IIC_VGA_DDC_READ()    {\
+ 357                                          ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_GPIO);\
+ 358                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_VGA_DDC, _SW_IIC_PIN_GPIO);\
+ 359                                          ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_DDC);\
+ 360                                          }
+ 361          
+ 362          #define IIC_DDC0_WRITE()    {\
+ 363                          ScalerPinshareGpioDdcPinSwitch(_DDC0_SWITCH_GPIO);\
+ 364                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC0, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 365                          ScalerPinshareGpioDdcPinSwitch(_DDC0_SWITCH_DDC);\
+ 366                          }
+ 367          
+ 368          #define IIC_DDC0_READ()     {\
+ 369                                          ScalerPinshareGpioDdcPinSwitch(_DDC0_SWITCH_GPIO);\
+ 370                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC0, _SW_IIC_PIN_GPIO);\
+ 371                                          ScalerPinshareGpioDdcPinSwitch(_DDC0_SWITCH_DDC);\
+ 372                                          }
+ 373          
+ 374          #define IIC_DDC1_WRITE()    {\
+ 375                          ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);\
+ 376                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC1, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 377                          ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);\
+ 378                          }
+ 379          
+ 380          #define IIC_DDC1_READ()     {\
+ 381                                          ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);\
+ 382                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC1, _SW_IIC_PIN_GPIO);\
+ 383                                          ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);\
+ 384                                          }
+ 385          #define IIC_DDC2_WRITE()    {\
+ 386                          ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_GPIO);\
+ 387                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC2, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 388                          ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_DDC);\
+ 389                          }
+ 390          
+ 391          #define IIC_DDC2_READ()     {\
+ 392                                          ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_GPIO);\
+ 393                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC2, _SW_IIC_PIN_GPIO);\
+ 394                                          ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_DDC);\
+ 395                                          }
+ 396          #define IIC_DDC3_WRITE()    {\
+ 397                          ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);\
+ 398                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC3, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 399                          ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);\
+ 400                          }
+ 401          
+ 402          #define IIC_DDC3_READ()     {\
+ 403                                          ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);\
+ 404                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 8   
+
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC3, _SW_IIC_PIN_GPIO);\
+ 405                                          ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);\
+ 406                                          }
+ 407          #define IIC_DDC4_WRITE()    {\
+ 408                          ScalerPinshareGpioDdcPinSwitch(_DDC4_SWITCH_GPIO);\
+ 409                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC4, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 410                          ScalerPinshareGpioDdcPinSwitch(_DDC4_SWITCH_DDC);\
+ 411                          }
+ 412          
+ 413          #define IIC_DDC4_READ()     {\
+ 414                                          ScalerPinshareGpioDdcPinSwitch(_DDC4_SWITCH_GPIO);\
+ 415                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC4, _SW_IIC_PIN_GPIO);\
+ 416                                          ScalerPinshareGpioDdcPinSwitch(_DDC4_SWITCH_DDC);\
+ 417                                          }
+ 418          #define IIC_DDC5_WRITE()    {\
+ 419                          ScalerPinshareGpioDdcPinSwitch(_DDC5_SWITCH_GPIO);\
+ 420                          UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]+g_pucDdcciRxBuf[_FC_BY
+             -TE7]), 1, (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86), &g_pucDdcciRxBuf[_FC_BYTE8], _IIC_FOR_DDC5, _SW_IIC_PIN_GPIO, _WRITE_SIZE
+             -_8);\
+ 421                          ScalerPinshareGpioDdcPinSwitch(_DDC5_SWITCH_DDC);\
+ 422                          }
+ 423          
+ 424          #define IIC_DDC5_READ()     {\
+ 425                                          ScalerPinshareGpioDdcPinSwitch(_DDC5_SWITCH_GPIO);\
+ 426                                          UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, (g_pucDdcciRxBuf[_FC_BYTE6]
+             -+g_pucDdcciRxBuf[_FC_BYTE7]), 1, 32, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DDC5, _SW_IIC_PIN_GPIO);\
+ 427                                          ScalerPinshareGpioDdcPinSwitch(_DDC5_SWITCH_DDC);\
+ 428                                          }
+ 429          
+ 430          
+ 431          
+ 432          #define _EDID_ADDRESS_DP1         _EDID_D0_ADDRESS_FLASH//0xA000
+ 433          #define _EDID_ADDRESS_DP2         _EDID_D1_ADDRESS_FLASH//0xB000
+ 434          
+ 435          #define _EDID_ADDRESS_HDMI1             _EDID_D2_ADDRESS_FLASH
+ 436          #define _EDID_ADDRESS_HDMI2             _EDID_D3_ADDRESS_FLASH
+ 437          
+ 438          
+ 439          #ifndef _EDID_ADDRESS_DP3
+ 440          #define _EDID_ADDRESS_DP3       _EDID_D6_ADDRESS_FLASH
+ 441          #endif
+ 442          
+ 443          #define _EDID_ADDRESS_MHL1        0xC000
+ 444          #define _EDID_ADDRESS_MHL2        0xD000
+ 445          
+ 446          #ifndef _EDID_ADDRESS_MHL3
+ 447          #define _EDID_ADDRESS_MHL3        _EDID_D2_MHL_ADDRESS_FLASH
+ 448          #endif
+ 449          #ifndef _EDID_ADDRESS_MHL4
+ 450          #define _EDID_ADDRESS_MHL4        _EDID_D3_MHL_ADDRESS_FLASH
+ 451          #endif
+ 452          #ifndef _EDID_ADDRESS_MHL5
+ 453          #define _EDID_ADDRESS_MHL5        _EDID_D4_MHL_ADDRESS_FLASH
+ 454          #endif
+ 455          #ifndef _EDID_ADDRESS_MHL6
+ 456          #define _EDID_ADDRESS_MHL6        _EDID_D5_MHL_ADDRESS_FLASH
+ 457          #endif
+ 458          
+ 459          
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 9   
+
+ 460          
+ 461          #define DP_EDID_WT_ADR_DP1(ucDDCRam)  {\
+ 462                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 463                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 464                              }
+ 465          #define DP_EDID_WT_ADR_DP2(ucDDCRam)  {\
+ 466                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_DP2+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 467                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 468                              }
+ 469          #define DP_EDID_WT_ADR_DP3(ucDDCRam)  {\
+ 470                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_DP3+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 471                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 472                              }
+ 473          #define MHL_EDID_WT_ADR_MHL1(ucDDCRam)  {\
+ 474                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL1+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 475                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 476                              }
+ 477          #define MHL_EDID_WT_ADR_MHL2(ucDDCRam)  {\
+ 478                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL2+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 479                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 480                              }
+ 481          #define MHL_EDID_WT_ADR_MHL3(ucDDCRam)  {\
+ 482                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL3+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 483                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 484                              }
+ 485          #define MHL_EDID_WT_ADR_MHL4(ucDDCRam)  {\
+ 486                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL4+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 487                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 488                              }
+ 489          #define MHL_EDID_WT_ADR_MHL5(ucDDCRam)  {\
+ 490                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL5+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 491                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 492                              }
+ 493          #define MHL_EDID_WT_ADR_MHL6(ucDDCRam)  {\
+ 494                                UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL6+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_
+             -pucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciRxBuf[_FC_BYTE8]);\
+ 495                                memcpy(ucDDCRam+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pucDdcciRxBuf[_FC_BYTE7]), &g_pucDdcciRxB
+             -uf[_FC_BYTE8], (g_pucDdcciRxBuf[_DDC_LENGTH]-0x86));\
+ 496                              }
+ 497          //3 GET EMBEDED EDID SELECT
+ 498          
+ 499          #define DP_EDID_RDF_ADR_DP1()     {\
+ 500                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pu
+             -cDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 501                              }
+ 502          #define DP_EDID_RDF_ADR_DP2()     {\
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 10  
+
+ 503                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_DP2+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pu
+             -cDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 504                              }
+ 505          #define DP_EDID_RDF_ADR_DP3()     {\
+ 506                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_DP3+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_pu
+             -cDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 507                              }
+ 508          #define MHL_EDID_RDF_ADR_MHL1()     {\
+ 509                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL1+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 510                              }
+ 511          #define MHL_EDID_RDF_ADR_MHL2()     {\
+ 512                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL2+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 513                              }
+ 514          #define MHL_EDID_RDF_ADR_MHL3()     {\
+ 515                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL3+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 516                              }
+ 517          #define MHL_EDID_RDF_ADR_MHL4()     {\
+ 518                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL4+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 519                              }
+ 520          #define MHL_EDID_RDF_ADR_MHL5()     {\
+ 521                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL5+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 522                              }
+ 523          #define MHL_EDID_RDF_ADR_MHL6()     {\
+ 524                                UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_MHL6+((g_pucDdcciRxBuf[_FC_BYTE6]*0x100)+g_p
+             -ucDdcciRxBuf[_FC_BYTE7]), 32, &g_pucDdcciTxBuf[_FC_BYTE2]);\
+ 525                              }
+ 526          
+ 527          
+ 528          
+ 529          //3  VGA Port (write to external EEPROM through DDC chanel)
+ 530          //--------------------------------------------------
+ 531          #define VGA_EDID_WRITE()    {}  //IIC_VGA_DDC_WRITE()
+ 532          #define VGA_EDID_READ()       {}  //IIC_VGA_DDC_READ()
+ 533          //--------------------------------------------------//
+ 534          //3 DVI Port (write to external EEPROM through DDC chanel)
+ 535          //--------------------------------------------------//
+ 536          #define DVI1_EDID_WRITE()   {}
+ 537          #define DVI1_EDID_READ()    {}
+ 538          
+ 539          #define DVI2_EDID_WRITE()   {}
+ 540          #define DVI2_EDID_READ()    {}
+ 541          
+ 542          //--------------------------------------------------//
+ 543          //3 HDMI Port (write to external EEPROM through DDC chanel)
+ 544          //--------------------------------------------------//
+ 545          #if(_HDMI_24C02_SUPPORT)
+              #define HDMI1_EDID_WRITE()    IIC_DDC3_WRITE()
+              #define HDMI1_EDID_READ()   IIC_DDC3_READ()
+              #else
+ 549          #define HDMI1_EDID_WRITE()    {}
+ 550          #define HDMI1_EDID_READ()   {}
+ 551          #endif
+ 552          
+ 553          #define HDMI2_EDID_WRITE()    IIC_DDC2_WRITE()
+ 554          #define HDMI2_EDID_READ()   IIC_DDC2_READ()
+ 555          
+ 556          #define HDMI3_EDID_WRITE()    {}
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 11  
+
+ 557          #define HDMI3_EDID_READ()   {}
+ 558          
+ 559          #define HDMI4_EDID_WRITE()    {}
+ 560          #define HDMI4_EDID_READ()   {}
+ 561          //--------------------------------------------------//
+ 562          //3 DP Port (write to Flash and internel DDCRAM)
+ 563          //--------------------------------------------------//
+ 564          #define DP1_EDID_WRITE()    DP_EDID_WT_ADR_DP1(MCU_DDCRAM_D1)
+ 565          #define DP1_EDID_READ()     DP_EDID_RDF_ADR_DP1()
+ 566          
+ 567          #define DP2_EDID_WRITE()    {}//DP_EDID_WT_ADR_DP2()
+ 568          #define DP2_EDID_READ()     {}//DP_EDID_RDF_ADR_DP2()
+ 569          
+ 570          #define DP3_EDID_WRITE()    {}
+ 571          #define DP3_EDID_READ()     {}
+ 572          
+ 573          //--------------------------------------------------//
+ 574          //3 MHL Port (write to Flash and internel DDCRAM)
+ 575          //--------------------------------------------------//
+ 576          
+ 577          #if(_D1_MHL_EMBEDDED_DDCRAM_SIZE != _EDID_SIZE_NONE)
+              
+              ///#define MHL1_EDID_WRITE()    MHL_EDID_WT_ADR_MHL1(MCU_DDCRAM_MHL_D2)
+              //#define MHL1_EDID_READ()    MHL_EDID_RDF_ADR_MHL1()
+              #endif
+ 582          
+ 583          #if(_D2_MHL_EMBEDDED_DDCRAM_SIZE != _EDID_SIZE_NONE)
+              
+              //#define MHL2_EDID_WRITE()   MHL_EDID_WT_ADR_MHL2(MCU_DDCRAM_MHL_D3)
+              //#define MHL2_EDID_READ()    MHL_EDID_RDF_ADR_MHL2()
+              #endif
+ 588          
+ 589          #if(_D3_MHL_EMBEDDED_DDCRAM_SIZE != _EDID_SIZE_NONE)
+              
+              //#define MHL3_EDID_WRITE()   {}
+              //#define MHL3_EDID_READ()    {}
+              
+              #endif
+ 595          
+ 596          #define MHL4_EDID_WRITE()   {}
+ 597          #define MHL4_EDID_READ()    {}
+ 598          //--------------------------------------------------//
+ 599          //3 HDMI2.0 Port (write to external EEPROM through DDC chanel)
+ 600          //--------------------------------------------------//
+ 601          #define HDMI20_HDMI1_EDID_WRITE()   {}
+ 602          #define HDMI20_HDMI1_EDID_READ()    {}
+ 603          
+ 604          #define HDMI20_HDMI2_EDID_WRITE()   {}
+ 605          #define HDMI20_HDMI2_EDID_READ()    {}
+ 606          
+ 607          #define HDMI20_HDMI3_EDID_WRITE()   {}
+ 608          #define HDMI20_HDMI3_EDID_READ()    {}
+ 609          
+ 610          #define HDMI20_HDMI4_EDID_WRITE()   {}
+ 611          #define HDMI20_HDMI4_EDID_READ()    {}
+ 612          
+ 613          
+ 614          
+ 615          //----------------------------------------------------------------------------------------------------
+ 616          // OSD Factory Data Function
+ 617          //----------------------------------------------------------------------------------------------------
+ 618          void TPVFCReplyEDIDPortData(void);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 12  
+
+ 619          void TPVFCEDIDWriteData(void);
+ 620          void TPVFCEDIDReadData(void);
+ 621          void TPVFCReplyEDIDStatus(void);
+ 622          WORD TPVFCCrc16(BYTE nData, WORD CRC);
+ 623          void TPVFCReplyCommand(BYTE ucResult, BYTE ucLength);
+ 624          bit TPVDFMAutoConfigByPass(void);
+ 625          
+ 626          
+ 627          //--------------------------------------------------
+ 628          // Description  : Save factory data
+ 629          // Input Value  : None
+ 630          // Output Value : None
+ 631          //--------------------------------------------------
+ 632          
+ 633          
+ 634          //--------------------------------------------------
+ 635          // Description  : TPV Factory Command DDCCI process
+ 636          // Input Value  : None
+ 637          // Output Value : TRUE: do Factory Command, FALSE: do nothing
+ 638          //--------------------------------------------------
+ 639          
+ 640          #define FC_EDID_EEPROM_WP_ENABLE()  {\
+ 641                            PCB_D0_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);\
+ 642                            PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);\
+ 643                            PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);\
+ 644                            }
+ 645          #define FC_EDID_EEPROM_WP_DISABLE() {\
+ 646                            PCB_D0_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);\
+ 647                            PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);\
+ 648                            PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);\
+ 649                            }
+ 650          
+ 651          BYTE ucChkSumCalibration = 0xff;
+ 652          
+ 653          
+ 654          
+ 655          #define FC_EDID_ERASE()     {\
+ 656                          UserCommonFlashErasePage(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1/_FLASH_PAGE_SIZE);\
+ 657                          }
+ 658          
+ 659          
+ 660          
+ 661          #define _EDID_SN_LENTH                         13       
+ 662          #define _EDID_SN_START_ADDRESS                 0x4d       
+ 663          
+ 664          /*
+ 665          extern void CobyHdmiEdidToDp(void);
+ 666          
+ 667          void CobyHdmiEdidToDp(void)
+ 668          {
+ 669          
+ 670            BYTE ucCount = 0;
+ 671            BYTE pucBuffer[16] = {0};
+ 672            BYTE EDID_DATA[16];
+ 673            BYTE j = 0;
+ 674          
+ 675              //UserCommonFlashRead(_EDID_FLASH_BANK, (_EDID_D0_ADDRESS_FLASH), _D0_EMBEDDED_DDCRAM_MAX_SIZE, MCU_DD
+             -CRAM_D1);
+ 676          
+ 677            ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+ 678            ScalerTimerDelayXms(1); 
+ 679            UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, 0x10, 1, 2, EDID_DATA, _IIC_FOR_DDC1, _SW_IIC_PIN_GPIO);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 13  
+
+ 680            ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+ 681            ScalerTimerDelayXms(1); 
+ 682            
+ 683              for(ucCount = 0; ucCount < 2; ucCount++)
+ 684                   MCU_DDCRAM_D1[0x10+ucCount] = EDID_DATA[ucCount];// year week
+ 685          
+ 686            ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+ 687            ScalerTimerDelayXms(1); 
+ 688            UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, _EDID_SN_START_ADDRESS, 1, _EDID_SN_LENTH, EDID_DATA, _IIC
+             -_FOR_DDC1, _SW_IIC_PIN_GPIO);
+ 689            ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+ 690            ScalerTimerDelayXms(1); 
+ 691            
+ 692             for(ucCount = 0; ucCount <_EDID_SN_LENTH; ucCount++)
+ 693                   MCU_DDCRAM_D1[_EDID_SN_START_ADDRESS+ucCount] = EDID_DATA[ucCount];// sn
+ 694          
+ 695                j = 0;
+ 696                  
+ 697               for(ucCount = 0; ucCount < 127; ucCount++)
+ 698               j += MCU_DDCRAM_D1[ucCount];
+ 699                
+ 700                MCU_DDCRAM_D1[0x7f]=0x100-j;
+ 701          
+ 702          #if 1//((_D0_INPUT_PORT_TYPE != _D0_NO_PORT) && (_D0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE) && ((_D0
+             -_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM) || (_D0_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATIO
+             -N_FLASH)))
+ 703              for(ucCount = 0; ucCount < (_D1_EMBEDDED_DDCRAM_MAX_SIZE / sizeof(pucBuffer)); ucCount++)
+ 704              {
+ 705                  memcpy(pucBuffer, MCU_DDCRAM_D1 + ucCount * sizeof(pucBuffer), sizeof(pucBuffer));
+ 706          #if(_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_SYSTEM_EEPROM)
+ 707                  UserCommonEepromRestoreEDID(_EDID_D0_ADDRESS_EEPROM + ucCount * sizeof(pucBuffer), sizeof(pucBuffe
+             -r), pucBuffer);
+ 708          #elif(_D1_EMBEDDED_DDCRAM_LOCATION == _EDID_TABLE_LOCATION_FLASH)
+ 709                  UserCommonFlashRestoreEDID(_EDID_D0_ADDRESS_FLASH + ucCount * sizeof(pucBuffer), sizeof(pucBuffer)
+             -, pucBuffer);
+ 710          #endif
+ 711              }
+ 712          #endif
+ 713              
+ 714          }
+ 715          */
+ 716            
+ 717          //bit TPVDFMCableWPCheck(void)
+ 718          //{
+ 719          
+ 720          
+ 721          
+ 722          
+ 723          
+ 724          /*
+ 725            BYTE ucCable_Status=0x00;
+ 726            BYTE ucLoopCheck=0x00;
+ 727          
+ 728            for(ucLoopCheck=_A0_INPUT_PORT;ucLoopCheck<_NO_INPUT_PORT;ucLoopCheck++)
+ 729            {
+ 730          #if 0//(_DONGLE_PORT != _NO_INPUT_PORT)
+ 731                  if(ucLoopCheck != _DONGLE_PORT)
+ 732                  {
+ 733                  ucCable_Status |= SysSourceGetCableDetect(ucLoopCheck);
+ 734                  }
+ 735          #else
+ 736              ucCable_Status |= SysSourceGetCableDetect(ucLoopCheck);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 14  
+
+ 737          #endif
+ 738            }
+ 739          
+ 740          #if 0//(_BURN_IN_NOT_CHK_CABLE == _OFF)
+ 741            if(ucCable_Status == 0)//all cable disconnect
+ 742          #endif  
+ 743            {
+ 744          //for AMD display card hdmi issue   UserCommonInterfaceDdcciSwitch(_DDCCI_MODE,DFM_DDC_WRITE_PORT);
+ 745          
+ 746              if(DFM_BURN_IN() != _OFF)
+ 747              {
+ 748                      //Do Burn-IN Process
+ 749                      ScalerDDomainBackgroundEnable(_ENABLE);
+ 750                      ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+ 751                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 752                      UserInterfaceKeyPadLedControl(_LED_TYPE_1);
+ 753          
+ 754          #if(_MPRT_SUPPORT == _ON)
+ 755          #if((_OSD_TYPE == _AGON_2017_OSD) || (_OSD_TYPE == _AGON_2023_OSD))
+ 756                      OsdFuncMPRTSelect(_OFF, _BACKLIGHT_MAX);
+ 757          #else
+ 758                      COsdFuncMPRTSelect(_OFF, _BACKLIGHT_MAX);
+ 759          #endif
+ 760          #else
+ 761                      UserAdjustBacklight(_BACKLIGHT_MAX);
+ 762          #endif
+ 763                if(ScalerOsdGetOsdEnable()==_DISABLE)
+ 764                {
+ 765                  COsdDispBurnIn();
+ 766                  ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_OSD_FLYING);
+ 767                  
+ 768                } 
+ 769          
+ 770          
+ 771                      TPVFactFuncBurnInPattern();
+ 772          #if((_LED_LIGHT_BAR_SUPPORT == _ON)||(_ENE_LED_CONTROL != _OFF))
+ 773                      TPVFactFuncBurnInLED();
+ 774          #endif
+ 775                return _TRUE;
+ 776              }
+ 777            }
+ 778            if(bProductModeFlag==_ON)
+ 779            {
+ 780              DebugMessageOsd("4.DFM ON",bProductModeFlag);
+ 781                  //fast enter Powersaving
+ 782              TIMER_FAST_ENTER_POWER_SAVING();
+ 783              return _TRUE;
+ 784            }
+ 785          
+ 786          
+ 787            return _FALSE;
+ 788          
+ 789            */
+ 790          //}
+ 791          
+ 792          //UserDdcciHandler
+ 793          
+ 794          
+ 795          // Delay 50~1000 us
+ 796          #define DELAY_XUS(N)                        {\
+ 797                                                          g_ucDelayXus_Counter = (N) >> 2;\
+ 798                                                          do\
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 15  
+
+ 799                                                          {\
+ 800                                                              DELAY_XUS_BASE();\
+ 801                                                          }\
+ 802                                                          while(--g_ucDelayXus_Counter);\
+ 803                                                      }
+ 804          
+ 805          bit TPVFCmdFactoryCommand(void)
+ 806            {
+ 807   1        #if 0//(_TC_ENABLE_TRUECOLOR == _ON)
+                    BYTE ucSNLength = 0;
+                    BYTE TempCount0 = 0;
+                    BYTE Temp0 = 0;
+                #endif
+ 812   1          
+ 813   1            if(g_pucDdcciRxBuf[_FC_BYTE3] != CMD_FC_TPVFactory)
+ 814   1            {
+ 815   2              return _FALSE;
+ 816   2            }
+ 817   1          ScalerMcuDdcciReleaseScl();
+ 818   1          #if 0//(_THEFT_MODE == _ON)
+                    if((g_pucDdcciRxBuf[_FC_BYTE3] == CMD_FC_TPVFactory)&&(g_pucDdcciRxBuf[_DDC_LENGTH] <= 0x82)&&((g_pucDd
+             -cciRxBuf[_FC_BYTE2] == _DDCCI_CMD_GET_VCP_FEATURE)))
+                    {
+                      return _FALSE;
+                    }
+                  #endif
+ 824   1          
+ 825   1          // TPV  factory command
+ 826   1            if(g_pucDdcciRxBuf[_FC_BYTE2] == _DDCCI_CMD_SET_VCP_FEATURE)
+ 827   1            {
+ 828   2              switch(g_pucDdcciRxBuf[_FC_BYTE4])
+ 829   2              {
+ 830   3          //--------0x14
+ 831   3                case VCP_FC_SAVE_COLORTEMP:
+ 832   3                  break;
+ 833   3            #if 1//((_TC_ENABLE_TRUECOLOR == _OFF) && (_OGC_SUPPORT == _OFF))//disable when fga or ogc support for 
+             -TPV reauest.
+ 834   3          //--------0x16
+ 835   3                case VCP_FC_ADJUST_R_GAIN:
+ 836   3                  break;
+ 837   3          //--------0x18
+ 838   3                case VCP_FC_ADJUST_G_GAIN:
+ 839   3                  break;
+ 840   3          //--------0x1A
+ 841   3                case VCP_FC_ADJUST_B_GAIN:
+ 842   3                  break;
+ 843   3            #endif
+ 844   3          //--------0x12
+ 845   3                case VCP_FC_ADJUST_CONTRAST:
+ 846   3                  break;
+ 847   3          //--------0x10
+ 848   3                case VCP_FC_ADJUST_BL_BRIGHTNESS:
+ 849   3                  break;
+ 850   3          //--------0xDC
+ 851   3          //--------0x04
+ 852   3                case VCP_FC_RESET:
+ 853   3                  
+ 854   3                  break;
+ 855   3          //--------0x1F
+ 856   3                case VCP_FC_AUTO_LEVEL:
+ 857   3          
+ 858   3                  break;
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 16  
+
+ 859   3          //--------0x1E
+ 860   3                case VCP_FC_AUTO_ADJUST:
+ 861   3          
+ 862   3          
+ 863   3                  break;
+ 864   3          //--------0xCC
+ 865   3                case VCP_FC_SET_LANGUAGE:
+ 866   3          
+ 867   3                  break;
+ 868   3          //--------0x60
+ 869   3                case VCP_FC_SET_SOURCE:
+ 870   3          
+ 871   3          
+ 872   3                  break;
+ 873   3          //--------0xD6
+ 874   3                case VCP_FC_ENTER_POWERSAVING:
+ 875   3                  break;
+ 876   3          //--------0xE2
+ 877   3                case VCP_FC_Code02://ADC gain/offset
+ 878   3                  break;
+ 879   3          //--------0xE1
+ 880   3                case VCP_FC_Code01:
+ 881   3                  switch(g_pucDdcciRxBuf[_FC_BYTE5])
+ 882   3                  {
+ 883   4          //--------0xE1-[0xA0]
+ 884   4                    case SUB_VCP_FC_FACTORY_MODE_A0:
+ 885   4                      if(g_pucDdcciRxBuf[_FC_BYTE6]==0x00)
+ 886   4                      {
+ 887   5                        if(g_pucDdcciRxBuf[_FC_BYTE7]==SUB1_VCP_FC_EXIT_FACTORY_MODE)
+ 888   5                        {
+ 889   6                              SET_FACTORY_MODE(_OFF);
+ 890   6                              TPVNVRamSaveFactoryDate();
+ 891   6                        }
+ 892   5                        else if(g_pucDdcciRxBuf[_FC_BYTE7]==SUB1_VCP_FC_ENTER_FACTORY_MODE)
+ 893   5                        {
+ 894   6                              SET_FACTORY_MODE(_OFF);
+ 895   6                              TPVNVRamSaveFactoryDate();
+ 896   6      
+ 897   6      
+ 898   6      
+ 899   6                              RTDNVRamSaveOSDData();
+ 900   6                        }
+ 901   5                          
+ 902   5                          TPVFCReplyCommand(_REPLY_RESULT_02, _AWB_COMMAND_LEN_CRC);
+ 903   5                      }
+ 904   4                      break;
+ 905   4          
+ 906   4          //DFM rev05 patch note 5>>
+ 907   4          //--------0xE1-[0xA1]
+ 908   4                    case SUB_VCP_FC_NVRAW_RESTORE_A1:
+ 909   4          
+ 910   4                      break;
+ 911   4          //DFM rev05 patch note 5>>
+ 912   4          
+ 913   4          //--------0xE1-[0xA2]
+ 914   4                    case SUB_VCP_FC_FACTORY_MODE_A2://4
+ 915   4                      if(g_pucDdcciRxBuf[_FC_BYTE6] == 0x00)
+ 916   4                      {
+ 917   5                        if (g_pucDdcciRxBuf[_FC_BYTE7]==SUB1_VCP_FC_SET_BURNIN_OFF)
+ 918   5                        {
+ 919   6                          BurnIn_Off();
+ 920   6                        }
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 17  
+
+ 921   5                        else if(g_pucDdcciRxBuf[_FC_BYTE7]==SUB1_VCP_FC_SET_BURNIN_ON)
+ 922   5                        {
+ 923   6                          BurnIn_On();
+ 924   6                        }
+ 925   5          
+ 926   5                        TPVFCReplyCommand(_REPLY_RESULT_02, _AWB_COMMAND_LEN_CRC);
+ 927   5                      }
+ 928   4                      else if(g_pucDdcciRxBuf[_FC_BYTE6] == 0x01)
+ 929   4                      {
+ 930   5                        if(g_pucDdcciRxBuf[_FC_BYTE7] == SUB1_VCP_FC_SET_WR_END)//  edid  操作完成
+ 931   5                        {
+ 932   6          
+ 933   6          //DFM rev02 patch note 8>>
+ 934   6                          FC_EDID_EEPROM_WP_ENABLE();
+ 935   6                                  ucChkSumCalibration |= _BIT0;
+ 936   6                                  
+ 937   6                      //    if (DFM_BURN_IN() == _ON)
+ 938   6                      //    {
+ 939   6                        ScalerTimerActiveTimerEvent(SEC(1), _USER_TIMER_EVENT_BURN_IN_DDCTOOL);
+ 940   6          
+ 941   6                      //    }
+ 942   6          
+ 943   6                                 //  if((SysModeGetModeState() == _MODE_STATUS_NOSIGNAL) && (DFM_BURN_IN() == _ON))
+ 944   6                          //{
+ 945   6                          //ScalerTimerActiveTimerEvent(SEC(1), _USER_TIMER_EVENT_BURN_IN);
+ 946   6          
+ 947   6                          //  }
+ 948   6          
+ 949   6                          //if(SysModeGetModeState() != _MODE_STATUS_DISPLAY_CHECK)
+ 950   6                          //{
+ 951   6                            //SysModeSetResetTarget(_MODE_ACTION_RESET_TO_SEARCH);
+ 952   6                            //SET_FORCE_POW_SAV_STATUS(_FALSE);
+ 953   6                          //}
+ 954   6          //DFM rev02 patch note 8<<
+ 955   6                        }
+ 956   5                        else if(g_pucDdcciRxBuf[_FC_BYTE7] == SUB1_VCP_FC_SET_WR_START)//  开始准备写EDID
+ 957   5                        {
+ 958   6          
+ 959   6                      #if ((_DP_SUPPORT == _ON) || (_MHL_SUPPORT == _ON))
+ 960   6                                        FC_EDID_ERASE();
+ 961   6                      #endif
+ 962   6          //DFM rev02 patch note 8>>
+ 963   6                          FC_EDID_EEPROM_WP_DISABLE();
+ 964   6          
+ 965   6                          //      if(DFM_BURN_IN() == _ON)
+ 966   6                          //         {
+ 967   6                           //       ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BURN_IN);
+ 968   6                             ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BURN_IN_DDCTOOL);
+ 969   6                            
+ 970   6                           //     }
+ 971   6          
+ 972   6                          
+ 973   6          //DFM rev06 patch note 1 >> turn on Power when  writing EDID through DDC channel
+ 974   6                        //  if(SysPowerGetPowerStatus() == _POWER_STATUS_SAVING)
+ 975   6                          //  SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+ 976   6          //DFM rev06 patch note 1<<
+ 977   6                          //if(SysModeGetModeState() != _MODE_STATUS_DISPLAY_CHECK)
+ 978   6                          //{
+ 979   6                            //SysModeSetResetTarget(_MODE_ACTION_RESET_TO_FACTORY_MODE);
+ 980   6                            //SET_FORCE_POW_SAV_STATUS(_TRUE);
+ 981   6                          //}
+ 982   6          //DFM rev02 patch note 8<<
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 18  
+
+ 983   6                        }
+ 984   5          
+ 985   5                        TPVFCReplyEDIDPortData();
+ 986   5                      }
+ 987   4      #if 0//((_TMDS_HDCP_2_2_SUPPORT == _ON) || (_DP_HDCP_2_2_SUPPORT == _ON))
+                              else if(g_pucDdcciRxBuf[_FC_BYTE6] == 0x02)
+                              {
+                                if(g_pucDdcciRxBuf[_FC_BYTE7] == 0x01)//_ON
+                                {
+                                  bAocFactoryHdcp22WriteStart = _TRUE;
+                                  HDCP22_START();
+                                }
+                                else//if(g_pucDdcciRxBuf[_FC_BYTE7]== 0x00)_OFF
+                                {
+                                  bAocFactoryHdcp22WriteStart = _FALSE;
+                                }
+                              }
+              #endif
+1001   4                      break;
+1002   4      
+1003   4          
+1004   4          //--------0xE1-[0xA3]
+1005   4                    case SUB_VCP_FC_FACTORY_MODE_A3:
+1006   4                  //    BACKLIGHTTIME_INITIAL();
+1007   4                      TPVFCReplyCommand(_REPLY_RESULT_02,_AWB_COMMAND_LEN_CRC);
+1008   4                      break;
+1009   4          //--------0xE1-[0xA4]
+1010   4                    case SUB_VCP_FC_FACTORY_MODE_A4:
+1011   4                      break;
+1012   4          
+1013   4          //--------0xE1-[0xA5]
+1014   4                    case SUB_VCP_FC_FACTORY_MODE_A5:
+1015   4                      
+1016   4                      break;
+1017   4          //--------0xE1-[0xA6]
+1018   4                    case SUB_VCP_FC_FACTORY_MODE_A6:
+1019   4                      //reserve for IIC switch
+1020   4                      break;
+1021   4          //--------0xE1-[0xA7]
+1022   4                    case SUB_VCP_FC_FACTORY_MODE_A7:
+1023   4          
+1024   4                      break;
+1025   4      #if 0//(_PANEL_VCOM_ADJUST_FUNCTION == _ON)
+                  //--------0xE1-[0xA9]
+                            case SUB_VCP_FC_FACTORY_MODE_A9:
+                              if(g_pucDdcciRxBuf[_FC_BYTE6]==0x00)
+                              {
+                                SET_FACTORY_VCOM(g_pucDdcciRxBuf[_FC_BYTE7]);
+                                SET_SW_IIC_STATUS(_I2C_LINE_PANEL);
+                  
+                            #if((_PANEL_VCOM_TYPE == _PANEL_VCOM_TYPE_2)||(_PANEL_VCOM_TYPE == _PANEL_VCOM_TYPE_3))
+                                PDATA_WORD(0) = GET_FACTORY_VCOM() + _PANEL_VCOM_OFFSET;
+                                ScalerMcuIICWrite(_PANEL_VCOM_I2C_ADDRESS,1,_PANEL_VCOMREF_SUB_ADDRESS,2,pData);
+                  
+                            #else
+                                pData[0] = 0x00;
+                                ScalerMcuIICWrite(_PANEL_VCOM_I2C_ADDRESS, 1, 0x02, 1, &pData[0]);
+                                pData[0] = GET_FACTORY_VCOM();
+                                ScalerMcuIICWrite(_PANEL_VCOM_I2C_ADDRESS, 1, 0x00, 1, &pData[0]);
+                            #endif
+                  
+                                SET_SW_IIC_STATUS(_I2C_LINE_NVRAM);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 19  
+
+                                TPVNVRamSaveFactoryDate();
+                              }
+                              break;
+              #endif
+1049   4          //--------0xE1-[0xE0]
+1050   4                  //  case SUB_VCP_FC_SET_HDCP_WRITE_START_RX:
+1051   4                  //    break;
+1052   4          //--------0xE1-[0xE1]
+1053   4                  //  case SUB_VCP_FC_SET_HDCP_WRITE_START_TX:
+1054   4                  //    break;
+1055   4                  }
+1056   3                  break;
+1057   3          
+1058   3          //--------0xE8 FOR WUHAN FGA TOOL WRITE SN by 3 times
+1059   3      #if 0//(_TC_ENABLE_TRUECOLOR == _ON)
+                        case VCP_FC_Code08:
+                          ucSNLength = (g_pucDdcciRxBuf[_DDC_LENGTH]-0x84);
+                          Temp0 = (g_pucDdcciRxBuf[5]&0x03)*6;
+                          for(TempCount0=0; TempCount0<ucSNLength; TempCount0++)
+                          {
+                            pData[TempCount0+Temp0] = g_pucDdcciRxBuf[ 6 + TempCount0 ];
+                          }
+                  
+                          if(g_pucDdcciRxBuf[5] == 0x02)
+                          {
+                            for(TempCount0=13; TempCount0>3; TempCount0--)
+                            {
+                              pData[TempCount0] = pData[TempCount0-1];
+                            }
+                            pData[TempCount0] = 0x41;
+                            RTDNVRamSaveSNData();
+                          }
+                          break;
+              #endif
+1079   3          
+1080   3          //--------0xEA
+1081   3                case VCP_FC_Code0A:
+1082   3                  break;
+1083   3          //--------0xEA
+1084   3                case VCP_FC_Code13:
+1085   3                  break;
+1086   3          //--------0xEF
+1087   3                case VCP_FC_Code0F://写EDID
+1088   3                
+1089   3                  
+1090   3                  TPVFCEDIDWriteData();
+1091   3          
+1092   3                  break;
+1093   3          
+1094   3            #if 0//(_TC_ENABLE_TRUECOLOR == _ON)
+                        case VCP_FC_FGA_PATTERN_OUT:
+                          DdcciFGAPatternOutput();
+                  
+                          break;
+                    #endif
+1100   3          
+1101   3                default:
+1102   3                  break;
+1103   3              }
+1104   2            }
+1105   1            else if((g_pucDdcciRxBuf[_DDCCI_COMMAND] == _DDCCI_CMD_GET_VCP_FEATURE))
+1106   1            {
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 20  
+
+1107   2              if((g_pucDdcciRxBuf[_FC_BYTE4]== VCP_FC_Code01)&&(g_pucDdcciRxBuf[_FC_BYTE5]== SUB_VCP_FC_READ_HDCP_CR
+             -C))
+1108   2              {
+1109   3                //TPVFCHdcpCrcCheck();
+1110   3                //SysPowerRecoverHDCPKey();//need to confirm
+1111   3              }
+1112   2      #if 0//(_PANEL_VCOM_ADJUST_FUNCTION == _ON)
+                      else if((g_pucDdcciRxBuf[_FC_BYTE4]== VCP_FC_Code01)&&(g_pucDdcciRxBuf[_FC_BYTE5]== SUB_VCP_FC_FACTORY
+             -_MODE_A9))
+                      {
+                        g_pucDdcciTxBuf[_DDCCI_SOURCE] = _DDCCI_DEST_ADDRESS;
+                        g_pucDdcciTxBuf[_DDCCI_LENGTH] = _DDCCI_CONTROL_STATUS_FLAG | 0x08;
+                        g_pucDdcciTxBuf[_DDCCI_COMMAND] = _DDCCI_CMD_GET_VCP_FEATURE_REPLY;
+                        g_pucDdcciTxBuf[_DDCCI_RESULT_CODE] = 0x00;
+                        g_pucDdcciTxBuf[_DDCCI_SINK_OPCODE] = CMD_FC_TPVFactory;
+                        UserCommonDdcciSetVCPReplyValue(0x01, GET_FACTORY_VCOM(), 0);
+                        g_pucDdcciTxBuf[_DDCCI_PRESENT_LOW_BYTE + 1] = UserCommonDdcciCalCheckSum();
+                        ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+                      }
+              #endif
+1125   2              else if(g_pucDdcciRxBuf[_FC_BYTE4]== VCP_FC_Code0F)
+1126   2              {
+1127   3                TPVFCEDIDReadData();
+1128   3              }
+1129   2          #if 0//(_TPV_FACTORY_SENSOR_TEST_SUPPORT == _ON)
+                      else if(g_pucDdcciRxBuf[_FC_BYTE4]== VCP_FC_ADJUST_BL_BRIGHTNESS)
+                      {
+                        g_pucDdcciTxBuf[_DDCCI_SOURCE] = _DDCCI_DEST_ADDRESS;
+                        g_pucDdcciTxBuf[_DDCCI_LENGTH] = _DDCCI_CONTROL_STATUS_FLAG | 0x08;
+                        g_pucDdcciTxBuf[_DDCCI_COMMAND] = _DDCCI_CMD_GET_VCP_FEATURE_REPLY;
+                        g_pucDdcciTxBuf[_DDCCI_RESULT_CODE] = 0x00;
+                        g_pucDdcciTxBuf[_DDCCI_SINK_OPCODE] = CMD_FC_TPVFactory;
+                        g_usBackupValue=UserCommonAdjustRealValueToPercent(PCB_GET_BACKLIGHT_PWM(), MAX(_BACKLIGHT_MAX_PWM), 
+             -MIN(_BACKLIGHT_MIN_PWM), CENTER(_BACKLIGHT_MIN_PWM+(_BACKLIGHT_MAX_PWM-_BACKLIGHT_MIN_PWM)/2));
+                        UserCommonDdcciSetVCPReplyValue(0x01, _BACKLIGHT_MAX, g_usBackupValue);
+                        g_pucDdcciTxBuf[_DDCCI_PRESENT_LOW_BYTE + 1] = UserCommonDdcciCalCheckSum();
+                        ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+                      }
+                  #endif
+1143   2            }
+1144   1            else if((g_pucDdcciRxBuf[_FC_BYTE4]== 'R')&&(g_pucDdcciRxBuf[_FC_BYTE5]== 'E')\
+1145   1            &&(g_pucDdcciRxBuf[_FC_BYTE6]== 'D')&&(g_pucDdcciRxBuf[_FC_BYTE7]== 'I')&&(g_pucDdcciRxBuf[_FC_BYTE8]==
+             - 'D'))
+1146   1            {
+1147   2              TPVFCReplyEDIDStatus();
+1148   2            }
+1149   1          
+1150   1            return _TRUE;
+1151   1          }
+1152          
+1153          
+1154          //--------------------------------------------------
+1155          // Description  : TPV Factory Command save Color Temp.
+1156          // Input Value  : None
+1157          // Output Value : None
+1158          //--------------------------------------------------
+1159          
+1160          
+1161          //--------------------------------------------------
+1162          // Description  : TPV Factory Command set language
+1163          // Input Value  : None
+1164          // Output Value : None
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 21  
+
+1165          //--------------------------------------------------
+1166          /////////////////////////////////////////////////////////////////////////////////////////
+1167          //- 0x00 = Reserved, must be ignored
+1168          //- 0x01 = Chinese (traditional / Hantai)    - 0x02 = English     - 0x03 = French   - 0x04 = German
+1169          //- 0x05 = Italian                      - 0x06 = Japanese       - 0x07 = Korean   - 0x08 = Portuguese (Portug
+             -al)
+1170          //- 0x09 = Russian            - 0x0A = Spanish (Espanol)  - 0x0B = Swedish  - 0x0C = Turkish
+1171          //- 0x0D = Chinese (simplified / Kantai)      - 0x0E = Portuguese (Brazil)    - 0x0F = Arabic           - 
+             -0x10 = Bulgarian
+1172          //- 0x11 = Croatian                   - 0x12 = Czech        - 0x13 = Danish   - 0x14 = Dutch (Netherlands)
+1173          //- 0x15 = Estonian                   - 0x16 = Finnish        - 0x17 = Greek    - 0x18 = Hebrew
+1174          //- 0x19 = Hindi                      - 0x1A = Hungarian      - 0x1B = Latvian    - 0x1C = Lithuanian
+1175          //- 0x1D = Norwegian                    - 0x1E = Polish       - 0x1F = Romanian - 0x20 = Serbian
+1176          //- 0x21 = Slovak                       - 0x22 = Slovenian      - 0x23 = Thai       - 0x24 = Ukrainian
+1177          //- 0x25 = Vietnamese
+1178          /////////////////////////////////////////////////////////////////////////////////////////
+1179          
+1180          
+1181          //--------------------------------------------------
+1182          // Description  : TPV Factory Command enter power saving
+1183          // Input Value  : None
+1184          // Output Value : None
+1185          //--------------------------------------------------
+1186          
+1187          //--------------------------------------------------
+1188          // Description  : TPV Factory Command reply EDID port
+1189          //        AOC Factory tool will detect this return value to determind EDID write procedure
+1190          //        VCP TPVPORT1: {VGA1=BIT7,VGA2=BIT6,DVI1=BIT5,DVI2=BIT4,HDMI1=BIT3,HDMI2=BIT2,DP1=BIT1,DP2=BIT0}
+1191          //        VCP TPVPORT2: {HDMI3=BIT7,HDMI4/Option Port=BIT6,MHL_HDMI=BIT5,MHL_HMDI2=BIT4,MHL_HDMI3=BIT3,MHL_HDM
+             -I4=BIT2,BIT1:0-Write Disable,1-Write Enable,BIT0:0-EDID in EEPROM,1-EDID in FLASH}
+1192          //        VCP TPVPORT3: {HDMI2.0_HDMI1=BIT7,HDMI2.0_HDMI2=BIT6,HDMI2.0_HDMI3=BIT5,HDMI2.0_HDMI4=BIT4,DP3=BIT3}
+1193          //        Sample(_HDMI_SUPPORT == _ON):g_pucDdcciTxBuf[3] = (_BIT7 |_BIT5 |_BIT3);   // VGA1 DVI1 HDMI1
+1194          // Input Value  : None
+1195          // Output Value : None
+1196          //--------------------------------------------------
+1197          void TPVFCReplyEDIDPortData(void)
+1198          {
+1199   1        g_pucDdcciTxBuf[_DDCCI_SOURCE] = _DDCCI_DEST_ADDRESS;
+1200   1        g_pucDdcciTxBuf[_DDCCI_LENGTH] = _DDCCI_CONTROL_STATUS_FLAG | 0x04;
+1201   1        g_pucDdcciTxBuf[_DDCCI_COMMAND] = _DDCCI_CMD_GET_VCP_FEATURE_REPLY;
+1202   1        g_pucDdcciTxBuf[3] = 0x00; //VCP TPVPORT1
+1203   1        g_pucDdcciTxBuf[4] = 0x00; //VCP TPVPORT 2
+1204   1        g_pucDdcciTxBuf[5] = 0x00; //VCP TPVPORT 3
+1205   1      
+1206   1        if(_DFM_VGA_PORT != _NO_INPUT_PORT)
+1207   1          g_pucDdcciTxBuf[3] |= (_BIT7);    // VGA1
+1208   1      
+1209   1        if(_DFM_DVI1_PORT != _NO_INPUT_PORT)
+1210   1          g_pucDdcciTxBuf[3] |= (_BIT5);    //  DVI1
+1211   1      
+1212   1        if(_DFM_DVI2_PORT != _NO_INPUT_PORT)
+1213   1          g_pucDdcciTxBuf[3] |= (_BIT4);    //  DVI2
+1214   1      
+1215   1        if(_DFM_HDMI1_PORT != _NO_INPUT_PORT)
+1216   1          g_pucDdcciTxBuf[3] |= (_BIT3);    //  HDMI1
+1217   1      
+1218   1        if(_DFM_HDMI2_PORT != _NO_INPUT_PORT)
+1219   1          g_pucDdcciTxBuf[3] |= (_BIT2);    //  HDMI2
+1220   1      
+1221   1        if(_DFM_DP1_PORT != _NO_INPUT_PORT)
+1222   1          g_pucDdcciTxBuf[3] |= (_BIT1);    //DP
+1223   1      
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 22  
+
+1224   1      #if 0//(_DP_MULTI_EDID_SUPPORT == _ON)
+                if((_DFM_DP2_PORT != _NO_INPUT_PORT)||(_DP_FREESYNC_SUPPORT == _ON))
+                  g_pucDdcciTxBuf[3] |= (_BIT0);    //DP2 and free sync
+              #else
+1228   1        if(_DFM_DP2_PORT != _NO_INPUT_PORT)
+1229   1          g_pucDdcciTxBuf[3] |= (_BIT0);    //DP2
+1230   1      #endif
+1231   1      
+1232   1      //-------------------------------------------------------------
+1233   1        if(_DFM_HDMI3_PORT != _NO_INPUT_PORT)
+1234   1          g_pucDdcciTxBuf[4] |= (_BIT7);   //HDMI3
+1235   1      
+1236   1        if(_DFM_HDMI4_PORT != _NO_INPUT_PORT)
+1237   1          g_pucDdcciTxBuf[4] |= (_BIT6);   //HDMI4
+1238   1      
+1239   1        if(_DFM_MHL1_PORT != _NO_INPUT_PORT)
+1240   1          g_pucDdcciTxBuf[4] |= (_BIT5);   //MHL1
+1241   1      
+1242   1        if(_DFM_MHL2_PORT != _NO_INPUT_PORT)
+1243   1          g_pucDdcciTxBuf[4] |= (_BIT4);   //MHL2
+1244   1      
+1245   1        if(_DFM_MHL3_PORT != _NO_INPUT_PORT)
+1246   1          g_pucDdcciTxBuf[3] |= (_BIT3);    //MHL3
+1247   1      
+1248   1        if(_DFM_MHL4_PORT != _NO_INPUT_PORT)
+1249   1          g_pucDdcciTxBuf[3] |= (_BIT2);    //MHL4
+1250   1      
+1251   1      //-------------------------------------------------------------
+1252   1        if(_DFM_HDMI20_HDMI1_PORT != _NO_INPUT_PORT)
+1253   1          g_pucDdcciTxBuf[5] |= (_BIT7);    //HDMI20 HDMI1
+1254   1      
+1255   1        if(_DFM_HDMI20_HDMI2_PORT != _NO_INPUT_PORT)
+1256   1          g_pucDdcciTxBuf[5] |= (_BIT6);    //HDMI20 HDMI2
+1257   1      
+1258   1        if(_DFM_HDMI20_HDMI3_PORT != _NO_INPUT_PORT)
+1259   1          g_pucDdcciTxBuf[5] |= (_BIT5);    //HDMI20 HDMI3
+1260   1      
+1261   1        if(_DFM_HDMI20_HDMI4_PORT != _NO_INPUT_PORT)
+1262   1          g_pucDdcciTxBuf[5] |= (_BIT4);    //HDMI20 HDMI4
+1263   1      
+1264   1        if(_DFM_DP3_PORT != _NO_INPUT_PORT)
+1265   1          g_pucDdcciTxBuf[5] |= (_BIT3);    //DP3
+1266   1      
+1267   1        g_pucDdcciTxBuf[4] |= ((g_pucDdcciRxBuf[_FC_BYTE7]==_ON) ? _BIT1 : 0x00 );//Status {BIT0 (0:EEPROM;1:FLAS
+             -H)  BIT1(0:Disable;1:Enable)  BIT2~BIT7=>(reversed)}
+1268   1          g_pucDdcciTxBuf[6] = UserCommonDdcciCalCheckSum();
+1269   1      
+1270   1          ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1271   1      }
+1272          
+1273          
+1274          
+1275          
+1276          
+1277          //--------------------------------------------------
+1278          // Description  : TPV Factory Command HDCP data write
+1279          // Input Value  : None
+1280          // Output Value : None
+1281          //--------------------------------------------------
+1282          
+1283          // 20111220 by jerry, <<
+1284          //===================================
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 23  
+
+1285          //REDIDWAY = 52 45 44 49 44 57 41 59
+1286          //Sending Command is REDIDWAY "51 8A 01 FE 52 45 44 49 44 57 41 59"
+1287          //IDFLH = 49 44 46 4C 48
+1288          //Received data is IDFLH "6E 88 02 00 FE 49 44 46 4C 48 05"
+1289          //IDXPP = 49 44 58 50 50
+1290          //Received data is IDXPP "6E 88 02 00 FE 49 44 58 50 50 1F"
+1291          //===================================
+1292          void TPVFCReplyEDIDStatus(void)
+1293          {
+1294   1        g_pucDdcciTxBuf[_DDCCI_SOURCE] = _DDCCI_DEST_ADDRESS;
+1295   1        g_pucDdcciTxBuf[_DDCCI_LENGTH] = _DDCCI_CONTROL_STATUS_FLAG | 0x08;
+1296   1        g_pucDdcciTxBuf[_DDCCI_COMMAND] = _DDCCI_CMD_GET_VCP_FEATURE_REPLY;
+1297   1        g_pucDdcciTxBuf[_DDCCI_RESULT_CODE] = 0x00;
+1298   1        g_pucDdcciTxBuf[_DDCCI_SINK_OPCODE] = CMD_FC_TPVFactory;
+1299   1      #if 1
+1300   1        g_pucDdcciTxBuf[5]='I';
+1301   1        g_pucDdcciTxBuf[6]='D';
+1302   1        g_pucDdcciTxBuf[7]='X';
+1303   1        g_pucDdcciTxBuf[8]='P';
+1304   1        g_pucDdcciTxBuf[9]='P';
+1305   1      #else
+                g_pucDdcciTxBuf[5]='I';
+                g_pucDdcciTxBuf[6]='D';
+                g_pucDdcciTxBuf[7]='F';
+                g_pucDdcciTxBuf[8]='L';
+                g_pucDdcciTxBuf[9]='H';
+              #endif
+1312   1        g_pucDdcciTxBuf[_DDCCI_PRESENT_LOW_BYTE + 1] = UserCommonDdcciCalCheckSum();
+1313   1        ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1314   1      }
+1315          
+1316          
+1317          
+1318          //--------------------------------------------------
+1319          // Description  : TPV Factory Command CRC calculation for HDCP
+1320          // Input Value  : None
+1321          // Output Value : None
+1322          //--------------------------------------------------
+1323          
+1324          
+1325          //--------------------------------------------------
+1326          // Description  : TPV Factory Command CRC calculation
+1327          // Input Value  : None
+1328          // Output Value : CRC
+1329          //--------------------------------------------------
+1330          WORD TPVFCCrc16(BYTE nData, WORD nCRC)
+1331          {
+1332   1          BYTE nMask;
+1333   1          bit fFeedback;
+1334   1          for (nMask= 0x80; nMask; nMask >>= 1)
+1335   1          {
+1336   2              fFeedback= (bit)(((nCRC & 0x8000) ? 1 : 0) ^ ((nMask & nData) ? 1 : 0));
+1337   2              nCRC <<= 1;
+1338   2              if (fFeedback)
+1339   2              {
+1340   3                  nCRC ^= 0x1021;
+1341   3              }
+1342   2          }
+1343   1      
+1344   1          return nCRC;
+1345   1      }
+1346          
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 24  
+
+1347          //--------------------------------------------------
+1348          // Description  : TPV Factory Command Tx command
+1349          // Input Value  : None
+1350          // Output Value : checksum
+1351          //--------------------------------------------------
+1352          void TPVFCReplyCommand(BYTE ucResult, BYTE ucLength)
+1353          {
+1354   1          WORD usCRC = 0;
+1355   1          BYTE i = 0;
+1356   1      
+1357   1          for(i = 0; i < ucLength; i++ )
+1358   1          {
+1359   2              usCRC = TPVFCCrc16(g_pucDdcciRxBuf[_FC_BYTE4 + i], usCRC);
+1360   2          }
+1361   1      
+1362   1          g_pucDdcciTxBuf[_DDCCI_SOURCE] = _DDCCI_DEST_ADDRESS;
+1363   1          g_pucDdcciTxBuf[_DDCCI_LENGTH] = _DDCCI_CONTROL_STATUS_FLAG | 0x03;
+1364   1          g_pucDdcciTxBuf[_DDCCI_COMMAND] = ucResult;
+1365   1          g_pucDdcciTxBuf[3] = (BYTE)((usCRC&0xff00)>>8);
+1366   1          g_pucDdcciTxBuf[4] = (BYTE)(usCRC&0x00ff);
+1367   1          g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+1368   1      
+1369   1          ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1370   1      }
+1371          #if(1)/////_CTX_TPV
+1372          
+1373          #if 1// (_ENABLE_WRITE_EDID_CTX==_ON)
+1374          
+1375          typedef enum
+1376          {
+1377              FCMD_VGA1_EDID = _BIT7,
+1378              FCMD_DVI1_EDID = _BIT6,
+1379              FCMD_HDMI1_EDID = _BIT5,
+1380              FCMD_DP1_EDID = _BIT4,
+1381              FCMD_VGA2_EDID = _BIT3,
+1382              FCMD_DVI2_EDID = _BIT2,
+1383              FCMD_HDMI2_EDID = _BIT1,
+1384              FCMD_DP2_EDID = _BIT0,
+1385              FCMD_HDMI3_EDID = _BIT7,
+1386              FCMD_HDMI4_EDID = _BIT6,
+1387              FCMD_HDMI1_14_EDID = _BIT5,
+1388              FCMD_HDMI1_20_EDID = _BIT4,
+1389              FCMD_TYPE_C1_EDID = _BIT3,
+1390              FCMD_TYPE_C2_EDID = _BIT7,
+1391          } drvFactoryInputPortEDID;
+1392          
+1393          
+1394          
+1395          typedef enum
+1396          {
+1397              DEVICE_VGA = 0,    // 0
+1398              DEVICE_DVI1,        // 1
+1399              DEVICE_HDMI1,   // 2
+1400              DEVICE_DP1,         // 3
+1401              DEVICE_VGA2,        // 4
+1402              DEVICE_DVI2,        // 5
+1403              DEVICE_HDMI2,   // 6
+1404              DEVICE_DP2,         // 7
+1405              DEVICE_HDMI3,   // 8
+1406              DEVICE_HDMI4,   //9
+1407              DEVICE_MHL,         // A
+1408              DEVICE_MHL2,        // B
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 25  
+
+1409          
+1410              DEVICE_EEPROM = 0x10,
+1411              DEVICE_HDCP1,
+1412              DEVICE_HDCP2,
+1413              DEVICE_OSDSN,
+1414              DEVICE_OSDMODELNAME,
+1415          
+1416              DEVICE_HDMI1_HDMI20=0x40,
+1417              DEVICE_HDMI2_HDMI20=0x41,
+1418              DEVICE_HDMI3_HDMI20=0x42,
+1419          
+1420              DEVICE_NUMS = 0xFF
+1421          } drvFactoryDeviceType;
+1422          
+1423          
+1424           //BYTE xdata DDC1[384];
+1425          
+1426          #if 0//_HDMI_24C02_SUPPORT == _OFF
+              #error "Please check _EDID_ADDRESS_HDMI2,_EDID_ADDRESS_HDMI2 and _EDID_ADDRESS_HDMI3 and _EDID_ADDRESS_DP1
+             - must not be same flash page!!"
+              #endif 
+1429          
+1430          //extern void RTDFlashSaveSNData(BYTE *ucSNData);
+1431          
+1432          
+1433          
+1434          void Edid_SN_READ(BYTE cmd)//与PCB端口一致 若SN有异常应检查此处
+1435          {  
+1436   1          BYTE DATA[13]={0};
+1437   1      
+1438   1        
+1439   1        ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+1440   1        ScalerTimerDelayXms(10);
+1441   1        #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+                UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, 0x4D, 1,13 ,DATA,_IIC_FOR_DDC1, _SW_IIC_PIN_GPIO);
+                #endif
+1444   1      
+1445   1        ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+1446   1      
+1447   1      //  RTDFlashSaveSNData(DATA);
+1448   1      
+1449   1      }
+*** WARNING C280 IN LINE 1434 OF User\RTD Factory\Code\TPVFactoryCommand.c: 'cmd': unreferenced local variable
+1450          
+1451          
+1452          
+1453          void TPVFCEDIDWriteData()
+1454          {
+1455   1           BYTE ucEdidLength = (g_pucDdcciRxBuf[1]-0x86);//32;///DFM rev03 patch note 1
+1456   1           WORD Index;
+1457   1           Index = g_pucDdcciRxBuf[6]*256 + g_pucDdcciRxBuf[7];
+1458   1      
+1459   1           switch(g_pucDdcciRxBuf[5])
+1460   1           {
+1461   2      
+1462   2             case DEVICE_VGA:
+1463   2      #if   _A0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE
+                     UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_A0_ADDRESS_FLASH+Index, ucEdidLength,  &g_pucDdcciRxBuf[8]
+             -);
+              #else
+1466   2                  PCB_A0_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+1467   2            ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_GPIO);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 26  
+
+1468   2            ScalerTimerDelayXms(10);
+1469   2            #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+                    UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _I
+             -IC_VGA_DDC, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                    #endif
+1472   2            ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_DDC);
+1473   2            PCB_A0_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+1474   2      #endif
+1475   2      
+1476   2                    break;
+1477   2             case DEVICE_HDMI2:
+1478   2      #if 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1479   2          #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)  
+1480   2          
+1481   2          //OsdDispMainMenu();
+1482   2                  UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_D2_ADDRESS_FLASH+Index, ucEdidLength,  &g_pucDdcciRx
+             -Buf[8]);
+1483   2                    memcpy(MCU_DDCRAM_D1+ Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+1484   2          #else
+                      PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _
+             -IIC_FOR_DDC1, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+                      PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+                      
+                      if(Index == 0xe0)
+                        {
+                          Edid_SN_READ(1);
+              
+                        }
+              
+              
+                  #endif
+1500   2      
+1501   2      
+1502   2          
+1503   2      
+1504   2              //CHAGEEDID(tEDID_TABLE_D3,_D3_INPUT_PORT_EDID);
+1505   2      #else
+                #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                      UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI2+Index, ucEdidLength,  &g_pucDdcciRxBuf[8
+             -]);
+                      memcpy(MCU_DDCRAM_D3+ Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+                #else
+                  PCB_D2_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+                  ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_GPIO);
+                  ScalerTimerDelayXms(10); 
+                  UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _II
+             -C_FOR_DDC2, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                  ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_DDC);
+                  ScalerTimerDelayXms(10);
+                  PCB_D2_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+                #endif
+              #endif
+1519   2                 break;
+1520   2      
+1521   2             case DEVICE_HDMI1:
+1522   2      
+1523   2      #if 0//(_PCB_TYPE==_RL6463__128PIN__HKMRT2513E05__1A1H__LVDS || _PCB_TYPE == _RL6463__76PIN__HKMRT2313E01_
+             -_1A1H__LVDS)
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 27  
+
+              
+              #if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                          UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI1+Index, ucEdidLength,  &g_pucDdcciRxBuf
+             -[8]);
+                            memcpy(MCU_DDCRAM_D1+ Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+              #else
+                      PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _
+             -IIC_FOR_DDC1, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+                      PCB_D1_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+              #endif
+              
+              
+              #elif 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1539   2        #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+1540   2        
+1541   2        //OsdDispMainMenu();
+1542   2                  UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_D2_ADDRESS_FLASH+Index, ucEdidLength,  &g_pucDdcciRx
+             -Buf[8]);
+1543   2                    memcpy(MCU_DDCRAM_D2+ Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+1544   2        #else
+                      PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+                      UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _
+             -IIC_FOR_DDC3, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                      #endif
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);
+                      PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+              
+              
+                #endif
+1556   2      
+1557   2        
+1558   2      #else
+              
+              #if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                          UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI1+Index, ucEdidLength,  &g_pucDdcciRxBuf
+             -[8]);
+                            memcpy(MCU_DDCRAM_D3+ Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+              #else
+                      PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICWrite(_EEPROM_SLAVE_ADDRESS, Index, 1, ucEdidLength, &g_pucDdcciRxBuf[_FC_BYTE8], _
+             -IIC_FOR_DDC3, _SW_IIC_PIN_GPIO, _WRITE_SIZE_8);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);
+                      PCB_D3_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_ENABLE);
+              #endif
+              
+              #endif
+1573   2            //  CHAGEEDID(BYTE * pucEdidAddr, BYTE enumInputPort)
+1574   2                 break;
+1575   2      
+1576   2             case DEVICE_DP1:
+1577   2      #if 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1578   2        #if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)   
+1579   2            //UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+Index, ucEdidLength, &g_pucDdcciRxBuf[8]);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 28  
+
+1580   2            //memcpy(MCU_DDCRAM_D1+Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+1581   2            //OsdDispMainMenu();
+1582   2            UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_D1_ADDRESS_FLASH+Index, 32, &g_pucDdcciRxBuf[8]);
+1583   2            memcpy(MCU_DDCRAM_D1+Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+1584   2        #endif   
+1585   2      #else
+                #if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)   
+                      UserCommonFlashWrite(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+Index, ucEdidLength, &g_pucDdcciRxBuf[8]);
+                      memcpy(MCU_DDCRAM_D1+Index, &g_pucDdcciRxBuf[_FC_BYTE8], ucEdidLength);
+                #endif   
+              #endif
+1591   2              break;
+1592   2             case 0xA0:
+1593   2              
+1594   2               break;
+1595   2               
+1596   2             case 0x14:
+1597   2             default:
+1598   2               break;
+1599   2           }
+1600   1           
+1601   1           g_pucDdcciTxBuf[0] = 0x6E;
+1602   1           g_pucDdcciTxBuf[1] = 0x80 | 0x03;
+1603   1           g_pucDdcciTxBuf[2] = g_pucDdcciRxBuf[6];
+1604   1           g_pucDdcciTxBuf[3] = g_pucDdcciRxBuf[7];
+1605   1           g_pucDdcciTxBuf[4] = (ucEdidLength);//DFM rev03 patch note 1
+1606   1           g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+1607   1           ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1608   1      
+1609   1       }
+1610          
+1611          
+1612          
+1613          void TPVFCEDIDReadData()
+1614          {
+1615   1           WORD Index;
+1616   1           Index = g_pucDdcciRxBuf[6]*256 + g_pucDdcciRxBuf[7];
+1617   1      
+1618   1           switch(g_pucDdcciRxBuf[5])
+1619   1           {
+1620   2            case DEVICE_VGA:
+1621   2      #if   _A0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE
+                    UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_A0_ADDRESS_FLASH+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+              #else
+1624   2            ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_GPIO);
+1625   2            ScalerTimerDelayXms(10); 
+1626   2            #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+                    UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_VGA_DD
+             -C, _SW_IIC_PIN_GPIO);
+                    #endif
+1629   2            ScalerPinshareGpioDdcPinSwitch(_DDC_VGA_SWITCH_DDC);
+1630   2      #endif  
+1631   2                   break;
+1632   2             case DEVICE_HDMI2:
+1633   2      #if 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1634   2        #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+1635   2                  UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_D2_ADDRESS_FLASH+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+1636   2        #else
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_D
+             -DC1, _SW_IIC_PIN_GPIO);
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 29  
+
+                      ScalerPinshareGpioDdcPinSwitch(_DDC1_SWITCH_DDC);
+                #endif
+1642   2      #else
+                #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                      UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI2+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+                #else
+                    ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_GPIO);
+                    ScalerTimerDelayXms(10); 
+                    UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_DD
+             -C2, _SW_IIC_PIN_GPIO);
+                    ScalerPinshareGpioDdcPinSwitch(_DDC2_SWITCH_DDC);
+                #endif
+              #endif
+1652   2                 break;
+1653   2      
+1654   2             case DEVICE_HDMI1:
+1655   2      
+1656   2      #if 0//(_PCB_TYPE==_RL6463__128PIN__HKMRT2513E05__1A1H__LVDS || _PCB_TYPE == _RL6463__76PIN__HKMRT2313E01_
+             -_1A1H__LVDS)
+              
+                #if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                          UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI2+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+                #else
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_D
+             -DC3, _SW_IIC_PIN_GPIO);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);
+                #endif
+              
+              #elif 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1668   2        #if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+1669   2                  UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_D1_ADDRESS_FLASH+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+1670   2        #else
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      #if(_EEPROM_ACCESS_FUNCTION_SUPPORT == _ON || _HDMI_24C02_SUPPORT)
+                      UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_D
+             -DC3, _SW_IIC_PIN_GPIO);
+                      #endif
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);
+                #endif
+1678   2      #else
+                #if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)    
+                          UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_HDMI1+Index, 0x20,  &g_pucDdcciTxBuf[2]);
+                #else
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_GPIO);
+                      ScalerTimerDelayXms(10); 
+                      UserCommonEepromIICRead(_EEPROM_SLAVE_ADDRESS, Index, 1, 0x20, &g_pucDdcciTxBuf[_FC_BYTE2], _IIC_FOR_D
+             -DC3, _SW_IIC_PIN_GPIO);
+                      ScalerPinshareGpioDdcPinSwitch(_DDC3_SWITCH_DDC);
+                #endif
+              #endif
+1688   2                 break;
+1689   2      
+1690   2             case DEVICE_DP1:
+1691   2      #if 1//_PCB_TYPE==_RL6432_156PIN_HKMRT2557E02_1H1DP_LVDS
+1692   2        #if(_D0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)   
+                      UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+Index, 0x20, &g_pucDdcciTxBuf[2]);
+                #endif
+1695   2      #else
+                #if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)   
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 30  
+
+                      UserCommonFlashRead(_EDID_FLASH_BANK,_EDID_ADDRESS_DP1+Index, 0x20, &g_pucDdcciTxBuf[2]);
+                #endif   
+              #endif
+1700   2              break;
+1701   2      
+1702   2             case 0xA0:
+1703   2              
+1704   2               break;
+1705   2               
+1706   2             case 0x14:
+1707   2             default:
+1708   2               break;
+1709   2           }
+1710   1           
+1711   1           g_pucDdcciTxBuf[0] = 0x6E;
+1712   1           g_pucDdcciTxBuf[1] = 0x80 | 0x20;//32 bytes
+1713   1           g_pucDdcciTxBuf[(g_pucDdcciTxBuf[1] & 0x7f) + 2] = UserCommonDdcciCalCheckSum();
+1714   1           ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1715   1      }
+1716          
+1717          
+1718          
+1719          
+1720          WORD GetAllWriteEdidPort(BYTE Flag)
+1721          {
+1722   1          BYTE xdata  ucInputEDID_High = 0;
+1723   1        BYTE xdata  ucInputEDID_Low = 0;
+1724   1      #if _A0_INPUT_PORT_TYPE == _A0_VGA_PORT
+                      ucInputEDID_High |= FCMD_VGA1_EDID;
+              #endif
+1727   1      
+1728   1      #if 0//ENABLE_DVI_INPUT
+                      ucInputEDID_High |= FCMD_DVI1_EDID;
+              #endif
+1731   1      
+1732   1      #if 1//ENABLE_HDMI_INPUT
+1733   1              ucInputEDID_High |= FCMD_HDMI1_EDID;
+1734   1      #endif
+1735   1      
+1736   1      #if 1//ENABLE_HDMI2ND_INPUT
+1737   1              ucInputEDID_High |= FCMD_HDMI2_EDID;
+1738   1      #endif
+1739   1      
+1740   1      #if 0//ENABLE_HDMI3ND_INPUT
+                      ucInputEDID_Low |= FCMD_HDMI3_EDID;
+              #endif
+1743   1      
+1744   1      #if 1//ENABLE_DP_INPUT
+1745   1              ucInputEDID_High |= FCMD_DP1_EDID;
+1746   1      #endif
+1747   1      
+1748   1      #if 0//ENABLE_DP2ND_INPUT
+                      ucInputEDID_High |= FCMD_DP2_EDID;
+              #endif
+1751   1      #if 0//ENABLE_MHL        
+                      ucInputEDID_Low |= MHL2_EDID; //20141205 chang
+                      ucInputEDID_Low |= MHL_EDID; //20141205 chang
+              #endif
+1755   1          //BIT0=0,EDID Saved in EEPRom;BIT0=1,EDID Saved in Flash
+1756   1          //BIT1:(0:Write Disable;1:Write Enable)
+1757   1          if ( Flag == 0x01 )
+1758   1          {
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 31  
+
+1759   2          //SET_FACTORY_MODE_FLAG();
+1760   2          //FC_EDID_EEPROM_WP_DISABLE();
+1761   2          FC_EDID_ERASE();
+1762   2          ucInputEDID_Low = ucInputEDID_Low | _BIT1;
+1763   2          }
+1764   1          else
+1765   1          {
+1766   2              //CLR_FACTORY_MODE_FLAG();
+1767   2              //FC_EDID_EEPROM_WP_ENABLE();
+1768   2          ucInputEDID_Low = ucInputEDID_Low & ~ ( _BIT1 );
+1769   2          }
+1770   1          return ( ( WORD ) ucInputEDID_High << 8 | ucInputEDID_Low );
+1771   1      }
+1772          
+1773          void CTXWriteEdid( void)
+1774          {
+1775   1           BYTE value = 0;
+1776   1           BYTE VcpCode = g_pucDdcciRxBuf[3];
+1777   1         BYTE VcpCmd =  g_pucDdcciRxBuf[4];
+1778   1         BYTE ValueH =  g_pucDdcciRxBuf[5];
+1779   1         BYTE ValueM =  g_pucDdcciRxBuf[6];
+1780   1         BYTE ValueL =  g_pucDdcciRxBuf[7];
+1781   1         WORD EdidPortValue = 0;
+1782   1      
+1783   1        //if(GET_FACTORY_MODE() == _OFF)
+1784   1        //{
+1785   1        //  return;
+1786   1        //}
+1787   1      
+1788   1         
+1789   1           if(( g_pucDdcciRxBuf[2] == CMD_SET_FACTORY_FEATURE) && (VcpCode == VCP_BOE_FACTORY_ALIGNMENT) 
+1790   1           && (g_pucDdcciRxBuf[4] == 0xF0) && (g_pucDdcciRxBuf[5] == 0xF1) && (g_pucDdcciRxBuf[6] == 0x03) && (g
+             -_pucDdcciRxBuf[7] == 0x01))
+1791   1           {  
+1792   2             
+1793   2      #if _A0_EMBEDDED_DDCRAM_MAX_SIZE == _EDID_SIZE_NONE
+1794   2        
+1795   2              PCB_A0_EDID_EEPROM_WRITE_PROTECT(_EDID_EEPROM_WP_DISABLE);
+1796   2      #endif
+1797   2          g_pucDdcciTxBuf[0] =0x6E;
+1798   2          g_pucDdcciTxBuf[1] =0x84;
+1799   2            g_pucDdcciTxBuf[2] = 0x02;
+1800   2            g_pucDdcciTxBuf[3] = 0xF0;
+1801   2            g_pucDdcciTxBuf[4] = 0xF1;
+1802   2              g_pucDdcciTxBuf[5] = 0x03;
+1803   2          g_pucDdcciTxBuf[6] = UserCommonDdcciCalCheckSum();
+1804   2          ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1805   2         }
+1806   1         else if(g_pucDdcciRxBuf[2] ==_DDCCI_CMD_SET_VCP_FEATURE)
+1807   1         {
+1808   2              switch(VcpCmd)//DDCBuffer[4]
+1809   2          {
+1810   3              case 0xF0 : 
+1811   3            if(ValueH == 0xF1)
+1812   3            {
+1813   4               if(ValueM == 0x01)
+1814   4               {
+1815   5                    EdidPortValue = GetAllWriteEdidPort(ValueL);
+1816   5                g_pucDdcciTxBuf[0]=0x6E;
+1817   5                g_pucDdcciTxBuf[1]  = 0x83;
+1818   5                  g_pucDdcciTxBuf[2] = 0x02;
+1819   5                  g_pucDdcciTxBuf[3] = EdidPortValue>>8;
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 32  
+
+1820   5                  g_pucDdcciTxBuf[4] = EdidPortValue&0xff;
+1821   5                g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+1822   5                ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1823   5               }
+1824   4               else if(ValueM == 0x02)
+1825   4               {
+1826   5               /*
+1827   5                    if(ValueL)
+1828   5                      {
+1829   5                          FC_EDID_EEPROM_WP_DISABLE();
+1830   5                      }
+1831   5                          else
+1832   5                            {
+1833   5                          FC_EDID_EEPROM_WP_ENABLE();
+1834   5                            }
+1835   5                     */
+1836   5                g_pucDdcciTxBuf[0]=0x6E;
+1837   5                g_pucDdcciTxBuf[1]  = 0x84;
+1838   5                  g_pucDdcciTxBuf[2] = 0x02;
+1839   5                  g_pucDdcciTxBuf[3] = 0xF0;
+1840   5                  g_pucDdcciTxBuf[4] = 0xF1;
+1841   5                    g_pucDdcciTxBuf[5] = 0x03;
+1842   5                g_pucDdcciTxBuf[6] = UserCommonDdcciCalCheckSum();
+1843   5                ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1844   5               }
+1845   4            }
+1846   3            break;
+1847   3            case 0xF8:
+1848   3                  TPVFCEDIDWriteData(); 
+1849   3            
+1850   3            break;
+1851   3          };
+1852   2      
+1853   2      
+1854   2         }
+1855   1         else if(g_pucDdcciRxBuf[2] == _DDCCI_CMD_GET_VCP_FEATURE)
+1856   1         {
+1857   2              switch(VcpCmd)//DDCBuffer[4]
+1858   2          {
+1859   3              case 0xF0 : 
+1860   3            if(ValueH == 0xF1)
+1861   3            {
+1862   4               if(ValueM == 0x01)
+1863   4               {
+1864   5                    EdidPortValue = GetAllWriteEdidPort(ValueL);
+1865   5                g_pucDdcciTxBuf[0]=0x6E;
+1866   5                g_pucDdcciTxBuf[1]  = 0x83;
+1867   5                  g_pucDdcciTxBuf[2] = 0x02;
+1868   5                  g_pucDdcciTxBuf[3] = EdidPortValue>>8;
+1869   5                  g_pucDdcciTxBuf[4] = EdidPortValue&0xff;
+1870   5                g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+1871   5                ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1872   5      
+1873   5               }
+1874   4               else if(ValueM == 0x02)
+1875   4               {
+1876   5               /*
+1877   5                    if(ValueL)
+1878   5                      {
+1879   5                          FC_EDID_EEPROM_WP_DISABLE();
+1880   5                      }
+1881   5                          else
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 33  
+
+1882   5                            {
+1883   5                          FC_EDID_EEPROM_WP_ENABLE();
+1884   5                            }
+1885   5                    */
+1886   5                g_pucDdcciTxBuf[0]=0x6E;
+1887   5                g_pucDdcciTxBuf[1]  = 0x84;
+1888   5                  g_pucDdcciTxBuf[2] = 0x02;
+1889   5                  g_pucDdcciTxBuf[3] = 0xF0;
+1890   5                  g_pucDdcciTxBuf[4] = 0xF1;
+1891   5                    g_pucDdcciTxBuf[5] = 0x03;
+1892   5                g_pucDdcciTxBuf[6] = UserCommonDdcciCalCheckSum();
+1893   5                ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+1894   5               }
+1895   4            }
+1896   3            break;
+1897   3            case 0xF8:
+1898   3                  TPVFCEDIDReadData();
+1899   3            break;
+1900   3          };
+1901   2         }
+1902   1      
+1903   1        //ScalerTimerDelayXms(1000); 
+1904   1        //if(GET_OSD_TPVEDIDEND())
+1905   1        //ScalerTimerDelayXms(1000); 
+1906   1        //Edid_SN_READ(1);
+1907   1      
+1908   1      }
+1909          
+1910          #endif
+1911          #endif
+1912          
+1913          
+1914          //--------------------------------------------------
+1915          //DFM Mode
+1916          //--------------------------------------------------
+1917          //--------------------------------------------------
+1918          // Description  : DFM mode Initial
+1919          //                add to last line of UserInterfaceInitial(), just call once
+1920          // Input Value  : None
+1921          // Output Value : None
+1922          //--------------------------------------------------
+1923          
+1924          //--------------------------------------------------
+1925          // Description  : DFM mode reset to off
+1926          //add to bottom line of Factory Reset process ,just call once
+1927          // Input Value  : None
+1928          // Output Value : None
+1929          //--------------------------------------------------
+1930          
+1931          
+1932          //--------------------------------------------------
+1933          // Description  : DFM mode flag Check
+1934          //for check DFM status check , Call many times depend on project
+1935          // Input Value  : None
+1936          // Output Value : None
+1937          //--------------------------------------------------
+1938          
+1939          //--------------------------------------------------
+1940          // Description  : WP check depend on Cable &DFM mode
+1941          //add to _MODE_STATUS_NOSIGNAL status of AOC2011OsdSystemFlowProc()  and when SysModeGetModeStateChange()=
+             -=High
+1942          //just call once
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 34  
+
+1943          // Input Value  : None
+1944          // Output Value : None
+1945          //--------------------------------------------------
+1946          
+1947          
+1948          //--------------------------------------------------
+1949          // Description  : DC power ON DFM mode clear
+1950          //add to _MODE_STATUS_INITIAL case of  AOC2011OsdSystemFlowProc() ,just call once
+1951          // Input Value  : None
+1952          // Output Value : None
+1953          //--------------------------------------------------
+1954          
+1955          
+1956          //--------------------------------------------------
+1957          // Description  : DFM mode Logo On Check
+1958          //add before Show Logo , just call once
+1959          // Input Value  : None
+1960          // Output Value : None
+1961          //--------------------------------------------------
+1962          
+1963          //--------------------------------------------------
+1964          // Description  : DFM mode Led indication
+1965          //           add before Keypad Led just call once
+1966          // Input Value  : None
+1967          // Output Value : None
+1968          //--------------------------------------------------
+1969          
+1970          
+1971          //--------------------------------------------------
+1972          // Description  : DFM mode switch
+1973          //add to OSD OperationTable
+1974          // Input Value  : None
+1975          // Output Value : None
+1976          //--------------------------------------------------
+1977          
+1978          //--------------------------------------------------
+1979          // Description  :
+1980          // Input Value  : None
+1981          // Output Value : None
+1982          //--------------------------------------------------
+1983          
+1984          
+1985          //DFM rev02 patch note 7<<
+1986          
+1987          //DFM rev04 patch note 1>>
+1988          //--------------------------------------------------
+1989          // Description  :
+1990          // Input Value  :
+1991          // Output Value :
+1992          //--------------------------------------------------
+1993          
+1994          //DFM rev04 patch note 1<<
+1995          
+1996          //DFM rev05 patch note 2>>
+1997          //DFM rev05 patch note 2<<
+1998          
+1999          #endif //end of #if ((_FACTORY_MODE_OWNER == _OWNER_TPV))
+2000          #endif // (_DEF_DDCCI_EDID_TOOL)
+*** WARNING C294 IN LINE 1207 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1210 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1213 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1229 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+C51 COMPILER V9.60.0.0   TPVFACTORYCOMMAND                                                 04/23/2026 13:55:25 PAGE 35  
+
+*** WARNING C294 IN LINE 1234 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1237 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1240 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1243 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1246 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1249 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1253 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1256 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1259 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1262 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+*** WARNING C294 IN LINE 1265 OF User\RTD Factory\Code\TPVFactoryCommand.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1380    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =     28      30
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  16 WARNING(S),  0 ERROR(S)

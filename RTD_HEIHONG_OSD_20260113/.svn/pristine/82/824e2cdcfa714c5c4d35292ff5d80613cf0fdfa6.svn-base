@@ -1,0 +1,1067 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+#define __RTD2011_ALIGN__
+
+#include "UserCommonInclude.h"
+
+#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+//****************************************************************************
+// VARIABLE DECLARATIONS
+//****************************************************************************
+
+BYTE Ct4500Flag = 0;
+//****************************************************************************
+// FUNCTION DECLARATIONS
+//****************************************************************************
+// void CTXAlignControl(void);
+void RTDDdcciAutoAlignPro(void);
+//--------------------------------------------------
+// Description  : 
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+
+bit IS_OSD_RESET(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x01));
+}
+bit IS_AUTO_COLOR(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x02));
+}
+/********************************************************************/
+bit IS_TEST_LIGHTMAX(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x03));
+}
+
+bit IS_LOAD_RGB(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xff)&&(g_pucDdcciRxBuf[5]==0x04));
+}
+
+bit IS_ALIGN_FINISH(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xFF)&&(g_pucDdcciRxBuf[5]==0x05));
+}
+
+bit IS_START(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0xff)&&(g_pucDdcciRxBuf[5]==0xFF));
+}
+
+/*******************************************************************/
+
+bit IS_RGB_ADJ(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x20)&&(g_pucDdcciRxBuf[5]==0x01));
+}
+
+/*******************************************************************/
+bit IS_SAVE_9300(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x00));
+}
+
+bit IS_SAVE_7500(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x01));
+}
+
+bit IS_SAVE_6500(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x02));
+}
+
+bit IS_SAVE_5800(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x03));
+}
+
+bit IS_SAVE_sRGB(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x04));
+}
+
+bit IS_SAVE_USER(void)
+{
+	return ((g_pucDdcciRxBuf[4]==0x30)&&(g_pucDdcciRxBuf[5]==0x05));
+}
+
+//*****************************************************
+
+//--------------------------------------------------
+// Description  : RTDDdccireply
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+extern void RTDDdccireply(BYTE Flag);
+
+//--------------------------------------------------
+// Description  : 
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void RTDDdcciAutoAlignPro(void)
+{
+  /************************FUNC***********************************/
+	if(IS_OSD_RESET())
+	{
+		OsdDispOsdReset();
+		RTDDdccireply(_TRUE);
+	}
+
+	if(IS_AUTO_COLOR())
+	{
+	
+#if(_VGA_SUPPORT != _ON)
+		RTDDdccireply(0X02);
+		return;
+#endif
+		if(SysSourceGetSourceType() != _SOURCE_VGA)
+		{	
+			RTDDdccireply(_FALSE);
+		}
+		else
+		{
+		
+#if(_VGA_SUPPORT == _ON)		
+			OsdDisplayAutoBalanceProc();
+			RTDDdccireply(_TRUE);
+#endif
+		}
+	}
+   /****************************CT**********************************/
+   
+   if(IS_TEST_LIGHTMAX())
+   {
+	   if(ScalerTimerSearchActiveTimerEvent(_USER_TIMER_EVENT_BUININ_MSG))
+	   {
+		   ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BUININ_MSG);
+		   RTDFactoryOsdFuncDisableOsd();
+		   ScalerDDomainPatternGenAdjustColor(255,255,255);
+		   ScalerDDomainPatternGenEnable(_ENABLE);
+		   ScalerDDomainBackgroundEnable(_DISABLE);
+	   
+	   }
+	   else
+	   {
+		   ScalerOsdDisableOsd();
+	   }
+	   SET_COLOR_TEMP_TYPE_USER_R(128);
+	   SET_COLOR_TEMP_TYPE_USER_G(128);
+	   SET_COLOR_TEMP_TYPE_USER_B(128);
+	   UserAdjustContrast(100);
+	   UserAdjustBacklight(100);
+	   RTDDdccireply(_TRUE);
+   }
+
+   if(IS_START())
+   {
+   	   
+	   RTDNVRamRestoreBriCon();
+	   RTDNVRamRestoreBacklight();
+	   UserAdjustBacklight(GET_OSD_BACKLIGHT());
+	   UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+	   
+	   RTDDdccireply(_TRUE);
+   }
+   
+   if(IS_LOAD_RGB())
+   {
+	   SET_COLOR_TEMP_TYPE_USER_R(g_pucDdcciRxBuf[6]);
+	   SET_COLOR_TEMP_TYPE_USER_G(g_pucDdcciRxBuf[7]);
+	   SET_COLOR_TEMP_TYPE_USER_B(g_pucDdcciRxBuf[8]);   
+#if(_DEF_COLORFUL)
+	   UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+	   UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+	   RTDDdccireply(_TRUE);
+   }
+   
+
+   /************************************R G B**************************/     
+	if(IS_RGB_ADJ())
+	{
+		SET_COLOR_TEMP_TYPE_USER_R(g_pucDdcciRxBuf[6]);
+		SET_COLOR_TEMP_TYPE_USER_G(g_pucDdcciRxBuf[7]);
+		SET_COLOR_TEMP_TYPE_USER_B(g_pucDdcciRxBuf[8]);
+
+#if(_DEF_COLORFUL)
+	   UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else	
+		UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+		RTDDdccireply(_SUCCESS);
+	}
+		
+	
+	/***********************************SAVE****************************/
+	 if(IS_SAVE_9300())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_9300);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+	 }
+	 if(IS_SAVE_7500())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_7500);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+	 }
+	 if(IS_SAVE_6500())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_6500);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+	 }
+	 if(IS_SAVE_5800())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_5800);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+	 }
+	 if(IS_SAVE_sRGB())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_SRGB);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+	 }
+	 if(IS_SAVE_USER())
+	 {
+		 SET_COLOR_TEMP_TYPE(_CT_USER);
+		 RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+		 RTDDdccireply(_TRUE);
+ 	}
+
+	 if(IS_ALIGN_FINISH())
+	 {
+		SET_COLOR_TEMP_TYPE(_CT_6500);
+		RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+		SET_OSD_ALIGN_MODE(_ON);
+		RTDDdccireply(_TRUE);
+		RTDNVRamSaveOSDData();
+		RTDFactoryMainMenu();
+		ScalerTimerActiveTimerEvent(SEC(5), _USER_TIMER_EVENT_OSD_DISABLE);
+
+	if(GET_OSD_BURNING_MODE() && SysModeGetModeState() == _MODE_STATUS_NOSIGNAL)
+	{
+		ScalerTimerActiveTimerEvent(SEC(0.01),_USER_TIMER_EVENT_BUININ_MSG);
+		ScalerOsdEnableOsd();
+		#if  (_BURNIN_MSG_MENU_SUPPORT==_ON)
+		RTDBurnInMenu();
+		#endif
+	}
+ 	}
+}
+
+bit FC_READ_R_GAIN()
+{
+    return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x02);
+}
+
+bit FC_READ_G_GAIN()
+{
+    return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x03);
+}
+
+bit FC_READ_B_GAIN()
+{
+    return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x04);
+}
+
+bit FC_READ_CONTRAST()
+{
+    return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x0e);
+}
+
+bit FC_READ_BRIGHTNESS()
+{
+    return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x0d);
+}
+
+bit FC_ADJUST_R_GAIN()
+{
+    return (g_pucDdcciRxBuf[3]==0x40&&g_pucDdcciRxBuf[4]==0x02);
+}
+
+bit FC_ADJUST_G_GAIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x40&&g_pucDdcciRxBuf[4]==0x03);
+}
+
+bit FC_ADJUST_B_GAIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x40&&g_pucDdcciRxBuf[4]==0x04);
+}
+
+bit FC_ADJUST_CONTRAST()
+{
+	return (g_pucDdcciRxBuf[3]==0x40&&g_pucDdcciRxBuf[4]==0x01);
+}
+
+bit FC_ADJUST_BRIGHTNESS()
+{
+	return (g_pucDdcciRxBuf[3]==0x40&&g_pucDdcciRxBuf[4]==0x00);
+}
+bit FC_AUTO_COLOR()
+{
+	return (g_pucDdcciRxBuf[3]==0x0d&&g_pucDdcciRxBuf[4]==0x01);
+}
+bit FC_SAVE_9300()
+{
+	return (g_pucDdcciRxBuf[3]==0x19&&g_pucDdcciRxBuf[4]==0x13);
+}
+
+bit FC_SAVE_6500()
+{
+	return (g_pucDdcciRxBuf[3]==0x16&&g_pucDdcciRxBuf[4]==0x15);
+}
+bit FC_SAVE_USER()
+{
+	return (g_pucDdcciRxBuf[3]==0x11&&g_pucDdcciRxBuf[4]==0x10);
+}
+bit FC_SAVE_7500()
+{
+	return (g_pucDdcciRxBuf[3]==0x17&&g_pucDdcciRxBuf[4]==0x15);
+}
+bit FC_SAVE_5000()
+{
+	return (g_pucDdcciRxBuf[3]==0x15&&g_pucDdcciRxBuf[4]==0x15);
+}
+
+bit FC_SAVE_sRGB()
+{
+	return (g_pucDdcciRxBuf[3]==0x11&&g_pucDdcciRxBuf[4]==0x11);
+}
+
+bit FC_SAVE_8200()
+{
+	return (g_pucDdcciRxBuf[3]==0x18&&g_pucDdcciRxBuf[4]==0x12);
+}
+
+bit FC_SAVE_11500()
+{
+	return (g_pucDdcciRxBuf[3]==0x1B&&g_pucDdcciRxBuf[4]==0x15);
+}
+bit FC_ENTER_BURNIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x0d&&g_pucDdcciRxBuf[4]==0x04);
+}
+
+bit FC_EXIT_BURNIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x0d&&g_pucDdcciRxBuf[4]==0x05);
+}
+
+bit FC_ENTER_FACTORY()
+{
+	return (g_pucDdcciRxBuf[3]==0x00&&g_pucDdcciRxBuf[4]==0x00);
+}
+
+bit FC_EXIT_FACTORY()
+{
+	return (g_pucDdcciRxBuf[3]==0x00&&g_pucDdcciRxBuf[4]==0x01);
+}
+bit FC_SET_6500K()
+{
+	return (g_pucDdcciRxBuf[3]== 0x06&& g_pucDdcciRxBuf[4] == 0x05);
+}
+bit FC_SET_7500K()
+{
+	return (g_pucDdcciRxBuf[3] == 0x07&& g_pucDdcciRxBuf[4] == 0x05);
+}
+bit FC_SET_9300K()
+{
+	return (g_pucDdcciRxBuf[3] == 0x09&& g_pucDdcciRxBuf[4] == 0x03);
+}
+bit FC_SET_USER()
+{
+	return (g_pucDdcciRxBuf[3] == 0x01&& g_pucDdcciRxBuf[4] == 0x00);
+}
+bit FC_SET_5000K()
+{
+	return (g_pucDdcciRxBuf[3] == 0x05&& g_pucDdcciRxBuf[4] == 0x05);
+}
+
+bit FC_SET_sRGB()
+{
+	return (g_pucDdcciRxBuf[3] == 0x01&& g_pucDdcciRxBuf[4] == 0x01);
+}
+
+bit FC_Set_ColorMode_sRGB()
+{
+	return (g_pucDdcciRxBuf[3] == 0x20 && g_pucDdcciRxBuf[4] == 0x01);
+}
+
+bit FC_Set_ColorMode_Normal()
+{
+	return (g_pucDdcciRxBuf[3] == 0x20 && g_pucDdcciRxBuf[4] == 0x00);
+}
+
+bit FC_SET_8200()
+{
+	return (g_pucDdcciRxBuf[3] == 0x08&& g_pucDdcciRxBuf[4] == 0x02);
+}
+bit FC_SET_11500()
+{
+	return (g_pucDdcciRxBuf[3] == 0x0B&& g_pucDdcciRxBuf[4] == 0x05);
+}
+bit FC_GET_ADC_RGAIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x12);
+}
+bit FC_GET_ADC_GGAIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x13);
+}
+bit FC_GET_ADC_BGAIN()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x14);
+}
+
+bit FC_GET_ADC_ROFFSET()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x15);
+}
+bit FC_GET_ADC_GOFFSET()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x16);
+}
+bit FC_GET_ADC_BOFFSET()
+{
+	return (g_pucDdcciRxBuf[3]==0x50&&g_pucDdcciRxBuf[4]==0x17);
+}
+bit FC_RESET_CMD()
+{
+	return (g_pucDdcciRxBuf[3]==0x0E&&g_pucDdcciRxBuf[4]==0x00);
+}
+
+void CAlignSendAckCmd(BYTE Status)
+{
+	g_pucDdcciRxBuf[0]=0x6E;
+    g_pucDdcciTxBuf[1]=0x83;
+	if(Status == _TRUE)
+	{
+		g_pucDdcciTxBuf[2] = 'e';
+		g_pucDdcciTxBuf[3] = 'n';
+		g_pucDdcciTxBuf[4] = 'a';
+
+	}
+	else
+	{
+		g_pucDdcciTxBuf[2] = 'e';
+		g_pucDdcciTxBuf[3] = 'x'; 
+		g_pucDdcciTxBuf[4] = 'a';
+	}
+
+	g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+	ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+	
+}
+
+
+// void CTXAlignControl(void)
+// {
+//     BYTE value = 0;
+// 	BYTE ucR_Gain,ucG_Gain,ucB_Gain;
+
+//     if(FC_READ_R_GAIN())
+// 	{
+	
+// 	    g_pucDdcciTxBuf[0] = 0x6E;
+// 		g_pucDdcciTxBuf[1]=0x83;
+// 		g_pucDdcciTxBuf[2] = GET_COLOR_TEMP_TYPE_USER_R();
+// 		g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 		ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 	}
+// 	else if(FC_READ_G_GAIN())
+// 	{
+// 	    g_pucDdcciTxBuf[0] = 0x6E;
+// 		g_pucDdcciTxBuf[1]=0x83;
+// 		g_pucDdcciTxBuf[2] = GET_COLOR_TEMP_TYPE_USER_G();
+// 		g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 		ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 	}
+// 	else if(FC_READ_B_GAIN())
+// 	{
+// 	    g_pucDdcciTxBuf[0] = 0x6E;
+// 		g_pucDdcciTxBuf[1]=0x83;
+// 		g_pucDdcciTxBuf[2] = GET_COLOR_TEMP_TYPE_USER_B();
+// 		g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 		g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+//         ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 	}
+// 		else if(FC_READ_CONTRAST())
+// 		{
+// 		   g_pucDdcciTxBuf[0] = 0x6E;
+// 		   g_pucDdcciTxBuf[1]=0x83;
+//            g_pucDdcciTxBuf[2]  =GET_OSD_CONTRAST();
+//            g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		   g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 		   g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 		   ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_READ_BRIGHTNESS())
+// 		{
+// 			g_pucDdcciTxBuf[0] = 0x6E;
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[2]  =GET_OSD_BACKLIGHT();
+// 			g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_ADJUST_R_GAIN())
+// 		{
+//          	ucR_Gain=g_pucDdcciRxBuf[5];
+// 			if((ucR_Gain >= 0) && (ucR_Gain <= 255))
+// 			{
+// 				CAlignSendAckCmd(_SUCCESS);
+// 			    SET_COLOR_TEMP_TYPE_USER_R(ucR_Gain);
+// 			    UserAdjustContrast(GET_OSD_CONTRAST());
+// 			}
+// 			g_pucDdcciTxBuf[0] = 0x6E;
+// 			g_pucDdcciTxBuf[1]=0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 'w';
+//             g_pucDdcciTxBuf[ 3 ]  = 'r';
+//             g_pucDdcciTxBuf[ 4 ]  = 'g';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_ADJUST_G_GAIN())
+// 		{
+//        		ucG_Gain=g_pucDdcciRxBuf[5];
+       		
+// 			if((ucG_Gain >= 0) && (ucG_Gain <= 255))
+// 			{
+// 			    CAlignSendAckCmd(_SUCCESS);
+// 			    SET_COLOR_TEMP_TYPE_USER_G(ucG_Gain);
+// 			    UserAdjustContrast(GET_OSD_CONTRAST());
+// 			}
+// 			g_pucDdcciTxBuf[0] = 0x6E;
+// 			g_pucDdcciTxBuf[1]=0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 'w';
+//             g_pucDdcciTxBuf[ 3 ]  = 'g';
+//             g_pucDdcciTxBuf[ 4 ]  = 'g';
+//        		g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 		    ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_ADJUST_B_GAIN())
+// 		{
+// 		    ucB_Gain=g_pucDdcciRxBuf[5];
+       		
+// 			if((ucB_Gain >= 0) && (ucB_Gain <= 255))
+// 			{
+// 			   	SET_COLOR_TEMP_TYPE_USER_B(ucB_Gain);
+// 				UserAdjustContrast(GET_OSD_CONTRAST());
+//             }
+// 			g_pucDdcciTxBuf[0] = 0x6E;
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[ 2 ]  = 'w';
+// 			g_pucDdcciTxBuf[ 3 ]  = 'b';
+// 			g_pucDdcciTxBuf[ 4 ]  = 'g';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);    
+// 		}
+// 		else if(FC_ADJUST_CONTRAST())
+// 		{
+// 		    BYTE uctempData;
+// 			uctempData=g_pucDdcciRxBuf[5];
+//        		if((uctempData <= 100))
+// 			{
+// 				SET_OSD_CONTRAST(uctempData);
+// 				UserAdjustContrast(GET_OSD_CONTRAST());
+				
+// 				g_pucDdcciTxBuf[2]='w';
+// 				g_pucDdcciTxBuf[3]='c';
+// 				g_pucDdcciTxBuf[4]='o';
+// 			}
+// 			else
+// 			{
+// 				g_pucDdcciTxBuf[2]='C';
+// 				g_pucDdcciTxBuf[3]='O';
+// 				g_pucDdcciTxBuf[4]='X';
+// 			}
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[0]=0x6E;
+			
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_ADJUST_BRIGHTNESS())
+// 		{
+//             BYTE uctempData;
+//        		uctempData=g_pucDdcciRxBuf[5];
+//        		if(uctempData <= 100)
+// 			{
+//                 SET_OSD_BACKLIGHT(uctempData);
+// 				UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 				g_pucDdcciTxBuf[2]='w';
+// 				g_pucDdcciTxBuf[3]='b';
+// 				g_pucDdcciTxBuf[4]='r';
+// 			}
+// 			else
+// 			{
+// 				g_pucDdcciTxBuf[2]='B';
+// 				g_pucDdcciTxBuf[3]='R';
+// 				g_pucDdcciTxBuf[4]='X';
+// 			}
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_AUTO_COLOR())
+// 		{
+// 			if(	(SysSourceGetInputPort() != _A0_INPUT_PORT)
+// #if(_VGA_SUPPORT == _ON)
+// 				|| (ScalerAutoDoWhiteBalance(_AUTO_TUNE_RGB) == _AUTO_SUCCESS) 
+// #endif
+// 				)                
+// 			{
+// #if(_VGA_SUPPORT == _ON)
+// 			    ScalerAutoGetAutoColorResult(&g_stAdcData);
+//               	UserCommonNVRamSaveADCSetting(_COLOR_SPACE_RGB);
+// #endif
+
+// 				g_pucDdcciTxBuf[2] = 'a';//0;	
+// 				g_pucDdcciTxBuf[3] = 'c';//0x4f;
+// 				g_pucDdcciTxBuf[4] = 'o';//UserCommonDdcciCalCheckSum();   
+
+// 			}
+// 			else
+// 			{
+// 				g_pucDdcciTxBuf[2] = 'A';//0;	
+// 				g_pucDdcciTxBuf[3] = 'C';//0x4f;
+// 				g_pucDdcciTxBuf[4] = 'X';//UserCommonDdcciCalCheckSum();   
+// 			}
+// 		    	 g_pucDdcciTxBuf[0]=0x6E;
+//            		 g_pucDdcciTxBuf[ 1 ]  = 0x83;
+		
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_ENTER_BURNIN())
+// 		{ 
+// 		  	SET_OSD_FACTORY_MODE(_ON);
+//       		SET_OSD_BURNING_MODE(_ON);
+// 			TPVNVRamSaveFactoryDate();
+// 			UserInterfaceKeyPadLedControl(_LED_POWER_SAVING);
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 'b';
+//             g_pucDdcciTxBuf[ 3 ]  = 'o';
+//             g_pucDdcciTxBuf[ 4 ]  = 'n';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_EXIT_BURNIN())
+// 		{
+// 		  SET_OSD_FACTORY_MODE(_OFF);
+//       SET_OSD_BURNING_MODE(_OFF);
+// 			TPVNVRamSaveFactoryDate();
+// 			UserInterfaceKeyPadLedControl(_LED_POWER_ACTIVE);
+// 			SET_COLOR_TEMP_TYPE( _DEF_COLORTEMP);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 'b';
+//             g_pucDdcciTxBuf[ 3 ]  = 'o';
+//             g_pucDdcciTxBuf[ 4 ]  = 'f';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_ENTER_FACTORY())
+// 		{
+// 		  //ubAutoAlign = 1;
+// 	    	CAlignSendAckCmd(_TRUE);
+// 		  	SET_OSD_FACTORY_MODE(_ON);
+//       		SET_OSD_BURNING_MODE(_ON);
+// 			TPVNVRamSaveFactoryDate();
+// 			UserInterfaceKeyPadLedControl(_LED_POWER_SAVING);
+// 			SET_COLOR_TEMP_TYPE( _DEF_COLORTEMP);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 		}
+// 		else if(FC_EXIT_FACTORY())
+// 		{ 
+// 			//SaveFactorySetting();
+// 			CAlignSendAckCmd(_TRUE);
+// 		  	SET_OSD_FACTORY_MODE(_OFF);
+//       		SET_OSD_BURNING_MODE(_OFF);
+// 			TPVNVRamSaveFactoryDate();				
+// 			UserInterfaceKeyPadLedControl(_LED_POWER_ACTIVE);
+// 			//ubAutoAlign = 0;
+// 			SET_COLOR_TEMP_TYPE( _DEF_COLORTEMP);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			if(Ct4500Flag==1)
+// 			{
+// 				Ct4500Flag=0;
+// 				//SET_CT4500_STATUS(_ON);
+// 			}
+// 			else
+// 			{
+// 				//SET_CT4500_STATUS(_OFF);   
+// 			}
+// 			RTDNVRamSaveOSDData();
+
+
+        
+// 		}
+// 		else if(FC_SET_6500K())
+// 		{
+// 			SET_COLOR_TEMP_TYPE( _CT_6500);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '6';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_SET_7500K())
+// 		{   
+// 			SET_COLOR_TEMP_TYPE( _CT_7500);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '7';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+
+// 		}
+// 		else if(FC_SET_9300K())
+// 		{
+// 			SET_COLOR_TEMP_TYPE( _CT_9300);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '9';
+//             g_pucDdcciTxBuf[ 4]  = '3';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_SET_5000K())
+// 		{
+// 			SET_COLOR_TEMP_TYPE( _CT_5800);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '5';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}	
+// 		else if(FC_SET_8200())
+// 		{
+// 			//SET_COLOR_TEMP_TYPE( _CT_8200);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '8';
+//             g_pucDdcciTxBuf[ 4 ]  = '2';
+            
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_SET_11500())
+// 		{
+// 			//SET_COLOR_TEMP_TYPE( _CT_11500);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = 'B';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+            
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_SET_sRGB())
+// 		{
+// 			SET_COLOR_TEMP_TYPE( _CT_SRGB);
+// 			RTDNVRamLoadColorSetting(GET_COLOR_TEMP_TYPE());
+// 			UserAdjustContrast(GET_OSD_CONTRAST());
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 't';
+//             g_pucDdcciTxBuf[ 3 ]  = '1';
+//             g_pucDdcciTxBuf[ 4 ]  = '1';
+            
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_Set_ColorMode_sRGB())
+// 		{
+// 			SET_OSD_PCM_STATUS( _PCM_OSD_SRGB);
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+			
+// 			g_pucDdcciTxBuf[2]=0x73;
+// 			g_pucDdcciTxBuf[3]=0x6f;
+// 			g_pucDdcciTxBuf[4]=0x31;
+
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_Set_ColorMode_Normal())
+// 		{
+// 			SET_OSD_PCM_STATUS( _PCM_OSD_NATIVE);
+// 			// SET_OSD_BACKLIGHT_SRGB(g_stVscSceneModeData.usBackLightSrgb);//ju
+// 			RTDNVRamSaveOSDData();
+// 			UserAdjustBacklight(GET_OSD_BACKLIGHT());
+// 			OsdFuncColorPcmAdjust();
+// 			RTDFlashRestoreViewModeParameters();
+			
+// 			g_pucDdcciTxBuf[2]=0x73;
+// 			g_pucDdcciTxBuf[3]=0x6f;
+// 			g_pucDdcciTxBuf[4]=0x30;
+			
+// 			g_pucDdcciTxBuf[1]=0x83;
+// 			g_pucDdcciTxBuf[0]=0x6E;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+//         else if(FC_SET_USER())
+// 		{
+
+// 		}
+// 		else if(FC_SAVE_6500())
+// 		{
+
+// 			RTDNVRamSaveColorSetting(_CT_6500);
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '6';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+
+// 		}
+// 		else if(FC_SAVE_7500())
+// 		{
+// 			RTDNVRamSaveColorSetting(_CT_7500);
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '7';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_SAVE_9300())
+// 		{
+// 			RTDNVRamSaveColorSetting(_CT_9300);
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '9';
+//             g_pucDdcciTxBuf[ 4 ]  = '3';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+				
+// 		}
+// 		else if(FC_SAVE_5000())
+// 		{
+
+// 			RTDNVRamSaveColorSetting(_CT_5800);
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '5';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+			
+// 		}
+// 		else if(FC_SAVE_8200())
+// 		{
+// 		//	RTDNVRamSaveColorSetting(_CT_8200);
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '8';
+//             g_pucDdcciTxBuf[ 4 ]  = '2';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+			
+			
+// 		}
+// 		else if(FC_SAVE_11500())
+// 		{
+// 		//	RTDNVRamSaveColorSetting(_CT_11500);
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = 'B';
+//             g_pucDdcciTxBuf[ 4 ]  = '5';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+			
+// 		}
+// 		//RTDFlashRestoreViewModeParameters
+// 		else if(FC_SAVE_sRGB())
+// 		{
+// 			RTDNVRamSaveColorSetting(_CT_SRGB);
+// 			// SET_OSD_BACKLIGHT_SRGB(g_stVscSceneModeData.usBackLightSrgb);//ju
+// 			RTDNVRamSaveOSDData();
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = '1';
+//             g_pucDdcciTxBuf[ 4 ]  = '1';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+//         else if(FC_SAVE_USER())
+// 		{
+// 			RTDNVRamSaveColorSetting(_CT_USER);
+
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ]  = 's';
+//             g_pucDdcciTxBuf[ 3 ]  = 'u';
+//             g_pucDdcciTxBuf[ 4 ]  = 's';
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}		
+// 		else if(FC_GET_ADC_RGAIN())
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//              g_pucDdcciTxBuf[ 2 ] =99;//UserPrefAdcRedGain;
+
+// 			 g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		     g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			 g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			 ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_GET_ADC_GGAIN())
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//              g_pucDdcciTxBuf[ 2 ] =103;//UserPrefAdcGreenGain;
+
+// 			 g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		     g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			 g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			 ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_GET_ADC_BGAIN())
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ] = 105;//UserPrefAdcBlueGain;
+
+// 			g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		    g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_GET_ADC_ROFFSET())
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ] =99;// UserPrefAdcRedOffset;
+
+// 			g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		    g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_GET_ADC_GOFFSET())
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ] =103;//UserPrefAdcGreenGain;
+
+// 			g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		    g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 			ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 		else if(FC_GET_ADC_BOFFSET())	
+// 		{
+// 		    g_pucDdcciTxBuf[0]=0x6E;
+//             g_pucDdcciTxBuf[ 1 ]  = 0x83;
+//             g_pucDdcciTxBuf[ 2 ] =  105;//UserPrefAdcBlueGain;
+
+// 			g_pucDdcciTxBuf[3]=' ';//0x4F;
+// 		    g_pucDdcciTxBuf[4]=' ';//0x4F;
+// 			g_pucDdcciTxBuf[5] = UserCommonDdcciCalCheckSum();
+// 		    ScalerMcuDdcciSendData(g_pucDdcciTxBuf);
+// 		}
+// 	    else if(FC_RESET_CMD())	
+// 		{
+// 		    OsdDispOsdReset();
+// 		    g_pucDdcciTxBuf[0]=0x83;
+//             g_pucDdcciTxBuf[1]= 0x00;
+//             g_pucDdcciTxBuf[2] =0x00;
+// 			g_pucDdcciTxBuf[3]=0x00;
+// 			//return 1;
+// 		}
+// }
+#endif //end of 
+
+
+
+
+

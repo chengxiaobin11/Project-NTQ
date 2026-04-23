@@ -1,0 +1,1306 @@
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SCALERDPRX0
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\ScalerDPRx0.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\Scaler\ScalerFunction\Code\ScalerDPRx0.c LARGE OPTIMIZE(9,SPEED) 
+                    -INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Hea
+                    -der;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\Lib
+                    -\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL64
+                    -49_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Header;
+                    -.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User
+                    -\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header)
+                    - DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\ScalerDPR
+                    -x0.lst) TABS(2) OBJECT(.\Output\RL6449_Project\ScalerDPRx0.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : ScalerDPRx0.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #include "ScalerFunctionInclude.h"
+  18          
+  19          //****************************************************************************
+  20          // DEFINITIONS / MACROS
+  21          //****************************************************************************
+  22          
+  23          //****************************************************************************
+  24          // STRUCT / TYPE / ENUM DEFINITTIONS
+  25          //****************************************************************************
+  26          
+  27          //****************************************************************************
+  28          // CODE TABLES
+  29          //****************************************************************************
+  30          
+  31          //****************************************************************************
+  32          // VARIABLE DECLARATIONS
+  33          //****************************************************************************
+  34          #if(_D0_DP_EXIST == _ON)
+  35          bit g_bDpRx0Tp1Initial = _FALSE;
+  36          BYTE g_ucDpRx0LTPatternSet;
+  37          BYTE g_ucDpRx0Tp1PermitSwingLevel0;
+  38          
+  39          #if(_DP_LT_TP2_RETRY_FOR_S2P1_S3P0 == _ON)
+              BYTE g_pucDpRx0MaxSwing[4];
+              #endif
+  42          
+  43          //****************************************************************************
+  44          // FUNCTION DECLARATIONS
+  45          //****************************************************************************
+  46          void ScalerDpRx0AuxWaitRcv_EXINT0(void);
+  47          void ScalerDpRx0ErrorCounterUpdate_EXINT0(void);
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 2   
+
+  48          void ScalerDpRx0ErrorCounterDisable_EXINT0(void);
+  49          void ScalerDpRx0ErrorCounterEnable_EXINT0(EnumDpLinkTrainingType enumDpLtType);
+  50          void ScalerDpRx0AVMute(void);
+  51          void ScalerDpRx0ScrambleSetting(void);
+  52          
+  53          #if((_DP_ILLEGAL_IDLE_PATTERN_CHECK_SUPPORT == _ON) && (_HW_DP_LANE_VALID_CHECK_SUPPORT == _ON))
+              bit ScalerDpRx0LaneValidCheck(void);
+              #endif
+  56          
+  57          void ScalerDpRx0CheckHdcpCpirqStatus(void);
+  58          void ScalerDpRx0CrcCalculate(void);
+  59          
+  60          #if(_DP_DYNAMIC_ADJUST_LINK_RATE_SUPPORT == _ON)
+              void ScalerDpRx0CalculateLinkRate(EnumDpLaneCount enumDpLaneCount);
+              #endif
+  63          
+  64          #if(_HW_HS_TRACKING_GEN_TYPE == _HS_TRACKING_GEN_2)
+  65          void ScalerDpRx0HSActiveTrackingMode(EnumDpHSTrackingType enumHSTrackingType);
+  66          #endif
+  67          BYTE ScalerDpRx0GetDpcdBitInfo(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BYT
+             -E ucDpcdBit);
+  68          BYTE ScalerDpRx0GetDpcdInfo(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL);
+  69          bit ScalerDpRx0GetVideoStream(void);
+  70          bit ScalerDpRx0MSAActiveChange(void);
+  71          void ScalerDpRx0SecDataBlockReset(void);
+  72          void ScalerDpRx0SetDpcdBitValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BY
+             -TE ucNotDpcdBit, BYTE ucDpcdBit);
+  73          void ScalerDpRx0SetDpcdValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BYTE 
+             -ucDpcdValue);
+  74          void ScalerDpRx0SetDpcdWrite1ClearValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessP
+             -ortL, BYTE ucDpcdValue);
+  75          void ScalerDpRx0SetSinkDeviceSpecificField(EnumDpVersionType enumDpVersion);
+  76          
+  77          void ScalerDpRx0SinkStatusSet(EnumDpSinkReceivePort enumReceiverPort, EnumDpSinkStatus enumInSync);
+  78          void ScalerDpRx0ChangeHdcpDpcdCapability(bit bEn);
+  79          
+  80          #if(_DP_RX0_ASSR_MODE_SUPPORT == _ON)
+              void ScalerDpRx0ASSRModeSetting(void);
+              #endif
+  83          
+  84          #if(_DP_FREESYNC_SUPPORT == _ON)
+              bit ScalerDpRx0GetFREESYNCStatusChange(void);
+              WORD ScalerDpRx0SetFREESYNCMsaForLut(WORD usDpHtotal);
+              #if(_FW_DP_RX_H_PORCH_ENLARGE_SUPPORT == _ON)
+              WORD ScalerDpRx0FreesyncHPorchEnlarge(WORD usDpHtotal);
+              #endif
+              #endif
+  91          
+  92          #if(_DP_HDCP14_REPEATER_BIT_DISABLE_FOR_TX_CLONE_OFF == _ON)
+              bit g_bDpRx0HdcpRepeaterBit;
+              #endif
+  95          #endif
+  96          
+  97          //****************************************************************************
+  98          // FUNCTION DEFINITIONS
+  99          //****************************************************************************
+ 100          #if(_D0_DP_EXIST == _ON)
+ 101          //-------------------------------------------------------
+ 102          // Description  : Wait for Aux Mac State switch to RCV_STANBY
+ 103          // Input Value  : None
+ 104          // Output Value : None
+ 105          //-------------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 3   
+
+ 106          void ScalerDpRx0AuxWaitRcv_EXINT0(void) using 1
+ 107          {
+ 108   1          BYTE ucCntTemp = 0;
+ 109   1      
+ 110   1          for(ucCntTemp; ucCntTemp < 60; ucCntTemp++)
+ 111   1          {
+ 112   2              DELAY_5US_EXINT();
+ 113   2              if(ScalerGetBit_EXINT(PB7_C7_TP1_OCCR, (_BIT2 | _BIT1 | _BIT0)) == _BIT0)
+ 114   2              {
+ 115   3                  break;
+ 116   3              }
+ 117   2          }
+ 118   1      }
+ 119          
+ 120          //--------------------------------------------------
+ 121          // Description  : DP Error Counter Update
+ 122          // Input Value  : None
+ 123          // Output Value : None
+ 124          //--------------------------------------------------
+ 125          void ScalerDpRx0ErrorCounterUpdate_EXINT0(void) using 1
+ 126          {
+ 127   1          WORD usErrorTemp = 0;
+ 128   1      
+ 129   1          switch(g_ucDpRx0LaneCount)
+ 130   1          {
+ 131   2              case _DP_ONE_LANE:
+ 132   2      
+ 133   2                  // Store Lane0 Error
+ 134   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE0 << 3));
+ 135   2      
+ 136   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 137   2      
+ 138   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 139   2                  {
+ 140   3                      usErrorTemp = 50;
+ 141   3                  }
+ 142   2      
+ 143   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x10, LOBYTE(usErrorTemp));
+ 144   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 145   2      
+ 146   2                  break;
+ 147   2      
+ 148   2              case _DP_TWO_LANE:
+ 149   2      
+ 150   2                  // Store Lane0 Error
+ 151   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE0 << 3));
+ 152   2      
+ 153   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 154   2      
+ 155   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 156   2                  {
+ 157   3                      usErrorTemp = 50;
+ 158   3                  }
+ 159   2      
+ 160   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x10, LOBYTE(usErrorTemp));
+ 161   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 162   2      
+ 163   2                  // Store Lane1 Error
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 4   
+
+ 164   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE1 << 3));
+ 165   2      
+ 166   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 167   2      
+ 168   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 169   2                  {
+ 170   3                      usErrorTemp = 50;
+ 171   3                  }
+ 172   2      
+ 173   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x12, LOBYTE(usErrorTemp));
+ 174   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x13, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 175   2      
+ 176   2                  break;
+ 177   2      
+ 178   2              default:
+ 179   2              case _DP_FOUR_LANE:
+ 180   2      
+ 181   2                  // Store Lane0 Error
+ 182   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE0 << 3));
+ 183   2      
+ 184   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 185   2      
+ 186   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 187   2                  {
+ 188   3                      usErrorTemp = 50;
+ 189   3                  }
+ 190   2      
+ 191   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x10, LOBYTE(usErrorTemp));
+ 192   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 193   2      
+ 194   2                  // Store Lane1 Error
+ 195   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE1 << 3));
+ 196   2      
+ 197   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 198   2      
+ 199   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 200   2                  {
+ 201   3                      usErrorTemp = 50;
+ 202   3                  }
+ 203   2      
+ 204   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x12, LOBYTE(usErrorTemp));
+ 205   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x13, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 206   2      
+ 207   2                  // Store Lane2 Error
+ 208   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE2 << 3));
+ 209   2      
+ 210   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 211   2      
+ 212   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 213   2                  {
+ 214   3                      usErrorTemp = 50;
+ 215   3                  }
+ 216   2      
+ 217   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x14, LOBYTE(usErrorTemp));
+ 218   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x15, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 5   
+
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 219   2      
+ 220   2                  // Store Lane3 Error
+ 221   2                  ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT4 | _BIT3), (_D0_DP_LANE3 << 3));
+ 222   2      
+ 223   2                  usErrorTemp = (((WORD)ScalerGetByte_EXINT(PB_0B_BIST_PATTERN3) << 8) | (ScalerGetByte_EXINT(PB
+             -_0C_BIST_PATTERN4)));
+ 224   2      
+ 225   2                  if((usErrorTemp >= 49) && (usErrorTemp <= 100))
+ 226   2                  {
+ 227   3                      usErrorTemp = 50;
+ 228   3                  }
+ 229   2      
+ 230   2                  ScalerDpRx0SetDpcdValue_EXINT0(0x00, 0x02, 0x16, LOBYTE(usErrorTemp));
+ 231   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x17, ~(_BIT6 | _BIT5 | _BIT4 | _BIT3 | _BIT2 | 
+             -_BIT1 | _BIT0), HIBYTE(usErrorTemp));
+ 232   2      
+ 233   2                  break;
+ 234   2          }
+ 235   1      
+ 236   1          // Reset 8B/10B Error Counter
+ 237   1          ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT2 | _BIT1 | _BIT0), 0x00);
+ 238   1          ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT2 | _BIT1 | _BIT0), _BIT1);
+ 239   1      }
+ 240          
+ 241          //--------------------------------------------------
+ 242          // Description  : DP Error Counter Disable
+ 243          // Input Value  : None
+ 244          // Output Value : None
+ 245          //--------------------------------------------------
+ 246          void ScalerDpRx0ErrorCounterDisable_EXINT0(void) using 1
+ 247          {
+ 248   1          // Disable Wildcard IRQ for Error Counter
+ 249   1          ScalerSetBit_EXINT(PB7_FB_DUMMY_1, ~(_BIT7 | _BIT5 | _BIT3 | _BIT1 | _BIT0), 0x00);
+ 250   1      
+ 251   1          // Disable 8B/10B Error Counter
+ 252   1          ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT2 | _BIT1 | _BIT0), 0x00);
+ 253   1      
+ 254   1          // Enable DPCD Auto Increment
+ 255   1          ScalerSetBit_EXINT(PB7_C0_DPCD_CTRL, ~_BIT0, _BIT0);
+ 256   1      
+ 257   1          // Set DPCD 0x21xh
+ 258   1          ScalerSetByte_EXINT(PB7_C1_DPCD_ADDR_PORT_H, 0x00);
+ 259   1          ScalerSetByte_EXINT(PB7_C2_DPCD_ADDR_PORT_M, 0x02);
+ 260   1          ScalerSetByte_EXINT(PB7_C3_DPCD_ADDR_PORT_L, 0x10);
+ 261   1      
+ 262   1          // Set DPCD 0x210-0x217 = 0x00
+ 263   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 264   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 265   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 266   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 267   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 268   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 269   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 270   1          ScalerSetByte_EXINT(PB7_C4_DPCD_DATA_PORT, 0x00);
+ 271   1      
+ 272   1          // Disable DPCD Auto Increment
+ 273   1          ScalerSetBit_EXINT(PB7_C0_DPCD_CTRL, ~_BIT0, 0x00);
+ 274   1      }
+ 275          
+ 276          //--------------------------------------------------
+ 277          // Description  : DP Error Counter Enable
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 6   
+
+ 278          // Input Value  : DP Link Training Type
+ 279          // Output Value : None
+ 280          //--------------------------------------------------
+ 281          void ScalerDpRx0ErrorCounterEnable_EXINT0(EnumDpLinkTrainingType enumDpLtType) using 1
+ 282          {
+ 283   1          // Enable DPCD Error Count Valid Flag
+ 284   1          switch(g_ucDpRx0LaneCount)
+ 285   1          {
+ 286   2              case _DP_ONE_LANE:
+ 287   2      
+ 288   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~_BIT7, _BIT7);
+ 289   2      
+ 290   2                  break;
+ 291   2      
+ 292   2              case _DP_TWO_LANE:
+ 293   2      
+ 294   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~_BIT7, _BIT7);
+ 295   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x13, ~_BIT7, _BIT7);
+ 296   2      
+ 297   2                  break;
+ 298   2      
+ 299   2              default:
+ 300   2              case _DP_FOUR_LANE:
+ 301   2      
+ 302   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x11, ~_BIT7, _BIT7);
+ 303   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x13, ~_BIT7, _BIT7);
+ 304   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x15, ~_BIT7, _BIT7);
+ 305   2                  ScalerDpRx0SetDpcdBitValue_EXINT0(0x00, 0x02, 0x17, ~_BIT7, _BIT7);
+ 306   2      
+ 307   2                  break;
+ 308   2          }
+ 309   1      
+ 310   1          if(enumDpLtType == _DP_NORMAL_LT)
+ 311   1          {
+ 312   2              // Enable 8B/10B Error Counter
+ 313   2              ScalerSetBit_EXINT(PB_08_BIST_PATTERN_SEL, ~(_BIT2 | _BIT1 | _BIT0), _BIT1);
+ 314   2          }
+ 315   1      
+ 316   1          // Enable Read Error Counter IRQ, Clear IRQ Flag
+ 317   1          ScalerSetBit_EXINT(PB7_FB_DUMMY_1, ~(_BIT7 | _BIT5 | _BIT3 | _BIT1 | _BIT0), (_BIT1 | _BIT0));
+ 318   1      }
+ 319          
+ 320          //--------------------------------------------------
+ 321          // Description  : DP RGB Output Disable
+ 322          // Input Value  : None
+ 323          // Output Value : None
+ 324          //--------------------------------------------------
+ 325          void ScalerDpRx0AVMute(void)
+ 326          {
+ 327   1          if(ScalerGetBit(PB6_3A_DP_IRQ_CTRL0, (_BIT1 | _BIT0)) == (_BIT1 | _BIT0))
+ 328   1          {
+ 329   2              // Set free run & force to BG
+ 330   2              ScalerSetBit(P0_28_VIDEO_DISPLAY_CONTROL_REG, ~(_BIT5 | _BIT3), _BIT5);
+ 331   2          }
+ 332   1      
+ 333   1          // Disable fifo overflwo/ underflwo IRQ
+ 334   1          ScalerSetBit(PB6_3A_DP_IRQ_CTRL0, ~(_BIT1 | _BIT0), 0x00);
+ 335   1      
+ 336   1          // Disable RGB Output
+ 337   1          ScalerSetBit(PB5_31_DP_OUTPUT_CTRL, ~(_BIT2 | _BIT1 | _BIT0), 0x00);
+ 338   1      
+ 339   1      #if(_AUDIO_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 7   
+
+ 340   1          // Disable Audio Channel
+ 341   1          ScalerAudioDpAudioEnable(_DISABLE, _D0_INPUT_PORT);
+ 342   1      #endif
+ 343   1      }
+ 344          
+ 345          //--------------------------------------------------
+ 346          // Description  : DP Scramble Setting
+ 347          // Input Value  : None
+ 348          // Output Value : None
+ 349          //--------------------------------------------------
+ 350          void ScalerDpRx0ScrambleSetting(void)
+ 351          {
+ 352   1          BYTE ucBackUp = ScalerGetByte(PB7_D0_AUX_MODE_SET);
+ 353   1          bit bEnhanceChange = _FALSE;
+ 354   1          bit bScrambleChange = _FALSE;
+ 355   1      
+ 356   1          SET_DP_RX0_AUX_MANUAL_MODE();
+ 357   1      
+ 358   1          if((ScalerDpRx0GetDpcdBitInfo(0x00, 0x01, 0x01, _BIT7) == _BIT7) != (ScalerGetBit(PB_01_PHY_DIG_RESET_
+             -CTRL, _BIT2) == _BIT2))
+ 359   1          {
+ 360   2              bEnhanceChange = _TRUE;
+ 361   2      
+ 362   2              if(ScalerDpRx0GetDpcdBitInfo(0x00, 0x01, 0x01, _BIT7) == _BIT7)
+ 363   2              {
+ 364   3                  // Enable Enhancement Control Mode --> MAC
+ 365   3                  ScalerSetBit(PB_01_PHY_DIG_RESET_CTRL, ~_BIT2, _BIT2);
+ 366   3              }
+ 367   2              else
+ 368   2              {
+ 369   3                  // Disable Enhancement Control Mode --> MAC
+ 370   3                  ScalerSetBit(PB_01_PHY_DIG_RESET_CTRL, ~_BIT2, 0x00);
+ 371   3              }
+ 372   2          }
+ 373   1      
+ 374   1          if((ScalerDpRx0GetDpcdBitInfo(0x00, 0x01, 0x02, _BIT5) == _BIT5) != (ScalerGetBit(PB_07_SCRAMBLE_CTRL,
+             - _BIT5) == _BIT5))
+ 375   1          {
+ 376   2              bScrambleChange = _TRUE;
+ 377   2      
+ 378   2              if(ScalerDpRx0GetDpcdBitInfo(0x00, 0x01, 0x02, _BIT5) == _BIT5)
+ 379   2              {
+ 380   3                  // Disable Scrambling
+ 381   3                  ScalerSetBit(PB_07_SCRAMBLE_CTRL, ~_BIT5, _BIT5);
+ 382   3              }
+ 383   2              else
+ 384   2              {
+ 385   3                  // Enable Scrambling
+ 386   3                  ScalerSetBit(PB_07_SCRAMBLE_CTRL, ~_BIT5, 0x00);
+ 387   3              }
+ 388   2          }
+ 389   1      
+ 390   1          if((bEnhanceChange == _TRUE) || (bScrambleChange == _TRUE))
+ 391   1          {
+ 392   2              SET_DP_RX0_AUX_AUTO_MODE();
+ 393   2      
+ 394   2              // Delay 2ms for Scramble
+ 395   2              ScalerTimerDelayXms(2);
+ 396   2      
+ 397   2              SET_DP_RX0_AUX_MANUAL_MODE();
+ 398   2          }
+ 399   1      
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 8   
+
+ 400   1          if((ucBackUp & _BIT1) == _BIT1)
+ 401   1          {
+ 402   2              SET_DP_RX0_AUX_AUTO_MODE();
+ 403   2          }
+ 404   1      }
+ 405          
+ 406          #if((_DP_ILLEGAL_IDLE_PATTERN_CHECK_SUPPORT == _ON) && (_HW_DP_LANE_VALID_CHECK_SUPPORT == _ON))
+              //--------------------------------------------------
+              // Description  : Check Lane Valid
+              // Input Value  : None
+              // Output Value : True --> ok, False --> Lane Valid Error
+              //--------------------------------------------------
+              bit ScalerDpRx0LaneValidCheck(void)
+              {
+                  // Enable Lane Valid Detect
+                  ScalerSetBit(PB_00_HD_DP_SEL, ~_BIT3, 0x00);
+                  ScalerSetBit(PB_00_HD_DP_SEL, ~_BIT3, _BIT3);
+              
+                  // Delay Time us [150,x]
+                  DELAY_XUS(150);
+              
+                  switch(ScalerDpRx0GetDpcdInfo(0x00, 0x01, 0x01) & 0x1F)
+                  {
+                      case _DP_ONE_LANE:
+              
+                          if(((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (ScalerGetBit(PB_00_HD_DP_SEL, _BI
+             -T7) == 0x00)) ||
+                             ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (ScalerGetBit(PB_00_HD_DP_SEL, _BI
+             -T6) == 0x00)) ||
+                             ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (ScalerGetBit(PB_00_HD_DP_SEL, _BI
+             -T5) == 0x00)) ||
+                             ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (ScalerGetBit(PB_00_HD_DP_SEL, _BI
+             -T4) == 0x00)))
+                          {
+                              return _FALSE;
+                          }
+              
+                          break;
+              
+                      case _DP_TWO_LANE:
+              
+                          if(((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+             -== _DP_SCALER_LANE1)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE0))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT7 | _BIT6)) == 0x00)) ||
+                             ((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+             -== _DP_SCALER_LANE2)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE0))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT7 | _BIT5)) == 0x00)) ||
+                             ((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE0) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+             -== _DP_SCALER_LANE3)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE0))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT7 | _BIT4)) == 0x00)) ||
+                             ((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+             -== _DP_SCALER_LANE2)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE1))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT6 | _BIT5)) == 0x00)) ||
+                             ((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE1) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+             -== _DP_SCALER_LANE3)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE1))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT6 | _BIT4)) == 0x00)) ||
+                             ((((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE2) && (GET_DP_RX0_PCB_LANE1_MAPPING() 
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 9   
+
+             -== _DP_SCALER_LANE3)) || ((GET_DP_RX0_PCB_LANE0_MAPPING() == _DP_SCALER_LANE3) && (GET_DP_RX0_PCB_LANE1_MAPPING() == _DP
+             -_SCALER_LANE2))) &&
+                              (ScalerGetBit(PB_00_HD_DP_SEL, (_BIT5 | _BIT4)) == 0x00)))
+                          {
+                              return _FALSE;
+                          }
+              
+                          break;
+              
+                      case _DP_FOUR_LANE:
+              
+                          if(ScalerGetBit(PB_00_HD_DP_SEL, (_BIT7 | _BIT6 | _BIT5 | _BIT4)) == 0x00)
+                          {
+                              return _FALSE;
+                          }
+              
+                          break;
+              
+                      default:
+              
+                          return _FALSE;
+              
+                          break;
+                  }
+              
+                  return _TRUE;
+              }
+              #endif
+ 474          
+ 475          //--------------------------------------------------
+ 476          // Description  : Clear CPIRQ Flag
+ 477          // Input Value  : None
+ 478          // Output Value : None
+ 479          //--------------------------------------------------
+ 480          void ScalerDpRx0CheckHdcpCpirqStatus(void)
+ 481          {
+ 482   1          if((ScalerGetByte(PB_1E_HDCP_INTGT_VRF_ANS_MSB) == 0x53) && (ScalerGetByte(PB_1F_HDCP_INTGT_VRF_ANS_LS
+             -B) == 0x1F))
+ 483   1          {
+ 484   2              if((ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x01) & _BIT2) == _BIT2)
+ 485   2              {
+ 486   3      #if(_DP_HDCP_2_2_SUPPORT == _ON)
+ 487   3                  // Check HDCP22 decode
+ 488   3                  if(GET_DP_RX0_HDCP_MODE() == _HDCP_22)
+ 489   3                  {
+ 490   4                      if(ScalerDpRx0GetDpcdInfo(0x06, 0x94, 0x93) == 0x00)
+ 491   4                      {
+ 492   5                          // Clear Link Status CPIRQ Flag
+ 493   5                          ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x01, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x01) & 
+             -~_BIT2));
+ 494   5                      }
+ 495   4                  }
+ 496   3                  else
+ 497   3      #endif
+ 498   3                  {
+ 499   4                      if(ScalerDpRx0GetDpcdInfo(0x06, 0x80, 0x29) == 0x00)
+ 500   4                      {
+ 501   5                          // Clear Link Status CPIRQ Flag
+ 502   5                          ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x01, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x01) & 
+             -~_BIT2));
+ 503   5                      }
+ 504   4                  }
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 10  
+
+ 505   3              }
+ 506   2          }
+ 507   1      }
+ 508          //--------------------------------------------------
+ 509          // Description  : DP CRC Calculate
+ 510          // Input Value  : None
+ 511          // Output Value : None
+ 512          //--------------------------------------------------
+ 513          void ScalerDpRx0CrcCalculate(void)
+ 514          {
+ 515   1          if(GET_DP_RX0_CRC_CALCULATE() == _TRUE)
+ 516   1          {
+ 517   2              DebugMessageRx0("7. DP CRC Test Start", 0);
+ 518   2      
+ 519   2              if(GET_COLOR_SPACE() == _COLOR_SPACE_YCBCR422)
+ 520   2              {
+ 521   3                  ScalerSetBit(PB5_70_DP_CRC_CTRL, ~_BIT4, _BIT4);
+ 522   3              }
+ 523   2              else
+ 524   2              {
+ 525   3                  ScalerSetBit(PB5_70_DP_CRC_CTRL, ~_BIT4, 0x00);
+ 526   3              }
+ 527   2      
+ 528   2              // Start CRC Calculation
+ 529   2              ScalerSetBit(PB5_70_DP_CRC_CTRL, ~_BIT7, _BIT7);
+ 530   2      
+ 531   2              if((ScalerTimerPollingFlagProc(_DP_MEASURE_POLLING_TIMEOUT, PB5_70_DP_CRC_CTRL, _BIT6, _TRUE) && (
+             -ScalerDpRx0FifoCheck(_DP_FIFO_POLLING_CHECK))) == _TRUE)
+ 532   2              {
+ 533   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x40, ScalerGetByte(PB5_72_DP_CRC_R_L));
+ 534   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x41, ScalerGetByte(PB5_71_DP_CRC_R_M));
+ 535   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x42, ScalerGetByte(PB5_74_DP_CRC_G_L));
+ 536   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x43, ScalerGetByte(PB5_73_DP_CRC_G_M));
+ 537   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x44, ScalerGetByte(PB5_76_DP_CRC_B_L));
+ 538   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x45, ScalerGetByte(PB5_75_DP_CRC_B_M));
+ 539   3      
+ 540   3                  CLR_DP_RX0_CRC_CALCULATE();
+ 541   3      
+ 542   3                  // Update _TEST_CRC_COUNT
+ 543   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x46, 0x21);
+ 544   3              }
+ 545   2      
+ 546   2              // Stop CRC Calculation
+ 547   2              ScalerSetBit(PB5_70_DP_CRC_CTRL, ~_BIT7, 0x00);
+ 548   2          }
+ 549   1      }
+ 550          
+ 551          #if(_DP_DYNAMIC_ADJUST_LINK_RATE_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : DP Link Rate Set
+              // Input Value  : MST Port and Lane Count
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx0CalculateLinkRate(EnumDpLaneCount enumDpLaneCount)
+              {
+                  BYTE ucLinkRate = 0;
+                  WORD usDpInputClkRang = _INPUTCLOCK_RANG_DP;
+                  BYTE ucBitPerComponent = _DP_EDID_COLOR_DEPTH_BITS_PER_COMPONENT;
+                  DWORD ulDpInputBitRate = (DWORD)usDpInputClkRang * ucBitPerComponent * 3;
+              
+              #if(_D0_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON)
+                  usDpInputClkRang = _INPUTCLOCK_RANG_USBC;
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 11  
+
+                  ulDpInputBitRate = (DWORD)usDpInputClkRang * ucBitPerComponent * 3;
+              #endif
+              
+                  if((ScalerDpRx0GetDpcdInfo(0x00, 0x00, 0x00) >= _DP_VERSION_1_2) || (ScalerDpRx0GetDpcdBitInfo(0x00, 0
+             -x00, 0x0E, _BIT7) == _BIT7))
+                  {
+                      if(ScalerDpRx0GetDpcdBitInfo(0x00, 0x00, 0x21, _BIT0) == 0x00)
+                      {
+                          ucLinkRate = DP_LINK_RATE_ADJUST(enumDpLaneCount, ulDpInputBitRate);
+              
+                          if(ucLinkRate > _D0_DP_LINK_CLK_RATE)
+                          {
+                              ucLinkRate = _D0_DP_LINK_CLK_RATE;
+                          }
+              
+                          if(ucLinkRate >= _DP_HIGH_SPEED2_540MHZ)
+                          {
+                              ScalerDpRx0SetDpcdValue(0x00, 0x00, 0x01, _DP_LINK_HBR2);
+              
+                              if(GET_DP_RX_D0_PORT_TARGET_VERSION() <= _DP_VERSION_1_2)
+                              {
+                                  // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                                  ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, _DP_LINK_HBR2);
+              #else
+                                  g_ucDpRx0DPCD02201hValue = _DP_LINK_HBR2;
+              #endif
+                              }
+                              else
+                              {
+                                  // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                                  ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, ucLinkRate);
+              #else
+                                  g_ucDpRx0DPCD02201hValue = ucLinkRate;
+              #endif
+                              }
+                          }
+                          else
+                          {
+                              ScalerDpRx0SetDpcdValue(0x00, 0x00, 0x01, ucLinkRate);
+              
+                              // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                              ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, ucLinkRate);
+              #else
+                              g_ucDpRx0DPCD02201hValue = ucLinkRate;
+              #endif
+                          }
+                      }
+                      else
+                      {
+                          if(_D0_DP_LINK_CLK_RATE >= _DP_HIGH_SPEED2_540MHZ)
+                          {
+                              ScalerDpRx0SetDpcdValue(0x00, 0x00, 0x01, _DP_LINK_HBR2);
+              
+                              if(GET_DP_RX_D0_PORT_TARGET_VERSION() <= _DP_VERSION_1_2)
+                              {
+                                  // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                                  ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, _DP_LINK_HBR2);
+              #else
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 12  
+
+                                  g_ucDpRx0DPCD02201hValue = _DP_LINK_HBR2;
+              #endif
+                              }
+                              else
+                              {
+                                  // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                                  ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, _D0_DP_LINK_CLK_RATE);
+              #else
+                                  g_ucDpRx0DPCD02201hValue = _D0_DP_LINK_CLK_RATE;
+              #endif
+                              }
+                          }
+                          else
+                          {
+                              ScalerDpRx0SetDpcdValue(0x00, 0x00, 0x01, _D0_DP_LINK_CLK_RATE);
+              
+                              // When Define Extended Rx Cap Should Set DPCD 0x02201
+              #if(_HW_DP_DPCD_EXT_CAP_PHYSICAL_ADDRESS_SUPPORT == _ON)
+                              ScalerDpRx0SetDpcdValue(0x00, 0x22, 0x01, _D0_DP_LINK_CLK_RATE);
+              #else
+                              g_ucDpRx0DPCD02201hValue = _D0_DP_LINK_CLK_RATE;
+              #endif
+                          }
+                      }
+                  }
+              }
+              #endif
+ 655          
+ 656          #if(_HW_HS_TRACKING_GEN_TYPE == _HS_TRACKING_GEN_2)
+ 657          //--------------------------------------------------
+ 658          // Description  : DP Hs Tracking Active Region Setting
+ 659          // Input Value  : Hs Tracking Type
+ 660          // Output Value : None
+ 661          //--------------------------------------------------
+ 662          void ScalerDpRx0HSActiveTrackingMode(EnumDpHSTrackingType enumHSTrackingType)
+ 663          {
+ 664   1          if(enumHSTrackingType == _DP_HS_TRACKING_FW_MODE)
+ 665   1          {
+ 666   2              // HS Tracking Region By FW Setting
+ 667   2              ScalerSetBit(PB5_B9_MN_SCLKG_SDM_TEST, ~_BIT7, _BIT7);
+ 668   2      
+ 669   2              // BE Start Num = 2 line
+ 670   2              ScalerSetBit(PB5_C7_VBID_MAN_MADE, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), _BIT5);
+ 671   2      
+ 672   2              // BE End Num = 2 line
+ 673   2              ScalerSetBit(PB5_C7_VBID_MAN_MADE, ~(_BIT3 | _BIT2 | _BIT1 | _BIT0), _BIT1);
+ 674   2          }
+ 675   1          else
+ 676   1          {
+ 677   2              // HS Tracking Region By FW Setting
+ 678   2              ScalerSetBit(PB5_B9_MN_SCLKG_SDM_TEST, ~_BIT7, 0x00);
+ 679   2          }
+ 680   1      }
+ 681          #endif
+ 682          //--------------------------------------------------
+ 683          // Description  : Get DPCD Table Information
+ 684          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 685          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 686          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 687          // Output Value : DPCD Information
+ 688          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 13  
+
+ 689          BYTE ScalerDpRx0GetDpcdBitInfo(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BYT
+             -E ucDpcdBit)
+ 690          {
+ 691   1          // Release Aux
+ 692   1          ScalerSetBit(PB7_C0_DPCD_CTRL, ~_BIT7, 0x00);
+ 693   1      
+ 694   1          ScalerSetByte(PB7_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 695   1          ScalerSetByte(PB7_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 696   1          ScalerSetByte(PB7_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 697   1      
+ 698   1          return ScalerGetBit(PB7_C4_DPCD_DATA_PORT, ucDpcdBit);
+ 699   1      }
+ 700          //--------------------------------------------------
+ 701          // Description  : Get DPCD Table Information
+ 702          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 703          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 704          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 705          // Output Value : DPCD Information
+ 706          //--------------------------------------------------
+ 707          BYTE ScalerDpRx0GetDpcdInfo(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL)
+ 708          {
+ 709   1          // Release Aux
+ 710   1          ScalerSetBit(PB7_C0_DPCD_CTRL, ~_BIT7, 0x00);
+ 711   1      
+ 712   1          ScalerSetByte(PB7_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 713   1          ScalerSetByte(PB7_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 714   1          ScalerSetByte(PB7_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 715   1      
+ 716   1          return ScalerGetByte(PB7_C4_DPCD_DATA_PORT);
+ 717   1      }
+ 718          //--------------------------------------------------
+ 719          // Description  : Check Dp Video Straam VBID
+ 720          // Input Value  : None
+ 721          // Output Value : True --> Get Video Stream
+ 722          //--------------------------------------------------
+ 723          bit ScalerDpRx0GetVideoStream(void)
+ 724          {
+ 725   1      #if(_DP_MST_SUPPORT == _ON)
+                  if(g_enumDpMSTCapablePort == _DP_MST_RX0_PORT)
+                  {
+                      // Check if ST_Source is Assigned the STx Stream In MST Mode
+                      if((ScalerGetBit(PB_01_PHY_DIG_RESET_CTRL, _BIT7) == _BIT7) &&
+                         (ScalerGetBit(PB5_0D_SOURCE_SEL_0, (_BIT6 | _BIT5 | _BIT4)) == 0x00))
+                      {
+                          return _FALSE;
+                      }
+                  }
+              #endif
+ 736   1      
+ 737   1          if(ScalerGetBit(PB6_01_DP_VBID, _BIT3) == 0x00)
+ 738   1          {
+ 739   2              return _TRUE;
+ 740   2          }
+ 741   1      
+ 742   1          return _FALSE;
+ 743   1      }
+ 744          //--------------------------------------------------
+ 745          // Description  : Check DP Vactive / Hactive Information
+ 746          // Input Value  : None
+ 747          // Output Value : True --> DP Vactive / Hactive Information Check Ok
+ 748          //--------------------------------------------------
+ 749          bit ScalerDpRx0MSAActiveChange(void)
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 14  
+
+ 750          {
+ 751   1          // Pop up Main Stream Attributes
+ 752   1          ScalerSetBit(PB6_00_MN_STRM_ATTR_CTRL, ~(_BIT7 | _BIT6 | _BIT5 | _BIT3 | _BIT2), (_BIT7 | _BIT6 | _BIT
+             -5 | _BIT3));
+ 753   1      
+ 754   1          // Get Display Format Hactive
+ 755   1          ScalerRead(PB5_45_MN_DPF_HWD_M, 2, &pData[0], _AUTOINC);
+ 756   1      
+ 757   1          // Get MSA Hactive
+ 758   1          ScalerRead(PB6_0C_MSA_HWD_0, 2, &pData[2], _AUTOINC);
+ 759   1      
+ 760   1          // Get Display Format Vactive
+ 761   1          ScalerRead(PB5_4D_MN_DPF_VHT_M, 2, &pData[4], _AUTOINC);
+ 762   1      
+ 763   1          // Get MSA Vactive
+ 764   1          ScalerRead(PB6_16_MSA_VHT_0, 2, &pData[6], _AUTOINC);
+ 765   1      
+ 766   1          if((PDATA_WORD(0) != PDATA_WORD(1)) || (PDATA_WORD(2) != PDATA_WORD(3)))
+ 767   1          {
+ 768   2              return _TRUE;
+ 769   2          }
+ 770   1      
+ 771   1          return _FALSE;
+ 772   1      }
+ 773          //--------------------------------------------------
+ 774          // Description  : Dp Secondary Data Reset
+ 775          // Input Value  : None
+ 776          // Output Value : None
+ 777          //--------------------------------------------------
+ 778          void ScalerDpRx0SecDataBlockReset(void)
+ 779          {
+ 780   1          // Set S code by FW manual
+ 781   1          ScalerSetBit(PB6_58_SCODE_0, ~_BIT7, _BIT7);
+ 782   1      
+ 783   1          // Sec Data Block Reset
+ 784   1          ScalerSetBit(PB5_00_MAC_DIG_RESET_CTRL, ~_BIT4, _BIT4);
+ 785   1          ScalerSetBit(PB5_00_MAC_DIG_RESET_CTRL, ~_BIT4, 0x00);
+ 786   1      
+ 787   1          // Set S code by HW auto
+ 788   1          ScalerSetBit(PB6_58_SCODE_0, ~_BIT7, 0x00);
+ 789   1      }
+ 790          //--------------------------------------------------
+ 791          // Description  : Set DPCD Table Information
+ 792          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 793          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 794          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 795          //                ucDpcdValue --> DPCD Value
+ 796          // Output Value : None
+ 797          //--------------------------------------------------
+ 798          void ScalerDpRx0SetDpcdBitValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BY
+             -TE ucNotDpcdBit, BYTE ucDpcdBit)
+ 799          {
+ 800   1          // Release Aux
+ 801   1          ScalerSetBit(PB7_C0_DPCD_CTRL, ~_BIT7, 0x00);
+ 802   1      
+ 803   1          ScalerSetByte(PB7_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 804   1          ScalerSetByte(PB7_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 805   1          ScalerSetByte(PB7_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 806   1          ScalerSetBit(PB7_C4_DPCD_DATA_PORT, ~(~ucNotDpcdBit), ucDpcdBit);
+ 807   1      }
+ 808          //--------------------------------------------------
+ 809          // Description  : Set DPCD Table Information
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 15  
+
+ 810          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 811          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 812          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 813          //                ucDpcdValue --> DPCD Value
+ 814          // Output Value : None
+ 815          //--------------------------------------------------
+ 816          void ScalerDpRx0SetDpcdValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessPortL, BYTE 
+             -ucDpcdValue)
+ 817          {
+ 818   1          // Release Aux
+ 819   1          ScalerSetBit(PB7_C0_DPCD_CTRL, ~_BIT7, 0x00);
+ 820   1      
+ 821   1          ScalerSetByte(PB7_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 822   1          ScalerSetByte(PB7_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 823   1          ScalerSetByte(PB7_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 824   1          ScalerSetByte(PB7_C4_DPCD_DATA_PORT, ucDpcdValue);
+ 825   1      }
+ 826          
+ 827          //--------------------------------------------------
+ 828          // Description  : Set DPCD Table Information
+ 829          // Input Value  : ucDpcdAccessPortH --> High Byte of DPCD Address
+ 830          //                ucDpcdAccessPortM --> Middle Byte of DPCD Address
+ 831          //                ucDpcdAccessPortL --> Low Bye of DPCD Adress
+ 832          //                ucDpcdValue --> DPCD Value
+ 833          // Output Value : None
+ 834          //--------------------------------------------------
+ 835          void ScalerDpRx0SetDpcdWrite1ClearValue(BYTE ucDpcdAccessPortH, BYTE ucDpcdAccessPortM, BYTE ucDpcdAccessP
+             -ortL, BYTE ucDpcdValue)
+ 836          {
+ 837   1          BYTE ucBackUp = 0;
+ 838   1      
+ 839   1          ucBackUp = ScalerGetByte(PB7_D0_AUX_MODE_SET);
+ 840   1      
+ 841   1          // Release Aux
+ 842   1          ScalerSetBit(PB7_C0_DPCD_CTRL, ~_BIT7, 0x00);
+ 843   1      
+ 844   1          // SET AUX AUTO MODE
+ 845   1          SET_DP_RX0_AUX_AUTO_MODE();
+ 846   1      
+ 847   1          ScalerSetByte(PB7_C1_DPCD_ADDR_PORT_H, ucDpcdAccessPortH);
+ 848   1          ScalerSetByte(PB7_C2_DPCD_ADDR_PORT_M, ucDpcdAccessPortM);
+ 849   1          ScalerSetByte(PB7_C3_DPCD_ADDR_PORT_L, ucDpcdAccessPortL);
+ 850   1          ScalerSetByte(PB7_C4_DPCD_DATA_PORT, ucDpcdValue);
+ 851   1      
+ 852   1          if((ucBackUp & _BIT1) == 0x00)
+ 853   1          {
+ 854   2              // SET AUX MANUAL MODE
+ 855   2              SET_DP_RX0_AUX_MANUAL_MODE();
+ 856   2          }
+ 857   1      }
+ 858          
+ 859          //--------------------------------------------------
+ 860          // Description  : Dp Set IEEE OUI Support and Dp Set Sink Device Specific Field 00400h - 004FFh
+ 861          // Input Value  : _DP_VERSION_1_1 or _DP_VERSION_1_2 or _DP_VERSION_1_4
+ 862          // Output Value : None
+ 863          //--------------------------------------------------
+ 864          void ScalerDpRx0SetSinkDeviceSpecificField(EnumDpVersionType enumDpVersion)
+ 865          {
+ 866   1          if(enumDpVersion >= _DP_VERSION_1_4)
+ 867   1          {
+ 868   2              // _BIT7 = 1: Always IEEE OUI Support Under DP1.2
+ 869   2              ScalerDpRx0SetDpcdBitValue(0x00, 0x00, 0x07, ~_BIT7, _BIT7);
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 16  
+
+ 870   2      
+ 871   2              // Sink IEEE OUI For DP1.4
+ 872   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x00, _DP_1_4_SINK_RTK_IEEE_OUI_L);
+ 873   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x01, _DP_1_4_SINK_RTK_IEEE_OUI_M);
+ 874   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x02, _DP_1_4_SINK_RTK_IEEE_OUI_H);
+ 875   2      
+ 876   2              // Sink IEEE OUI LSB For DP1.4
+ 877   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x03, _DP_1_4_SINK_RTK_ID_STRING_0);
+ 878   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x04, _DP_1_4_SINK_RTK_ID_STRING_1);
+ 879   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x05, _DP_1_4_SINK_RTK_ID_STRING_2);
+ 880   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x06, _DP_1_4_SINK_RTK_ID_STRING_3);
+ 881   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x07, _DP_1_4_SINK_RTK_ID_STRING_4);
+ 882   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x08, _DP_1_4_SINK_RTK_ID_STRING_5);
+ 883   2      
+ 884   2              // Sink HW/FW Version For DP1.4
+ 885   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x09, _DP_1_4_SINK_RTK_HW_VERSION);
+ 886   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0A, _DP_1_4_SINK_RTK_FW_VERSION_H);
+ 887   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0B, _DP_1_4_SINK_RTK_FW_VERSION_L);
+ 888   2          }
+ 889   1          else if(enumDpVersion >= _DP_VERSION_1_2)
+ 890   1          {
+ 891   2              // _BIT7 = 1: Always IEEE OUI Support Under DP1.2
+ 892   2              ScalerDpRx0SetDpcdBitValue(0x00, 0x00, 0x07, ~_BIT7, _BIT7);
+ 893   2      
+ 894   2              // Sink IEEE OUI for DP1.2
+ 895   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x00, _DP_1_2_SINK_RTK_IEEE_OUI_L);
+ 896   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x01, _DP_1_2_SINK_RTK_IEEE_OUI_M);
+ 897   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x02, _DP_1_2_SINK_RTK_IEEE_OUI_H);
+ 898   2      
+ 899   2              // Sink IEEE OUI LSB For DP1.2
+ 900   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x03, _DP_1_2_SINK_RTK_ID_STRING_0);
+ 901   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x04, _DP_1_2_SINK_RTK_ID_STRING_1);
+ 902   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x05, _DP_1_2_SINK_RTK_ID_STRING_2);
+ 903   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x06, _DP_1_2_SINK_RTK_ID_STRING_3);
+ 904   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x07, _DP_1_2_SINK_RTK_ID_STRING_4);
+ 905   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x08, _DP_1_2_SINK_RTK_ID_STRING_5);
+ 906   2      
+ 907   2              // Sink HW/FW Version For DP1.2
+ 908   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x09, _DP_1_2_SINK_RTK_HW_VERSION);
+ 909   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0A, _DP_1_2_SINK_RTK_FW_VERSION_H);
+ 910   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0B, _DP_1_2_SINK_RTK_FW_VERSION_L);
+ 911   2          }
+ 912   1          else
+ 913   1          {
+ 914   2      #if(_DP_SINK_VER11_OUI_SUPPORT == _ON)
+ 915   2              // _BIT7 = 1: IEEE OUI Support
+ 916   2              ScalerDpRx0SetDpcdBitValue(0x00, 0x00, 0x07, ~_BIT7, _BIT7);
+ 917   2      
+ 918   2              // Sink IEEE OUI For DP1.1
+ 919   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x00, _DP_1_1_SINK_RTK_IEEE_OUI_L);
+ 920   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x01, _DP_1_1_SINK_RTK_IEEE_OUI_M);
+ 921   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x02, _DP_1_1_SINK_RTK_IEEE_OUI_H);
+ 922   2      #else
+                      // _BIT7 = 0: IEEE OUI Not Support
+                      ScalerDpRx0SetDpcdBitValue(0x00, 0x00, 0x07, ~_BIT7, 0x00);
+              
+                      // Sink IEEE OUI Not Support
+                      ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x00, 0x00);
+                      ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x01, 0x00);
+                      ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x02, 0x00);
+              #endif
+ 931   2              // Sink IEEE OUI LSB For DP1.1
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 17  
+
+ 932   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x03, _DP_1_1_SINK_RTK_ID_STRING_0);
+ 933   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x04, _DP_1_1_SINK_RTK_ID_STRING_1);
+ 934   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x05, _DP_1_1_SINK_RTK_ID_STRING_2);
+ 935   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x06, _DP_1_1_SINK_RTK_ID_STRING_3);
+ 936   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x07, _DP_1_1_SINK_RTK_ID_STRING_4);
+ 937   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x08, _DP_1_1_SINK_RTK_ID_STRING_5);
+ 938   2      
+ 939   2              // Sink HW/FW Version For DP1.1
+ 940   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x09, _DP_1_1_SINK_RTK_HW_VERSION);
+ 941   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0A, _DP_1_1_SINK_RTK_FW_VERSION_H);
+ 942   2              ScalerDpRx0SetDpcdValue(0x00, 0x04, 0x0B, _DP_1_1_SINK_RTK_FW_VERSION_L);
+ 943   2          }
+ 944   1      }
+ 945          
+ 946          //--------------------------------------------------
+ 947          // Description  : DP Sink Status Setting
+ 948          // Input Value  : Receive Port, Sync Status
+ 949          // Output Value : None
+ 950          //--------------------------------------------------
+ 951          void ScalerDpRx0SinkStatusSet(EnumDpSinkReceivePort enumReceiverPort, EnumDpSinkStatus enumInSync)
+ 952          {
+ 953   1          if(enumInSync == _DP_SINK_IN_SYNC)
+ 954   1          {
+ 955   2              if(enumReceiverPort == _DP_SINK_REVEICE_PORT0)
+ 956   2              {
+ 957   3                  // Set Receive Port 0 in Sync
+ 958   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x05, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x05) | _BIT0));
+ 959   3              }
+ 960   2              else if(enumReceiverPort == _DP_SINK_REVEICE_PORT1)
+ 961   2              {
+ 962   3                  // Set Receive Port 1 in Sync
+ 963   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x05, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x05) | _BIT1));
+ 964   3              }
+ 965   2          }
+ 966   1          else
+ 967   1          {
+ 968   2              if(enumReceiverPort == _DP_SINK_REVEICE_PORT0)
+ 969   2              {
+ 970   3                  // Set Receive Port 0 Out of Sync
+ 971   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x05, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x05) & ~_BIT0))
+             -;
+ 972   3              }
+ 973   2              else if(enumReceiverPort == _DP_SINK_REVEICE_PORT1)
+ 974   2              {
+ 975   3                  // Set Receive Port 1 Out of Sync
+ 976   3                  ScalerDpRx0SetDpcdValue(0x00, 0x02, 0x05, (ScalerDpRx0GetDpcdInfo(0x00, 0x02, 0x05) & ~_BIT1))
+             -;
+ 977   3              }
+ 978   2          }
+ 979   1      }
+ 980          
+ 981          //--------------------------------------------------
+ 982          // Description  : Dp HDCP DPCD capability Switch
+ 983          // Input Value  : _ENABLE or _DISABLE
+ 984          // Output Value : None
+ 985          //--------------------------------------------------
+ 986          void ScalerDpRx0ChangeHdcpDpcdCapability(bit bEn)
+ 987          {
+ 988   1          if(bEn == _ENABLE)
+ 989   1          {
+ 990   2              // Clear flag for write 68xxx int
+ 991   2              ScalerSetBit(PB7_DA_AUX_FIFO_RST, ~_BIT1, _BIT1);
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 18  
+
+ 992   2      
+ 993   2              // Enable Write 68xxx int
+ 994   2              ScalerSetBit(PB7_DA_AUX_FIFO_RST, ~_BIT2, _BIT2);
+ 995   2      
+ 996   2      #if((_DP_TX_SUPPORT == _ON) && (_D0_DP_MST_PORT_SUPPORT == _ON))
+                      // Clear flag for Write AKSV int
+                      ScalerSetBit(PB7_A5_AUX_RESERVE5, ~(_BIT2 | _BIT1 | _BIT0), _BIT2);
+              
+                      // Enable Write AKSV int
+                      ScalerSetBit(PB7_A5_AUX_RESERVE5, ~_BIT6, _BIT6);
+              
+              #if(_DP_HDCP14_REPEATER_BIT_DISABLE_FOR_TX_CLONE_OFF == _ON)
+                      // Enable Hdcp Repeater, _BIT1: Repeater,  _BIT0: HDCP Capable
+                      ScalerDpRx0SetDpcdBitValue(0x06, 0x80, 0x28, ~(_BIT1 | _BIT0), (((BYTE)GET_DP_RX0_HDCP14_REPEATER_
+             -SUPPORT() << 1) | _BIT0));
+              #else
+                      // Enable HDCP and repeater support
+                      ScalerDpRx0SetDpcdValue(0x06, 0x80, 0x28, 0x03);
+              #endif
+              #else
+1011   2              // Enable HDCP support
+1012   2              ScalerDpRx0SetDpcdValue(0x06, 0x80, 0x28, 0x01);
+1013   2      #endif
+1014   2      
+1015   2      #if((_EIZO_CUSTOMIZED_VALUE_OF_DPCD_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+                      if(ScalerDpRx0GetDpcdInfo(0x00, 0x00, 0x00) > _DP_VERSION_1_1)
+                      {
+                          ScalerDpRx0SetDpcdValue(0x06, 0x80, 0x28, 0x03);
+                      }
+              #endif
+1021   2      
+1022   2      #if(_DP_HDCP_2_2_SUPPORT == _ON)
+1023   2              // Enable the HDCP2.2 capability
+1024   2              for(pData[0] = 0; pData[0] < 3; pData[0]++)
+1025   2              {
+1026   3                  ScalerDpRx0SetDpcdValue(0x06, 0x92, (0x1D + pData[0]), g_pucDPRx0Caps[pData[0]]);
+1027   3              }
+1028   2      #endif
+1029   2          }
+1030   1          else
+1031   1          {
+1032   2              // Disable Write 68xxx int
+1033   2              ScalerSetBit(PB7_DA_AUX_FIFO_RST, ~_BIT2, 0x00);
+1034   2      
+1035   2      #if((_DP_TX_SUPPORT == _ON) && (_D0_DP_MST_PORT_SUPPORT == _ON))
+                      // Disable Write AKSV int
+                      ScalerSetBit(PB7_A5_AUX_RESERVE5, ~_BIT6, 0x00);
+              #endif
+1039   2              // Disable HDCP support
+1040   2              ScalerDpRx0SetDpcdValue(0x06, 0x80, 0x28, 0x00);
+1041   2      
+1042   2      #if(_DP_HDCP_2_2_SUPPORT == _ON)
+1043   2              // Disable the HDCP2.2 capability
+1044   2              for(pData[0] = 0; pData[0] < 3; pData[0]++)
+1045   2              {
+1046   3                  ScalerDpRx0SetDpcdValue(0x06, 0x92, (0x1D + pData[0]), 0x00);
+1047   3              }
+1048   2      #endif
+1049   2          }
+1050   1      }
+1051          
+1052          #if(_DP_RX0_ASSR_MODE_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 19  
+
+              //--------------------------------------------------
+              // Description  : DP ASSR Mode On/ Off
+              // Input Value  : _ON/ _OFF
+              // Output Value : None
+              //--------------------------------------------------
+              void ScalerDpRx0ASSRModeSetting(void)
+              {
+                  if((ScalerDpRx0GetDpcdInfo(0x00, 0x01, 0x0A) & _BIT0) == _BIT0)
+                  {
+                      // Scramble seed equal to 0xFFFE
+                      ScalerSetBit(PB_07_SCRAMBLE_CTRL, ~_BIT4, _BIT4);
+                  }
+                  else
+                  {
+                      // Scramble seed equal to 0xFFFF
+                      ScalerSetBit(PB_07_SCRAMBLE_CTRL, ~_BIT4, 0x00);
+                  }
+              }
+              #endif
+1072          
+1073          #if(_DP_FREESYNC_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Check FREESYNC Enable
+              // Input Value  : None
+              // Output Value : _TRUE: FREESYNC change
+              //--------------------------------------------------
+              bit ScalerDpRx0GetFREESYNCStatusChange(void)
+              {
+              #if(_DRR_FREE_RUN_DISPLAY_SUPPORT == _OFF)
+                  if((GET_FREESYNC_ENABLED() == _TRUE) && ((g_stInputTimingData.usVFreq < (_PANEL_FREESYNC_MIN_FRAME_RAT
+             -E - _FRAME_SYNC_MARGIN)) || (g_stInputTimingData.usVFreq > (_PANEL_FREESYNC_MAX_FRAME_RATE + _FRAME_SYNC_MARGIN))))
+                  {
+                      DebugMessageRx0("7.FREESYNC IVF out of panel range", g_stInputTimingData.usVFreq);
+                      return _TRUE;
+                  }
+              #endif
+              
+                  if((bit)(ScalerDpRx0GetDpcdInfo(0x00, 0x01, 0x07) & _BIT7) != GET_FREESYNC_ENABLED())
+                  {
+                      DebugMessageRx0("7.FREESYNC ignore MSA 0 -> 1", 0);
+                      return _TRUE;
+                  }
+              
+                  return _FALSE;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Set DP Freesync Htotal info
+              // Input Value  : Dp Timing Info
+              // Output Value : None
+              //--------------------------------------------------
+              WORD ScalerDpRx0SetFREESYNCMsaForLut(WORD usDpHtotal)
+              {
+                  WORD usTempMeasureHtotal = usDpHtotal;
+                  WORD usTempMsaHtotal = ((((WORD)ScalerGetByte(PB6_08_MSA_HTT_0)) << 8) | ((WORD)ScalerGetByte(PB6_09_M
+             -SA_HTT_1)));
+                  WORD usTempMsaHtotalMargin = ((DWORD)usTempMeasureHtotal * _EDID_ANALYSIS_HTOTAL_MARGIN / 100);
+              
+                  if((usTempMsaHtotal > (usTempMeasureHtotal + usTempMsaHtotalMargin)) || (usTempMsaHtotal < (usTempMeas
+             -ureHtotal - usTempMsaHtotalMargin)))
+                  {
+                      SET_DP_RX0_HTOTAL(usTempMeasureHtotal);
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 20  
+
+              
+                      SET_DP_RX0_HTOTAL_MARGIN(usTempMsaHtotalMargin);
+              
+                      DebugMessageRx0("7. DP Freesync Get MSA Htotal Fail", usTempMsaHtotal);
+                  }
+                  else
+                  {
+                      SET_DP_RX0_HTOTAL(usTempMsaHtotal);
+              
+                      SET_DP_RX0_HTOTAL_MARGIN(1);
+                  }
+              
+                  return GET_DP_RX0_HTOTAL();
+              }
+              
+              #if(_FW_DP_RX_H_PORCH_ENLARGE_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : DP H Porch Enlarge
+              // Input Value  : Vlaue for H Proch Enlarge
+              // Output Value : None
+              //--------------------------------------------------
+              WORD ScalerDpRx0FreesyncHPorchEnlarge(WORD usDpHtotal)
+              {
+                  WORD usTempHtotal = usDpHtotal;
+                  BYTE ucDpHPorchExtend = (GET_DWORD_MUL_DIV(usDpHtotal, 5, 100));
+                  WORD usFifoOffset = 0;
+                  WORD usTempHWidth = ((((WORD)ScalerGetByte(PB6_0C_MSA_HWD_0)) << 8) | ((WORD)ScalerGetByte(PB6_0D_MSA_
+             -HWD_1)));
+              
+                  // DP fifo size = 256 x 96bit or 128 x 96bit
+                  if(GET_COLOR_SPACE() == _COLOR_SPACE_YCBCR422)
+                  {
+                      // FifoOffset = (1/2 * (fifo size) / (2 * depth per color)), color format is YCbCr 4:2:2
+                      usFifoOffset = _HW_DP_RX_VIDEO_FIFO_SIZE / (4 * GET_COLOR_DEPTH());
+                  }
+                  else
+                  {
+                      // FifoOffset = (1/2 * (fifo size) / (3 * depth per color)), color format is RGB or YCbCr 4:4:4 or
+             - others
+                      usFifoOffset = _HW_DP_RX_VIDEO_FIFO_SIZE / (6 * GET_COLOR_DEPTH());
+                  }
+              
+                  // Check if H porch is less than ucDpHPorchExtend
+                  if((usTempHtotal - usTempHWidth) < ucDpHPorchExtend)
+                  {
+                      SET_DP_RX0_H_PORCH_ENLARGE(ucDpHPorchExtend - (usTempHtotal - usTempHWidth));
+              
+                      // if H porch Enlarge is more than 1/4 fifo offset , H porch Enlarge use 1/4 fifo offset
+                      if(GET_DP_RX0_H_PORCH_ENLARGE() > (usFifoOffset / 2))
+                      {
+                          SET_DP_RX0_H_PORCH_ENLARGE(usFifoOffset / 2);
+                      }
+              
+                      usTempHtotal = usTempHtotal + GET_DP_RX0_H_PORCH_ENLARGE();
+                  }
+                  else
+                  {
+                      CLR_DP_RX0_H_PORCH_ENLARGE();
+                  }
+              
+                  if((usTempHtotal % 2) != 0)
+                  {
+C51 COMPILER V9.60.0.0   SCALERDPRX0                                                       10/18/2025 16:24:54 PAGE 21  
+
+                      // Avoid Htotal value is odd.
+                      usTempHtotal += 1;
+                  }
+              
+                  return usTempHtotal;
+              }
+              #endif
+              #endif
+1180          
+1181          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2221    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2      23
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       3
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

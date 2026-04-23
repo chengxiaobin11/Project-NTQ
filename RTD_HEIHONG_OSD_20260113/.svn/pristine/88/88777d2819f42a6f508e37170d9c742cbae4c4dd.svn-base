@@ -1,0 +1,113 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : User_PCB_List.h No.0000
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+//****************************************************************************
+// Definitions by User PCB
+//****************************************************************************
+/*_RL6369_PROJECT                0x1xxx
+ *_RL6410_PROJECT                0x2xxx
+ *_RL6432_PROJECT                0x3xxx //156Pin
+ *_RL6432_PROJECT                0x4xxx //216Pin
+ *_RL6449_PROJECT                0x5xxx
+ *_RL6463_PROJECT                0x6xxx
+ *_RL6492_PROJECT                0x7xxx
+ *pcb ��������:оƬϵ��->Pin����->�忨����->����˿�->����˿�
+ */
+
+/*********************RL6369*********************************************/
+
+
+/*********************RL6410*********************************************/
+#define _RL6410__318PIN__JY29XT_PH_WS_R20_1__2H2DP__eDPVB1LVDS			 0x2001
+
+
+/*********************RL6432 156Pin**************************************/
+
+#define _RL6432__156PIN__JY85TX_VPH_LS_R10_1__1A1H1DP__LVDS              0x3001
+#define _RL6432__156PIN__RTD2556T_1A1D_LS_R30_1__1A1DVI__LVDS            0x3002
+#define _RL6432__156PIN__RTD2556T_1A1H_WS_R60_1__1A1H__LVDS              0x3003
+#define _RL6432__156PIN__JY85QS_UPH_LS_R10_1__1H1DP__LVDS                0x3004
+#define _RL6432__156PIN__JY85QS_UPH_WS_R10_1__1H1DP__LVDS              	 0x3005
+#define _RL6432__156PIN__JY85QR_UPH_LS_R20_1__1H1DP__LVDS                0x3006
+#define _RL6432__156PIN__JY85QR_UPH_WS_R20_1__1H1DP__LVDS                0x3007
+#define _RL6432__156PIN__RTD2556T_1A1H_LS_R70_1__1A1H__LVDS              0x3008
+#define _RL6432__156PIN__SG85QS_1P1H_LS_R10_1__1P1H__LVDS                0x3009
+#define _RL6432_SG_C_156PIN_1A1H_FFC_DPTX_eDP                            0x300A
+
+
+#define _RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS                0x300B
+#define _RL6432__156PIN__HKMRT2556E02__1H1DP__LVDS                0x300C//FF-  0XB0 240MA  0X9C 300MA 0X88 360MA 0X7B 400MA 0X60 480MA 0X58 500MA 
+#define _RL6432__156PIN__HKMRT2556E06__1H1DP__LVDS            	  0x300D
+
+#define _RL6432__156PIN__HKMRT2556E11__1H1DP__LVDS                0x300E
+#define _RL6432__156PIN__HKMRT2556E12__1H1DP1T__LVDS                0x300F
+#define _RL6432__156PIN__HKMRT2557E09__1T1H1DP_EDP                0x3010
+#define _RL6432__156PIN__HKMRT2556E12__2H1DP__LVDS                0x3011
+
+/*********************RL6432 216Pin***************************************/
+#define _RL6432__216PIN__HKCMNT_RTD2785T_A1_0__1A1H1DVI__LVDS            0x4001
+#define _RL6432__216PIN__SG2785T_PHD_LS_R10_2__1D1H1P__LVDS              0x4002
+#define _RL6432__216PIN__SG2785T_PHD_WS_R30_2__1D1H1P__LVDS              0x4003
+#define _RL6432__216PIN__SG2785T_UPH_LWS_R20_1__1H1P1U__LVDS             0x4004
+#define _RL6432__216PIN__RTD2785_VHD_LS_R20_1__1A1H1DVI__LVDS            0x4005
+#define _RL6432__216PIN__RTD2785_VHD_WS_R10_2__1A1H1DVI__LVDS            0x4006
+#define _RL6432__216PIN__RT27X5T_1P2H_LWS_R10_4_LVDS                     0x4007
+/*********************RL6432 216Pin***************************************/
+
+#define _RL6432__216PIN__HK_M_RT2785E01_LVDS                             0x4008
+#define _RL6432__216PIN__HK_M_RT2785E02_1DP2HDMI_LVDS                    0x4009 //FF-  0XB0 250MA  0X9D 310MA 0X8C 350MA  0X89 360MA 0X7C 400MA  0X6A 400MA 0X60 480MA 0X58 500MA 0X48 550MA
+#define _RL6432__216PIN__HK_M_RT2785E02_1DP3HDMI_LVDS                    0x400A
+#define _RL6432__216PIN__HK_M_RT2785E03_1DP3HDMI_eDP                     0x400B
+#define _RL6432__216PIN__HK_M_RT2785E04_1DP2HDMI1USB_LVDS                0x400C
+#define _RL6432__216PIN__HK_M_RT2785E06_1DP2HDMI1USB_LVDS                0x400D
+
+/*********************RL6449*********************************************/
+#define _RL6449__216PIN__JY27X5T_2P2H_WS_R10_3__2DP2H__eDPVB1   		 0x5001
+#define _RL6449__216PIN__JY27X5T_2P2H_LS_R20_1__2DP2H__eDPVB1   		 0x5002
+#define _RL6449__216PIN__JY95U_2P2H_WS_R30_2__2DP2H__eDPVB1   		     0x5003
+#define _RL6449__216PIN__JY95U_2P2H_LS_R30_2__2DP2H__eDPVB1   		     0x5004
+#define _RL6449__216PIN__SG95T_UPH_WS_R10_1__1DP2H__eDPVB1               0x5005
+#define _RL6449__216PIN__SG95T_UPH_LS_R10_1__1DP2H__eDPVB1               0x5006
+#define _RL6449__216PIN__SG95TC_HTP_WS_R10_1_DPTX_eDP                    0x5007
+#define _RL6449__216PIN__YY95UTUT2H_R10_1_1DP2H_TYPEC_USB_DPTX_eDP       0x5008
+/*********************RL6449*********************************************/
+
+#define _RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1   		         0x5009
+#define _RL6449__216PIN__HK_M_RTD2795E02__1T1DP1H__eDPVB1   		     0x500A
+#define _RL6449__216PIN__HKMRT2795E03__1USB1DP2H__eDPVB1   		 	     0x500B
+#define _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1   		 	     0x500C
+
+
+#define _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1   		         0x500D
+#define _RL6449__216PIN__HK_M_RTD2795E06__1T1DP1H__eDPVB1   		     0x500E
+#define _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1   		     0x500F
+#define _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1   		         0x5010
+/*********************RL6463*********************************************/
+#define _RL6463__128PIN__SG2513AR_VH_LS_R10_2__1A1H__LVDS                0x6001
+#define _RL6463__128PIN__SGA_2525AR_PH_R10_1__1P1H__LVDS                 0X6002
+/*********************RL6463*********************************************/
+
+#define _RL6463__128PIN__HKMRT2513E01__1A1H__LVDS                        0X6003
+#define _RL6463__128PIN__HKMRT2525E01__1A2H__LVDS                         0X6004
+#define _RL6463__128PIN__HKMRT2525E03__1A1P1H__LVDS                         0X6005
+#define _RL6463__128PIN__HKMRT2525E04__1A1P1H__LVDS                         0X6006
+
+
+/*********************RL6492*********************************************/
+
+

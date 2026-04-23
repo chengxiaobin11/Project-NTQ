@@ -1,0 +1,762 @@
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RTD2014USERTYPECINTERFACE
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\RTD2014UserTypeCInterface.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Series\RTD2014Function\Code\RTD2014UserTypeCInterface.c LARGE O
+                    -PTIMIZE(9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\
+                    -Kernel\System\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\S
+                    -calerFunction\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\K
+                    -ernel\Scaler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_C
+                    -ommon\Lib\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014
+                    -Osd\Header;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\Non
+                    -e Factory\Header;.\User\RTD Factory\Code) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEN
+                    -D PRINT(.\Output\RL6449_Project\RTD2014UserTypeCInterface.lst) TABS(2) OBJECT(.\Output\RL6449_Project\RTD2014UserTypeCIn
+                    -terface.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          //----------------------------------------------------------------------------------------------------
+  16          // ID Code      : RTD2014UserTypeCInterface.c No.0000
+  17          // Update Note  :
+  18          //----------------------------------------------------------------------------------------------------
+  19          
+  20          #define __USER_TYPECINTERFACE__
+  21          
+  22          #include "UserCommonInclude.h"
+  23          
+  24          #if(_OSD_TYPE == _REALTEK_2014_OSD)
+  25          #if(_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+              
+              //****************************************************************************
+              // DEFINITIONS / MACROS
+              //****************************************************************************
+              //--------------------------------------------------
+              // Definitions of Usb Hub Polling Par
+              //--------------------------------------------------
+              #define _USB_D0_HUB_POLLING_DEVICE_STEP         500 // Unit: ms
+              #define _USB_D1_HUB_POLLING_DEVICE_STEP         500 // Unit: ms
+              #define _USB_D2_HUB_POLLING_DEVICE_STEP         500 // Unit: ms
+              #define _USB_D6_HUB_POLLING_DEVICE_STEP         500 // Unit: ms
+              #define _USB_DX_HUB_POLLING_DEVICE_STEP         500 // Unit: ms
+              
+              //****************************************************************************
+              // STRUCT / TYPE / ENUM DEFINITTIONS
+              //****************************************************************************
+              
+              
+              //****************************************************************************
+              // CODE TABLES
+              //****************************************************************************
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 2   
+
+              
+              
+              //****************************************************************************
+              // FUNCTION DECLARATIONS
+              //****************************************************************************
+              EnumTypeCU3ModeType UserInterfaceTypeCGetOsdU3ModeSelection(BYTE ucInputPort);
+              
+              #if(_TYPE_C_RTS5400_SERIES_PDO_INFO_SUPPORT == _ON)
+              bit UserInterfaceTypeCPDO(BYTE ucInputPort);
+              #endif
+              
+              EnumTypeCPinCfgCapType UserInterfaceTypeCGetPinConfigType(BYTE ucInputPort, EnumTypeCU3ModeType enumU3Mode
+             -Sel);
+              
+              #if(_DP_USB_HUB_SUPPORT == _ON)
+              bit UserInterfaceTypeCUSBSupport(BYTE ucInputPort);
+              bit UserInterfaceTypeCGetUSBSupportStatus(BYTE ucInputPort);
+              void UserInterfaceTypeCOsdHubProc(BYTE ucInputPort, BYTE ucUsbHubInfo);
+              WORD UserInterfaceTypeCUsbHubSetPollingStep(BYTE ucInputPort);
+              bit UserInterfaceTypeCUsbHubU3InfoDectectUserFlow(BYTE ucInputPort);
+              bit UserInterfaceTypeCUsbHubSetSSMode(BYTE ucInputPort, bit bEn);
+              BYTE UserInterfaceTypeCUsbHubDetectSSDevicePlugInfo(BYTE ucInputPort);
+              #endif // End of #if(_DP_USB_HUB_SUPPORT == _ON)
+              
+              #if(_PORT_CONTROLLER_USERDECITION_SUPPORT == _ON)
+              bit UserInterfaceTypeCPortControllerReconnect(BYTE ucInputPort);
+              EnumTypeCUserPortCtrlFailureType UserInterfaceTypeCGetPinCfgType(BYTE ucInputPort, EnumTypeCPinCfgType *pe
+             -numPinCfgtype);
+              #endif // End of #if(_USB_HUB_USERDECITION_SUPPORT == _ON)
+              
+              #if(_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)
+              EnumTypeCEmbPdoSource UserInterfaceTypeCPdoSource(BYTE ucInputPort);
+              WORD UserInterfaceTypeCGetMaxPower(BYTE ucInputPort);
+              EnumTypeCPdoNumber UserInterfaceTypeCGetPdoCount(BYTE ucInputPort);
+              void UserInterfaceTypeCGetPdoInfo(BYTE ucInputPort, BYTE ucPdoIndex, StructTypeCUserSrcPDO *pstTypeCUserPd
+             -o);
+              #endif
+              
+              //****************************************************************************
+              // FUNCTION DEFINITIONS
+              //****************************************************************************
+              //--------------------------------------------------
+              // Description  : Get OSD Type-C U3 Mode Selection
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : Return Type-C U3 Mode Selection
+              //--------------------------------------------------
+              EnumTypeCU3ModeType UserInterfaceTypeCGetOsdU3ModeSelection(BYTE ucInputPort)
+              {
+                  EnumTypeCU3ModeType enumTypeCMode = _TYPE_C_U3_OFF;
+              
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D0_INPUT_PORT:
+                          enumTypeCMode = GET_OSD_D0_TYPEC_U3_MODE();
+                          break;
+              #endif
+              
+              #if(_D1_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D1_INPUT_PORT:
+                          enumTypeCMode = GET_OSD_D1_TYPEC_U3_MODE();
+                          break;
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 3   
+
+              #endif
+              
+              #if(_D2_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D2_INPUT_PORT:
+                          enumTypeCMode = GET_OSD_D2_TYPEC_U3_MODE();
+                          break;
+              #endif
+              
+              
+              #if(_D6_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D6_INPUT_PORT:
+                          enumTypeCMode = GET_OSD_D6_TYPEC_U3_MODE();
+                          break;
+              #endif
+                      default:
+                          break;
+                  }
+              
+                  return enumTypeCMode;
+              }
+              
+              #if(_TYPE_C_RTS5400_SERIES_PDO_INFO_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : 5400 PD current & voltage calculate
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : _TRUE / _FALSE
+              //--------------------------------------------------
+              bit UserInterfaceTypeCPDO(BYTE ucInputPort)
+              {
+                  WORD usTemp = 0;
+              
+                  if(SysTypeCGetAltModeReady(ucInputPort) == _TRUE)
+                  {
+                      if(UserCommonPortControllerGetPDOStatus(ucInputPort) == _FAIL)
+                      {
+                          return _FAIL;
+                      }
+                  }
+                  else
+                  {
+                      return _FALSE;
+                  }
+              
+                  // All Filed Element of g_unSMBusRdDataPool.stRdGetPDOStatus can be used here
+                  // For example:
+                  /*
+                  g_unSMBusRdDataPool.stRdGetPDOStatus.ucByte0
+                  usTemp = (g_unSMBusRdDataPool.stRdGetPDOStatus.ucByte0 + ((g_unSMBusRdDataPool.stRdGetPDOStatus.ucByte
+             -1 & 0x03) << 8)) * 10;
+                  SET_OSDINFO_TYPEC_CURRENT(usTemp);
+              
+                  usTemp = ((((g_unSMBusRdDataPool.stRdGetPDOStatus.ucByte1 & 0xFC) >> 2)+ ((g_unSMBusRdDataPool.stRdGet
+             -PDOStatus.ucByte2 & 0xFF) << 6)) * 50);
+                  SET_OSDINFO_TYPEC_VOLTAGE(usTemp);
+                  */
+              
+                  return _TRUE;
+              }
+              #endif
+              
+              //--------------------------------------------------
+              // Description  : User Decide Sink Pin Config Type
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 4   
+
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : Pin Config Capability Type
+              //--------------------------------------------------
+              EnumTypeCPinCfgCapType UserInterfaceTypeCGetPinConfigType(BYTE ucInputPort, EnumTypeCU3ModeType enumU3Mode
+             -Sel)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D0_INPUT_PORT:
+              
+                          switch(enumU3ModeSel)
+                          {
+                              case _TYPE_C_U3_ON:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CDE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CDE;
+              
+                              default:
+                              case _TYPE_C_U3_OFF:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CE;
+                          }
+              #endif
+              
+              #if(_D1_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D1_INPUT_PORT:
+              
+                          switch(enumU3ModeSel)
+                          {
+                              case _TYPE_C_U3_ON:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CDE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CDE;
+              
+                              default:
+                              case _TYPE_C_U3_OFF:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CE;
+                          }
+              #endif
+              
+              #if(_D6_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D6_INPUT_PORT:
+              
+                          switch(enumU3ModeSel)
+                          {
+                              case _TYPE_C_U3_ON:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CDE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CDE;
+              
+                              default:
+                              case _TYPE_C_U3_OFF:
+              
+                                  // Decide Sink Pin Config Type Capability is _TYPE_C_PIN_ASSIGNMENT_CAP_CE
+                                  return _TYPE_C_PIN_ASSIGNMENT_CAP_CE;
+                          }
+              #endif
+              
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 5   
+
+                      default:
+                          break;
+                  }
+              }
+              
+              #if(_DP_USB_HUB_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : User Decide Wether Support USB Hub
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : _TRUE / _FALSE
+              //--------------------------------------------------
+              bit UserInterfaceTypeCUSBSupport(BYTE ucInputPort)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D0_INPUT_PORT:
+              
+                          if(GET_OSD_D0_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _TRUE;
+                          }
+              #endif
+              
+              #if(_D1_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+              
+                      case _D1_INPUT_PORT:
+              
+                          if(GET_OSD_D1_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _TRUE;
+                          }
+              #endif
+              
+              #if(_D2_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D2_INPUT_PORT:
+              
+                          if(GET_OSD_D2_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _TRUE;
+                          }
+              #endif
+              
+              #if(_D6_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+                      case _D6_INPUT_PORT:
+              
+                          if(GET_OSD_D6_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _TRUE;
+                          }
+              #endif
+              
+                      default:
+                          break;
+                  }
+              
+                  return _FALSE;
+              }
+              
+              //--------------------------------------------------
+              // Description  :
+              // Input Value  : None
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 6   
+
+              // Output Value : None
+              //--------------------------------------------------
+              bit UserInterfaceTypeCGetUSBSupportStatus(BYTE ucInputPort)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_USB_HUB_SUPPORT == _ON)
+                      case _D0_INPUT_PORT:
+              
+                          if(GET_OSD_D0_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _ON;
+                          }
+              
+                          break;
+              #endif
+              
+              #if(_D1_DP_USB_HUB_SUPPORT == _ON)
+              
+                      case _D1_INPUT_PORT:
+              
+                          if(GET_OSD_D1_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _ON;
+                          }
+              
+                          break;
+              
+              #endif
+              
+              #if(_D2_DP_USB_HUB_SUPPORT == _ON)
+                      case _D2_INPUT_PORT:
+              
+                          if(GET_OSD_D2_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _ON;
+                          }
+              
+                          break;
+              
+              #endif
+              
+              #if(_D6_DP_USB_HUB_SUPPORT == _ON)
+                      case _D6_INPUT_PORT:
+                          if(GET_OSD_D6_TYPEC_U3_MODE() == _TYPE_C_U3_ON)
+                          {
+                              return _ON;
+                          }
+              
+                          break;
+              
+              #endif
+              
+                      default:
+                          break;
+                  }
+              
+                  return _OFF;
+              }
+              
+              //--------------------------------------------------
+              // Description  : User decided how many lanes to switch
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 7   
+
+              // Input Value  : ucInputPort --> Input Port
+              //                ucUsbHubInfo:
+              //                _BIT0 : 1 --> Hub Port0 U3 Device Plug In,  0 --> Hub Port0 U3 Device Plug off
+              //                _BIT1 : 1 --> Hub Port1 U3 Device Plug In,  0 --> Hub Port1 U3 Device Plug off
+              //                _BIT2 : 1 --> Hub Port2 U3 Device Plug In,  0 --> Hub Port2 U3 Device Plug off
+              //                _BIT3 : 1 --> Hub Port3 U3 Device Plug In,  0 --> Hub Port3 U3 Device Plug off
+              //                _BIT4 ~ _BIT7 : Useless
+              // Output Value : None
+              //--------------------------------------------------
+              void UserInterfaceTypeCOsdHubProc(BYTE ucInputPort, BYTE ucUsbHubInfo)
+              {
+                  ucUsbHubInfo = ucUsbHubInfo;
+              
+                  switch(ucInputPort)
+                  {
+                      case _D0_INPUT_PORT:
+                          // Here: User Can Use "ucUsbHubInfo" Info to Create Draw Notice U3 Device Menu Event
+                          break;
+              
+                      case _D1_INPUT_PORT:
+                          // Here: User Can Use "ucUsbHubInfo" Info to Create Draw Notice U3 Device Menu Event
+                          break;
+              
+                      case _D6_INPUT_PORT:
+                          // Here: User Can Use "ucUsbHubInfo" Info to Create Draw Notice U3 Device Menu Event
+                          break;
+              
+                      default:
+                          break;
+                  }
+              }
+              
+              //--------------------------------------------------
+              // Description  : User Set Usb Hub Polling SS Device Step
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : Usb Hub Polling Step Par.
+              //--------------------------------------------------
+              WORD UserInterfaceTypeCUsbHubSetPollingStep(BYTE ucInputPort)
+              {
+                  if(ucInputPort == _D0_INPUT_PORT)
+                  {
+                      return _USB_D0_HUB_POLLING_DEVICE_STEP;
+                  }
+                  else if(ucInputPort == _D1_INPUT_PORT)
+                  {
+                      return _USB_D1_HUB_POLLING_DEVICE_STEP;
+                  }
+                  else if(ucInputPort == _D2_INPUT_PORT)
+                  {
+                      return _USB_D2_HUB_POLLING_DEVICE_STEP;
+                  }
+                  else if(ucInputPort == _D6_INPUT_PORT)
+                  {
+                      return _USB_D6_HUB_POLLING_DEVICE_STEP;
+                  }
+                  else
+                  {
+                      return _USB_DX_HUB_POLLING_DEVICE_STEP;
+                  }
+              }
+              
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 8   
+
+              // Description  : Usb Hub RTS5400 Series User Flow Support
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : _TRUE: User Flow, _FALSE: Kernal Flow
+              //--------------------------------------------------
+              bit UserInterfaceTypeCUsbHubU3InfoDectectUserFlow(BYTE ucInputPort)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_USB_HUB_SUPPORT == _ON)
+                      case _D0_INPUT_PORT:
+              
+                          return _FALSE;
+              
+                          break;
+              #endif
+              
+              #if(_D1_DP_USB_HUB_SUPPORT == _ON)
+              
+                      case _D1_INPUT_PORT:
+              
+                          return _FALSE;
+              
+                          break;
+              #endif
+              
+              #if(_D6_DP_USB_HUB_SUPPORT == _ON)
+                      case _D6_INPUT_PORT:
+              
+                          return _FALSE;
+              
+                          break;
+              #endif
+              
+                      default:
+                          break;
+                  }
+              
+                  return _FALSE;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Set Usb Hub into SS Mode
+              // Input Value  : None
+              // Output Value : Operation result (Fail/Success)
+              //--------------------------------------------------
+              bit UserInterfaceTypeCUsbHubSetSSMode(BYTE ucInputPort, bit bEn)
+              {
+                  ucInputPort = ucInputPort;
+                  bEn = bEn;
+              
+                  return _TRUE;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Detect Usb Hub SS Device Plug In
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : Return SS Device Info.
+              //                _BIT0 : 1 --> Hub Port0 U3 Device Plug In,  0 --> Hub Port0 U3 Device Plug off
+              //                _BIT1 : 1 --> Hub Port1 U3 Device Plug In,  0 --> Hub Port1 U3 Device Plug off
+              //                _BIT2 : 1 --> Hub Port2 U3 Device Plug In,  0 --> Hub Port2 U3 Device Plug off
+              //                _BIT3 : 1 --> Hub Port3 U3 Device Plug In,  0 --> Hub Port3 U3 Device Plug off
+              //                _BIT4 ~ _BIT7 : Useless
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 9   
+
+              //--------------------------------------------------
+              BYTE UserInterfaceTypeCUsbHubDetectSSDevicePlugInfo(BYTE ucInputPort)
+              {
+                  ucInputPort = ucInputPort;
+              
+                  return 0x00;
+              }
+              #endif // End of #if(_DP_USB_HUB_SUPPORT == _ON)
+              
+              #if(_PORT_CONTROLLER_USERDECITION_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Port Controller Reconnect
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : return _TRUE / __FALSE
+              //--------------------------------------------------
+              bit UserInterfaceTypeCPortControllerReconnect(BYTE ucInputPort)
+              {
+                  ucInputPort = ucInputPort;
+              
+                  return _TRUE;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Port Controller Config Type
+              // Input Value  : ucInputPort --> Input Port
+              //                penumPinCfgtype --> Pin Assignment Type
+              // Output Value : return failure type
+              //--------------------------------------------------
+              EnumTypeCUserPortCtrlFailureType UserInterfaceTypeCGetPinCfgType(BYTE ucInputPort, EnumTypeCPinCfgType *pe
+             -numPinCfgtype)
+              {
+                  ucInputPort = ucInputPort; // Avoiding Warning
+                  *penumPinCfgtype = _TYPE_C_PIN_ASSIGNMENT_C;
+              
+                  // Example:
+                  /*
+                      if(UserGetPortcontrollerConfigPinAssignmentTypeFunc(penumPinCfgtype) == _TRUE)
+                      {
+                          return _TYPE_C_USER_PORT_CTRL_COMMUNICATION_SUCCESS;
+                      }
+                      else
+                      {
+                          return _TYPE_C_USER_PORT_CTRL_COMMUNICATION_FAIL;
+                      }
+                  */
+              
+                  return _TYPE_C_USER_PORT_CTRL_COMMUNICATION_FAIL;
+              }
+              #endif // End of #if(_PORT_CONTROLLER_USERDECITION_SUPPORT == _ON)
+              
+              #if(_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Embedded Port Controller PDO Source
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : return PDO from USER / KERNEL
+              //--------------------------------------------------
+              EnumTypeCEmbPdoSource UserInterfaceTypeCPdoSource(BYTE ucInputPort)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+                      case _D0_INPUT_PORT:
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 10  
+
+              
+                          // Source Capability Defined By User or Kernel Default
+                          return _TYPE_C_PDO_FROM_USER;
+              
+                          break;
+              #endif
+              
+                      default:
+              
+                          return _TYPE_C_PDO_FROM_KERNEL;
+              
+                          break;
+                  }
+              }
+              
+              //--------------------------------------------------
+              // Description  : Embedded Port Controller Max Power
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : return Max Power (Unit = 0.1W)
+              //--------------------------------------------------
+              WORD UserInterfaceTypeCGetMaxPower(BYTE ucInputPort)
+              {
+                  // Max Power Range From 0 ~ 100W
+                  WORD usEmbTypeCMaxPower = 0;
+              
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+                      case _D0_INPUT_PORT:
+              
+                          // Default Max Power = 270 * 0.1 = 27W
+                          usEmbTypeCMaxPower = 270;
+              
+                          break;
+              #endif
+              
+                      default:
+              
+                          // Default Max Power = 270 * 0.1 = 27W
+                          usEmbTypeCMaxPower = 270;
+              
+                          break;
+                  }
+              
+                  return usEmbTypeCMaxPower;
+              }
+              
+              //--------------------------------------------------
+              // Description  : Embedded Port Controller PDO Count
+              // Input Value  : ucInputPort --> Input Port
+              // Output Value : return Number of PDOs
+              //--------------------------------------------------
+              EnumTypeCPdoNumber UserInterfaceTypeCGetPdoCount(BYTE ucInputPort)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+                      case _D0_INPUT_PORT:
+              
+                          // Number of PDO Count, No PPS Default = 2, With PPS Default = 3
+              #if(_TYPE_C_PD3_PPS_SUPPORT == _ON)
+                          return _TYPE_C_PDO_NUM_3;
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 11  
+
+              #else
+                          return _TYPE_C_PDO_NUM_2;
+              #endif
+              
+                          break;
+              #endif
+              
+                      default:
+              
+                          return _TYPE_C_PDO_NUM_2;
+              
+                          break;
+                  }
+              }
+              
+              //--------------------------------------------------
+              // Description  : Embedded Port Controller PDO Info
+              // Input Value  : ucInputPort --> Input Port
+              //                ucPdoIndex --> PDO Index
+              //                *pstTypeCUserPdo --> PDO Info
+              // Output Value : None
+              //--------------------------------------------------
+              void UserInterfaceTypeCGetPdoInfo(BYTE ucInputPort, BYTE ucPdoIndex, StructTypeCUserSrcPDO *pstTypeCUserPd
+             -o)
+              {
+                  switch(ucInputPort)
+                  {
+              #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+                      case _D0_INPUT_PORT:
+              
+                          switch(ucPdoIndex)
+                          {
+                              // =============================== WARNING ===============================
+                              // 1st PDO Must Be Fix Supply PDO @ 5V
+                              // ALL PDO Must Be In Voltage Order : Lowest To Highest
+                              // Fix Supply PDO "MUST" Before PPS PDO
+                              // =======================================================================
+              
+                              case _TYPE_C_PDO_NUM_1:
+              
+                                  // ----------------------- 1st PDO ------------------------
+                                  // PDO Type = Fix Supply PDO, Must Be 5V (Max = 5A)
+                                  // Max Voltage (Unit = 100mV) : 50 * 100mV = 5V
+                                  // Max Current (Unit = 50mA)  : 60 *  50mA = 3A
+                                  // --------------------------------------------------------
+                                  pstTypeCUserPdo->enumPdoType = _PD_FIX_SUPPLY_PDO;
+                                  pstTypeCUserPdo->ucMaxVoltage = 50;
+                                  pstTypeCUserPdo->ucMaxCurrent = 60;
+              
+                                  break;
+              
+                              case _TYPE_C_PDO_NUM_2:
+              
+                                  // ----------------------- 2nd PDO ------------------------
+                                  // PDO Type = Fix Supply PDO (Max = 20V / 5A)
+                                  // Max Voltage (Unit = 100mV) : 90 * 100mV = 9V
+                                  // Max Current (Unit = 50mA)  : 60 *  50mA = 3A
+                                  // --------------------------------------------------------
+                                  pstTypeCUserPdo->enumPdoType = _PD_FIX_SUPPLY_PDO;
+                                  pstTypeCUserPdo->ucMaxVoltage = 90;
+                                  pstTypeCUserPdo->ucMaxCurrent = 60;
+              
+C51 COMPILER V9.60.0.0   RTD2014USERTYPECINTERFACE                                         04/23/2026 13:55:14 PAGE 12  
+
+                                  break;
+              
+                              case _TYPE_C_PDO_NUM_3:
+              
+              #if(_TYPE_C_PD3_PPS_SUPPORT == _ON)
+                                  // -------------- 3rd PDO (PPS PDO Example) ---------------
+                                  // PDO Type = Fix Supply PDO (Max = 20V / 5A)
+                                  // Spec 9V Prog PDO = 3~11V @ 3A
+                                  // Min Voltage (Unit = 100mV) : 30 * 100mV = 3V
+                                  // Max Voltage (Unit = 100mV) : 90 * 100mV = 9V
+                                  // Max Current (Unit = 50mA)  : 60 *  50mA = 3A
+                                  // --------------------------------------------------------
+                                  pstTypeCUserPdo->enumPdoType = _PD_3_PROGRAMMABLE_PDO;
+                                  pstTypeCUserPdo->ucMinVoltage = 30;
+                                  pstTypeCUserPdo->ucMaxVoltage = 90;
+                                  pstTypeCUserPdo->ucMaxCurrent = 60;
+              #endif
+                                  break;
+              
+                              case _TYPE_C_PDO_NUM_4:
+                              case _TYPE_C_PDO_NUM_5:
+                              case _TYPE_C_PDO_NUM_6:
+                              case _TYPE_C_PDO_NUM_7:
+                              default:
+              
+                                  break;
+                          }
+              
+              
+                          break;
+              #endif  // End of #if(_D0_DP_TYPE_C_PORT_CTRL_TYPE == _PORT_CONTROLLER_EMBEDDED)
+              
+                      default:
+              
+                          break;
+                  }
+              }
+              
+              #endif // End of #if(_PORT_CONTROLLER_EMBEDDED_SUPPORT == _ON)
+              
+              #endif // End of #if(_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+ 700          #endif // End of #if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

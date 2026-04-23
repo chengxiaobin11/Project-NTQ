@@ -1,0 +1,346 @@
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RTD2014OSDPALETTE
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\RTD2014OsdPalette.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Series\RTD2014Osd\Code\RTD2014OsdPalette.c LARGE OPTIMIZE(9,SPE
+                    -ED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System
+                    -\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction
+                    -\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\
+                    -RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Hea
+                    -der;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\
+                    -User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Hea
+                    -der;.\User\RTD Factory\Code) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Out
+                    -put\RL6449_Project\RTD2014OsdPalette.lst) TABS(2) OBJECT(.\Output\RL6449_Project\RTD2014OsdPalette.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          //----------------------------------------------------------------------------------------------------
+  16          // ID Code      : RTD2014OsdPalette.c No.0000
+  17          // Update Note  :
+  18          //----------------------------------------------------------------------------------------------------
+  19          
+  20          #define __RTD_OSDPALETTE__
+  21          
+  22          #include "UserCommonInclude.h"
+  23          
+  24          #if(_OSD_TYPE == _REALTEK_2014_OSD)
+  25          
+  26          
+  27          
+  28          //****************************************************************************
+  29          // DEFINITIONS / MACROS
+  30          //****************************************************************************
+  31          #define _RGB_BLACK                                0,   0,   0
+  32          #define _RGB_WHITE                              255, 255, 255
+  33          #define _RGB_RED                                255,   0,   0
+  34          #define _RGB_GREEN                                0, 255,   0//19,  119,  19
+  35          #define _RGB_BLUE                                22,  14, 245// 65,   150, 210//0,    68, 166
+  36          #define _RGB_YELLOW                             255, 255,   0
+  37          #define _RGB_GRAY                               210,210,210//96,  96,   96
+  38          
+  39          #if(_DEF_OSD_LOGO == _DEF_OSD_LOGO_CROSSOVER) || (_DEF_OSD_LOGO == _DEF_OSD_LOGO_OVERPOWER)||(_DEF_OSD_LOG
+             -O == _DEF_OSD_LOGO_CROSSOVER2)
+              #define _RGB_BLUE_120                          255, 255, 255
+              #else
+  42          #define _RGB_BLUE_120                          0,   30,  120
+  43          #endif
+  44          
+  45          #define _RGB_ORANGE                             255, 196,   0
+  46          #define _RGB_LIGHTBLUE                          170, 205, 235// 208, 208, 208
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 2   
+
+  47          #define _RGB_DARKBLUE_1                            16, 16, 16
+  48          #define _RGB_DARKBLUE                            60,  90, 150
+  49          #define _RGB_GRAY0                                120,  120,  120
+  50          
+  51          #define _RGB_SELECTBOTTOM                  60,  90, 150//58,  70,  80
+  52          #define _RGB_PINK                               255, 128, 255
+  53          
+  54          #define _RGB_ORANGE_H                           250, 180,  40
+  55          #define _RGB_ORANGE_DARK                        224, 120,   7
+  56          
+  57          #if 1//
+  58          #define _RGB_LIGHT_GRAY                           141, 141, 141
+  59          #else
+              #define _RGB_LIGHT_GRAY                           210, 210, 210
+              #endif
+  62          
+  63          
+  64          #define _LOGO_BLACK                             0,     0,   0
+  65          #define _LOGO_WHITE                             255, 255, 255
+  66          
+  67          #define _LOGO_RED                               255,   0,   0
+  68          #define _LOGO_GREEN                             0,   255,   0
+  69          #define _LOGO_BLUE                              0,     0, 255
+  70          #if(_LOGO_TYPE == _LOGO_FUEGO)
+              #define _LOGO_YELLOW                           231, 49, 16
+              #else
+  73          #define _LOGO_YELLOW                            255, 255,   0
+  74          #endif
+  75          #if(_LOGO_TYPE == _LOGO_FUEGO)
+              #define _LOGO_GRAY                              36, 41, 38
+              #else
+  78          #define _LOGO_GRAY                              96,   96,  96
+  79          #endif
+  80          #define _LOGO_DARKBLUE                          64,   64, 255
+  81          #define _LOGO_LIGHTBLUE                         128, 128, 255
+  82          #define _LOGO_SELECTBOTTOM                      58,   70,  80
+  83          #define _LOGO_PINK                              255, 128, 255
+  84          #if(_LOGO_TYPE == _LOGO_SKY)
+              #define _LOGO_BLUE1               0,99,177
+              #elif(_LOGO_TYPE == _LOGO_AMOI_XIAXIN)
+              #define _LOGO_BLUE1               45,123,210
+              #elif(_LOGO_TYPE == _LOGO_MUCAI)
+              #define _LOGO_BLUE1               0,0,0
+              #elif(_LOGO_TYPE == _LOGO_CHUANSHENG)
+              #define _LOGO_BLUE1                             0,   0,  1
+              #elif(_LOGO_TYPE == _LOGO_GUANJIE)
+              #define _LOGO_BLUE1                             0,   0,  0
+              #elif(_LOGO_TYPE == _LOGO_XGAMING)
+              #define _LOGO_BLUE1                          235, 251, 251
+              #elif(_LOGO_TYPE == _LOGO_ARZOPA)
+              #define _LOGO_BLUE1                         0, 140, 196
+              #elif(_LOGO_TYPE == _LOGO_ASTEX)
+              #define _LOGO_BLUE1                         0, 140, 196
+              #elif(_LOGO_TYPE == _LOGO_GENLOVE)
+              #define _LOGO_BLUE1                             16,122,222 
+              
+              #else
+ 104          #define _LOGO_BLUE1               1,123,188
+ 105          #endif
+ 106          #define _LOGO_GREEN1                             92,191,20
+ 107          
+ 108          #define _LOGO_ORANGE_H                          250, 180,  40
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 3   
+
+ 109          #if(_LOGO_TYPE == _LOGO_SUNWIND_QHD)
+              #define _LOGO_ORANGE_L                          243, 112,   32
+              #elif(_LOGO_TYPE == _LOGO_XGAMING)
+              #define _LOGO_ORANGE_L                           0, 160, 233
+              #else
+ 114          #define _LOGO_ORANGE_L                          235, 160,   5
+ 115          #endif
+ 116          
+ 117          
+ 118          
+ 119          #if(_LOGO_TYPE == _LOGO_AMOI_XIAXIN)
+              #define _LOGO_BLUE_1                             0,0,255
+              #elif(_LOGO_TYPE == _LOGO_SOOANN)
+              #define _LOGO_BLUE_1                0,149,222
+              #else
+ 124          #define _LOGO_BLUE_1                             10,     46, 140
+ 125          #endif
+ 126          
+ 127          #define _RGB_BLUE1            100,210,210
+ 128          #define _RGB_LIGHTBLACK1       130,130,130
+ 129          
+ 130          //****************************************************************************
+ 131          // STRUCT / TYPE / ENUM DEFINITTIONS
+ 132          //****************************************************************************
+ 133          
+ 134          
+ 135          //****************************************************************************
+ 136          // CODE TABLES
+ 137          //****************************************************************************
+ 138          #if(_LOGO_TYPE == _LOGO_ARZOPA_4BIT)
+              BYTE code tPALETTE_RTD_LOGO[] =
+              {
+                  _LOGO_BLACK,
+                  _LOGO_WHITE,
+                  _LOGO_BLACK,
+                  _LOGO_BLACK,
+              
+                _LOGO_BLACK,
+                  _LOGO_BLACK,
+                  _LOGO_BLACK,
+                  _LOGO_BLACK,
+              
+                _LOGO_BLACK,
+                _LOGO_BLACK,
+                _LOGO_BLACK,
+                _LOGO_BLACK,
+              
+                _LOGO_BLACK,
+                _LOGO_BLACK,
+                _LOGO_BLACK,
+                _LOGO_BLACK,  // 15
+              
+                0,0,0,
+                0,175,203,  // 5  //128,0,0,
+                0,180,204,  // 4  //0,128,0,
+                0,185,204,  // 3  //128,128,0,  // 3
+                
+                0,197,205,  // 2  //0,0,128,
+                0,202,206,  // 1  //128,0,128,
+                0,154,198,  // 7  //0,128,128,
+                0,147,197,  // 8  //128,128,128,  // 7
+                
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 4   
+
+                0,164,201,  // 6  //192,192,192,
+                0,141,196,  // 9  //255,0,0,
+                0,132,194,  // 10 //0,255,0,
+                0,123,192,  // 11 //255,255,0,    // 11
+                
+                0,115,190,  // 12 //0,0,255,
+                0,108,189,  // 13 //255,0,255,
+                0,100,187,  // 14 //0,255,255,
+                0,90,185, // 15 //255,255,255,  // 15
+              
+                0,0,0,
+                0,175,203,  // 5  //128,0,0,
+                0,197,204,  // 4  //0,128,0,
+                0,187,205,  // 3  //128,128,0,  // 3
+                
+                0,76,183, // 17
+                0,80,183, // 16
+                0,154,198,  // 7  //0,128,128,
+                0,147,197,  // 8  //128,128,128,  // 7
+                
+                0,164,201,  // 6  //192,192,192,
+                0,141,196,  // 9  //255,0,0,
+                0,132,194,  // 10 //0,255,0,
+                0,123,192,  // 11 //255,255,0,    // 11
+                
+                0,115,190,  // 12 //0,0,255,
+                0,108,189,  // 13 //255,0,255,
+                0,100,187,  // 14 //0,255,255,
+                0,90,185, // 15 //255,255,255,  // 15
+                  
+              };
+              
+              #else
+ 204          BYTE code tPALETTE_RTD_LOGO[] =
+ 205          {
+ 206              _LOGO_BLACK,
+ 207              _LOGO_WHITE,
+ 208          #if(_LOGO_TYPE == _LOGO_TIEMU)
+                _RGB_BLUE1,
+              #else
+ 211            _LOGO_RED,
+ 212          #endif
+ 213              _LOGO_GREEN,
+ 214              _LOGO_BLUE,
+ 215              _LOGO_YELLOW,
+ 216              _LOGO_GRAY,
+ 217              _LOGO_DARKBLUE,
+ 218              
+ 219              _LOGO_LIGHTBLUE,
+ 220              _LOGO_SELECTBOTTOM,
+ 221              _LOGO_PINK,
+ 222              _LOGO_RED,
+ 223              _LOGO_GREEN1,
+ 224              _LOGO_ORANGE_L,
+ 225              _RGB_LIGHTBLACK1,
+ 226              _LOGO_BLUE1,
+ 227          };
+ 228          #endif
+ 229          
+ 230          
+ 231          
+ 232          BYTE code tPALETTE_MAIN_MENU[] =
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 5   
+
+ 233          {
+ 234          
+ 235              _RGB_BLACK,
+ 236              _RGB_WHITE,
+ 237              _RGB_RED,
+ 238              _RGB_GREEN,
+ 239              _RGB_BLUE,
+ 240              _RGB_YELLOW,
+ 241              _RGB_LIGHTBLUE,
+ 242              _RGB_DARKBLUE,
+ 243              _RGB_LIGHTBLUE,
+ 244              _RGB_GRAY0,
+ 245              _RGB_BLACK,
+ 246              _RGB_DARKBLUE_1,
+ 247          //    _RGB_DARKBLUE,
+ 248              _RGB_BLUE,  
+ 249              _RGB_LIGHT_GRAY,
+ 250              _RGB_BLUE_120,
+ 251              _RGB_SELECTBOTTOM,    
+ 252          
+ 253          };
+ 254          
+ 255          //****************************************************************************
+ 256          // FUNCTION DECLARATIONS
+ 257          //****************************************************************************
+ 258          void OsdPaletteLoadPigment(BYTE ucPaletteIndex, BYTE *pucColorPaletteArray, BYTE ucColorPaletteCount);
+ 259          void OsdPaletteSelectPalette(BYTE ucValue);
+ 260          
+ 261          //****************************************************************************
+ 262          // FUNCTION DEFINITIONS
+ 263          //****************************************************************************
+ 264          //--------------------------------------------------
+ 265          // Description  :
+ 266          // Input Value  : None
+ 267          // Output Value : None
+ 268          //--------------------------------------------------
+ 269          void OsdPaletteLoadPigment(BYTE ucPaletteIndex, BYTE *pucColorPaletteArray, BYTE ucColorPaletteCount)
+ 270          {
+ 271   1          BYTE ucAddr = ucPaletteIndex * 16;
+ 272   1          BYTE ucI = 0;
+ 273   1      
+ 274   1          for(ucI = 0; ucI < ucColorPaletteCount; ucI++)
+ 275   1          {
+ 276   2              ScalerOsdSetColorPalette(ucAddr + ucI, *(pucColorPaletteArray + (ucI * 3)), *(pucColorPaletteArray
+             - + (ucI * 3) + 1), *(pucColorPaletteArray + (ucI * 3) + 2));
+ 277   2          }
+ 278   1      }
+ 279          
+ 280          
+ 281          //--------------------------------------------------
+ 282          // Description  :
+ 283          // Input Value  : None
+ 284          // Output Value : None
+ 285          //--------------------------------------------------
+ 286          void OsdPaletteSelectPalette(BYTE ucValue)
+ 287          {
+ 288   1          switch(ucValue)
+ 289   1          {
+ 290   2              case _PALETTE_RTD_LOGO:
+ 291   2                  OsdPaletteLoadPigment(_PALETTE_INDEX0, tPALETTE_RTD_LOGO, sizeof(tPALETTE_RTD_LOGO)/3);
+ 292   2                  break;
+ 293   2      
+C51 COMPILER V9.60.0.0   RTD2014OSDPALETTE                                                 04/23/2026 13:55:22 PAGE 6   
+
+ 294   2              case _PALETTE_MAIN_MENU:
+ 295   2                  OsdPaletteLoadPigment(_PALETTE_INDEX0, tPALETTE_MAIN_MENU, 16);
+ 296   2                  break;
+ 297   2      
+ 298   2              default:
+ 299   2                  break;
+ 300   2          }
+ 301   1      }
+ 302          
+ 303          #endif // End of #if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    155    ----
+   CONSTANT SIZE    =     96    ----
+   XDATA SIZE       =   ----       7
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

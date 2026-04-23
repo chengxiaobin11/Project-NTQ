@@ -1,0 +1,6398 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : RTD2014UserInterface.c No.0000
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+
+#define __USER_INTERFACE__
+
+#include "UserCommonInclude.h"
+#include "RTD2014UserHDMIEdid.h"
+#include "RTD2014UserDPEdid.h"
+
+#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+#if(_MPRT_SUPPORT == _ON)
+WORD g_MPRTValue;
+#endif
+
+
+/********************************For Dcr*************************************/
+	code char BacklightFlag[] = {"This is BacklightDef Flag!"};
+
+	BYTE code BacklightDefault[3] = 
+	{
+		_BACKLIGHT_MIN, 			
+		_BACKLIGHT_DEF_PWM, 					   
+		_BACKLIGHT_MAX, 
+	};
+	
+	BYTE code MPRTBacklightDefault[3] = 
+	{
+		_MPRT_PWM_MIN, 			
+		_MPRT_PWM_DEF, 					   
+		_MPRT_PWM_MAX, 
+	};
+
+#if(_ADJ_BACKLIGHT_BY_TABLE == _ON)
+	//For DCR :
+    #if(_PANEL_TYPE == _AUO_P490QAR010_VBY_UHD_60HZ)
+    WORD code tBacklight_Table[101] =
+    {   
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 
+        31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 
+        51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 
+        61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 
+        71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 
+        81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 
+        91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 
+        101
+    };
+    #else
+	WORD code tBacklight_Table[101] =
+	{
+		4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
+        16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 
+        49, 55, 61, 67, 73, 79, 85, 91, 97, 103, 
+        113, 123, 133, 143, 153, 163, 173, 183, 193, 203, 
+        218, 233, 248, 263, 278, 293, 308, 323, 338, 353, 
+        374, 395, 416, 437, 458, 479, 500, 521, 542, 563, 
+        591, 619, 647, 675, 703, 731, 759, 787, 815, 843, 
+        874, 905, 936, 967, 998, 1029, 1060, 1091, 1122, 1153, 
+        1187, 1221, 1255, 1289, 1323, 1357, 1391, 1425, 1459, 1493, 
+        1531, 1569, 1607, 1645, 1683, 1721, 1759, 1797, 1835, 1873, 
+        1910
+	};
+    #endif
+#else
+
+#define tBacklight_Table_Value(x)   ( (x<_DEF_BACKLIGHT)?((DWORD)(BacklightDefault[1]-BacklightDefault[0])*x/_DEF_BACKLIGHT+BacklightDefault[0]):((DWORD)(BacklightDefault[2]-BacklightDefault[1])*(x-_DEF_BACKLIGHT)/(100-_DEF_BACKLIGHT)+BacklightDefault[1]))
+#define tBacklight_Table_Value_MPRT(x)   ( (x<_DEF_BACKLIGHT)?((DWORD)(MPRTBacklightDefault[1]-MPRTBacklightDefault[0])*x/_DEF_BACKLIGHT+MPRTBacklightDefault[0]):((DWORD)(MPRTBacklightDefault[2]-MPRTBacklightDefault[1])*(x-_DEF_BACKLIGHT)/(100-_DEF_BACKLIGHT)+MPRTBacklightDefault[1]))
+
+#endif//#if(_ADJ_BACKLIGHT_BY_TABLE==_ON)
+
+//****************************************************************************
+// DEFINITIONS / MACROS
+//****************************************************************************
+#define _USER_SHOW_LOGO_STEP                    18 // frames
+
+#define _EDID_VENDOR_SPEC_0                     160
+#define _EDID_CHKSUM                            255
+
+//-------------------------------------------------------
+//  Definitions of RCP Key Codes
+//-------------------------------------------------------
+#define _MHL_RCP_VOLUME_UP                      0x41
+#define _MHL_RCP_VOLUME_DOWN                    0x42
+#define _MHL_RCP_MUTE                           0x43
+#define _MHL_RCP_MUTE_FUNCTION                  0x65
+#define _MHL_RCP_RESTORE_VOLUME_FUNCTION        0x66
+
+//****************************************************************************
+// STRUCT / TYPE / ENUM DEFINITTIONS
+//****************************************************************************
+#if(_FREESYNC_SUPPORT == _ON)
+#define _USER_DRR_CLK_MARGIN                    (1)
+#define _USER_DRR_HTOTAL_MARGIN                 (2)
+
+#if(_DP_FREESYNC_SUPPORT == _ON)
+#define GET_DP_FREESYNC_IHWIDTH(x)              (tDrrFreeSyncDpTimingInfo[(x)].usIHwidth)
+#define GET_DP_FREESYNC_IVHEIGHT(x)             (tDrrFreeSyncDpTimingInfo[(x)].usIVheight)
+#define GET_DP_FREESYNC_IHTOTAL(x)              (tDrrFreeSyncDpTimingInfo[(x)].usIHtotal)
+#define GET_DP_FREESYNC_ICLK(x)                 (tDrrFreeSyncDpTimingInfo[(x)].usPixelClk)
+#define GET_DP_FREESYNC_IVFREQ(x)               (tDrrFreeSyncDpTimingInfo[(x)].usIVfreq)
+#endif
+
+#if(_HDMI_FREESYNC_SUPPORT == _ON)
+#define GET_HDMI_FREESYNC_IHWIDTH(x)            (tDrrFreeSyncHdmiTimingInfo[(x)].usIHwidth)
+#define GET_HDMI_FREESYNC_IVHEIGHT(x)           (tDrrFreeSyncHdmiTimingInfo[(x)].usIVheight)
+#define GET_HDMI_FREESYNC_IHTOTAL(x)            (tDrrFreeSyncHdmiTimingInfo[(x)].usIHtotal)
+#define GET_HDMI_FREESYNC_ICLK(x)               (tDrrFreeSyncHdmiTimingInfo[(x)].usPixelClk)
+#define GET_HDMI_FREESYNC_IVFREQ(x)             (tDrrFreeSyncHdmiTimingInfo[(x)].usIVfreq)
+#endif
+#endif
+
+#if(_DP_FREESYNC_SUPPORT == _ON)
+StructDrrFreeSyncTimingInfo code tDrrFreeSyncDpTimingInfo[] =
+{
+    // Hwidth, Vheight, Htotal, Pixel clk (0.1M), Vfreq (0.1Hz)
+    {1920, 1080, 2200, 1485, 600},
+    {2560, 1440, 2720, 2415, 600},
+
+    // Established Timing Info
+    {720,  400,  888,  283,  702},//720 x 400 at 70Hz - IBM VGA
+    {720,  400,  907,  355,  882},//720 x 400 at 88Hz - IBM XGA2
+    {640,  480,  800,  251,  600},//640 x 480 at 60Hz - IBM VGA
+    {640,  480,  864,  302,  667},//640 x 480 at 67Hz - Mac II
+    {640,  480,  832,  315,  728},//640 x 480 at 72Hz - VESA
+    {640,  480,  840,  315,  750},//640 x 480 at 75Hz - VESA
+    {800,  600,  1024, 360,  562},//800 x 600 at 56Hz - VESA
+    {800,  600,  1056, 400,  603},//800 x 600 at 60Hz - VESA
+    {800,  600,  1040, 500,  722},//800 x 600 at 72Hz - VESA
+    {800,  600,  1056, 495,  750},//800 x 600 at 75Hz - VESA
+    {832,  624,  1152, 572,  745},//832 x 624 at 75Hz - Mac II
+    {1024, 768,  1264, 898,  870},//1024 x 768 at 43Hz - IBM 8514a
+    {1024, 768,  1344, 650,  600},//1024 x 768 at 60Hz - VESA
+    {1024, 768,  1328, 750,  700},//1024 x 768 at 70Hz - VESA
+    {1024, 768,  1312, 787,  750},//1024 x 768 at 75Hz - VESA
+    {1280, 1024, 1688, 1350, 750},//1280 x 1024 at 75Hz - VESA
+    {1152, 870,  1456, 1000, 750},//1152 x 870 at 75Hz - Mac II
+};
+#endif
+
+#if(_HDMI_FREESYNC_SUPPORT == _ON)
+StructDrrFreeSyncTimingInfo code tDrrFreeSyncHdmiTimingInfo[] =
+{
+    // Hwidth, Vheight, Htotal, Pixel clk (0.1M), Vfreq (0.1Hz)
+    {1920, 1080, 2200, 1485, 600},
+    {2560, 1440, 2720, 2415, 600},
+
+    // Established Timing Info
+    {720,  400,  888,  283,  702},// 720 x 400 at 70Hz - IBM VGA
+    {720,  400,  907,  355,  882},// 720 x 400 at 88Hz - IBM XGA2
+    {640,  480,  800,  251,  600},// 640 x 480 at 60Hz - IBM VGA
+    {640,  480,  864,  302,  667},// 640 x 480 at 67Hz - Mac II
+    {640,  480,  832,  315,  728},// 640 x 480 at 72Hz - VESA
+    {640,  480,  840,  315,  750},// 640 x 480 at 75Hz - VESA
+    {800,  600,  1024, 360,  562},// 800 x 600 at 56Hz - VESA
+    {800,  600,  1056, 400,  603},// 800 x 600 at 60Hz - VESA
+    {800,  600,  1040, 500,  722},// 800 x 600 at 72Hz - VESA
+    {800,  600,  1056, 495,  750},// 800 x 600 at 75Hz - VESA
+    {832,  624,  1152, 572,  745},// 832 x 624 at 75Hz - Mac II
+    {1024, 768,  1264, 898,  870},// 1024 x 768 at 43Hz - IBM 8514a
+    {1024, 768,  1344, 650,  600},// 1024 x 768 at 60Hz - VESA
+    {1024, 768,  1328, 750,  700},// 1024 x 768 at 70Hz - VESA
+    {1024, 768,  1312, 787,  750},// 1024 x 768 at 75Hz - VESA
+    {1280, 1024, 1688, 1350, 750},// 1280 x 1024 at 75Hz - VESA
+    {1152, 870,  1456, 1000, 750},// 1152 x 870 at 75Hz - Mac II
+};
+#endif
+
+
+//****************************************************************************
+// CODE TABLES
+//****************************************************************************
+//----------------------------------------------------------------------------------------------------
+// Filter Coefficient Table (Sharpness)
+//----------------------------------------------------------------------------------------------------
+#if(_SHARPNESS_SUPPORT == _ON)
+#if((_HSU_128TAPS_SUPPORT == _ON) || (_VSU_128TAPS_SUPPORT == _ON))
+BYTE code tSU_COEF_128_TAPS_0[] =
+{
+#include "./Sharpness/Sharpness128TapsNormalTable0.h"
+};
+
+BYTE code tSU_COEF_128_TAPS_2[] =
+{
+#include "./Sharpness/Sharpness128TapsNormalTable2.h"
+};
+
+BYTE code tSU_COEF_128_TAPS_4[] =
+{
+#include "./Sharpness/Sharpness128TapsNormalTable4.h"
+};
+
+BYTE code tSU_COEF_128_TAPS_6[] =
+{
+#include "./Sharpness/Sharpness128TapsNormalTable6.h"
+};
+
+BYTE code tSU_COEF_128_TAPS_8[] =
+{
+#include "./Sharpness/Sharpness128TapsNormalTable8.h"
+};
+
+code BYTE *tSCALE_128TAPS_NORMAL_COEF_TABLE[] =
+{
+    tSU_COEF_128_TAPS_0,        tSU_COEF_128_TAPS_2,        tSU_COEF_128_TAPS_4,        tSU_COEF_128_TAPS_6,        tSU_COEF_128_TAPS_8,
+};
+#endif // End of #if((_HSU_128TAPS_SUPPORT == _ON) || (_VSU_128TAPS_SUPPORT == _ON))
+
+#if(_HSU_128TAPS_SUPPORT == _ON)
+BYTE code tSU_1to1_COEF_128_TAPS_0[] =
+{
+#include "./Sharpness/Sharpness128Taps1to1Table0.h"
+};
+
+BYTE code tSU_1to1_COEF_128_TAPS_2[] =
+{
+#include "./Sharpness/Sharpness128Taps1to1Table2.h"
+};
+
+BYTE code tSU_1to1_COEF_128_TAPS_4[] =
+{
+#include "./Sharpness/Sharpness128Taps1to1Table4.h"
+};
+
+BYTE code tSU_1to1_COEF_128_TAPS_6[] =
+{
+#include "./Sharpness/Sharpness128Taps1to1Table6.h"
+};
+
+BYTE code tSU_1to1_COEF_128_TAPS_8[] =
+{
+#include "./Sharpness/Sharpness128Taps1to1Table8.h"
+};
+
+code BYTE *tSCALE_128TAPS_1to1_COEF_TABLE[] =
+{
+    tSU_1to1_COEF_128_TAPS_0,        tSU_1to1_COEF_128_TAPS_2,        tSU_1to1_COEF_128_TAPS_4,        tSU_1to1_COEF_128_TAPS_6,        tSU_1to1_COEF_128_TAPS_8,
+};
+#endif // End of #if(_HSU_128TAPS_SUPPORT == _ON)
+
+#if((_HSU_96TAPS_SUPPORT == _ON) || (_VSU_96TAPS_SUPPORT == _ON))
+BYTE code tSU_COEF_96_TAPS_0[] =
+{
+#include "./Sharpness/Sharpness96TapsNormalTable0.h"
+};
+
+BYTE code tSU_COEF_96_TAPS_2[] =
+{
+#include "./Sharpness/Sharpness96TapsNormalTable2.h"
+};
+
+BYTE code tSU_COEF_96_TAPS_4[] =
+{
+#include "./Sharpness/Sharpness96TapsNormalTable4.h"
+};
+
+BYTE code tSU_COEF_96_TAPS_6[] =
+{
+#include "./Sharpness/Sharpness96TapsNormalTable6.h"
+};
+
+BYTE code tSU_COEF_96_TAPS_8[] =
+{
+#include "./Sharpness/Sharpness96TapsNormalTable8.h"
+};
+
+code BYTE *tSCALE_96TAPS_NORMAL_COEF_TABLE[] =
+{
+    tSU_COEF_96_TAPS_0,        tSU_COEF_96_TAPS_2,        tSU_COEF_96_TAPS_4,        tSU_COEF_96_TAPS_6,        tSU_COEF_96_TAPS_8,
+};
+#endif // End of #if((_HSU_96TAPS_SUPPORT == _ON) || (_VSU_96TAPS_SUPPORT == _ON))
+
+#if(_HSU_96TAPS_SUPPORT == _ON)
+BYTE code tSU_1to1_COEF_96_TAPS_0[] =
+{
+#include "./Sharpness/Sharpness96Taps1to1Table0.h"
+};
+
+BYTE code tSU_1to1_COEF_96_TAPS_2[] =
+{
+#include "./Sharpness/Sharpness96Taps1to1Table2.h"
+};
+
+BYTE code tSU_1to1_COEF_96_TAPS_4[] =
+{
+#include "./Sharpness/Sharpness96Taps1to1Table4.h"
+};
+
+BYTE code tSU_1to1_COEF_96_TAPS_6[] =
+{
+#include "./Sharpness/Sharpness96Taps1to1Table6.h"
+};
+
+BYTE code tSU_1to1_COEF_96_TAPS_8[] =
+{
+#include "./Sharpness/Sharpness96Taps1to1Table8.h"
+};
+
+code BYTE *tSCALE_96TAPS_1to1_COEF_TABLE[] =
+{
+    tSU_1to1_COEF_96_TAPS_0,        tSU_1to1_COEF_96_TAPS_2,        tSU_1to1_COEF_96_TAPS_4,        tSU_1to1_COEF_96_TAPS_6,        tSU_1to1_COEF_96_TAPS_8,
+};
+#endif // End of #if(_HSU_96TAPS_SUPPORT == _ON)
+#endif // End of #if(_SHARPNESS_SUPPORT == _ON)
+
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+//----------------------------------------------------------------------------------------------------
+// ULTRAVIVID TABLE
+//----------------------------------------------------------------------------------------------------
+BYTE code tCOLOR_ULTRAVIVID_SETTING_L[] =
+{
+#include "./UltraVivid/UltraVividTableL.h"
+};
+
+BYTE code tCOLOR_ULTRAVIVID_SETTING_M[] =
+{
+#include "./UltraVivid/UltraVividTableM.h"
+};
+
+BYTE code tCOLOR_ULTRAVIVID_SETTING_H[] =
+{
+#include "./UltraVivid/UltraVividTableH.h"
+};
+
+code BYTE *tCOLOR_ULTRAVIVID_SETTING_TABLE[] =
+{
+    tCOLOR_ULTRAVIVID_SETTING_L,
+    tCOLOR_ULTRAVIVID_SETTING_M,
+    tCOLOR_ULTRAVIVID_SETTING_H,
+};
+
+#if(_HDR10_SUPPORT == _ON)
+BYTE code tCOLOR_ULTRAVIVID_SETTING_HDR[] =
+{
+#include "./UltraVivid/UltraVividTableHDR.h"
+};
+#endif
+#endif  // End of #if(_ULTRA_VIVID_SUPPORT == _ON)
+
+#if(_YPEAKING_SUPPORT == _ON)
+//----------------------------------------------------------------------------------------------------
+// Ypeaking Coefficient Table
+//----------------------------------------------------------------------------------------------------
+#include "YPeakingTable.h"
+
+code BYTE *tYPEAKING_TABLE[] =
+{
+    tYPK_COEF_1,
+};
+#endif // End of #if(_YPEAKING_SUPPORT == _ON)
+
+
+//****************************************************************************
+// VARIABLE DECLARATIONS
+//****************************************************************************
+#if(_UART_SUPPORT == _ON)
+BYTE g_pucUartData[5];
+#endif
+//****************************************************************************
+// DCR
+//****************************************************************************
+//****************************************************************************
+// FUNCTION DECLARATIONS
+//****************************************************************************
+void UserInterfaceTimerEventProc(EnumScalerTimerEventID enumEventID);
+//-------------------------------------------------------
+// Adjust Backlight
+//-------------------------------------------------------
+void UserAdjustBacklight(BYTE usBacklight);
+
+//-------------------------------------------------------
+// for RTD Tool IIC Debug
+//-------------------------------------------------------
+#if(_DEBUG_IIC_BY_USERINTERFACE == _ON)
+bit UserInterfaceDebugIIC(BYTE ucType, BYTE *pucDdcciArray, BYTE *pucReturnValue);
+#endif
+
+//-------------------------------------------------------
+// INT
+//-------------------------------------------------------
+#if(_INSTANT_TIMER_EVENT_0 == _ON)
+void UserInterfaceTimer0InstantAccess_EXINT(void);
+#endif
+
+#if(_INSTANT_TIMER_EVENT_1 == _ON)
+void UserInterfaceTimer1InstantAccess_EXINT(void);
+#endif
+
+#if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+void UserInterfaceTimer2InstantAccess_EXINT(void);
+#endif
+
+#if(_UART_SUPPORT == _ON)
+void UserInterfaceUartIntHandler_SERIALPORT(void);
+#endif
+
+#if(_EXT_INT1_SUPPORT == _ON)
+void UserInterfaceEXTINT1Handler_EXINT1(void);
+#endif
+
+#if(_DEBUG_MESSAGE_SUPPORT == _OFF)
+BYTE UserInterfaceGetDdcciStatus_EXINT1(void);
+BYTE UserInterfaceGetFactoryCommand_EXINT1(void);
+#if((_HDMI_FREESYNC_SUPPORT == _ON) && (_HDMI_FREESYNC_CAPABILITY_SWITCH_METHOD == _MCCS_SWITCH_MODE))
+BYTE UserInterfaceDdcciHDMIFreesyncOpcode_EXINT1(void);
+#endif
+#endif
+
+//-------------------------------------------------------
+// EDID & HDCP
+//-------------------------------------------------------
+#if(_HDMI_MULTI_EDID_SUPPORT == _ON)
+EnumHdmiEdidLocation UserInterfaceGetMultiHdmiEdidLocated(BYTE ucInputport, BYTE ucEdidIndex);
+EnumEdidSelection UserInterfaceGetMultiHdmiEdidIndex(BYTE ucInputPort);
+#endif
+
+#if((_EMBEDDED_EDID_SUPPORT == _ON) && (_WRITE_EDID_LOCATION_BY_USER_SUPPORT == _ON))
+void UserInterfaceGetEmbeddedEDIDData(EnumInputPortEdid enumInputPort);
+#endif
+
+#if(_USB3_RETIMER_SUPPORT == _ON)
+EnumUSB3RetimerPSPDSupportStatus UserInterfaceGetUSB3RetimerPSPDSupportStatus(void);
+#endif
+
+#if(_DIGITAL_PORT_SUPPORT == _ON)
+#if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_USER)
+void UserInterfaceGetHDCPKeyBksvByUser(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+void UserInterfaceGetHDCPKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+
+#if(_DP_TX_SUPPORT == _ON)
+void UserInterfaceGetTxHDCPKeyAksvByUser(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray);
+void UserInterfaceGetTxHDCPKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+#endif
+#endif
+
+#if((_HDCP_2_2_SUPPORT == _ON) && (_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_USER))
+void UserInterfaceGetHdcp2CertrxByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetHdcp2RSADkeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetHdcp2RSARRModNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetHdcp2RSAKPrivByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetHdcp2RSANpinvByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetHdcp2LCKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+#if((_DP_HDCP_2_2_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+void UserInterfaceGetDpTxHdcp2RRMODNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetDpTxHdcp2DcpLlcNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetDpTxHdcp2EKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+void UserInterfaceGetDpTxHdcp2NPinvByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+#endif
+#endif
+#endif
+
+
+//-------------------------------------------------------
+// Wait for Panel Power Sequence Delay
+//-------------------------------------------------------
+#if(_PANEL_POWER_SEQUENCE_CONTROL_BY_USER == _ON)
+void UserInterfacePanelPowerAction(BYTE ucEvent);
+#endif
+
+void UserInterfaceAdjustWaitPanelT1(void);
+void UserInterfaceAdjustWaitPanelT2(void);
+void UserInterfaceAdjustWaitPanelT3(void);
+void UserInterfaceAdjustWaitPanelT4(void);
+void UserInterfaceAdjustWaitPanelT5(void);
+
+//-------------------------------------------------------
+//
+//-------------------------------------------------------
+void UserInterfaceUncallFunction(void);
+void UserInterfaceInitial(void);
+
+void UserInterfacePowerSwitch(EnumPowerAction enumSwitch);
+void UserInterfaceKeyPadLedControl(BYTE ucKeyPadLed);
+
+//-------------------------------------------------------
+// User Information
+//-------------------------------------------------------
+EnumSourceDetectionInfo UserInterfaceSourceBypassDetection(void);
+bit UserInterfaceGetLogoStatus(void);
+bit UserInterfaceGetdNoSupportStatus(void);
+bit UserInterfaceGetDclkNoSupportStatus(void);
+bit UserInterfaceGetActiveByPassStatus(void);
+bit UserInterfaceGetCableResetStatus(void);
+bit UserInterfaceGetForcePSStatus(void);
+
+#if(_HDMI_SUPPORT == _ON)
+EnumUserForcePSTmdsHpdToggle UserInterfaceForcePSWakeupTmdsHpdToggle(void);
+#endif
+
+#if(_DVI_SUPPORT == _ON)
+EnumTmdsHdcpType UserInterfaceTmdsAcOnGetHdcpCap(void);
+#endif
+
+bit UserInterfaceGetIntoPSStatus(void);
+EnumUserForceFakePS UserInterfaceGetFakePSStatus(void);
+EnumUserForceFakePowerOff UserInterfaceGetFakePowerOffStatus(void);
+bit UserInterfaceGetNVRamDataStatus(EnumNvramCheckType enumNvramCheckType);
+bit UserInterfaceGetDisplaySettingBacklightAction(void);
+
+EnumColorSpace UserInterfaceGetColorFormat(void);
+
+#if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+BYTE UserInterfaceGetHpSourceSwitchOsdEventTime(BYTE ucSourceScanType);
+#endif
+
+#if(_OVERSCAN_SUPPORT == _ON)
+bit UserInterfaceGetOverScanStatus(void);
+#endif
+
+#if(_ASPECT_RATIO_SUPPORT == _ON)
+EnumAspectRatioType UserInterfaceGetAspectRatioType(void);
+void UserInterfaceGetAspectRatio(WORD *pusHRatio, WORD *pusVRatio);
+void UserInterfaceAdjustAspectRatio(void);
+#if(_ASPECT_RATIO_WITHOUT_MUTE == _ON)
+WORD UserInterfaceGetAspectRatioMinDVHeight(void);
+#endif
+
+#if(_ASPECT_ORIGINAL_MODE_SUPPORT == _ON)
+BYTE UserInterfaceGetAspectRatioOriginalRatio(void);
+BYTE UserInterfaceGetAspectRatioOriginalRatioSmall(void);
+#endif
+
+#endif
+
+#if(_DISPLAY_ROTATION_SUPPORT == _ON)
+EnumRotationType UserInterfaceGetRotationDegree(void);
+EnumRotationDisplayType UserInterfaceGetRotationDisplayType(void);
+#endif
+
+#if(_DISP_LATENCY_ADJUST_SUPPORT == _ON)
+BYTE UserInterfaceGetDisplayLatencyRatio(void);
+#endif
+
+#if(_FRC_SUPPORT == _ON)
+void UserInterfaceGetDVMaxMinFreq(StructDVCustomizedFreq *pstDVCustomizedFreq);
+#endif
+
+void UserInterfaceDisplaySelectMDomainSettingForMain(StructCustomizedMdomain *pstCustomizedMdomain);
+
+#if(_OD_SUPPORT == _ON)
+EnumFunctionOnOFF UserInterfaceGetODEnableStatus(void);
+#endif
+
+#if((_MEMORY_TYPE_CONFIG == _MEMORY_DDR3) && (_DDR3_MULTIPHASE_EXIST == _ON))
+void UserInterfaceUpdateDDR3PhaseData(void);
+#endif
+
+#if(_USER_SYSTEM_EEPROM_CUSTOMIZATION == _ON)
+bit UserInterfaceSystemEepromReadCustomProc(WORD usSubAddr, WORD usLength, BYTE *pucReadArray);
+bit UserInterfaceSystemEepromWriteCustomProc(WORD usSubAddr, WORD usLength, BYTE *pucWriteArray);
+#endif
+
+#if(_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+void UserInterfaceMbrBacklightAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl, WORD usDVTotal);
+void UserInterfaceMbrAdimAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl);
+EnumMbrPDimCtrl UserInterfaceMbrGetPdimControl(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl);
+void UserInterfaceMbrPdimAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl);
+EnumMbrBacklightMode UserInterfaceMbrGetBacklightMode(void);
+#if((_DRR_MOTION_BLUR_REDUCTION_SUPPORT == _ON) || (_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON))
+BYTE UserInterfaceMbrGetBacklightDuty(void);
+BYTE UserInterfaceMbrGetBacklightPos(void);
+#endif
+EnumMbrBacklightSeq UserInterfaceMbrGetBacklightSequence(bit bLightCtrl);
+WORD UserInterfaceMbrGetBacklightSequenceDelay(bit bLightCtrl);
+#if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+EnumRtkAdvMbrUserStatus UserInterfaceGetRtkAdvMbrSetting(void);
+#endif
+#endif
+
+WORD UserInterfaceDisplayGetExtendedActiveWaitTime(void);
+
+//-------------------------------------------------------
+// Display Timing
+//-------------------------------------------------------
+void UserInterfaceDisplayInitialization(void);
+void UserInterfaceAdjustInputTiming(void);
+
+#if(_UNDERSCAN_SUPPORT == _ON)
+bit UserInterfaceAdjustUnderScan(void);
+#endif
+
+void UserInterfaceAdjustDisplayTiming(void);
+
+//-------------------------------------------------------
+// Color
+//-------------------------------------------------------
+#if((_RGB_QUANTIZATION_RANGE_SUPPORT == _ON) && (_RGB_QUANTIZATION_DEFAULT_RANGE_JUDGE_BY_USER == _ON))
+bit UserInterfaceGetRGBQuantizationLimitRangeStatus(EnumColorRGBQuantization enumColorRGBQuantization);
+#endif
+
+#if(_YCC_QUANTIZATION_RANGE_SUPPORT == _ON)
+bit UserInterfaceGetYCCQuantizationFullRangeStatus(EnumColorYCCQuantization enumColorYCCQuantization);
+#endif
+
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+EnumFunctionOnOFF UserInterfaceGetDemoModeType(void);
+#endif
+
+void UserInterfaceAdjustActiveByPassColorProc(void);
+void UserInterfaceAdjustColorProc(void);
+
+
+
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+void UserInterfaceAdjustUltraVivid(void);
+void UserInterfaceAdjustUltraVividProc(EnumDBApply enumDBApply);
+#endif
+
+#if(_SHARPNESS_SUPPORT == _ON)
+code BYTE *UserInterfaceGetSharpnessCoef(EnumSUCoefType enumSUCoefType, EnumSourceSearchPort enumSourceSearchPort);
+BYTE UserInterfaceGetSharpnessCoefBankNum(void);
+bit UserInterfaceSharpnessBypassCheck(void);
+#endif
+
+#if(_DCR_SUPPORT == _ON)
+void UserInterfaceAdjustDCRHandler(void);
+#endif
+
+#if(_DCC_HISTOGRM_INFO == _ON)
+void UserInterfaceDCCHistogramHandler(void);
+#endif
+
+#if(_IAPS_SUPPORT == _ON)
+void UserInterfaceAdjustIAPSHandler(void);
+#endif
+
+//-------------------------------------------------------
+// Osd
+//-------------------------------------------------------
+void UserInterfaceAdjustOsdPowerOnInitial(void);
+void UserInterfaceAdjustOsdActiveProc(void);
+void UserInterfaceAdjustOsdResetProc(void);
+
+//-------------------------------------------------------
+// Interfaces
+//-------------------------------------------------------
+#if(_VGA_SUPPORT == _ON)
+BYTE UserInterfaceGetVGAConfuseMode(BYTE ucModeIndex);
+bit UserInterfaceGetLoadModeTableDefaultStatus(void);
+bit UserInterfaceGetFirstAutoConfigStatus(void);
+void UserInterfaceGetAutoConfigPercentage(BYTE ucAutoPercentage);
+
+#if(_VGA_FORCE_DISPLAY == _ON)
+BYTE UserInterfaceModeSearchModeVGA(void);
+#endif
+
+bit UserInterfaceSkipAutoVpos(void);
+bit UserInterfaceSkipAutoHpos(void);
+#endif
+
+#if(_MHL_SUPPORT == _ON)
+bit UserInterfaceAdjustMHLMscRCPProc(BYTE ucKeyCode);
+#endif
+
+EnumFreeSyncSupport UserInterfaceGetFreeSyncEnable(EnumSourceSearchPort enumSourcePort);
+EnumDpAdaptiveSyncSupport UserInterfaceGetDpAdaptiveSyncEnable(EnumSourceSearchPort enumSourcePort);
+
+#if(_DP_SUPPORT == _ON)
+EnumDpVersionType UserInterfaceGetDPVersion(BYTE ucInputPort);
+EnumDpLaneCount UserInterfaceGetDpLaneCount(BYTE ucInputPort);
+EnumDPMSTPort UserInterfaceGetDpMSTCapablePort(void);
+
+#if(_DP_MST_CAP_ON_INACTIVE_PORT_HPD_LOW == _ON)
+EnumDPMSTPort UserInterfaceGetDpMstTargetPort(void);
+#endif
+
+#if((_DP_MST_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+bit UserInterfaceGetDpCloneOutputStatus(void);
+#endif
+
+#if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) || (_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP))
+BYTE UserInterfaceGetDpSwitchSelectPort(void);
+#endif
+
+#if(_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP)
+void UserInterfaceEmbeddedDpSwitch(void);
+#endif
+
+#if(_DP_DC_ON_HPD_CONTROL_BY_USER_SUPPORT == _ON)
+EnumDpHpdToggleMode UserInterfaceGetDpDcOnHpdMode(void);
+#endif
+
+#endif // End of #if(_DP_SUPPORT == _ON)
+
+#if((_D12_INPUT_PORT_TYPE == _D12_HDMI_PORT) && (_D12_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D3))
+EnumSourceSearchPort UserInterfaceHdmiExternalSwitchDefaultPort(void);
+#endif
+
+#if(_DP_HDMI_COMPATIBLE_MODE == _ON)
+bit UserInterfaceGetHdmi5VStatus(BYTE ucInputPort);
+#endif
+
+#if(_SOURCE_AUTO_SEARCH_STYLE == _SOURCE_POLLING_EIZO_STYLE)
+bit UserInterfaceAdjustOsdCheckTotalSearchFinish(void);
+void UserInterfaceAdjustSourceSearchTime(void);
+WORD UserInterfaceAdjustSourceReactiveSearchTime(EnumSourceAdjustReactiveTimePortType enumSourceAdjustReactiveTimePortType);
+WORD UserInterfaceGetEizoSearchFinishTime(void);
+#endif
+
+//-------------------------------------------------------
+// AUDIO
+//-------------------------------------------------------
+#if(_AUDIO_SUPPORT == _ON)
+bit UserInterfaceGetAudioReadyToPlayStatus(void);
+EnumAudioInputSource UserInterfaceGetAudioSource(void);
+bit UserInterfaceGetAudioMuteStatus(void);
+EnumAudioCodingType UserInterfaceGetAudioNonLPCMStatus(void);
+EnumAudioMuteStatus UserInterfaceAudioGetOutputMuteStatus(void);
+WORD UserInterfaceGetAudioVolume(void);
+
+#if(_EMBEDDED_DAC_SUPPORT == _ON)
+EnumAudioDACOutput UserInterfaceGetAudioDACOutput(void);
+bit UserInterfaceGetAudioDACKeepDepopState(void);
+#endif
+
+#if(_SLEEP_AUDIO_SUPPORT == _ON)
+bit UserInterfaceGetAudioStandAloneStatus(void);
+#endif
+
+void UserInterfaceAdjustAudioResetProc(void);
+void UserInterfaceAdjustAudioPowerProc(EnumPowerStatus enumPowStatus);
+void UserInterfaceAdjustAudioAmpMuteProc(bit bMute);
+EnumAudioSamplingFreqType UserInterfaceAudioGetUserSamplingFreq(void);
+
+#if(_DP_SUPPORT == _ON)
+#if(_DP_DPCD_AUDIO_CAPABILITY_USER_CONTROL_SUPPORT == _ON)
+EnumAudioDpDpcdSupport UserInterfaceAudioDpGetCapabilityInitialState(BYTE ucInputPort);
+#endif // End of #if(_DP_DPCD_AUDIO_CAPABILITY_USER_CONTROL_SUPPORT == _ON)
+#endif // End of #if(_DP_SUPPORT == _ON)
+
+#if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
+void UserInterfaceAudioExternalCodecProc(bit bEnable);
+#endif
+
+#if((_LINE_IN_SUPPORT == _ON) && (_HW_AUDIO_LINE_IN_TO_DIGITAL_LR_SWAP == _ON))
+void UserInterfaceSwapExternalAudioCodecInput(bit bSwap);
+#endif
+
+#if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+bit UserInterfaceAudioGetTtsSupport(void);
+BYTE UserInterfaceAudioGetTtsPlayAudioVolume(void);
+BYTE UserInterfaceAudioGetTtsPlayTextVolume(void);
+bit UserInterfaceAudioGetTtsAudioReady(void);
+#endif // End of #if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+
+#endif // End of #if(_AUDIO_SUPPORT == _ON)
+
+#if((_OGC_SUPPORT == _ON) || (_OCC_SUPPORT == _ON) || (_OGC_DICOM_SUPPORT == _ON) || (_UNIFORMITY_SUPPORT == _ON))
+void UserInterfaceAdjustBeforeDisplayCalibration(EnumCaliType enumMode);
+void UserInterfaceAdjustAfterDisplayCalibration(EnumCaliType enumMode);
+void UserInterfaceAdjustBacklight(BYTE ucBacklight);
+#endif
+
+#if(_BACKLIGHT_DIMMING_SUPPORT == _ON)
+void UserInterfaceAdjustBeforeDimmingCalibration(void);
+void UserInterfaceAdjustAfterDimmingCalibration(void);
+#endif
+
+#if(_LD_HDR10_BOOST_SUPPORT == _ON)
+void UserInterfaceAdjustLDBoostCalibration(bit bBoost);
+#endif
+
+#if(_YPEAKING_SUPPORT == _ON)
+void UserInterfaceAdjustYpeaking(void);
+#endif
+
+#if(_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+EnumDDCCIDebugMode UserInterfaceGetDdcciMode(void);
+EnumDataExchangeRepeaterPowerState UserInterfaceGetRepeaterIntoPowerOff(void);
+
+#endif
+
+#if(_DCR_SUPPORT)
+void UserAdjustPwmDcr();
+BYTE UserAdjustDCRCalPwm(BYTE ucRGBValValue);
+#if(_DEF_OPPOSITE_DCR)	//_MENU_FUN_DCR_OPPOSITE
+BYTE UserAdjustDCRCalPwm_Opposite(BYTE ucRGBValValue);
+#endif
+BYTE UserAdjustDCRGetPwm(void);
+void UserAdjustDCRControl(bit bEn);
+void UserInterfaceAdjustDCR(void);
+
+BYTE g_ucDCR_15SEC_OffBLFlag;
+BYTE g_ucDCR_TUNE_1STEP_Flag;
+
+#endif
+
+//****************************************************************************
+// FUNCTION DEFINITIONS
+//****************************************************************************
+//--------------------------------------------------
+// Description  : Adjust backlight
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserAdjustBacklight(WORD usBacklight)
+{
+		switch(GET_OSD_COLOR_EFFECT())
+		{
+			case _COLOREFFECT_MOVIE :
+				usBacklight = _ECO_MOVIE_BACKLIGHT;
+				break;
+				
+			case _COLOREFFECT_GAME:
+				usBacklight = _ECO_GAME_BACKLIGHT;
+				break;
+				
+			case _COLOREFFECT_PHOTO :
+				usBacklight = _ECO_TEXT_BACKLIGHT;
+				break;
+				
+			case _COLOREFFECT_STANDARD :
+				usBacklight = usBacklight;
+				break;
+				
+#if(_EOC_RTS_FPS_SUPPORT == _ON)
+			case _COLOREFFECT_FPS:
+				usBacklight = _ECO_FPS_BACKLIGHT;
+				break;
+				
+			case _COLOREFFECT_RTS :
+				usBacklight = _ECO_RTS_BACKLIGHT;
+				break;		
+
+#endif
+
+
+#if(_EOC_ENERGY_SAVING_SUPPORT == _ON)
+
+			case _COLOREFFECT_ENERGY_SAVING :
+				usBacklight = _ECO_ENERGY_SAVING_BACKLIGHT;
+				break;		
+#endif
+	
+			default:
+				break;
+		}
+		
+#if(_HDR10_SUPPORT == _ON)
+
+		if(GET_OSD_HDR_MODE() != _OFF)
+		{
+			if(GET_HDR10_EOTF_SETTING() == _HDR_TARGET_STATUS_SMPTE_ST_2084)
+			{
+				usBacklight = 100;
+
+			}
+		}
+#endif
+
+		
+#if(_MPRT_SUPPORT == _ON)
+
+	if((GET_OSD_MPRT()!=_OFF)&&(SysModeGetModeState() ==_MODE_STATUS_ACTIVE)&&(GET_INPUT_TIMING_VFREQ()> _MPRT_MIN_FRAME_RATE)&&(GET_OSD_FREE_SYNC_STATUS() == _OFF))
+	{
+			usBacklight = tBacklight_Table_Value_MPRT(usBacklight);
+	}
+	else
+#endif		
+
+#if(_ADJ_BACKLIGHT_BY_TABLE==_ON)
+	usBacklight = tBacklight_Table[usBacklight];
+#else
+	usBacklight = tBacklight_Table_Value(usBacklight);
+#endif
+
+#if(_BACKLIGHT_PWM_INVERSE == _ON)
+#if(_PWM_DUT_RESOLUTION == _PWM_12BIT)
+    usBacklight = 0xFFF - usBacklight;
+#else
+	usBacklight = 255 - usBacklight;
+#endif
+#endif
+	PCB_BACKLIGHT_PWM(usBacklight);
+
+}
+
+#if (_DEF_REAL_TIME_HZ)
+void OsdHzShow()
+{
+	OsdDispDisableOsd();
+	OsdFuncApplyMap(WIDTH(8), HEIGHT(5), COLOR(_CP_BG, _CP_BG));
+	OsdFontVLCLoadFont(_FONT1_GLOBAL);		
+	RTDOsdTableFuncPutStringProp(1,4,_PFONT_PAGE_1,_OSD_PINLVXIANSHI_HZ,0,COLOR(_CP_RED,_CP_BG),_ENGLISH);	
+	OsdDispSetPosition(_POS_PERCENT, _OSD_POSITION_GLOBAL_A, 98, 2);
+	ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+	OsdFuncEnableOsd();
+}
+
+#endif
+
+//--------------------------------------------------
+// Description  : User timer event process
+// Input Value  : Event ID
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceTimerEventProc(EnumScalerTimerEventID enumEventID)
+{
+    switch(enumEventID)
+    {
+        case _USER_TIMER_EVENT_KEY_REPEAT_ENABLE:
+            SET_KEYREPEATSTART();
+            break;
+
+        case _USER_TIMER_EVENT_KEY_SCAN_READY:
+            SET_KEYSCANREADY();
+            break;
+
+        case _USER_TIMER_EVENT_OSD_DISABLE_OSD_LOGO:
+            OsdDispDisableOsd();
+            SET_OSD_LOGO_ON(_OFF);
+#if(_INSTANT_TIMER_EVENT_0 == _ON)
+            ScalerTimer0SetTimerCount(_TIMER_OFF);
+#endif
+
+#if(_PANEL_POW_SEQ_FAST_MODE == _ON)
+            UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+#else
+            UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+#endif
+            ScalerDDomainBackgroundEnable(_ENABLE);
+            ScalerDDomainPatternGenEnable(_DISABLE);
+            break;
+
+        case _USER_TIMER_EVENT_OSD_SHOW_NO_CABLE:
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_NOCABLE_MSG);
+            break;
+
+        case _USER_TIMER_EVENT_OSD_SHOW_NO_SIGNAL:
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_NOSIGNAL_MSG);
+            break;
+
+        case _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING:
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_POWER_SAVING_EVENT_MSG);
+            break;
+
+        case _USER_TIMER_EVENT_GO_TO_POWER_SAVING:
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_GO_TO_POWER_SAVING_EVENT_MSG);
+            break;
+        case _USER_TIMER_EVENT_OSD_DISABLE_120s:
+            ScalerTimerReactiveTimerEvent(SEC(60), _USER_TIMER_EVENT_OSD_DISABLE);
+            break;
+
+        case _USER_TIMER_EVENT_OSD_DISABLE:
+            
+
+			if(GET_OSD_CROSS_STATUS()==_ON)
+			{
+
+			MenuCross();
+
+
+			}
+            else
+            {
+                OsdDispDisableOsd();
+            }
+#if(_DEF_REAL_TIME_HZ)
+			if(GET_OSD_FV_INFORMATION())
+				SET_OSD_HZ_DISPLAYSTATUS(1);
+#endif
+
+#if(_KEY_IR_HUIXIONG_CROOSSOVER)
+			//SET_IR_HOTKEY_STATUS(_OFF);
+#endif
+
+#if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+	    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_DRR_VFREQ);
+#endif
+
+            break;
+
+        case _USER_TIMER_EVENT_PANEL_BACKLIGHT_ON:
+            SET_PANELPOWERSTATUS(_READY_FOR_BACKLIGHT);
+            break;
+
+        case _USER_TIMER_EVENT_PANEL_POWER_OFF:
+            SET_PANELPOWERSTATUS(_PANEL_POWER_OFF_STATE);
+            break;
+
+#if(_VGA_SUPPORT == _ON)
+        case _USER_TIMER_EVENT_DO_AUTO_COLOR:
+            CLR_KEY_HOLD();
+            OsdDisplayAutoBalanceProc();
+            break;
+#endif
+
+		
+	case _USER_TIMER_EVENT_FACTORY:
+		CLR_KEY_HOLD();
+		if(GET_OSD_FACTORY_MODE() == _ON)
+		{
+			RTDFactoryMainMenu();
+		}
+		break;
+
+        case _USER_TIMER_EVENT_DO_POWER_DOWN:
+            CLR_KEY_HOLD();
+           if(SysPowerGetPowerStatus() == _POWER_STATUS_OFF)
+            {
+                SET_OSD_STATE(_MENU_NONE);
+                SET_OSD_IN_FACTORY_MENU_STATUS(_FALSE);
+                SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+            }
+            else
+            {
+				#if(_NAVIGAT_MENU_SURPPORT)			
+				if(((GET_OSD_STATE() == _MENU_NONE))&&(SysModeGetModeState() == _MODE_STATUS_ACTIVE) && (GET_OSD_FACTORY_MODE() == _OFF))
+				{
+					SET_OSD_STATE(_MENU_NAVIGAT_NONE);
+					OsdDispNavigatMenu();			   
+				}
+				else if((GET_OSD_STATE() == _MENU_NAVIGAT_NONE)||(SysModeGetModeState() != _MODE_STATUS_ACTIVE) || (GET_OSD_FACTORY_MODE() == _ON))
+				{
+					SysPowerSetTargetPowerStatus(_POWER_STATUS_OFF);					
+					SET_OSD_FACTORY_MODE(_OFF);
+					SET_OSD_BURNING_MODE(_OFF);
+					
+					RTDNVRamSaveOSDData();
+				}
+					
+				#else
+				
+					SysPowerSetTargetPowerStatus(_POWER_STATUS_OFF);
+					SET_OSD_FACTORY_MODE(_OFF);					
+					SET_OSD_BURNING_MODE(_OFF);
+					
+					RTDNVRamSaveOSDData();
+				#endif            		
+            }
+            break;
+		
+
+        case _USER_TIMER_EVENT_PANEL_USED_TIMER:
+            RTDFactoryPanelUsedTimer();
+            break;
+
+		 case _USER_TIMER_EVENT_LOCK_OSD:
+            CLR_KEY_HOLD();
+         	SET_OSD_LOCK((~(GET_OSD_LOCK())));
+           	RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_LOCK_MENU-_MENU_FUN_BACKLIGHT);
+		   	RTDNVRamSaveOSDData();
+	        ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE);
+
+            break;
+
+
+		case _USER_REAL_TIME_REFRESH_RATE:
+#if(_DEF_REAL_TIME_HZ)
+			if(GET_OSD_HZ_DISPLAYSTATUS() != 2)
+			{
+				if(GET_OSD_STATE() == _MENU_NONE)
+				{
+					OsdHzShow();
+					SET_OSD_HZ_DISPLAYSTATUS((GET_INPUT_TIMING_VFREQ()/10)|_BIT0);
+				}
+			}
+#endif
+			break;
+					
+
+		case _USER_TIMER_EVENT_LOCK_POWER_KEY:
+            if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+			{
+				CLR_KEY_HOLD();
+				SET_POWER_KEY_LOCK((~(GET_POWER_KEY_LOCK())));
+				RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_POWERKEY_LOCK_MENU-_MENU_FUN_BACKLIGHT);
+				RTDNVRamSaveOSDData();
+				ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE);
+			}
+            break;
+			
+
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+        case _USER_TIMER_EVENT_HLWIN_TYPE5_MOVE:
+            UserAdjustHLWinType5Move();
+            break;
+#endif
+
+
+#if(_FREEZE_SUPPORT == _ON)
+        case _USER_TIMER_EVENT_OSD_DISABLE_FREEZE_MSG:
+            OsdFuncDisableOsd();
+            if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) && (GET_OSD_STATE() != _MENU_NONE))
+            {
+#if(_URGENT_EVENT_CHECK_MODE == _OFF)
+                SET_FREEZE_DISABLE_MSG_STATE(_OFF);
+#endif
+            }
+            break;
+#endif
+
+#if(_LD_HDR10_BOOST_SUPPORT == _ON)
+        case _USER_TIMER_EVENT_HDR_BOOST:
+            g_bHdrBoost = _FALSE;
+            break;
+
+        case _USER_TIMER_EVENT_HDR_COOL:
+            g_bHdrBoost = _TRUE;
+            break;
+#endif
+
+		case _USER_TIMER_EVENT_LED_MODE_FLICKER:
+
+            PCB_LED_TYPE_FLASH();
+
+			ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+			break;
+			
+		case _USER_TIMER_EVENT_AUTO_POWER_DOWN:
+			if(GET_OSD_FACTORY_MODE())
+			{
+				ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+				break;
+			}
+				
+			g_usPowerDownCount-=1;
+			
+			ScalerTimerActiveTimerEvent(SEC(60), _USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+		if(g_usPowerDownCount == 1)
+		{
+			g_usPowerDownCount_MSG=60;
+	      	ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);// henry  20210716
+
+			ScalerTimerActiveTimerEvent(SEC(1), _USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+			OsdDispOsdMessagePoweroff();
+		}
+		else if(g_usPowerDownCount == 0)
+		{	
+#if 1//
+	    	SET_OSD_AUTO_POWEROFF(_DEF_POWEROFF);  
+#else
+			SET_OSD_AUTO_POWEROFF(_AutoPowerOff_4);
+#endif
+	        RTDNVRamSaveOSDData();
+
+			ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+			SysPowerSetTargetPowerStatus(_POWER_STATUS_OFF);		
+		}
+			break;
+			
+		case _USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG:
+				g_usPowerDownCount_MSG--;
+				ScalerTimerActiveTimerEvent(SEC(1), _USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+				UpdateOsdDispOsdMessagePoweroff();
+				if(g_usPowerDownCount_MSG == 0)
+				ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+			break;
+		case _USER_TIMER_EVENT_BUININ_MSG:
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_BUININ_MSG);
+			break;
+
+
+#if(_DCR_SUPPORT == _ON)
+		case _USER_TIMER_EVENT_DCR_CAL_TIME:
+			g_ucDCR_15SEC_OffBLFlag = _TRUE;
+			break;
+		case _USER_TIMER_EVENT_DCR_TUNE_PWM_TIMER:
+			g_ucDCR_TUNE_1STEP_Flag = _TRUE;
+			break;
+#endif
+
+
+#if 1//(_MPRT_SUPPORT == _ON)
+		
+		case _USER_TIMER_EVENT_MPRT:
+			
+			if(GET_OSD_MPRT())
+			{
+
+			
+			PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_ON);
+			}
+			else
+			{
+				PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_ON);
+		
+			}	
+			
+			break;	
+#endif
+
+
+#if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+	case _USER_TIMER_EVENT_OSD_SHOW_DRR_VFREQ:
+		OsdDisplayVfreq();
+		break;
+#endif
+
+
+
+        default:
+            break;
+    }
+}
+
+#if(_DEBUG_IIC_BY_USERINTERFACE == _ON)
+//--------------------------------------------------
+// Description  : User Debug Tool Page IIC
+// Input Value  : Event ID
+// Output Value : None
+//--------------------------------------------------
+bit UserInterfaceDebugIIC(BYTE ucType, BYTE *pucDdcciArray, BYTE *pucReturnValue)
+{
+    bit bDebugMode = _FALSE;
+
+#if(_DEVICE_LED_DRIVER_TYPE != _DEVICE_LED_DRIVER_NONE)
+    if(bDebugMode == _FALSE)
+    {
+        bDebugMode = ExternalDeviceInterfaceLedDriverDebug(ucType, pucDdcciArray, pucReturnValue);
+    }
+#endif
+
+    return bDebugMode;
+
+    ucType = *pucDdcciArray;
+    ucType = *pucReturnValue;
+}
+#endif
+
+#if(_INSTANT_TIMER_EVENT_0 == _ON)
+//--------------------------------------------------
+// Description  : Action in Timer0 int defined by User
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#pragma save
+#pragma OT(8)
+void UserInterfaceTimer0InstantAccess_EXINT(void)
+{
+    if(GET_OSD_LOGO_ON() == _ON)
+    {
+        if(g_ucLogoTimerCounter != 0xFF)
+        {
+            g_ucLogoTimerCounter++;
+        }
+
+        switch(g_ucLogoTimerCounter)
+        {
+            case _USER_SHOW_LOGO_STEP:
+            case (_USER_SHOW_LOGO_STEP * 2):
+            case (_USER_SHOW_LOGO_STEP * 3):
+            case (_USER_SHOW_LOGO_STEP * 4):
+            case (_USER_SHOW_LOGO_STEP * 5):
+            case (_USER_SHOW_LOGO_STEP * 6):
+            case (_USER_SHOW_LOGO_STEP * 7):
+
+                ScalerOsdSetTransparency_EXINT(0xFF - (g_ucLogoTimerCounter / _USER_SHOW_LOGO_STEP) * 36);
+
+                break;
+
+            default:
+
+                break;
+        }
+    }
+}
+#pragma restore
+#endif
+
+#if(_INSTANT_TIMER_EVENT_1 == _ON)
+#if(_LED_EFFECT_TJMODE14==_ON)
+BYTE led_time = 0;
+BYTE led_flag = 0;
+BYTE led_start = 0;
+
+#endif
+
+#if(_IR_VIRTUAL)	
+BYTE tcc_time = 0,ir_up_time = 0,wave_H_count = 0,data_count = 0;
+bit f_time1ms = 0,f_count_H = 0,f_guide = 0,f_resaveok = 0;
+DWORD r_data = 0;
+#endif
+
+//--------------------------------------------------
+// Description  : Action in Timer1 int defined by User
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#pragma save
+#pragma OT(8)
+void UserInterfaceTimer1InstantAccess_EXINT(void)
+{
+
+//ѭ��
+#if 0//(_IR_VIRTUAL)	
+
+    tcc_time++;
+    
+    if(tcc_time>9)
+    {
+      f_time1ms=1;
+      tcc_time=0;
+      ir_up_time++;
+    }
+    
+    if(IR_STATUS==1)
+    {
+        f_count_H=1;
+        wave_H_count++;
+        if(wave_H_count>60)
+        {
+          wave_H_count=60;
+          data_count=0;
+          f_guide=0;
+        }
+    }
+    else
+    {
+        if(f_count_H==1)
+        {
+           f_count_H=0;
+           if(f_guide==0)
+           {  
+            if(((wave_H_count>=12)&&(wave_H_count<=58)))
+            {
+                f_guide=1;
+            }      
+                  
+                  wave_H_count=0;
+           }
+           else
+           {
+              if(wave_H_count>=2&&wave_H_count<=9)
+              {
+                r_data=r_data>>1;
+                r_data=r_data&0x7fffffff;        //  bit0
+                data_count++;
+              }
+              if(wave_H_count>=10&&wave_H_count<=24)
+              {
+                r_data=r_data>>1;
+                r_data=r_data|0x80000000;        //  bit1
+                data_count++;
+              }
+              if(wave_H_count<=1||wave_H_count>=25)
+              { 
+                data_count=0; f_guide=0;
+              }
+               wave_H_count=0;
+           }
+         }
+    }
+    
+    if(data_count>=32)
+   {
+           data_count=0;
+           f_guide=0;
+           wave_H_count=0;
+           f_resaveok=1;
+   }
+#endif
+
+
+
+#if(_LED_EFFECT_TJMODE14==_ON)
+
+if(led_start == 1)
+{
+
+
+	led_start =2;
+	led_time = 0;
+	led_flag = 0;
+}
+else if(led_start == 2)
+{
+	led_time++;
+
+	switch(led_flag)
+	{
+		case 0x00:
+			OSD_LED_CONTRL_SCL(LED_LOW);
+			if(led_time >= 32)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_HIGH);  //�� 32ms  ===>��
+				led_flag =1;
+				
+			}
+			break;
+			
+		case 0x01:
+			if(led_time >=8)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_LOW);// ��8 ms //��� ������====  >��
+				led_flag =2;
+			}		
+			break;
+			
+		case 0x02:
+
+			if(led_time >=4)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_HIGH);// ��4ms===>��
+				led_flag =3;
+			}		
+
+		break;
+
+		case 0x03:
+
+
+		if(((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeIn)&&(GET_OSD_LED_COLOR()!=LightColorMode_Spectrum))\
+			||(GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeOut))	
+		{
+			
+				if(led_time >= 12)
+				{
+					led_time = 0;
+					OSD_LED_CONTRL_SCL(LED_LOW);// �� 12ms	 ������� 1 ===>��
+					led_flag =4;
+				}	
+
+
+		}
+		else 
+		{
+
+
+
+					if(led_time >= 4)
+					{
+						led_time = 0;
+						OSD_LED_CONTRL_SCL(LED_LOW);// �� 4ms	������� 0 ===>��
+						led_flag =4;
+					}	
+
+		}
+		
+		break;
+///////////////////////////////////////////////
+		case 0x04:
+		
+			if(led_time >= 4)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_HIGH);//��4ms====>��
+				led_flag =5;
+			}		
+		
+		break;
+
+		case 0x05:
+
+if((GET_OSD_LED_LIGHTMODE()==LightMode_Breathe)\
+||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeIn)&&(GET_OSD_LED_COLOR()==LightColorMode_Spectrum))\
+||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeOut)&&((GET_OSD_LED_COLOR()>=LightColorMode_Green)&&(GET_OSD_LED_COLOR()<=LightColorMode_Yellow))))
+{
+					if(led_time >= 12)
+					{
+						led_time = 0;
+						OSD_LED_CONTRL_SCL(LED_LOW);// �� 12ms	 ������� 1 ===>��
+						led_flag =6;
+					}	
+
+
+}
+
+else
+{
+
+
+					if(led_time >= 4)
+					{
+						led_time = 0;
+						OSD_LED_CONTRL_SCL(LED_LOW);// ��4ms   �������0 ===>��
+						led_flag =6;
+					}	
+
+
+
+}
+
+			
+		
+	
+		
+		break;
+///////////////////////////////////////////////
+		case 0x06:
+	
+		if(led_time >= 4)
+		{
+			led_time = 0;
+			OSD_LED_CONTRL_SCL(LED_HIGH);//��4ms ====>��
+			led_flag =7;
+		}		
+		
+		break;		
+
+		case 0x07:
+
+if(((GET_OSD_LED_LIGHTMODE()==LightMode_Static)&&((GET_OSD_LED_COLOR()>=LightColorMode_Blue)&&(GET_OSD_LED_COLOR()<=LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_Breathe)&&((GET_OSD_LED_COLOR()>=LightColorMode_Gyan)&&(GET_OSD_LED_COLOR()<=LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeIn)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Purple)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeOut)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Red)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow))))
+
+{
+
+
+				if(led_time >= 12)
+				{
+					led_time = 0;
+					OSD_LED_CONTRL_SCL(LED_LOW);//��12ms===�������1====>��
+					led_flag =8;
+				}		
+
+
+}
+
+	
+else
+{
+
+				if(led_time >= 4)
+				{
+					led_time = 0;
+					OSD_LED_CONTRL_SCL(LED_LOW);//��4ms===�������0====>��
+					led_flag =8;
+				}		
+
+
+
+}
+	
+		
+		break;	
+
+////////////////////////////////////////////////////////
+		case 0x08:
+	
+		if(led_time >= 4)
+		{
+			led_time = 0;
+			OSD_LED_CONTRL_SCL(LED_HIGH); //��4ms ====>��
+			led_flag =9;
+		}	
+		
+		break;	
+
+		case 0x09:
+
+if(((GET_OSD_LED_LIGHTMODE()==LightMode_Static)&&((GET_OSD_LED_COLOR()==LightColorMode_Red)||(GET_OSD_LED_COLOR()==LightColorMode_Green)||(GET_OSD_LED_COLOR()==LightColorMode_Purple)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_Breathe)&&((GET_OSD_LED_COLOR()==LightColorMode_Green)||(GET_OSD_LED_COLOR()==LightColorMode_Blue)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeIn)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Blue)||(GET_OSD_LED_COLOR()==LightColorMode_Gyan)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeOut)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Red)||(GET_OSD_LED_COLOR()==LightColorMode_Gyan)||(GET_OSD_LED_COLOR()==LightColorMode_Purple))))
+{
+
+
+			if(led_time >= 12)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_LOW);//��12ms===�������1====>��
+				led_flag =10;
+			}		
+
+
+
+}
+
+else
+{
+
+			if(led_time >= 4)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_LOW);//��4ms===�������0====>��
+				led_flag =10;
+			}		
+
+}
+			
+		
+
+		
+		break;	
+
+case 0x0a:
+
+if(led_time >= 4)
+{
+	led_time = 0;
+	OSD_LED_CONTRL_SCL(LED_HIGH);//��4ms ====>��
+	led_flag =0x0b;
+}		
+
+break;		
+
+
+		case 0x0b:
+
+if(((GET_OSD_LED_LIGHTMODE()==LightMode_Static)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Green)||(GET_OSD_LED_COLOR()==LightColorMode_Gyan)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_Breathe)&&((GET_OSD_LED_COLOR()==LightColorMode_Red)||(GET_OSD_LED_COLOR()==LightColorMode_Blue)||(GET_OSD_LED_COLOR()==LightColorMode_Purple)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeIn)&&((GET_OSD_LED_COLOR()==LightColorMode_Spectrum)||(GET_OSD_LED_COLOR()==LightColorMode_Green)||(GET_OSD_LED_COLOR()==LightColorMode_Gyan)||(GET_OSD_LED_COLOR()==LightColorMode_Yellow)))\
+	||((GET_OSD_LED_LIGHTMODE()==LightMode_MarqueeOut)&&((GET_OSD_LED_COLOR()==LightColorMode_Red)||(GET_OSD_LED_COLOR()==LightColorMode_Blue)||(GET_OSD_LED_COLOR()==LightColorMode_Purple))))
+{
+
+
+			if(led_time >= 12)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_LOW);//��12ms===�������1====>��
+				led_flag =0x0c;
+			}		
+
+
+
+}
+
+else
+{
+
+			if(led_time >= 4)
+			{
+				led_time = 0;
+				OSD_LED_CONTRL_SCL(LED_LOW);//��4ms===�������0====>��
+				led_flag =0x0c;
+			}		
+
+}
+			
+		
+
+		
+		break;	
+
+
+		
+///////////////////////////////////////////////////
+		case 0x0c:
+		
+		if(led_time >= 8)
+		{
+			led_time = 0;
+			OSD_LED_CONTRL_SCL(LED_HIGH);//��8ms   ��ɽ�����======>��
+			led_start = 0;
+			led_flag = 0;
+		}		
+		
+		break;	
+		
+
+	}
+
+}		
+
+
+
+
+
+
+
+
+#endif
+}
+
+#pragma restore
+#endif
+
+#if(_SYSTEM_TIMER_QUARTER_RESOLUTION == _ON)
+//--------------------------------------------------
+// Description  : Action in Timer2 int defined by User
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+#pragma save
+#pragma OT(8)
+void UserInterfaceTimer2InstantAccess_EXINT(void)
+{
+}
+#pragma restore
+#endif
+
+#if(_UART_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Action in Serial Port0 int defined by User
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceUartIntHandler_SERIALPORT(void)
+{
+    if(GET_UART_RECEIVE_STATUS() == _TRUE)
+    {
+        g_pucUartData[0] = GET_UART_DATA();
+
+        CLR_UART_RECEIVE_STATUS();
+    }
+}
+#endif
+
+#if(_EXT_INT1_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Action in EXT_INT1 int defined by User
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceEXTINT1Handler_EXINT1(void) using 2
+{
+    //USER To Do
+}
+#endif
+
+#if(_DEBUG_MESSAGE_SUPPORT == _OFF)
+//--------------------------------------------------
+// Description  : Get DDC-CI Status for Int1
+// Input Value  : ucDataType --> Data Type in StructSystemData
+// Output Value : ucValue --> Value of the Input Data Type
+//--------------------------------------------------
+BYTE UserInterfaceGetDdcciStatus_EXINT1(void) using 2
+{
+    return GET_OSD_DDCCI_STATUS();
+}
+
+//--------------------------------------------------
+// Description  : Get Data from DDCCI Buffer defined by user
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+BYTE UserInterfaceGetFactoryCommand_EXINT1(void) using 2
+{
+    return _FALSE;
+}
+
+#if((_HDMI_FREESYNC_SUPPORT == _ON) && (_HDMI_FREESYNC_CAPABILITY_SWITCH_METHOD == _MCCS_SWITCH_MODE))
+//--------------------------------------------------
+// Description  : Get Source Opcode is HDMI freesync
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+BYTE UserInterfaceDdcciHDMIFreesyncOpcode_EXINT1(void) using 2
+{
+    if(g_pucDdcciRxBuf[_DDCCI_SOURCE_OPCODE] == _HDMI_FREESYNC_MCCS_VCP)
+    {
+        return _TRUE;
+    }
+    else
+    {
+        return _FALSE;
+    }
+}
+#endif // #if(_HDMI_FREESYNC_SUPPORT == _ON)
+
+#endif
+
+#if(_HDMI_MULTI_EDID_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get the HDMI Port Edid location
+// Input Value  : EDID Index
+// Output Value : External/ Embedded Edid
+//--------------------------------------------------
+EnumHdmiEdidLocation UserInterfaceGetMultiHdmiEdidLocated(BYTE ucInputport, BYTE ucEdidIndex)
+{
+    return tEdidMultiLocatedTable[ucInputport][ucEdidIndex];
+}
+
+//--------------------------------------------------
+// Description  : Get the Mapping of Edid index of Function Application
+// Input Value  : ucInputPort
+// Output Value : Edid Index Enum
+//--------------------------------------------------
+EnumEdidSelection UserInterfaceGetMultiHdmiEdidIndex(BYTE ucInputPort)
+{
+    EnumEdidSelection enumIndex = _EDID_INDEX_0;
+    BYTE ucHdmiVer = OsdFuncGetHdmiPortVersion(ucInputPort);
+
+#if(_HDMI_FREESYNC_SUPPORT == _ON)
+    if((GET_OSD_FREE_SYNC_STATUS() == _ON))
+    {
+        enumIndex += ((_HDMI_HDR10_SUPPORT == _ON) ? 0x06 : 0x03);
+    }
+#endif
+
+#if(_HDMI_HDR10_SUPPORT == _ON)
+    if((UserInterfaceHDRGetHDR10ModeStatus(ucInputPort) != _HDR10_MODE_OFF))
+    {
+        enumIndex += 0x03;
+    }
+#endif
+
+    switch(ucHdmiVer)
+    {
+        case _HDMI_1P4:
+            break;
+
+        case _HDMI_2P0:
+            enumIndex += 0x01;
+            break;
+
+        case _HDMI_2P1:
+            enumIndex += 0x02;
+            break;
+
+        default:
+            break;
+    }
+    return enumIndex;
+}
+#endif
+
+#if((_EMBEDDED_EDID_SUPPORT == _ON) && (_WRITE_EDID_LOCATION_BY_USER_SUPPORT == _ON))
+//--------------------------------------------------
+// Description  : Set Embedded EDID Data
+// Input Value  : Input Port EDID Select
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetEmbeddedEDIDData(EnumInputPortEdid enumInputPort)
+{
+    switch(enumInputPort)
+    {
+        case _A0_INPUT_PORT_EDID:
+            break;
+
+#if(_D0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D0_INPUT_PORT_EDID:
+
+#if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+
+            memset(MCU_DDCRAM_D0, 0, _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D0, tDP_EDID_TABLE[UserAdjustGetDpEdidIndex(_D0_INPUT_PORT)], _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+
+#elif(_D0_HDMI_SUPPORT == _ON)
+
+#if(_D0_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D0_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D0_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D0, 0, _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D0, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D0_INPUT_PORT)], _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D0, 0, _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D0, tHDMI_EDID_FHD_TABLE, _D0_EMBEDDED_DDCRAM_MAX_SIZE);
+#endif
+
+#endif
+            break;
+#endif // #if(_D0_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D1_INPUT_PORT_EDID:
+
+#if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+            memset(MCU_DDCRAM_D1, 0, _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D1, tDP_EDID_TABLE[UserAdjustGetDpEdidIndex(_D1_INPUT_PORT)], _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+
+#elif(_D1_HDMI_SUPPORT == _ON)
+
+#if(_D1_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D1_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D1_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D1, 0, _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D1, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D1_INPUT_PORT)], _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D1, 0, _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D1, tHDMI_EDID_FHD_TABLE, _D1_EMBEDDED_DDCRAM_MAX_SIZE);
+#endif
+
+#endif
+            break;
+#endif // #if(_D1_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D2_INPUT_PORT_EDID:
+
+#if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+            memset(MCU_DDCRAM_D2, 0, _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D2, tDP_EDID_TABLE[UserAdjustGetDpEdidIndex(_D2_INPUT_PORT)], _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+
+#elif(_D2_HDMI_SUPPORT == _ON)
+
+#if(_D2_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D2_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D2_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D2, 0, _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D2, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D2_INPUT_PORT)], _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D2, 0, _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D2, tHDMI_EDID_FHD_TABLE, _D2_EMBEDDED_DDCRAM_MAX_SIZE);
+#endif
+
+#endif
+            break;
+#endif // #if(_D2_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D3_INPUT_PORT_EDID:
+
+#if(_D3_HDMI_SUPPORT == _ON)
+
+#if(_D3_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D3_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D3_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D3, 0, _D3_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D3, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D3_INPUT_PORT)], _D3_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D3, 0, _D3_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D3, tHDMI_EDID_FHD_TABLE, _D3_EMBEDDED_DDCRAM_MAX_SIZE);
+#endif
+
+#endif
+            break;
+#endif // #if(_D3_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D4_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D4_INPUT_PORT_EDID:
+
+#if(_D4_HDMI_SUPPORT == _ON)
+
+#if(_D4_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D4_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D4_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D4, 0, _D4_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D4, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D4_INPUT_PORT)], _D4_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D4, 0, _D4_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D4, tHDMI_EDID_FHD_TABLE, _D4_EMBEDDED_DDCRAM_MAX_SIZE);
+
+#endif
+
+#endif
+            break;
+#endif // #if(_D4_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D5_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D5_INPUT_PORT_EDID:
+
+#if(_D5_HDMI_SUPPORT == _ON)
+
+#if(_D5_HDMI_MULTI_EDID_SUPPORT == _ON)
+            if(UserCommonInterfaceHDMIGetMultiEdidLocated(_D5_INPUT_PORT, UserInterfaceGetMultiHdmiEdidIndex(_D5_INPUT_PORT)) != _HDMI_EDID_EXTERNAL)
+            {
+                memset(MCU_DDCRAM_D5, 0, _D5_EMBEDDED_DDCRAM_MAX_SIZE);
+                memcpy(MCU_DDCRAM_D5, tHDMI_EDID_TABLE[UserInterfaceGetMultiHdmiEdidIndex(_D5_INPUT_PORT)], _D5_EMBEDDED_DDCRAM_MAX_SIZE);
+            }
+#else
+            memset(MCU_DDCRAM_D5, 0, _D5_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D5, tHDMI_EDID_FHD_TABLE, _D5_EMBEDDED_DDCRAM_MAX_SIZE);
+#endif
+
+#endif
+            break;
+#endif // #if(_D5_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+#if(_D6_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+        case _D6_INPUT_PORT_EDID:
+
+#if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+
+            memset(MCU_DDCRAM_D6, 0, _D6_EMBEDDED_DDCRAM_MAX_SIZE);
+            memcpy(MCU_DDCRAM_D6, tDP_EDID_TABLE[UserAdjustGetDpEdidIndex(_D6_INPUT_PORT)], _D6_EMBEDDED_DDCRAM_MAX_SIZE);
+
+#endif
+            break;
+#endif // #if(_D6_EMBEDDED_DDCRAM_MAX_SIZE != _EDID_SIZE_NONE)
+
+        case _D0_INPUT_PORT_MHL_EDID:
+            break;
+
+        case _D1_INPUT_PORT_MHL_EDID:
+            break;
+
+        case _D2_INPUT_PORT_MHL_EDID:
+            break;
+
+        case _D3_INPUT_PORT_MHL_EDID:
+            break;
+
+        case _D4_INPUT_PORT_MHL_EDID:
+            break;
+
+        case _D5_INPUT_PORT_MHL_EDID:
+            break;
+
+        default:
+            break;
+    }
+}
+#endif // End of #if((_EMBEDDED_EDID_SUPPORT == _ON) && (_WRITE_EDID_LOCATION_BY_USER_SUPPORT == _ON))
+
+#if(_USB3_RETIMER_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get USB3 Retimer PS/PD Support Status
+// Input Value  : void
+// Output Value : EnumUSB3RetimerPSPDSupportStatus
+//--------------------------------------------------
+EnumUSB3RetimerPSPDSupportStatus UserInterfaceGetUSB3RetimerPSPDSupportStatus(void)
+{
+    if(GET_OSD_USB3_RETIMER_PS_PD_WAKEUP() == _TRUE)
+    {
+        return _USB3_RETIMER_PS_PD_ENABLE;
+    }
+
+    return _USB3_RETIMER_PS_PD_ENABLE;
+}
+#endif
+
+#if(_DIGITAL_PORT_SUPPORT == _ON)
+#if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_USER)
+//--------------------------------------------------
+// Description  : Get HDCP Bksv By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHDCPKeyBksvByUser(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+{
+    ucSubAddr = ucSubAddr;
+    ucLength = ucLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHDCPKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+#if(_DP_TX_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get Tx HDCP Aksv By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetTxHDCPKeyAksvByUser(BYTE ucSubAddr, BYTE ucLength, BYTE *pucReadArray)
+{
+    ucSubAddr = ucSubAddr;
+    ucLength = ucLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetTxHDCPKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+#endif // End of #if(_DP_TX_SUPPORT == _ON)
+#endif // End of #if(_HDCP_1_4_KEY_LOCATION == _TABLE_LOCATION_USER)
+
+#if((_HDCP_2_2_SUPPORT == _ON) && (_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_USER))
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2CertrxByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2RSADkeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2RSARRModNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2RSAKPrivByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2RSANpinvByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP By User Defined Method
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetHdcp2LCKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+#if((_DP_HDCP_2_2_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+//--------------------------------------------------
+// Description  : Get HDCP2.2 TX KEY -- RRMODN
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetDpTxHdcp2RRMODNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP2.2 TX KEY -- RRMODN
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetDpTxHdcp2DcpLlcNByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP2.2 TX KEY -- RRMODN
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetDpTxHdcp2EKeyByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+
+//--------------------------------------------------
+// Description  : Get HDCP2.2 TX KEY -- RRMODN
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetDpTxHdcp2NPinvByUser(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+}
+#endif // End of #if((_DP_HDCP_2_2_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+#endif // End of #if((_HDCP_2_2_SUPPORT == _ON) && (_HDCP_2_2_KEY_LOCATION == _TABLE_LOCATION_USER))
+#endif // End of #if(_DIGITAL_PORT_SUPPORT == _ON)
+
+#if(_PANEL_POWER_SEQUENCE_CONTROL_BY_USER == _ON)
+//--------------------------------------------------
+// Description  : Power Power On/Off Sequence
+// Input Value  : ucEvent --> _PANEL_ON
+//                            _PANEL_OFF
+//                            _BACKLIGHT_ON
+//                            _BACKLIGHT_OFF
+// Output Value : None
+//--------------------------------------------------
+void UserInterfacePanelPowerAction(BYTE ucEvent)
+{
+    ucEvent = ucEvent;
+}
+#endif
+
+//--------------------------------------------------
+// Description  : Wait For Panel Power Sequence T1
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustWaitPanelT1(void)
+{
+    ScalerTimerDelayXms(_PANEL_POWER_ON_T1);
+}
+
+//--------------------------------------------------
+// Description  : Wait For Panel Power Sequence T2
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustWaitPanelT2(void)
+{
+#if(_PANEL_STYLE == _PANEL_LVDS)
+
+    ScalerTimerDelayXms(_PANEL_POWER_ON_T2);
+
+#elif(_PANEL_STYLE == _PANEL_VBO)
+
+    ScalerDisplayVboPollingHotPlug(_PANEL_POWER_ON_T2);
+
+#elif(_PANEL_STYLE == _PANEL_DPTX)
+
+    ScalerDisplayDPTxPollingHotPlug(_PANEL_POWER_ON_T2);
+
+#endif
+}
+
+//--------------------------------------------------
+// Description  : Wait For Panel Power Sequence T3
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustWaitPanelT3(void)
+{	
+
+    ScalerTimerDelayXms(_PANEL_POWER_ON_T3);
+}
+
+//--------------------------------------------------
+// Description  : Wait For Panel Power Sequence T4
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustWaitPanelT4(void)
+{
+    ScalerTimerDelayXms(_PANEL_POWER_OFF_T4);
+}
+
+//--------------------------------------------------
+// Description  : Wait For Panel Power Sequence T5
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustWaitPanelT5(void)
+{
+    ScalerTimerDelayXms(_PANEL_POWER_OFF_T5);
+}
+
+//--------------------------------------------------
+// Description  : Uncall Function
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceUncallFunction(void)
+{
+    bit bUncall = _FALSE;
+
+    if(bUncall == _TRUE)
+    {
+#if((_FLASH_PARTITION_TYPE == _FLASH_PARTITION_USER) && (_CODE_DIGITAL_SIGNATURE_SUPPORT == _SIGNATURE_TYPE_OFF))
+        bUncall = tFLASH_PARTITION_BOOTTABLE[0];
+#endif
+
+        UserInterfaceGetDisplaySettingBacklightAction();
+
+#if(_DEVICE_LED_DRIVER_TYPE != _DEVICE_LED_DRIVER_NONE)
+        ExternalDeviceInterfaceLedDriverPwm(_DEVICE_LED_DRIVER_PWM_ALL, 0, _DEVICE_CALI_OFF);
+#if(_LD_HDR10_BOOST_SUPPORT == _ON)
+        ExternalDeviceInterfaceLedDriverPwmArrayBoostMode(0, 100);
+#else
+        ExternalDeviceInterfaceLedDriverPwmArray(0);
+#endif
+        ExternalDeviceInterfaceLedDriverPwmEnable(_ENABLE);
+        ExternalDeviceInterfaceLedDriverBacklight(0);
+#endif
+
+#if(_DP_TYPE_C_CONNECTOR_SUPPORT == _ON)
+        UserInterfaceTypeCGetOsdU3ModeSelection(_D0_INPUT_PORT);
+        UserInterfaceTypeCGetPinConfigType(_D0_INPUT_PORT, _TYPE_C_U3_ON);
+#endif
+
+#if(_AUDIO_SUPPORT == _ON)
+		ScalerAudioGetDigitalAudioSource(_NO_INPUT_PORT);
+#endif // End of #if(_AUDIO_SUPPORT == _ON)
+#if(_DP_SUPPORT == _ON)
+		UserCommonInterfaceDpGetEdidNativeTimingBw(_NO_PORT_EDID);
+#endif
+#if(_DVI_SUPPORT == _ON)
+		UserCommonInterfaceTmdsHdcpVersionCapabilitySwitch(_NO_INPUT_PORT, _HDCP_BY_PROJECT_DEFINE);
+#endif
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+		UserInterfaceGetDemoModeType();
+#endif
+	OsdFontPut4BitTable(0,0,0);
+	OsdFontPut1BitTable_LOGO(0, 0, 0, 0 , 0);
+
+    }
+}
+
+//--------------------------------------------------
+// Description  : User Power On Initial
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceInitial(void)
+{
+    PCB_PWM_SETTING();
+    RTDNVRamStartup();
+
+    UserCommonInterfaceDdcciSwitch(GET_OSD_DDCCI_STATUS(), UserCommonNVRamGetSystemData(_SEARCH_PORT));
+    RTDKeyInitial();
+    SET_PANELPOWERSTATUS(_PANEL_POWER_OFF_STATE);
+
+#if(_MOTION_BLUR_REDUCTION_SUPPORT == _OFF)
+    // Adjust Backlight
+    UserAdjustBacklight(GET_OSD_BACKLIGHT());
+#endif
+
+    // Adjust IR Decode
+#if(_IR_SUPPORT == _IR_HW_SUPPORT)
+    UserAdjusIR();
+#endif
+    SET_OSD_DOUBLE_SIZE(GET_OSD_NVRAM_DOUBLE_SIZE());
+#if(_INSTANT_TIMER_EVENT_1 == _ON)	//LED_EFFECT //_IR_VIRTUAL
+	ScalerTimer1SetTimerCount(1);
+#endif  
+
+#if(_LED_EFFECT_TJMODE14==_ON)	//_LED_EFFECT_SC8P1152A //_IR_VIRTUAL
+	if(UserCommonNVRamGetSystemData(_MONITOR_POWER_STATUS) == _OFF)
+	led_start =0;
+	  else
+	led_start =1;
+
+
+#else
+
+		if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+		{
+			ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+			OSD_LED_CONTRL(_OSD_LED_OFF);
+		}
+		else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+		{
+			ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+
+			OSD_LED_CONTRL(_OSD_LED_ON);
+
+		}
+		else if(GET_OSD_LED_TYPE() == _OSDLedType_FLASH)
+		{
+			ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+			
+		}
+#endif
+
+#if((_DVI_SUPPORT == _ON) || (_HDMI_SUPPORT == _ON))
+    UserCommonInterfaceTmdsSetHdmiZ0HpdType(_HDMI_HPD_Z0_TOGGLE_AT_SAME_TIME, 0, 0);
+#endif
+
+
+
+
+}
+
+//--------------------------------------------------
+// Description  : User Power Switch
+// Input Value  : ucSwitch --> Power Action
+// Output Value : None
+//--------------------------------------------------
+void UserInterfacePowerSwitch(EnumPowerAction enumSwitch)
+{
+    switch(enumSwitch)
+    {
+        case _POWER_ACTION_AC_ON_TO_NORMAL:
+
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_ON);
+
+            break;
+
+        case _POWER_ACTION_PS_TO_NORMAL:
+#if(_LED_EFFECT_TJMODE14==_ON)
+                    SET_OSD_LED_LIGHTMODE(GET_OSD_LED_PRE_LIGHTMODE()); 
+                    SET_OSD_LED_COLOR(GET_OSD_LED_PRE_COLOR());
+                    led_start =1;
+                    ScalerTimerDelayXms(30);
+#endif
+
+            break;
+
+        case _POWER_ACTION_OFF_TO_NORMAL:
+#if(_LED_EFFECT_TJMODE14==_ON)
+                SET_OSD_LED_LIGHTMODE(GET_OSD_LED_PRE_LIGHTMODE()); 
+                SET_OSD_LED_COLOR(GET_OSD_LED_PRE_COLOR());
+                led_start =1;
+                ScalerTimerDelayXms(30);
+            
+#endif
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_ON);
+
+            // Set Monitor Power On Status
+            UserCommonNVRamSetSystemData(_MONITOR_POWER_STATUS, _ON);
+
+            // Save System Power Status Data.
+            UserCommonNVRamSaveSystemData();
+
+            break;
+
+        case _POWER_ACTION_AC_ON_TO_OFF:
+
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_OFF);
+
+            // Panel pown down.
+            UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+
+            break;
+
+        case _POWER_ACTION_NORMAL_TO_OFF:
+#if(_LED_EFFECT_TJMODE14==_ON)  
+                SET_OSD_LED_TYPE(_OSDLedType_OFF);
+                led_start =1;                                                     //�ر� ��Ч
+#endif
+
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_OFF);
+
+            // Panel pown down.
+            UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+
+            // Set Monitor Power Off Status
+            UserCommonNVRamSetSystemData(_MONITOR_POWER_STATUS, _OFF);
+
+            // Save System Power Status Data.
+            UserCommonNVRamSaveSystemData();
+
+            break;
+
+        case _POWER_ACTION_PS_TO_OFF:
+
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_OFF);
+
+            // Set Monitor Power Off Status
+            UserCommonNVRamSetSystemData(_MONITOR_POWER_STATUS, _OFF);
+
+            // Save System Power Status Data.
+            UserCommonNVRamSaveSystemData();
+
+            break;
+
+        case _POWER_ACTION_NORMAL_TO_PS:
+
+            // Update LED Status
+            UserInterfaceKeyPadLedControl(_LED_POWER_SAVING);
+
+            // Panel pown down.
+            UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+
+            break;
+
+        default:
+
+            break;
+    }
+
+#if(_INSTANT_TIMER_EVENT_0 == _ON)
+    ScalerTimer0SetTimerCount(_TIMER_OFF);
+#endif
+}
+
+//--------------------------------------------------
+// Description  : Keypad Led Control
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceKeyPadLedControl(BYTE ucKeyPadLed)
+{
+    switch(ucKeyPadLed)
+    {
+        case _LED_POWER_ON:
+            PCB_LED_ON();
+            break;
+
+        case _LED_POWER_ACTIVE:
+            
+#if((Project_ID == ID_TJZG_HK2775E05_M270KCAD8B_EDP4LANHBR2_MD2769_QHD180HZ_20240313)||\
+    (Project_ID == ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528))
+            if(GET_OSD_FACTORY_MODE())
+            UserInterfaceKeyPadLedControl(_LED_POWER_SAVING);
+            else
+#endif
+            PCB_LED_ACTIVE();
+            break;
+
+        case _LED_POWER_SEARCH:
+#if((Project_ID == ID_TJZG_HK2775E05_M270KCAD8B_EDP4LANHBR2_MD2769_QHD180HZ_20240313)||\
+                (Project_ID == ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528))
+            if(GET_OSD_FACTORY_MODE())
+            UserInterfaceKeyPadLedControl(_LED_POWER_SAVING);
+            else
+#endif
+            PCB_LED_IDLE();
+            break;
+
+        case _LED_POWER_SAVING:
+            PCB_LED_POWER_SAVING();
+            break;
+
+        case _LED_POWER_NOSUPPORT:
+            PCB_LED_ACTIVE();
+            break;
+
+        case _LED_POWER_NOSUPPORT_SAVING:
+            PCB_LED_POWER_SAVING();
+            break;
+
+        case _LED_POWER_OFF:
+            PCB_LED_OFF();
+            break;
+
+        case _LED_ALL_OFF:
+            PCB_LED_OFF();
+            break;
+
+        case _LED_TYPE_1:
+            PCB_LED_TYPE1();
+            break;
+
+        case _LED_TYPE_2:
+            PCB_LED_TYPE2();
+            break;
+
+        case _LED_TYPE_3:
+            PCB_LED_TYPE3();
+            break;
+
+        case _LED_TYPE_4:
+            PCB_LED_TYPE4();
+            break;
+
+        case _LED_TYPE_5:
+            PCB_LED_TYPE5();
+            break;
+
+        case _LED_TYPE_FLASH:
+            PCB_LED_TYPE_FLASH();
+            break;
+
+        default:
+            break;
+    }
+}
+
+//--------------------------------------------------
+// Description  : User decide bypass Source Handler
+// Input Value  : None
+// Output Value : _SOURCE_DETECTION_NORMAL/_SOURCE_DETECTION_BYPASS
+//--------------------------------------------------
+EnumSourceDetectionInfo UserInterfaceSourceBypassDetection(void)
+{
+    return _SOURCE_DETECTION_NORMAL;
+}
+
+//--------------------------------------------------
+// Description  : User OSD Get LogoOn
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+bit UserInterfaceGetLogoStatus(void)
+{
+    return (GET_OSD_LOGO_ON());
+}
+
+//--------------------------------------------------
+// Description  : Check Whther to support this timing
+// Input Value  : None
+// Output Value : TRUE => Go to No Support State
+//--------------------------------------------------
+bit UserInterfaceGetdNoSupportStatus(void)
+{
+    // Add User No Support Check
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : For User to Check Whether to Support Current DCLK
+// Input Value  : None
+// Output Value : _TRUE => No Support
+//--------------------------------------------------
+bit UserInterfaceGetDclkNoSupportStatus(void)
+{
+#if(1)//
+        return _FALSE;
+#endif
+    if((GET_D_MAX_CLK_FREQ() > ((DWORD)_PANEL_PIXEL_CLOCK_MAX_KHZ)) ||
+       (GET_D_MIN_CLK_FREQ() < ((DWORD)_PANEL_PIXEL_CLOCK_MIN_KHZ)))
+    {
+        DebugMessageScaler("D Clock Exceed Panel Supported Range", GET_D_CLK_FREQ());
+        return _TRUE;
+    }
+
+#if((_FRC_SUPPORT == _ON) && (_HW_FRC_DOSMODE_ONLY_SUPPORT == _ON))
+#if(_M_DOMAIN_IMG_CMP_SUPPORT == _OFF) // Compatible to RL6463
+    if(GET_MEMORY_CONFIG() == _MEMORY_WORK_MODE)
+    {
+        if((GET_INPUT_TIMING_HWIDTH() > 800) ||
+           (GET_INPUT_TIMING_VHEIGHT() > 600))
+        {
+            DebugMessageScaler("FRC only supports dos-mode timing", 0);
+            return _TRUE;
+        }
+    }
+#else
+    // RL6851 Support IMC, FRC is not limit to DOS-Mode only
+#endif
+#endif
+
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : Get whether to by pass normal active process
+// Input Value  : None
+// Output Value : _TRUE => By pass normal active process
+//--------------------------------------------------
+bit UserInterfaceGetActiveByPassStatus(void)
+{
+    if(GET_OSD_STATE() != _MENU_NONE)
+    {
+        return _TRUE;
+    }
+
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : User Define Whether Cable Status Should Reset
+// Input Value  : None
+// Output Value : _TRUE => Reset
+//--------------------------------------------------
+bit UserInterfaceGetCableResetStatus(void)
+{
+    if((SysSourceGetCableStatusChange(UserCommonNVRamGetSystemData(_SEARCH_PORT)) == _TRUE) &&
+       ((!(SysModeGetModeState() == _MODE_STATUS_SEARCH)) || (SysSourceGetCableDetect(UserCommonNVRamGetSystemData(_SEARCH_PORT)) == _TRUE)))
+    {
+        SET_FORCE_POW_SAV_STATUS(_FALSE);
+
+        if(SysSourceGetScanType() != _SOURCE_SWITCH_FIXED_PORT)
+        {
+            SysSourceSwitchInputPort(UserCommonNVRamGetSystemData(_SEARCH_PORT));
+        }
+
+        return _TRUE;
+    }
+
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : Get Forced Power Saving Status
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+bit UserInterfaceGetForcePSStatus(void)
+{
+    return (GET_FORCE_POW_SAV_STATUS());
+}
+
+#if(_HDMI_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Force HPD Toggle when Power Saving Wakeup
+// Input Value  : None
+// Output Value : _USER_FORCE_PS_TMDS_HPD_TOGGLE->User Want to Toggle HPD When Wakeup
+//--------------------------------------------------
+EnumUserForcePSTmdsHpdToggle UserInterfaceForcePSWakeupTmdsHpdToggle(void)
+{
+    return _USER_FORCE_PS_TMDS_HPD_NOT_TOGGLE;
+}
+#endif
+
+#if(_DVI_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Decide HDCP Capibility
+// Input Value  : None
+// Output Value : HDCP Version
+//--------------------------------------------------
+EnumTmdsHdcpType UserInterfaceTmdsAcOnGetHdcpCap(void)
+{
+    return _HDCP_BY_PROJECT_DEFINE;
+}
+#endif
+
+//--------------------------------------------------
+// Description  : User Check Into Power Saving
+// Input Value  : None
+// Output Value : True --> User Check Ready to Power Saving
+//--------------------------------------------------
+bit UserInterfaceGetIntoPSStatus(void)
+{
+    if(ScalerOsdGetOsdEnable() == _TRUE)
+    {
+        return _FALSE;
+    }
+
+    return _TRUE;
+}
+
+//--------------------------------------------------
+// Description  : User Setting Fake Power Saving
+// Input Value  : None
+// Output Value : _USER_FORCE_FAKE_PS --> User Set Power Status into Fake Power Saving
+//                _USER_FORCE_POWER_SAVING    --> User Set Power Status into Power saving
+//--------------------------------------------------
+EnumUserForceFakePS UserInterfaceGetFakePSStatus(void)
+{
+    return _USER_FORCE_POWER_SAVING;
+}
+
+//--------------------------------------------------
+// Description  : User Setting Fake Power Status
+// Input Value  : None
+// Output Value : _USER_FORCE_FAKE_POWER_OFF ==> Fake Power Off
+//                _USER_FORCE_POWER_OFF ==> Power off
+//--------------------------------------------------
+EnumUserForceFakePowerOff UserInterfaceGetFakePowerOffStatus(void)
+{
+    return _USER_FORCE_POWER_OFF;
+}
+
+//--------------------------------------------------
+// Description  : Check Whther ADC Data is Reasonable
+// Input Value  : LOAD or SAVE
+// Output Value : _TRUE => Reasonable
+//--------------------------------------------------
+bit UserInterfaceGetNVRamDataStatus(EnumNvramCheckType enumNvramCheckType)
+{
+    switch(enumNvramCheckType)
+    {
+#if(_VGA_SUPPORT == _ON)
+        case _CHECK_ADC_LOAD:
+
+            if(g_stAdcData.ucAdcPGA >= 0xF0)
+            {
+                // Assign Prefered Value
+                g_stAdcData.ucAdcPGA = 8;
+            }
+
+            break;
+
+        case _CHECK_ADC_SAVE:
+
+            if(g_stAdcData.ucAdcPGA >= 0xF0)
+            {
+                return _FAIL;
+            }
+            break;
+#endif
+
+        case _CHECK_SYSTEM_DATA_LOAD:
+        case _CHECK_SYSTEM_DATA_SAVE:
+        case _CHECK_MODE_USER_DATA_LOAD:
+        case _CHECK_MODE_USER_DATA_SAVE:
+
+            break;
+
+        default:
+            break;
+    }
+
+    return _SUCCESS;
+}
+
+//--------------------------------------------------
+// Description  : Get backlight staus when performing display setting
+// Input Value  : None
+// Output Value : _ENABLE or _DISABLE
+//--------------------------------------------------
+bit UserInterfaceGetDisplaySettingBacklightAction(void)
+{
+#if((_PANEL_STYLE == _PANEL_DPTX) ||\
+    (_PANEL_STYLE == _PANEL_VBO))
+
+    return _DISABLE;
+
+#else
+
+#if(_DISPLAY_ROTATION_SUPPORT == _ON)
+    if((GET_ROT_TYPE() != UserInterfaceGetRotationDegree()) ||
+       (GET_ROT_DISP_SIZE() != UserInterfaceGetRotationDisplayType()))
+    {
+        return _DISABLE;
+    }
+#endif
+
+#if(_DISP_LATENCY_ADJUST_SUPPORT == _ON)
+#if(_DISPLAY_ROTATION_SUPPORT == _ON)
+    if(GET_ROT_TYPE() != _ROT_DISABLE)
+#endif
+    {
+        if(GET_DISP_LATENCY_RATIO() != UserInterfaceGetDisplayLatencyRatio())
+        {
+            return _DISABLE;
+        }
+    }
+#endif
+
+    return _ENABLE;
+
+#endif
+}
+
+//--------------------------------------------------
+// Description  : Get OSD Color Format
+// Input Value  : None
+// Output Value : Color Format
+//--------------------------------------------------
+EnumColorSpace UserInterfaceGetColorFormat(void)
+{
+    EnumColorSpace enumColorSpace = ScalerColorGetColorSpace();
+
+#if(_COLOR_FORMAT_CONVERT == _ON)
+    switch(SysSourceGetSourceType())
+    {
+        case _SOURCE_VGA:
+        case _SOURCE_DVI:
+            enumColorSpace = GET_OSD_COLOR_FORMAT();
+            break;
+
+        default:
+            break;
+    }
+#endif
+
+    if(ScalerColorGetColorSpaceRGB(enumColorSpace) == _TRUE)
+    {
+        return _COLOR_SPACE_RGB;
+    }
+    else
+    {
+        return _COLOR_SPACE_YPBPR;
+    }
+}
+
+#if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : HP Source Switch Event Time
+// Input Value  : Source Scan Type
+// Output Value : None
+//--------------------------------------------------
+BYTE UserInterfaceGetHpSourceSwitchOsdEventTime(BYTE ucSourceScanType)
+{
+    ucSourceScanType = ucSourceScanType;
+    return 0;
+}
+#endif
+
+#if(_OVERSCAN_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Modify Timing For Overscan
+// Input Value  : Current Input Timing
+// Output Value : Modified Input Timing
+//--------------------------------------------------
+bit UserInterfaceGetOverScanStatus(void)
+{
+    bit bDoOverScan = _FALSE;
+    BYTE ucTemp = 0;
+    WORD code tusOverscanEnTable[][3] =
+    {
+        // VFreq, HWidth, VHeight,
+        {600,  640,  480},    // 480p
+        {600,  720,  480},    // 480p
+        {600,  960,  480},    // 480p
+        {600, 1440,  480},    // 480p
+
+        {500,  720,  576},    // 576p
+        {500,  768,  576},    // 576p
+        {500,  960,  576},    // 576p
+        {500, 1280,  576},    // 576p
+        {500, 1440,  576},    // 576p
+        {500, 1280,  720},    // 720p
+        {600, 1280,  720},    // 720p
+        {500, 1920,  1080},   // 1080p
+        {600, 1920,  1080},   // 1080p
+
+        // Don't delete it, and place it at last.
+        {  0,    0,    0},
+    };
+
+    if(GET_OSD_OVERSCAN_STATUS() == _OFF)
+    {
+        return _FALSE;
+    }
+
+    // Decide whether to do over scan
+    switch(SysSourceGetSourceType())
+    {
+#if(_OVERSCAN_VGA_SUPPORT == _ON)
+        case _SOURCE_VGA:
+
+            // Interlaced and YUV Timing Always do overscan
+            if(GET_INPUT_TIMING_INTERLACE_FLG() == _TRUE)
+            {
+                bDoOverScan = _TRUE;
+                break;
+            }
+
+            if(GET_VGA_COLOR_FORMAT_STATUS() == _COLOR_SPACE_RGB)
+            {
+                break;
+            }
+
+            while(tusOverscanEnTable[ucTemp][0] != 0)
+            {
+                if((abs(GET_INPUT_TIMING_VFREQ() - tusOverscanEnTable[ucTemp][0]) < 10) &&
+                   (abs(GET_INPUT_TIMING_HWIDTH() - tusOverscanEnTable[ucTemp][1]) < 2) &&
+                   (GET_INPUT_TIMING_VHEIGHT() == tusOverscanEnTable[ucTemp][2]))
+                {
+                    bDoOverScan = _TRUE;
+                    break;
+                }
+
+                ucTemp++;
+            }
+
+            break;
+#endif // End of #if(_OVERSCAN_VGA_SUPPORT == _ON)
+
+#if(_OVERSCAN_DVI_SUPPORT != _ON)
+        case _SOURCE_DVI:
+            break;
+#endif
+
+#if(_OVERSCAN_HDMI_SUPPORT != _ON)
+        case _SOURCE_HDMI:
+            break;
+#endif
+
+#if(_OVERSCAN_DP_SUPPORT != _ON)
+        case _SOURCE_DP:
+            break;
+#endif
+
+        default:
+#if((_OVERSCAN_DVI_SUPPORT == _ON) || (_OVERSCAN_HDMI_SUPPORT == _ON) || (_OVERSCAN_DP_SUPPORT == _ON))
+            // Interlaced and YUV Timing Always do overscan
+            if(GET_INPUT_TIMING_INTERLACE_FLG() == _TRUE)
+            {
+                bDoOverScan = _TRUE;
+                break;
+            }
+
+            if(ScalerColorGetColorSpaceRGB(ScalerColorGetColorSpace()) == _TRUE)
+            {
+                break;
+            }
+
+            while(tusOverscanEnTable[ucTemp][0] != 0)
+            {
+                if((abs(GET_INPUT_TIMING_VFREQ() - tusOverscanEnTable[ucTemp][0]) < 10) &&
+                   (abs(GET_INPUT_TIMING_HWIDTH() - tusOverscanEnTable[ucTemp][1]) < 2) &&
+                   (GET_INPUT_TIMING_VHEIGHT() == tusOverscanEnTable[ucTemp][2]))
+                {
+                    bDoOverScan = _TRUE;
+                    break;
+                }
+
+                ucTemp++;
+            }
+#endif // End of #if((_OVERSCAN_DVI_SUPPORT == _ON) || (_OVERSCAN_HDMI_SUPPORT == _ON) || (_OVERSCAN_DP_SUPPORT == _ON))
+            break;
+    }
+
+    return bDoOverScan;
+}
+#endif // End of #if(_OVERSCAN_SUPPORT == _ON)
+
+#if(_ASPECT_RATIO_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Modify Timing For Aspect Ratio
+// Input Value  : None
+// Output Value : aspect ration type
+//--------------------------------------------------
+EnumAspectRatioType UserInterfaceGetAspectRatioType(void)
+{
+    switch(GET_OSD_ASPECT_RATIO_TYPE())
+    {
+
+        case _OSD_ASPECT_RATIO_4_BY_3:
+        case _OSD_ASPECT_RATIO_5_BY_4:
+		case _OSD_ASPECT_RATIO_1_BY_1:
+
+            return _ASPECT_RATIO_FIXED;
+
+#if(_ASPECT_ORIGINAL_MODE_SUPPORT == _ON)
+        case _OSD_ASPECT_RATIO_ORIGIN:
+
+            return _ASPECT_RATIO_ORIGIN;
+        case _OSD_ASPECT_RATIO_USER:
+    #if 1//
+            return _ASPECT_RATIO_FIXED;
+    #else
+            return _ASPECT_RATIO_ORIGIN;
+    #endif
+#endif
+
+        default:
+
+
+        case _OSD_ASPECT_RATIO_FULL:
+
+            return _ASPECT_RATIO_FULL;
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get user H/V aspect ratio values
+// Input Value  : enumSelRegion --> select region
+//                usHRatio, usVRatio --> aspect ratio
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetAspectRatio(WORD *pusHRatio, WORD *pusVRatio)
+{
+    switch(GET_OSD_ASPECT_RATIO_TYPE())
+    {
+        default:
+            break;
+
+        case _OSD_ASPECT_RATIO_16_BY_9:
+            *pusHRatio = 16;
+			*pusVRatio = 9;
+            break;
+
+        case _OSD_ASPECT_RATIO_4_BY_3:
+            *pusHRatio = 4;
+            *pusVRatio = 3;
+            break;
+			
+		case _OSD_ASPECT_RATIO_1_BY_1:
+            *pusHRatio = 1;
+            *pusVRatio = 1;
+            break;
+			
+        case _OSD_ASPECT_RATIO_5_BY_4:
+            *pusHRatio = 5;
+            *pusVRatio = 4;
+            
+#if 1//
+        case  _OSD_ASPECT_RATIO_USER:
+            *pusHRatio = GET_INPUT_TIMING_HWIDTH();
+            *pusVRatio = GET_INPUT_TIMING_VHEIGHT();
+#endif
+            break;
+    }
+}
+
+//--------------------------------------------------
+// Description  : User defined aspect ratio process
+// Input Value  : select region
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustAspectRatio(void)
+{
+}
+
+#if(_ASPECT_RATIO_WITHOUT_MUTE == _ON)
+//--------------------------------------------------
+// Description  : User defined minimum dvheight for aspect ratio
+//                use 1:1 for example
+// Input Value  : None
+// Output Value : usMinDvheight
+//--------------------------------------------------
+WORD UserInterfaceGetAspectRatioMinDVHeight(void)
+{
+    WORD usMinDvheight = (GET_INPUT_TIMING_VHEIGHT() < GET_MDOMAIN_OUTPUT_VHEIGHT()) ? GET_INPUT_TIMING_VHEIGHT() : GET_MDOMAIN_OUTPUT_VHEIGHT();
+    // return 0 if disable the function
+    return usMinDvheight;
+}
+#endif
+
+#if(_ASPECT_ORIGINAL_MODE_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get aspect original mode ratio
+// Input Value  : select region
+// Output Value : Retion display ratio in aspect ratio original mode (0x00 ~ 0xFF)
+//--------------------------------------------------
+BYTE UserInterfaceGetAspectRatioOriginalRatio(void)
+{
+    return 0xFF;
+}
+
+//--------------------------------------------------
+// Description  : Get reduced aspect ratio in original mode
+// Input Value  : select region
+// Output Value : Retion display ratio in aspect ratio original mode (0x00 ~ 0xFF)
+//--------------------------------------------------
+BYTE UserInterfaceGetAspectRatioOriginalRatioSmall(void)
+{
+#if 0//(Project_ID != ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+    if(GET_OSD_ASPECT_RATIO_TYPE() == _OSD_ASPECT_RATIO_USER)
+    {
+        return 0xCC;
+    }
+    else
+#endif
+    {
+        return 0xFF;
+    }
+}
+#endif
+#endif // End of #if(_ASPECT_RATIO_SUPPORT == _ON)
+
+#if(_DISPLAY_ROTATION_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get current rotation degree
+// Input Value  : None
+// Output Value : rotation degree
+//--------------------------------------------------
+EnumRotationType UserInterfaceGetRotationDegree(void)
+{
+    switch(GET_OSD_DISP_ROTATE())
+    {
+        default:
+        case _DISP_ROTATE_0:
+            return _ROT_DISABLE;
+
+#if (_DISPLAY_ROTATION_90_SUPPORT == _ON)
+        case _DISP_ROTATE_90:
+            return _ROT_CW90;
+#endif
+#if (_DISPLAY_ROTATION_180_SUPPORT == _ON)
+        case _DISP_ROTATE_180:
+            return _ROT_CW180;
+#endif
+#if (_DISPLAY_ROTATION_270_SUPPORT == _ON)
+        case _DISP_ROTATE_270:
+            return _ROT_CW270;
+#endif
+#if (_DISPLAY_HOR_MIRROR_SUPPORT == _ON)
+        case _DISP_ROTATE_HOR_MIRROR:
+            return _ROT_HOR_MIRROR;
+#endif
+#if (_DISPLAY_VER_MIRROR_SUPPORT == _ON)
+        case _DISP_ROTATE_VER_MIRROR:
+            return _ROT_VER_MIRROR;
+#endif
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get current rotation type
+// Input Value  : None
+// Output Value : rotation type
+//--------------------------------------------------
+EnumRotationDisplayType UserInterfaceGetRotationDisplayType(void)
+{
+    switch(GET_OSD_DISP_ROTATION_SIZE_TYPE())
+    {
+        default:
+        case _OSD_ROTATE_DISPLAY_FULL:
+            return _ROT_FULL;
+
+        case _OSD_ROTATE_DISPLAY_PIXEL_BY_PIXEL:
+            return _ROT_PIXEL_BY_PIXEL;
+
+        case _OSD_ROTATE_DISPLAY_KEEP_SRC_ASPECT_RATIO:
+            return _ROT_KEEP_SRC_ASPECT_RATIO;
+    }
+}
+#endif
+
+#if(_DISP_LATENCY_ADJUST_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get Display Latency Ratio
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+BYTE UserInterfaceGetDisplayLatencyRatio(void)
+{
+    switch(GET_OSD_LATENCY())
+    {
+        default:
+            break;
+
+        case _LATENCY_L:
+            return 0;   // 0%
+
+        case _LATENCY_M:
+            return 50;  // 50%
+
+        case _LATENCY_H:
+            return 100; // 100%
+    }
+
+    return 0;
+}
+#endif
+
+#if(_FRC_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Adjust Max/Min Freq according to latency
+// Input Value  : None
+// Output Value : max/min freq
+//--------------------------------------------------
+void UserInterfaceGetDVMaxMinFreq(StructDVCustomizedFreq *pstDVCustomizedFreq)
+{
+    pstDVCustomizedFreq = pstDVCustomizedFreq;
+
+#if(_MN_FINE_TUNE_LASTLINE_SUPPORT == _ON)
+    if((SysSourceGetInputPort() == _A0_INPUT_PORT) ||
+       (GET_INPUT_TIMING_INTERLACE_FLG() == _TRUE))
+    {
+        pstDVCustomizedFreq->b1FORCETOFREERUN = _ENABLE;
+    }
+#endif
+
+#if(_DISP_LATENCY_ADJUST_SUPPORT == _ON)
+    switch (GET_OSD_LATENCY())
+    {
+        default:
+        case _LATENCY_H:
+        case _LATENCY_M:
+        case _LATENCY_L:
+
+            pstDVCustomizedFreq->usMaxFreq = _PANEL_MAX_FRAME_RATE;
+            pstDVCustomizedFreq->usTypFreq = _PANEL_TYP_FRAME_RATE;
+            pstDVCustomizedFreq->usMinFreq = _PANEL_MIN_FRAME_RATE;
+            break;
+    }
+#endif
+}
+#endif
+
+//--------------------------------------------------
+// Description  : Adjust Main Memory Data Bit, including line buffer and frame buffer
+// Input Value  : pstCustomizedMdomain
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceDisplaySelectMDomainSettingForMain(StructCustomizedMdomain *pstCustomizedMdomain)
+{
+    pstCustomizedMdomain->enumMemoryBitSelect = _MEMORY_REF_SOURCE_BIT;
+}
+
+#if(_OD_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get OD enable status
+// Input Value  : None
+// Output Value : function enable status
+//--------------------------------------------------
+EnumFunctionOnOFF UserInterfaceGetODEnableStatus(void)
+{
+    return GET_OSD_OD_STATUS();
+}
+#endif
+
+#if((_MEMORY_TYPE_CONFIG == _MEMORY_DDR3) && (_DDR3_MULTIPHASE_EXIST == _ON))
+//--------------------------------------------------
+// Description  : Get DDR3 Phase From GPIO or DDCCI command
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceUpdateDDR3PhaseData(void)
+{
+    StructDDR3PhaseInfo stUserVedorDdr3PhaseData = {_DDR3_PLL_INITIAL_PHASE_0, _DDR3_PLL_INITIAL_PHASE_1, _DDR3_READ_DQ_DLYN_TAP};
+    ScalerPLLGetDDR3PhaseData(&stUserVedorDdr3PhaseData);
+}
+#endif
+
+#if(_USER_SYSTEM_EEPROM_CUSTOMIZATION == _ON)
+//--------------------------------------------------
+// Description  : User Custom Check Proc when System Eeprom Read
+// Input Value  : usSubAddr    --> Start address of selected device
+//                usLength     --> Numbers of data we want to read
+//                pReadArray   --> Result array
+// Output Value : Reading result (Fail/Success)
+//--------------------------------------------------
+bit UserInterfaceSystemEepromReadCustomProc(WORD usSubAddr, WORD usLength, BYTE *pucReadArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucReadArray = pucReadArray;
+    return _SUCCESS;
+}
+
+//--------------------------------------------------
+// Description  : User Custom Check Proc when System Eeprom Write
+// Input Value  : usSubAddr    --> Start address of selected device
+//                usLength     --> Numbers of data we want to write
+//                pReadArray   --> Result array
+// Output Value : Reading result (Fail/Success)
+//--------------------------------------------------
+bit UserInterfaceSystemEepromWriteCustomProc(WORD usSubAddr, WORD usLength, BYTE *pucWriteArray)
+{
+    usSubAddr = usSubAddr;
+    usLength = usLength;
+    pucWriteArray = pucWriteArray;
+    return _SUCCESS;
+}
+#endif
+
+#if(_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Adjust backlight setting
+// Input Value  : Backlight Mode, Backlight On/Off
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceMbrBacklightAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl, WORD usDVTotal)
+{
+    BYTE ucBacklightDuty = 0; // Backlight ON percentage
+    BYTE ucBacklightPos = 0; // Backlight Position percentage
+    WORD usStrobeVWidth = 0; // Backlight ON lines
+    WORD usStrobeVPos = 0; // Backlight ON Position (lines)
+
+    DebugMessageScaler("MBR: bLightCtrl", bLightCtrl);
+    DebugMessageScaler("MBR: VTotal", usDVTotal);
+    DebugMessageScaler("MBR: ucBacklightDuty", GET_OSD_MBR_DUTY());
+    DebugMessageScaler("MBR: ucBacklightPos", GET_OSD_MBR_POSITION());
+
+    switch(enumBacklightMode)
+    {
+        //=================================================================
+        // User customized motion blur reduction mode
+        //=================================================================
+        case _BACKLIGHT_MODE_STROBE_USER_CUSTOMIZE_MBR:
+            /*
+             Strobe Backlight Position
+               _____       ________________________     _____
+              |     |     |                        |   |     |
+              |VSync|_____|         Duty           |___|VSync|___
+                         Pos                   Pos + Duty
+
+               _____                        ________________________
+              |     |                      |                        |
+              |VSync|______________________|         Duty           |___
+                                          Pos                  Pos + Duty
+            */
+
+            if(bLightCtrl == _LIGHT_CONTROL_ON)
+            {
+                // Backlight strobe ctrl (Tcon local enable...)
+                ucBacklightDuty = GET_OSD_MBR_DUTY();
+                ucBacklightPos = GET_OSD_MBR_POSITION();
+                usStrobeVPos = (WORD)((DWORD)ucBacklightPos * usDVTotal / 100L);
+                usStrobeVWidth = (WORD)((DWORD)ucBacklightDuty * usDVTotal / 100L);
+                if(ucBacklightDuty == 100)
+                {
+                    ScalerTconAdjustByIndex(_PCB_MBR_TCON_PIN, 0x0000, 0x1FFF, 0x0000, 0x3FFF);
+                }
+                else
+                {
+                    ScalerTconAdjustByIndex(_PCB_MBR_TCON_PIN, 0x0000, 0x1FFF, usStrobeVPos, (usStrobeVPos + usStrobeVWidth) % usDVTotal);
+                }
+                ScalerTconEnableByIndex(_PCB_MBR_TCON_PIN, _ENABLE);
+            }
+            else
+            {
+                // Setting in _LIGHT_CONTROL_OFF case
+                ScalerTconEnableByIndex(_PCB_MBR_TCON_PIN, _DISABLE);
+            }
+            break;
+
+        //=================================================================
+        // Constant backlight mode
+        //=================================================================
+        default:
+        case _BACKLIGHT_MODE_CONSTANT:
+            if(bLightCtrl == _LIGHT_CONTROL_ON)
+            {
+                // Backlight Ctrl
+                // Set TCON to always ON and/or disable strobe ctrl pins...
+                ScalerTconAdjustByIndex(_PCB_MBR_TCON_PIN, 0x0000, 0x1FFF, 0x0000, 0x3FFF);
+
+                ScalerTconEnableByIndex(_PCB_MBR_TCON_PIN, _ENABLE);
+            }
+            else
+            {
+                // Setting in _LIGHT_CONTROL_OFF case
+                ScalerTconEnableByIndex(_PCB_MBR_TCON_PIN, _DISABLE);
+            }
+            break;
+    }
+}
+
+//--------------------------------------------------
+// Description  : Adjust Backlight ADIM (normally controled by scaler PWM)
+// Input Value  : Current backlight mode and backlight on/off status
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceMbrAdimAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl)
+{
+    if(bLightCtrl == _LIGHT_CONTROL_ON)
+    {
+        switch(enumBacklightMode)
+        {
+            // In strobe backlight case, set scaler PWM to full duty
+            case _BACKLIGHT_MODE_STROBE_USER_CUSTOMIZE_MBR:
+            case _BACKLIGHT_MODE_STROBE_DRR_MBR:
+            case _BACKLIGHT_MODE_STROBE_RTK_ADV_MBR:
+                PCB_PWM_SETTING();
+                PCB_BACKLIGHT_PWM(0xFF);
+                break;
+
+            // In constant backlight case, set scaler PWM according to user setting
+            case _BACKLIGHT_MODE_CONSTANT:
+            default:
+                PCB_PWM_SETTING();
+                UserAdjustBacklight(GET_OSD_BACKLIGHT());
+                break;
+        }
+    }
+    else
+    {
+        PCB_BACKLIGHT_PWM(0x00);
+    }
+}
+
+//--------------------------------------------------
+// Description  : Adjust Backlight PDIM
+// Input Value  : Current backlight mode and backlight on/off status
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceMbrPdimAdjust(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl)
+{
+    enumBacklightMode = enumBacklightMode;
+    bLightCtrl = bLightCtrl;
+
+    // User can modify PDIM control setting here
+    // e.g.
+    // when using AS3824, MBR P-dimming setting may not required to be controled by TCON in Constant Mode
+    // User can place additional setting here(switch Pinshare, Send I2C Command to driver...etc.)
+    // ---
+    // For TCON enable setting, kernel set accrording to the result of UserInterfaceDisplayMbrGetPdimControl()
+}
+
+//--------------------------------------------------
+// Description  : Get backlight PDIM control method
+// Input Value  : Current backlight mode and backlight on/off status
+// Output Value : PDIM control method
+//--------------------------------------------------
+EnumMbrPDimCtrl UserInterfaceMbrGetPdimControl(EnumMbrBacklightMode enumBacklightMode, bit bLightCtrl)
+{
+    enumBacklightMode = enumBacklightMode;
+    bLightCtrl = bLightCtrl;
+
+    // User can specify PDIM control method here
+    // e.g.
+    // when using AS3824, MBR P-dimming setting may not required to be controled by TCON in Constant Mode
+    // User can return _BACKLIGHT_PDIM_CTRL_BY_USER and place additional setting in UserInterfaceDisplayMbrPdimAdjust()
+    // ---
+    // _BACKLIGHT_PDIM_CTRL_BY_TCON => kernel WILL enable/disable TCON at current status
+    // _BACKLIGHT_PDIM_CTRL_BY_USER => kernel WILL NOT enable/disable TCON at current status
+
+    return _BACKLIGHT_PDIM_CTRL_BY_TCON;
+}
+
+//--------------------------------------------------
+// Description  : Judge MBR Backlight Mode
+// Input Value  : None
+// Output Value : Backlight Mode
+//--------------------------------------------------
+EnumMbrBacklightMode UserInterfaceMbrGetBacklightMode(void)
+{
+    if(GET_OSD_MBR_STATUS() == _OSD_MBR_USER_DISABLE) // Constant backlight
+    {
+        return _BACKLIGHT_MODE_CONSTANT;
+    }
+    else if(GET_OSD_MBR_STATUS() == _OSD_MBR_USER_ENABLE) // User want to control backlight
+    {
+        return _BACKLIGHT_MODE_STROBE_USER_CUSTOMIZE_MBR;
+    }
+    else if(GET_OSD_MBR_STATUS() == _OSD_RTK_ADV_MBR_USER_ENABLE)
+    {
+#if((_FREESYNC_SUPPORT == _ON) && (_DRR_MOTION_BLUR_REDUCTION_SUPPORT == _ON))
+        if((ScalerSyncGetFREESYNCEnable() == _TRUE) && (UserCommonInterfaceMbrDrrGetHWSupport() == _TRUE))
+        {
+            return _BACKLIGHT_MODE_STROBE_DRR_MBR;
+        }
+#endif
+#if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+        if(ScalerMbrGetAdvMbrStatus() == _ENABLE)
+        {
+            return _BACKLIGHT_MODE_STROBE_RTK_ADV_MBR;
+        }
+#endif
+        return _BACKLIGHT_MODE_CONSTANT;
+    }
+
+    return _BACKLIGHT_MODE_CONSTANT;
+}
+
+#if((_DRR_MOTION_BLUR_REDUCTION_SUPPORT == _ON) || (_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON))
+//--------------------------------------------------
+// Description  : Get User MBR Backlight Duty
+// Input Value  : None
+// Output Value : Backlight Duty
+//--------------------------------------------------
+BYTE UserInterfaceMbrGetBacklightDuty(void)
+{
+    return (BYTE)GET_OSD_MBR_DUTY();
+}
+
+//--------------------------------------------------
+// Description  : Get User MBR Backlight Position
+// Input Value  : None
+// Output Value : Backlight Position
+//--------------------------------------------------
+BYTE UserInterfaceMbrGetBacklightPos(void)
+{
+    return (BYTE)GET_OSD_MBR_POSITION();
+}
+#endif
+
+//--------------------------------------------------
+// Description  : Get backlight off PDIM/ADIM sequence
+// Input Value  : None
+// Output Value : Backlight adjust sequence
+//--------------------------------------------------
+EnumMbrBacklightSeq UserInterfaceMbrGetBacklightSequence(bit bLightCtrl)
+{
+    if(bLightCtrl == _LIGHT_CONTROL_ON)
+    {
+        if(UserCommonInterfaceMbrGetCurrentBacklightMode() == _BACKLIGHT_MODE_CONSTANT)
+        {
+            return _BACKLIGHT_SEQ_ADIM_PDIM;
+        }
+        else
+        {
+            return _BACKLIGHT_SEQ_PDIM_ADIM;
+        }
+    }
+    else
+    {
+        return _BACKLIGHT_SEQ_PDIM_ADIM;
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get backlight off PDIM/ADIM delay
+// Input Value  : None
+// Output Value : xx ms delay between PDIM/ADIM
+//--------------------------------------------------
+WORD UserInterfaceMbrGetBacklightSequenceDelay(bit bLightCtrl)
+{
+    if(bLightCtrl == _LIGHT_CONTROL_ON)
+    {
+        return 0;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+#if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Adjust Motion Blur Reduction Function
+//                Accroding to User Selection
+// Input Value  : None
+// Output Value : _RTK_ADV_MBR_USER_DISABLE/_RTK_ADV_MBR_USER_ENABLE
+//--------------------------------------------------
+EnumRtkAdvMbrUserStatus UserInterfaceGetRtkAdvMbrSetting(void)
+{
+    if((GET_OSD_MBR_STATUS() == _OSD_RTK_ADV_MBR_USER_ENABLE) && (GET_INPUT_TIMING_VFREQ() >= _RTK_ADV_MBR_MIN_ENABLE_IVF))
+    {
+        return _RTK_ADV_MBR_USER_ENABLE;
+    }
+
+    return _RTK_ADV_MBR_USER_DISABLE;
+}
+#endif // End of #if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+#endif // End of #if(_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+
+//--------------------------------------------------
+// Description  : Get extended wait time to active state from user
+// Input Value  : None
+// Output Value : Extended wait time (ms)
+//--------------------------------------------------
+WORD UserInterfaceDisplayGetExtendedActiveWaitTime(void)
+{
+    return 0;
+}
+
+//--------------------------------------------------
+// Description  : Modify display Timing Based on User Requirement
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceDisplayInitialization(void)
+{
+}
+
+//--------------------------------------------------
+// Description  : Modify Input Timing Based on User Requirement
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustInputTiming(void)
+{
+}
+
+#if(_UNDERSCAN_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Modify Input Timing Based on User Requirement
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+bit UserInterfaceAdjustUnderScan(void)
+{
+    if((GET_INPUT_TIMING_HWIDTH() == 640) && (GET_INPUT_TIMING_VHEIGHT() == 350))
+    {
+#if(_FREESYNC_SUPPORT == _ON)
+        if(GET_FREESYNC_ENABLED() == _FALSE)
+#endif
+        {
+            SET_UNDERSCAN_VHEIGHT(400);
+            return _TRUE;
+        }
+    }
+
+    return _FALSE;
+}
+#endif
+
+//--------------------------------------------------
+// Description  : Modify Display Timing Based on User Requirement
+// Input Value  : Current Display Timing Info
+// Output Value : Modified Display Timing
+//--------------------------------------------------
+void UserInterfaceAdjustDisplayTiming(void)
+{
+#if(_PANEL_STYLE == _PANEL_LVDS)
+    // Check display format resolution according to LVDS port count
+    SET_MDOMAIN_OUTPUT_HSTART(GET_MDOMAIN_OUTPUT_HSTART() + (GET_MDOMAIN_OUTPUT_HSTART() % ((BYTE)1 << _LVDS_OUTPUT_PORT)));
+    SET_MDOMAIN_OUTPUT_HWIDTH(GET_MDOMAIN_OUTPUT_HWIDTH() - (GET_MDOMAIN_OUTPUT_HWIDTH() % ((BYTE)1 << _LVDS_OUTPUT_PORT)));
+    SET_MDOMAIN_OUTPUT_HBSTART(GET_MDOMAIN_OUTPUT_HBSTART() + (GET_MDOMAIN_OUTPUT_HBSTART() % ((BYTE)1 << _LVDS_OUTPUT_PORT)));
+    SET_MDOMAIN_OUTPUT_HBWIDTH(GET_MDOMAIN_OUTPUT_HBWIDTH() - (GET_MDOMAIN_OUTPUT_HBWIDTH() % ((BYTE)1 << _LVDS_OUTPUT_PORT)));
+#endif
+}
+
+#if((_RGB_QUANTIZATION_RANGE_SUPPORT == _ON) && (_RGB_QUANTIZATION_DEFAULT_RANGE_JUDGE_BY_USER == _ON))
+//--------------------------------------------------
+// Description  : User Judge if Quantization Range is Full or Limited
+// Input Value  : EnumDisplayRegion --> display region
+//                ucQuanRange --> quantization status
+// Output Value : True or False
+//--------------------------------------------------
+bit UserInterfaceGetRGBQuantizationLimitRangeStatus(EnumColorRGBQuantization enumColorRGBQuantization)
+{
+#if(_HDR10_SUPPORT == _ON)
+    if(UserCommonHDRGetHDR10Status() == _HDR10_ON)
+    {
+        switch(enumColorRGBQuantization)
+        {
+            case _RGB_QUANTIZATION_FULL_RANGE:
+            default:
+
+                return _FALSE;
+
+            case _RGB_QUANTIZATION_LIMIT_RANGE:
+            case _RGB_QUANTIZATION_DEFAULT_RANGE:
+            case _RGB_QUANTIZATION_RESERVED:
+
+                return _TRUE;
+        }
+    }
+    else
+#endif
+    {
+        switch(enumColorRGBQuantization)
+        {
+            case _RGB_QUANTIZATION_FULL_RANGE:
+            case _RGB_QUANTIZATION_DEFAULT_RANGE:
+            case _RGB_QUANTIZATION_RESERVED:
+            default:
+
+                return _FALSE;
+
+            case _RGB_QUANTIZATION_LIMIT_RANGE:
+
+                return _TRUE;
+        }
+    }
+}
+#endif
+
+#if(_YCC_QUANTIZATION_RANGE_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User Judge if YCC Quantization Range is Full or Limited
+// Input Value  : None
+// Output Value : True or False
+//--------------------------------------------------
+bit UserInterfaceGetYCCQuantizationFullRangeStatus(EnumColorYCCQuantization enumColorYCCQuantization)
+{
+    switch(enumColorYCCQuantization)
+    {
+        case _YCC_QUANTIZATION_FULL_RANGE:
+        case _YCC_QUANTIZATION_RESERVED:
+        default:
+
+            return _TRUE;
+
+        case _YCC_QUANTIZATION_LIMIT_RANGE:
+
+            return _FALSE;
+    }
+}
+#endif
+
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Check whether Demo mode is on or not
+// Input Value  : None
+// Output Value : ON or OFF
+//--------------------------------------------------
+EnumFunctionOnOFF UserInterfaceGetDemoModeType(void)
+{
+    if(GET_OSD_HLWIN_TYPE() != _HL_WIN_OFF)
+    {
+        return _FUNCTION_ON;
+    }
+    else
+    {
+        return _FUNCTION_OFF;
+    }
+}
+#endif
+
+//--------------------------------------------------
+// Description  : Set Color in pass normal active process
+// Input Value  : None
+// Output Value : void
+//--------------------------------------------------
+void UserInterfaceAdjustActiveByPassColorProc(void)
+{
+    return;
+}
+
+//--------------------------------------------------
+// Description  : Set User Required Color Process
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustColorProc(void)
+{
+    if((GET_OSD_STATE() == _MENU_NONE) || (GET_OSD_STATE() == _MENU_FUN_RESET))
+    {
+        // Set Color Conversion
+        switch(SysSourceGetInputPort())
+        {
+            case _A0_INPUT_PORT:
+
+                SET_OSD_COLOR_FORMAT(GET_VGA_COLOR_FORMAT_STATUS());
+
+                break;
+
+#if(_D0_INPUT_PORT_TYPE == _D0_DVI_PORT)
+            case _D0_INPUT_PORT:
+#endif
+
+#if(_D1_INPUT_PORT_TYPE == _D1_DVI_PORT)
+            case _D1_INPUT_PORT:
+#endif
+
+#if(_D2_INPUT_PORT_TYPE == _D2_DVI_PORT)
+            case _D2_INPUT_PORT:
+#endif
+
+#if(_D3_INPUT_PORT_TYPE == _D3_DVI_PORT)
+            case _D3_INPUT_PORT:
+#endif
+
+#if((_D0_INPUT_PORT_TYPE == _D0_DVI_PORT) || (_D1_INPUT_PORT_TYPE == _D1_DVI_PORT) ||\
+    (_D2_INPUT_PORT_TYPE == _D2_DVI_PORT) || (_D3_INPUT_PORT_TYPE == _D3_DVI_PORT))
+                SET_OSD_COLOR_FORMAT(GET_DVI_COLOR_FORMAT_STATUS());
+                break;
+#endif
+
+            default:
+
+                if(ScalerColorGetColorSpaceRGB(ScalerColorGetColorSpace()) == _TRUE)
+                {
+                    SET_OSD_COLOR_FORMAT(_COLOR_SPACE_RGB);
+                }
+                else
+                {
+                    SET_OSD_COLOR_FORMAT(_COLOR_SPACE_YPBPR);
+                }
+
+                break;
+        }
+    }
+
+#if((_HDR10_SUPPORT == _OFF)&&(_PROJECT == _RL6463_PROJECT))
+	MockHdrEffect();
+#endif
+
+    // Adjust Color Space
+    SysModeColorSpaceConvert(UserCommonInterfaceGetColorFormat(), _DB_APPLY_NO_POLLING);
+
+    // Adjust UltraVivid
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+    UserInterfaceAdjustUltraVividProc(_DB_APPLY_NO_POLLING);
+#else
+
+    // Adjust Y-Peaking
+#if(_YPEAKING_SUPPORT == _ON)
+    UserInterfaceAdjustYpeaking();
+#endif
+
+#endif
+
+    // Adjust Sharpness
+#if(_SHARPNESS_SUPPORT == _ON)
+    UserCommonAdjustSharpness(SysSourceGetInputPort());
+#endif
+
+    // Adjust Backlight
+    UserAdjustBacklight(GET_OSD_BACKLIGHT());
+
+    // Adjust Brightness & Contrast
+    RTDNVRamLoadBriCon(SysSourceGetSourceType());
+
+    // Adjust Transparency
+    ScalerOsdSetTransparency(GET_OSD_TRANSPARENCY_STATUS());
+
+    // User Adjust Background Color
+    ScalerDDomainBackgroundSetColor(0, 0, 0);
+
+#if(_PCM_FUNCTION == _ON)
+#if(_HDR10_SUPPORT == _ON)
+    if((GET_OSD_PCM_STATUS() != _PCM_OSD_NATIVE) || (GET_OSD_HDR_MODE() == _HDR10_MODE_FORCE_2084))
+#else
+    if(GET_OSD_PCM_STATUS() != _PCM_OSD_NATIVE)
+#endif
+    {
+#if(_BRIGHTNESS_SUPPORT == _ON)
+        ScalerColorBrightnessEnable(_FUNCTION_OFF);
+#endif
+
+#if(_CONTRAST_SUPPORT == _ON)
+        ScalerColorContrastEnable(_FUNCTION_OFF);
+#endif
+        UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+        ScalerColorSRGBEnable(_FUNCTION_ON);
+        ScalerColorPCMInputGammaEnable(_FUNCTION_ON);
+
+#if((_OCC_SUPPORT == _ON) && (_RGB_3D_GAMMA == _ON))
+        if(GET_OSD_PCM_STATUS() == _PCM_OSD_SOFT_PROFT)
+        {
+            ScalerColorRGB3DGammaEnable(_FUNCTION_ON);
+        }
+        else
+        {
+            ScalerColorRGB3DGammaEnable(_FUNCTION_OFF);
+        }
+#endif  // End of #if((_OCC_SUPPORT == _ON) && (_RGB_3D_GAMMA == _ON))
+
+#if((_GLOBAL_HUE_SATURATION == _ON) && (_GLOBAL_COLOR_CONVERT_HUE_SATURATION_FUNCTION == _ON))
+        // Use Color Convert to Adjust Hue & Saturation
+        if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_VIVID)
+        {
+            UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), 140);
+        }
+        else
+        {
+            UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GET_OSD_SATURATION());
+        }
+#endif  // End of #if((_GLOBAL_HUE_SATURATION == _ON) && (_GLOBAL_COLOR_CONVERT_HUE_SATURATION_FUNCTION == _ON))
+
+    }
+    else
+#endif  // End of #if(_PCM_FUNCTION == _ON)
+    {
+
+#if(_PCM_FUNCTION == _ON)
+        ScalerColorPCMInputGammaEnable(_FUNCTION_OFF);
+#endif
+
+        // Adjust Gamma On/Off
+#if(_GAMMA_FUNCTION == _ON)
+        if(GET_OSD_GAMMA() == _GAMMA_OFF)
+        {
+            UserCommonAdjustGammaRegionEnable(_FUNCTION_OFF);
+
+#if(_RGB_GAMMA_FUNCTION == _ON)
+            ScalerColorRGBOutputGammaEnable(_FUNCTION_OFF);
+#endif
+        }
+        else
+        {
+            UserCommonAdjustGammaRegionEnable(_FUNCTION_ON);
+
+#if(_RGB_GAMMA_FUNCTION == _ON)
+            ScalerColorRGBOutputGammaEnable(_FUNCTION_ON);
+#endif
+        }
+#endif  // End of #if(_GAMMA_FUNCTION == _ON)
+
+        // Adjust Hue & Saturation
+#if(_GLOBAL_HUE_SATURATION == _ON)
+        if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_VIVID)
+        {
+            UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), 140);
+        }
+        else
+        {
+            UserAdjustGlobalHueSat((SWORD)GET_OSD_HUE(), GET_OSD_SATURATION());
+        }
+#endif  // End of #if(_GLOBAL_HUE_SATURATION == _ON)
+
+        // Adjuset Brightness & Contrast
+#if(_BRIGHTNESS_SUPPORT == _ON)
+        UserAdjustBrightness(GET_OSD_BRIGHTNESS());
+#endif
+
+#if(_CONTRAST_SUPPORT == _ON)
+#if(_DEF_COLORFUL)
+		UserAdjustContrast(GetOsdValue(_MENU_FUN_CONTRAST));
+#else
+		UserAdjustContrast(GET_OSD_CONTRAST());
+#endif
+#endif
+    }
+
+    // Adjust ICM On/Off
+#if(_ICM_SUPPORT == _ON)
+    if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_STANDARD)
+    {
+        ScalerColorICMEnable(_FUNCTION_OFF);
+    }
+    else
+    {
+        ScalerColorICMEnable(_FUNCTION_ON);
+    }
+#endif
+
+    // Adjust DCC On/Off
+#if(_DCC_FUNCTION == _ON)
+
+#if(_DCC_PROGRESS_BAR)
+		UserAdjustDCC(GET_OSD_DCC());
+#else
+        ScalerColorDCCEnable(GET_OSD_DCC());
+#endif
+
+#endif
+
+#if(_OD_SUPPORT == _ON)
+
+#if(_CUSTOMER_TYPE == _HUASHUOHUI_CUSTOMER)
+		if(GET_OSD_OD_STATUS())
+			SET_OSD_OD_GAIN(0x3A);
+#endif
+
+#if(_OD_WEAK_MID_HIGH)
+	ScalerODAdjustDeltaGain(GET_OSD_OD_GAIN());
+	if(GET_OSD_OD_STATUS())
+	{
+		ScalerODEnable(_ON);
+	}
+	else
+	{
+		ScalerODEnable(GET_OSD_OD_STATUS());
+	}
+#else
+	ScalerODAdjustDeltaGain(0x30);
+	ScalerODEnable(GET_OSD_OD_STATUS());
+
+#endif
+
+#endif
+
+	
+#if 0//
+		if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+		{
+			OSD_LED_CONTRL(_OSD_LED_ON);
+			
+			LED_LOWBIT(0);
+			ScalerTimerDelayXms(300);
+			LED_LOWBIT(1);
+		}
+#endif
+
+
+
+
+    // Adjust DCC Table
+#if 0//(_DCC_FUNCTION == _ON)
+	//UserAdjustDCC(_OFF);//	UserAdjustDCC(_ON);  // henry by 20210802
+#else
+    #if(_CUSTOM_TYPE == _FKX_CUSTOMER)
+      UserAdjustDCC(_OFF);//  UserAdjustDCC(_ON);  // henry by 20210802
+	#else
+    //UserAdjustDCC(GET_OSD_COLOR_EFFECT());
+	#endif
+#endif
+
+#if(_UNIFORMITY_SUPPORT == _ON)
+    if(GET_OSD_PANEL_UNIFORMITY() == _OFF)
+    {
+        ScalerColorPanelUniformityEnable(_FUNCTION_OFF);
+    }
+    else
+    {
+        ScalerColorPanelUniformityEnable(_FUNCTION_ON);
+    }
+#endif
+
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+    // Adjust Highlight Window Effect Space
+    UserAdjustHighLightWindowEffectSpace();
+
+#if(_ASPECT_ORIGINAL_MODE_SUPPORT == _ON)
+    if(GET_OSD_ASPECT_RATIO_TYPE() != _OSD_ASPECT_RATIO_ORIGIN)
+#endif
+    {
+        if(GET_OSD_HLWIN_TYPE() == _HL_WIN_OFF)
+        {
+            ScalerColorHLWEnable(_FUNCTION_OFF, _DB_APPLY_NONE);
+        }
+        else
+        {
+            UserAdjustHLWinType(GET_OSD_HLWIN_TYPE());
+            ScalerColorHLWEnable(_FUNCTION_ON, _DB_APPLY_NONE);
+        }
+    }
+#endif  // End of #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+
+#if(_DCR_SUPPORT)
+#if(_DEF_OPPOSITE_DCR)
+	   if(GET_OSD_DCR_OPPOSITE()||GET_OSD_DCR_STATUS())
+	   {
+		   UserAdjustDCRControl(_ON);
+	   }
+	   else
+	   {
+		   UserAdjustDCRControl(_OFF);
+	   }
+#else
+	   UserAdjustDCRControl(GET_OSD_DCR_STATUS());
+#endif
+#endif
+
+#if((_HDR10_SUPPORT == _OFF)&&(_PROJECT == _RL6463_PROJECT))
+		MockHdrEffect();
+    #endif
+
+
+}
+
+#if 0//
+BYTE GetVividValue(void)
+{
+	if(GET_OSD_DCR_STATUS() == _OFF)
+	{
+		switch(GET_OSD_COLOR_EFFECT())
+		{
+			case _COLOREFFECT_MOVIE :
+				return _ULTRA_VIVID_L;
+				break;
+				
+			case _COLOREFFECT_GAME:
+				return _ULTRA_VIVID_H;
+				break;
+	
+			default:			
+				return GET_OSD_ULTRA_VIVID_STATUS();
+				break;
+		}
+	}
+	
+	return GET_OSD_ULTRA_VIVID_STATUS();
+}
+#endif
+
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Set UltraVivid Settings
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustUltraVivid(void)
+{
+#if(_DEF_ECO_SET)
+    BYTE ucUltraVividStatus = GetOsdValue(_MENU_FUN_VIVID); //GetVividValue();
+#else
+	BYTE ucUltraVividStatus = GET_OSD_ULTRA_VIVID_STATUS();
+#endif
+    // Wait for D-domain DB apply ready
+    ScalerColorWaitDDomainDBApply();
+
+#if(_HDR10_SUPPORT == _ON)
+    if((UserCommonHDRGetHDR10Status() == _HDR10_ON) && (GET_OSD_HDR_SHARPNESS() == _ON))
+    {
+        ScalerColorUltraVividAdjust(tCOLOR_ULTRAVIVID_SETTING_HDR, GET_CURRENT_BANK_NUMBER());
+    }
+    else
+#endif
+    {
+        if(ucUltraVividStatus != _ULTRA_VIVID_OFF)
+        {
+#if 0//
+			//�ͻ���ӳ�ͱȸߵ���ɫ�������,�޸ĵ���ʹ��ͬһ��Table
+			if(ucUltraVividStatus == _ULTRA_VIVID_L)
+				ScalerColorUltraVividAdjust(tCOLOR_ULTRAVIVID_SETTING_TABLE[_ULTRA_VIVID_M - 1], GET_CURRENT_BANK_NUMBER());
+			else
+#endif
+            	ScalerColorUltraVividAdjust(tCOLOR_ULTRAVIVID_SETTING_TABLE[ucUltraVividStatus - 1], GET_CURRENT_BANK_NUMBER());
+		}
+        else
+        {
+            ScalerColorUltraVividEnable(_FUNCTION_OFF, _DB_APPLY_NONE);
+        }
+    }
+}
+
+//--------------------------------------------------
+// Description  : UltraVivid Proccess
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustUltraVividProc(EnumDBApply enumDBApply)
+{
+#if(_HDR10_SUPPORT == _ON)
+    if((UserCommonHDRGetHDR10Status() == _HDR10_ON) && (GET_OSD_HDR_SHARPNESS() == _ON))
+    {
+        UserCommonAdjustUltraVivid(_FUNCTION_ON, UserCommonInterfaceGetColorFormat(), enumDBApply);
+    }
+    else
+#endif
+    {
+        if(GET_OSD_ULTRA_VIVID_STATUS() == _ULTRA_VIVID_OFF)
+        {
+            UserCommonAdjustUltraVivid(_FUNCTION_OFF, UserCommonInterfaceGetColorFormat(), enumDBApply);
+        }
+        else
+        {
+            UserCommonAdjustUltraVivid(_FUNCTION_ON, UserCommonInterfaceGetColorFormat(), enumDBApply);
+        }
+    }
+}
+#endif  // End of #if(_ULTRA_VIVID_SUPPORT == _ON)
+
+
+#if 0//
+BYTE GetSharpnessValue()
+{
+	if(GET_OSD_DCR_STATUS() == _OFF)
+	{
+		switch(GET_OSD_COLOR_EFFECT())
+		{
+			case _COLOREFFECT_MOVIE :
+				return 3;
+				break;
+			case _COLOREFFECT_GAME:
+				return 4;
+				break;
+				
+			default:
+				return GET_OSD_SHARPNESS();
+				break;
+		}
+	}
+	
+	return GET_OSD_SHARPNESS();
+}
+#endif
+
+#if(_SHARPNESS_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get Sharpness Coef
+// Input Value  : SU Coef Type
+// Output Value : SU Coef
+//--------------------------------------------------
+code BYTE *UserInterfaceGetSharpnessCoef(EnumSUCoefType enumSUCoefType, EnumSourceSearchPort enumSourceSearchPort)
+{
+    enumSourceSearchPort = enumSourceSearchPort;
+
+    switch(enumSUCoefType)
+    {
+#if (_DEF_ECO_SET) || (_CUSTOMER_TYPE == _HUASHUOHUI_CUSTOMER)
+		case _H_V_SU_128TAPS_NORMAL:
+			return tSCALE_128TAPS_NORMAL_COEF_TABLE[GetOsdValue(_MENU_FUN_SHARPNESS)];	//GetSharpnessValue()];
+		break;
+		
+        case _H_SU_128TAPS_1_TO_1:
+            return tSCALE_128TAPS_1to1_COEF_TABLE[GetOsdValue(_MENU_FUN_SHARPNESS)];
+		break;	
+
+#if((_HSU_96TAPS_SUPPORT == _ON) || (_VSU_96TAPS_SUPPORT == _ON))
+        case _H_V_SU_96TAPS_NORMAL:
+            return tSCALE_96TAPS_NORMAL_COEF_TABLE[GetOsdValue(_MENU_FUN_SHARPNESS)];
+#endif
+
+#if(_HSU_96TAPS_SUPPORT == _ON)
+        case _H_SU_96TAPS_1_TO_1:
+            return tSCALE_96TAPS_1to1_COEF_TABLE[GetOsdValue(_MENU_FUN_SHARPNESS)];
+#endif
+		
+		
+#else
+
+#if((_HSU_128TAPS_SUPPORT == _ON) || (_VSU_128TAPS_SUPPORT == _ON))
+        case _H_V_SU_128TAPS_NORMAL:
+            return tSCALE_128TAPS_NORMAL_COEF_TABLE[GET_OSD_SHARPNESS()];
+#endif
+
+#if((_HSU_96TAPS_SUPPORT == _ON) || (_VSU_96TAPS_SUPPORT == _ON))
+        case _H_V_SU_96TAPS_NORMAL:
+            return tSCALE_96TAPS_NORMAL_COEF_TABLE[GET_OSD_SHARPNESS()];
+#endif
+
+#if(_HSU_128TAPS_SUPPORT == _ON)
+       	case _H_SU_128TAPS_1_TO_1:
+            return tSCALE_128TAPS_1to1_COEF_TABLE[GET_OSD_SHARPNESS()];
+#endif
+
+#if(_HSU_96TAPS_SUPPORT == _ON)
+        case _H_SU_96TAPS_1_TO_1:
+            return tSCALE_96TAPS_1to1_COEF_TABLE[GET_OSD_SHARPNESS()];
+#endif
+
+#endif
+
+        default:
+            return _NULL_POINTER;
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get Sharpness Coef BankNum
+// Input Value  : None
+// Output Value : BankNum
+//--------------------------------------------------
+BYTE UserInterfaceGetSharpnessCoefBankNum(void)
+{
+    return GET_CURRENT_BANK_NUMBER();
+}
+
+//--------------------------------------------------
+// Description  : User Bypass Check
+// Input Value  : None
+// Output Value : _TRUE or _FALSE
+//--------------------------------------------------
+bit UserInterfaceSharpnessBypassCheck(void)
+{
+    return _FALSE;
+}
+#endif
+
+#if(_DCR_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User Adjust DCR
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustDCRHandler(void)
+{
+#if(_DEF_OPPOSITE_DCR)
+	if(GET_OSD_DCR_STATUS() != _OFF || GET_OSD_DCR_OPPOSITE() != _OFF)
+#else
+    if(GET_OSD_DCR_STATUS() == _ON)
+#endif
+	{
+    
+		// Read DCR Result
+		UserInterfaceAdjustDCR();
+#if(_LOCAL_DIMMING_SUPPORT == _ON)
+        if(UserInterfaceGetLocalDimmingStatus() == _LD_ENABLE)
+        {
+            BYTE pucDCRResult[_TOTAL_REGION];
+            memset(pucDCRResult, 255UL, _TOTAL_REGION);
+            ScalerColorDCRLocalDimmingReadResult(pucDCRResult);
+        }
+        else
+#endif
+        {
+            PDATA_DWORD(0) = ScalerColorDCRReadResult(_DCR_ABOVE_TH1_NUM);
+        }
+    }
+}
+#endif // End of #if(_DCR_SUPPORT == _ON)
+
+#if(_DCC_HISTOGRM_INFO == _ON)
+//--------------------------------------------------
+// Description  : User Adjust DCC Histogram
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceDCCHistogramHandler(void)
+{
+}
+#endif // End of #if(_DCC_HISTOGRM_INFO == _ON)
+
+#if(_IAPS_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User Adjust IAPS
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustIAPSHandler(void)
+{
+}
+#endif // End of #if(_IAPS_SUPPORT == _ON)
+
+//--------------------------------------------------
+// Description  : OSD Power On Initial
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustOsdPowerOnInitial(void)
+{
+#if(_SIX_COLOR_SUPPORT == _ON || _DEF_STA_SIX_COLOR)
+	BYTE ucIndex = 0;
+#endif
+#if(_UNIFORMITY_SUPPORT == _ON)
+    // Uniformity parameters setting
+    ScalerColorPanelUniformityInitial();
+
+    if(GET_OSD_PANEL_UNIFORMITY() == _ON)
+    {
+        UserAdjustPanelUniformityMode(_UNIFORMITY_OSD_TYPE1);
+    }
+#endif
+
+    // Adjust Color Palette
+    OsdPaletteSelectPalette(_PALETTE_MAIN_MENU);
+
+#if(_PCM_FUNCTION == _ON)
+    if(GET_OSD_PCM_STATUS() != _PCM_OSD_NATIVE)
+    {
+        UserAdjustPCM(GET_OSD_PCM_STATUS());
+    }
+    else
+#endif
+    {
+#if(_GAMMA_FUNCTION == _ON)
+        // Adjust Gamma Table
+        UserAdjustGamma(GET_OSD_GAMMA());
+#endif
+    }
+
+#if(_RGB_3D_GAMMA == _ON)
+    UserAdjust3DGamma(GET_OSD_PCM_SOFT_PROFT_MODE());
+#endif
+
+// Adjust SCM Table, Should before ICM Adjust
+#if(_SCM_SUPPORT == _ON)
+    UserAdjustSCM(GET_OSD_COLOR_EFFECT());
+#endif
+
+    // Adjust ICM Table
+#if(_ICM_SUPPORT == _ON)
+    UserAdjustICM(GET_OSD_COLOR_EFFECT());
+#endif
+
+    // Adjust DCR Threshold & Source
+#if(_DCR_SUPPORT == _ON)
+
+#if(_DCR_BIT_MODE == _DCR_GEN_1_0_10BIT)
+    ScalerColorDCRAdjust(_DCR_THESHOLD1, _DCR_THESHOLD2, _MEASURE_AVERAGE);
+#elif((_DCR_BIT_MODE == _DCR_GEN_0_0_8BIT) || (_DCR_BIT_MODE == _DCR_GEN_0_1_8BIT))
+    ScalerColorDCRAdjust((_DCR_THESHOLD1 >> 2), (_DCR_THESHOLD2 >> 2), _MEASURE_AVERAGE);
+#endif
+
+#endif
+
+#if(_SIX_COLOR_SUPPORT == _ON)&&(_DEF_STA_SIX_COLOR)
+//if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_USER)
+	ScalerColorICMEnable(_FUNCTION_ON);//�޸���ɫ����ʧЧ
+    for(ucIndex = 0; ucIndex < 6; ucIndex++)
+    {
+        SET_OSD_SIX_COLOR(ucIndex);
+        OsdDisplaySixColorGetOneColor(ucIndex);
+        ScalerColorSixColorAdjust(ucIndex, GET_OSD_SIX_COLOR_HUE(), GET_OSD_SIX_COLOR_SATURATION());
+    }
+    ScalerColorSixColorInitial();
+#endif
+
+#if(_OD_SUPPORT == _ON)
+    UserAdjustOD();
+#endif
+
+    // Adjust Highlight Window Border
+#if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+    ScalerColorHLWBorderAdjust(_HL_WIN_BORDER_SIZE, 255, 0, 0);
+
+    ScalerColorHLWBorderEnable(_ON, _ON, _ON, _ON);
+#endif
+
+#if(_SDR_TO_HDR_SUPPORT == _ON)
+    UserAdjustSDRToHDR(GET_OSD_SDR_TO_HDR());
+#endif
+}
+
+
+//--------------------------------------------------
+// Description  : OSD Active Process
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustOsdActiveProc(void)
+{
+    if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+       (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+    {
+        UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+        UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+        UserCommonNVRamSaveSystemData();
+    }
+
+    if(UserInterfaceGetActiveByPassStatus() == _FALSE)
+    {
+        // DDCCI switch to active port
+        UserCommonInterfaceDdcciSwitch(GET_OSD_DDCCI_STATUS(), SysSourceGetInputPort());
+
+        if(GET_FAIL_SAFE_MODE() == _TRUE)
+        {
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_FAIL_SAFE_MODE_MSG);
+        }
+        else
+        {
+            SET_OSD_EVENT_MESSAGE(_OSDEVENT_ACTIVE_DO_ONE_TIME_MSG);
+        }
+    }
+
+#if((_OD_SUPPORT == _ON) && (_FREESYNC_SUPPORT == _ON))
+    UserAdjustOD();
+#endif
+
+#if(_FREEZE_SUPPORT == _ON)
+    UserCommonAdjustDisplayFreeze(GET_OSD_FREEZE_STATUS());
+#endif
+	
+	ScalerDDomainPatternGenEnable(_DISABLE);
+    ScalerDDomainBackgroundEnable(_DISABLE);
+	
+
+
+#if(_AUDIO_SUPPORT == _ON)
+		
+	UserAdjustAudioVolume(GET_OSD_VOLUME());
+
+	UserAdjustAudioMuteSwitch();
+#endif
+}
+
+//--------------------------------------------------
+// Description  : OSD Reset Process
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustOsdResetProc(void)
+{
+    // Disable OSD
+    if(GET_OSD_LOGO_ON() == _OFF)
+    {
+        OsdDispDisableOsd();
+    }
+
+    SET_OSD_LOGO_ON(_OFF);
+
+    // Cancel Timer Events
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_OSD_LOGO);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_120s);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_CABLE);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_SIGNAL);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_GO_TO_POWER_SAVING);
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DO_AUTO_COLOR);	
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DO_POWER_DOWN);
+	
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_FACTORY);
+#if (_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_HLWIN_TYPE5_MOVE);
+#endif
+#if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_DRR_VFREQ);
+#endif
+
+	ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_LOCK_OSD);
+	ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_LOCK_POWER_KEY);
+	ScalerTimerCancelTimerEvent(_USER_REAL_TIME_REFRESH_RATE);
+}
+
+
+#if(_VGA_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Check ModeIndex
+// Input Value  : System ModeIndex
+// Output Value : ModeIndex
+//--------------------------------------------------
+BYTE UserInterfaceGetVGAConfuseMode(BYTE ucModeIndex)
+{
+    if((ucModeIndex == _MODE_640x480_60HZ) || (ucModeIndex == _MODE_720x480_60HZ_GTF) || (ucModeIndex == _MODE_720x480p_60HZ))
+    {
+        if(GET_INPUT_TIMING_VSYNCWIDTH() <= 4)
+        {
+            ucModeIndex = _MODE_640x480_60HZ;
+
+            DebugMessageAnalog("Detected by Special Case to 640x480-60", _MODE_640x480_60HZ);
+        }
+        else if((GET_INPUT_TIMING_H_POLARITY() == _FALSE) && (GET_INPUT_TIMING_V_POLARITY() == _FALSE))
+        {
+            ucModeIndex = _MODE_720x480_60HZ_GTF;
+
+            DebugMessageAnalog("Detected by Special Case to 720x480-60_GTF", _MODE_720x480_60HZ_GTF);
+        }
+        else
+        {
+            ucModeIndex = _MODE_720x480p_60HZ;
+
+            DebugMessageAnalog("Detected by Special Case to 720x480-60", _MODE_720x480p_60HZ);
+        }
+    }
+
+    if((ucModeIndex == _MODE_720x400_70HZ) || (ucModeIndex == _MODE_640x400_70HZ))
+    {
+        if((GET_INPUT_TIMING_H_POLARITY() == _TRUE) && (GET_INPUT_TIMING_V_POLARITY() == _FALSE))
+        {
+            ucModeIndex = _MODE_640x350_70HZ;
+
+            DebugMessageAnalog("Detected by Special Case to _MODE_640x350_70HZ", _MODE_640x350_70HZ);
+        }
+    }
+
+    if((ucModeIndex == _MODE_640x400_85HZ) || (ucModeIndex == _MODE_720x400_85HZ))
+    {
+        if((GET_INPUT_TIMING_H_POLARITY() == _TRUE) && (GET_INPUT_TIMING_V_POLARITY() == _FALSE))
+        {
+            ucModeIndex = _MODE_640x350_85HZ;
+        }
+
+        DebugMessageAnalog("Detected by Special Case to _MODE_640x350_85HZ", _MODE_640x350_85HZ);
+    }
+
+    return ucModeIndex;
+}
+
+//--------------------------------------------------
+// Description  : Check Load Mode Table Value
+// Input Value  : None
+// Output Value : _TURE -> Force Load Mode Table Value
+//--------------------------------------------------
+bit UserInterfaceGetLoadModeTableDefaultStatus(void)
+{
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : Check VGA First Auto Config
+// Input Value  : None
+// Output Value : _TRUE => Do Auto Config
+//--------------------------------------------------
+bit UserInterfaceGetFirstAutoConfigStatus(void)
+{
+    if((GET_VGA_MODE_DO_FIRST_AUTO() == _TRUE) &&
+       (GET_INPUT_TIMING_HWIDTH() > 720))
+    {
+        return _TRUE;
+    }
+
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : Percentage of AutoConfig
+// Input Value  : Percentage
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceGetAutoConfigPercentage(BYTE ucAutoPercentage)
+{
+    ucAutoPercentage = ucAutoPercentage;
+    g_usAdjustValue = ucAutoPercentage;
+}
+
+#if(_VGA_FORCE_DISPLAY == _ON)
+//--------------------------------------------------
+// Description  : VGA Mode Search User Flow
+// Input Value  : None
+// Output Value : Mode Number
+//--------------------------------------------------
+BYTE UserInterfaceModeSearchModeVGA(void)
+{
+    return 0;
+}
+#endif
+
+//--------------------------------------------------
+// Description  : VGA Auto Config Flow control for V position
+// Input Value  : None
+// Output Value : _TRUE or _FALSE
+//--------------------------------------------------
+bit UserInterfaceSkipAutoVpos(void)
+{
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : VGA Auto Config Flow control for H position
+// Input Value  : None
+// Output Value : _TRUE or _FALSE
+//--------------------------------------------------
+bit UserInterfaceSkipAutoHpos(void)
+{
+    return _FALSE;
+}
+#endif // End of #if(_VGA_SUPPORT == _ON)
+
+#if(_MHL_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User RCP Handler
+// Input Value  : RCP Key Code
+// Output Value : True or False
+//--------------------------------------------------
+bit UserInterfaceAdjustMHLMscRCPProc(BYTE ucKeyCode)
+{
+    // Check RCP Key Code
+    switch(ucKeyCode)
+    {
+#if(_AUDIO_SUPPORT == _ON)
+        case _MHL_RCP_VOLUME_UP:
+
+            if(GET_OSD_VOLUME() < 100)
+            {
+                SET_OSD_VOLUME(GET_OSD_VOLUME() + 1);
+            }
+
+            if(UserInterfaceGetAudioReadyToPlayStatus() == _TRUE)
+            {
+                UserAdjustAudioVolume(GET_OSD_VOLUME());
+            }
+            break;
+
+        case _MHL_RCP_VOLUME_DOWN:
+
+            if(GET_OSD_VOLUME() > 0)
+            {
+                SET_OSD_VOLUME(GET_OSD_VOLUME() - 1);
+            }
+
+            if(UserInterfaceGetAudioReadyToPlayStatus() == _TRUE)
+            {
+                UserAdjustAudioVolume(GET_OSD_VOLUME());
+            }
+            break;
+
+        case _MHL_RCP_MUTE:
+        case _MHL_RCP_MUTE_FUNCTION:
+
+            SET_OSD_VOLUME_MUTE(!GET_OSD_VOLUME_MUTE());
+
+            if(UserInterfaceGetAudioReadyToPlayStatus() == _TRUE)
+            {
+                UserAdjustAudioMuteSwitch();
+            }
+            break;
+
+        case _MHL_RCP_RESTORE_VOLUME_FUNCTION:
+
+            SET_OSD_VOLUME(50);
+
+            if(UserInterfaceGetAudioReadyToPlayStatus() == _TRUE)
+            {
+                UserAdjustAudioVolume(GET_OSD_VOLUME());
+            }
+            break;
+#endif
+
+        default:
+            return _FALSE;
+    }
+
+    return _TRUE;
+}
+#endif // End of #if(_MHL_SUPPORT == _ON)
+
+//--------------------------------------------------
+// Description  : Decide whether to Enable FREESYNC Function
+// Input Value  : None
+// Output Value : Ture or False
+//--------------------------------------------------
+EnumFreeSyncSupport UserInterfaceGetFreeSyncEnable(EnumSourceSearchPort enumSourcePort)
+{
+    enumSourcePort = enumSourcePort;
+
+#if((_FREESYNC_SUPPORT == _ON) || (_FREESYNC_II_SUPPORT == _ON))
+    if(GET_OSD_FREE_SYNC_STATUS() == _TRUE)
+    {    
+#if 0
+		if(GET_INPUT_TIMING_VFREQ() < 950)
+		{
+			if(GET_OSD_FV_INFORMATION())
+				SET_OSD_FV_INFORMATION(_OFF);
+			if(GET_OSD_FREE_SYNC_STATUS())
+			{
+				SET_OSD_FREE_SYNC_STATUS(_OFF);
+				return _FREESYNC_SUPPORT_OFF;
+			}
+		}
+#endif
+        return _FREESYNC_SUPPORT_ON;
+    }
+#endif
+    return _FREESYNC_SUPPORT_OFF;
+}
+
+//--------------------------------------------------
+// Description  : Decide whether to Enable ADAPTIVESYNC Function
+// Input Value  : None
+// Output Value : Ture or False
+//--------------------------------------------------
+EnumDpAdaptiveSyncSupport UserInterfaceGetDpAdaptiveSyncEnable(EnumSourceSearchPort enumSourcePort)
+{
+    enumSourcePort = enumSourcePort;
+
+#if(_DP_ADAPTIVESYNC_SUPPORT == _ON)
+    if(GET_OSD_DP_ADAPTIVE_SYNC_STATUS() == _TRUE)
+    {
+        return _DP_ADAPTIVESYNC_SUPPORT_ON;
+    }
+#endif
+    return _DP_ADAPTIVESYNC_SUPPORT_OFF;
+}
+
+#if(_DP_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get DP Version
+// Input Value  : RCP Key Code
+// Output Value : DP_VERSION_1_1 or DP_VERSION_1_2
+//--------------------------------------------------
+EnumDpVersionType UserInterfaceGetDPVersion(BYTE ucInputPort)
+{
+     return _DP_VERSION_1_4;
+    switch(ucInputPort)
+    {
+#if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+        case _D0_INPUT_PORT:
+
+            if(GET_OSD_DP_D0_VERSION() == _DP_VER_1_DOT_1)
+            {
+                if(GET_OSD_DP_MST() == _MST_D0)
+                {
+                    SET_OSD_DP_MST(_MST_OFF);
+                }
+
+                return _DP_VERSION_1_1;
+            }
+            else if(GET_OSD_DP_D0_VERSION() == _DP_VER_1_DOT_2)
+            {
+                return _DP_VERSION_1_2;
+            }
+            else if(GET_OSD_DP_D0_VERSION() == _DP_VER_1_DOT_3)
+            {
+                return _DP_VERSION_1_4;
+            }
+            break;
+
+#endif
+#if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+        case _D1_INPUT_PORT:
+
+            if(GET_OSD_DP_D1_VERSION() == _DP_VER_1_DOT_1)
+            {
+                if(GET_OSD_DP_MST() == _MST_D1)
+                {
+                    SET_OSD_DP_MST(_MST_OFF);
+                }
+
+                return _DP_VERSION_1_1;
+            }
+            else if(GET_OSD_DP_D1_VERSION() == _DP_VER_1_DOT_2)
+            {
+                return _DP_VERSION_1_2;
+            }
+            else if(GET_OSD_DP_D1_VERSION() == _DP_VER_1_DOT_3)
+            {
+                return _DP_VERSION_1_4;
+            }
+            break;
+#endif
+
+#if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+        case _D2_INPUT_PORT:
+
+            if(GET_OSD_DP_D2_VERSION() == _DP_VER_1_DOT_1)
+            {
+                if(GET_OSD_DP_MST() == _MST_D1)
+                {
+                    SET_OSD_DP_MST(_MST_OFF);
+                }
+
+                return _DP_VERSION_1_1;
+            }
+            else if(GET_OSD_DP_D2_VERSION() == _DP_VER_1_DOT_2)
+            {
+                return _DP_VERSION_1_2;
+            }
+            else if(GET_OSD_DP_D2_VERSION() == _DP_VER_1_DOT_3)
+            {
+                return _DP_VERSION_1_4;
+            }
+            break;
+#endif
+
+
+#if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+        case _D6_INPUT_PORT:
+
+            if(GET_OSD_DP_D6_VERSION() == _DP_VER_1_DOT_1)
+            {
+                if(GET_OSD_DP_MST() == _MST_D6)
+                {
+                    SET_OSD_DP_MST(_MST_OFF);
+                }
+
+                return _DP_VERSION_1_1;
+            }
+            else if(GET_OSD_DP_D6_VERSION() == _DP_VER_1_DOT_2)
+            {
+                return _DP_VERSION_1_2;
+            }
+            else if(GET_OSD_DP_D6_VERSION() == _DP_VER_1_DOT_3)
+            {
+                return _DP_VERSION_1_4;
+            }
+            break;
+#endif
+        default:
+
+            break;
+    }
+
+    return _DP_VERSION_1_1;
+}
+
+//--------------------------------------------------
+// Description  : Get DP Lane Count
+// Input Value  : InputPort
+// Output Value : DP Lane Count
+//--------------------------------------------------
+EnumDpLaneCount UserInterfaceGetDpLaneCount(BYTE ucInputPort)
+{
+    switch(ucInputPort)
+    {
+#if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+        case _D0_INPUT_PORT:
+            return UserCommonNVRamGetSystemData(_DP_D0_LANES);
+#endif
+
+#if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+        case _D1_INPUT_PORT:
+            return UserCommonNVRamGetSystemData(_DP_D1_LANES);
+#endif
+
+#if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+        case _D2_INPUT_PORT:
+            return UserCommonNVRamGetSystemData(_DP_D2_LANES);
+#endif
+
+#if(_D6_INPUT_PORT_TYPE == _D6_DP_PORT)
+        case _D6_INPUT_PORT:
+            return UserCommonNVRamGetSystemData(_DP_D6_LANES);
+#endif
+
+        default:
+            break;
+    }
+
+    return _DP_LINK_4_LANE;
+}
+
+//--------------------------------------------------
+// Description  : Get Dp MST Capable Port
+// Input Value  : None
+// Output Value : _DP_MST_RX0 or _DP_MST_RX1
+//--------------------------------------------------
+EnumDPMSTPort UserInterfaceGetDpMSTCapablePort(void)
+{
+#if(_DP_MST_SUPPORT == _OFF)
+
+    return _DP_MST_NO_PORT;
+
+#endif
+
+#if(_DP_MST_AUTO_SEARCH_SUPPORT == _OFF)
+    if((SysSourceGetScanType() == _SOURCE_SWITCH_FIXED_PORT) && (GET_PORT_TYPE(SysSourceGetInputPortType(SysSourceGetInputPort())) == _PORT_DP))
+#endif
+    {
+#if((_D0_INPUT_PORT_TYPE == _D0_DP_PORT) && (_D0_DP_MST_PORT_SUPPORT == _ON))
+        if((GET_OSD_DP_MST() == _MST_D0) && (SysSourceGetInputPort() == _D0_INPUT_PORT))
+        {
+            if(GET_OSD_DP_D0_VERSION() == _DP_VER_1_DOT_1)
+            {
+                SET_OSD_DP_MST(_MST_OFF);
+
+                return _DP_MST_NO_PORT;
+            }
+            else
+            {
+                return _DP_MST_RX0_PORT;
+            }
+        }
+        else
+#endif
+
+#if((_D1_INPUT_PORT_TYPE == _D1_DP_PORT) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+        if((GET_OSD_DP_MST() == _MST_D1) && (SysSourceGetInputPort() == _D1_INPUT_PORT))
+        {
+            if(GET_OSD_DP_D1_VERSION() == _DP_VER_1_DOT_1)
+            {
+                SET_OSD_DP_MST(_MST_OFF);
+
+                return _DP_MST_NO_PORT;
+            }
+            else
+            {
+                return _DP_MST_RX1_PORT;
+            }
+        }
+        else
+#endif
+
+#if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) &&\
+    ((_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0) && (_D0_DP_MST_PORT_SUPPORT == _ON)))
+        if((GET_OSD_DP_MST() == _MST_D6) && (SysSourceGetInputPort() == _D6_INPUT_PORT))
+        {
+            if(GET_OSD_DP_D6_VERSION() == _DP_VER_1_DOT_1)
+            {
+                SET_OSD_DP_MST(_MST_OFF);
+
+                return _DP_MST_NO_PORT;
+            }
+            else
+            {
+                return _DP_MST_RX6_PORT;
+            }
+        }
+        else
+#endif
+
+#if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
+        if(GET_OSD_DP_MST() == _MST_AUTO)
+        {
+            return _DP_MST_AUTO_PORT;
+        }
+        else
+#endif
+        {
+            return _DP_MST_NO_PORT;
+        }
+    }
+
+    return _DP_MST_NO_PORT;
+}
+
+#if(_DP_MST_CAP_ON_INACTIVE_PORT_HPD_LOW == _ON)
+//--------------------------------------------------
+// Description  : Get Dp MST Target Port
+// Input Value  : None
+// Output Value : _DP_MST_RX0 or _DP_MST_RX1
+//--------------------------------------------------
+EnumDPMSTPort UserInterfaceGetDpMstTargetPort(void)
+{
+#if((_D0_INPUT_PORT_TYPE == _D0_DP_PORT) && (_D0_DP_MST_PORT_SUPPORT == _ON))
+    if(GET_OSD_DP_MST() == _MST_D0)
+    {
+        if(GET_OSD_DP_D0_VERSION() == _DP_VER_1_DOT_1)
+        {
+            return _DP_MST_NO_PORT;
+        }
+        else
+        {
+            return _DP_MST_RX0_PORT;
+        }
+    }
+    else
+#endif
+
+#if((_D1_INPUT_PORT_TYPE == _D1_DP_PORT) && (_D1_DP_MST_PORT_SUPPORT == _ON))
+    if(GET_OSD_DP_MST() == _MST_D1)
+    {
+        if(GET_OSD_DP_D1_VERSION() == _DP_VER_1_DOT_1)
+        {
+            return _DP_MST_NO_PORT;
+        }
+        else
+        {
+            return _DP_MST_RX1_PORT;
+        }
+    }
+    else
+#endif
+
+#if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) &&\
+((_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0) && (_D0_DP_MST_PORT_SUPPORT == _ON)))
+    if(GET_OSD_DP_MST() == _MST_D6)
+    {
+        if(GET_OSD_DP_D6_VERSION() == _DP_VER_1_DOT_1)
+        {
+            return _DP_MST_NO_PORT;
+        }
+        else
+        {
+            return _DP_MST_RX6_PORT;
+        }
+    }
+    else
+#endif
+    {
+        return _DP_MST_NO_PORT;
+    }
+
+    return _DP_MST_NO_PORT;
+}
+#endif
+
+#if((_DP_MST_SUPPORT == _ON) && (_DP_TX_SUPPORT == _ON))
+//--------------------------------------------------
+// Description  : Decide whether to Clone output to DP Tx
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+bit UserInterfaceGetDpCloneOutputStatus(void)
+{
+    if(GET_OSD_CLONE_MODE() == _OFF)
+    {
+        return _FALSE;
+    }
+
+    return _TRUE;
+}
+#endif
+
+#if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) || (_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP))
+//--------------------------------------------------
+// Description  : User Select Externel DP Switch
+// Input Value  : None
+// Output Value : Only Return _D0_INPUT_PORT or _D6_INPUT_PORT
+//--------------------------------------------------
+BYTE UserInterfaceGetDpSwitchSelectPort(void)
+{
+    return _D0_INPUT_PORT;
+}
+#endif
+
+#if(_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP)
+//--------------------------------------------------
+// Description  : User flow for embedded DP switch
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceEmbeddedDpSwitch(void)
+{
+    UserAdjustEmbeddedDpSwitch();
+}
+#endif
+
+#if(_DP_DC_ON_HPD_CONTROL_BY_USER_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : DC On DP HPD Toggle Mode Control By User
+// Input Value  : None
+// Output Value : EnumDpHpdToggleMode
+//--------------------------------------------------
+EnumDpHpdToggleMode UserInterfaceGetDpDcOnHpdMode(void)
+{
+    return _DP_HPD_TOGGLE_NORMAL;
+}
+#endif
+
+#endif // End of #if(_DP_SUPPORT == _ON)
+
+#if(_DP_HDMI_COMPATIBLE_MODE == _ON)
+//--------------------------------------------------
+// Description  : User Report HDMI +5V Status
+// Input Value  : D0/D1/D2 Port
+// Output Value : _TURE --> +5V exist
+//--------------------------------------------------
+bit UserInterfaceGetHdmi5VStatus(BYTE ucInputPort)
+{
+    switch(ucInputPort)
+    {
+        case _D0_INPUT_PORT:
+            return _TRUE;
+        case _D1_INPUT_PORT:
+            return _TRUE;
+        case _D2_INPUT_PORT:
+            return _TRUE;
+        case _D3_INPUT_PORT:
+            return _TRUE;
+        default:
+            return _TRUE;
+    }
+}
+#endif
+
+#if(_SOURCE_AUTO_SEARCH_STYLE == _SOURCE_POLLING_EIZO_STYLE)
+//--------------------------------------------------
+// Description  : User check search is finish or not
+// Input Value  : None
+// Output Value : Ture or False
+//--------------------------------------------------
+bit UserInterfaceAdjustOsdCheckTotalSearchFinish(void)
+{
+    return _TRUE;
+}
+
+//--------------------------------------------------
+// Description  : Determine the search time of each source
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustSourceSearchTime(void)
+{
+}
+
+//--------------------------------------------------
+// Description  : Determine the search time of each source
+// Input Value  : Input Port Type
+// Output Value : Search Reative Time
+//--------------------------------------------------
+WORD UserInterfaceAdjustSourceReactiveSearchTime(EnumSourceAdjustReactiveTimePortType enumSourceAdjustReactiveTimePortType)
+{
+    switch(enumSourceAdjustReactiveTimePortType)
+    {
+        case _ADJUST_PORT_VGA:
+
+            return SEC(2);
+
+        case _ADJUST_PORT_TMDS:
+
+            return SEC(4.5);
+
+        case _ADJUST_PORT_MHL:
+
+            return SEC(6);
+
+        case _ADJUST_PORT_DP:
+
+            return SEC(4);
+
+        default:
+
+            return 0;
+    }
+}
+
+//--------------------------------------------------
+// Description  : User Report Eizo Search Finish Time
+// Input Value  : None
+// Output Value : Search Finish Time
+//--------------------------------------------------
+WORD UserInterfaceGetEizoSearchFinishTime(void)
+{
+    return 0;
+}
+#endif
+
+#if(_AUDIO_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Determine whether to User is Ready to play audio
+// Input Value  : None
+// Output Value : _TRUE => Free to Play
+//--------------------------------------------------
+bit UserInterfaceGetAudioReadyToPlayStatus(void)
+{
+#if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT != _ON)
+    if(UserInterfaceGetAudioMuteStatus() != _ON)
+#endif
+    {
+#if(_EMBEDDED_DAC_SUPPORT == _ON)
+        if(ScalerAudioDACGetState() == _AUDIO_DAC_READY)
+#endif
+        {
+#if(_LINE_IN_SUPPORT == _ON)
+            if(UserInterfaceGetAudioSource() == _LINE_IN_AUDIO)
+            {
+            
+#if(_PCB_TYPE ==_RL6463__128PIN__SG2513AR_VH_LS_R10_2__1A1H__LVDS)
+				// Swap Speaker L/R Output
+				ScalerSetBit(0x06E0, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), 0x00);
+#endif
+#if(_SLEEP_AUDIO_SUPPORT == _ON)
+                if(UserInterfaceGetAudioStandAloneStatus() == _TRUE)
+                {
+#if((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_LINE_IN))
+                    return _TRUE;
+#endif
+                }
+#endif
+                if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) ||
+                   ((SysModeGetModeState() == _MODE_STATUS_DISPLAY_SETTING) && (SysAudioGetAudioState() == _AUDIO_STATUS_PLAYBACK)))
+                {
+                    return _TRUE;
+                }
+            }
+            else
+#endif
+            {
+                if(UserInterfaceGetAudioSource() == _DIGITAL_AUDIO)
+                {
+                
+#if(_PCB_TYPE == _RL6463__128PIN__SG2513AR_VH_LS_R10_2__1A1H__LVDS)
+					// Swap Speaker L/R Output
+					ScalerSetBit(0x06E0, ~(_BIT7 | _BIT6 | _BIT5 | _BIT4), (_BIT6 | _BIT4));
+#endif
+                    if(ScalerAudioGetAudioDetected(SysSourceGetInputPort()) == _TRUE)
+                    {
+#if(_SLEEP_AUDIO_SUPPORT == _ON)
+                        if(UserInterfaceGetAudioStandAloneStatus() == _TRUE)
+                        {
+#if((_DP_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_DP)))
+                            if(ScalerAudioGetDigitalAudioSource(SysSourceGetInputPort()) == _DIGITAL_AUDIO_SOURCE_DP)
+                            {
+                                // When Fixed Port, should not play DP Audio at different port
+                                if((SysSourceGetScanType() != _SOURCE_SWITCH_FIXED_PORT) || (SysSourceGetAudioPlaybackPort() == SysSourceGetInputPort()))
+                                {
+                                    return _TRUE;
+                                }
+                            }
+#endif
+                        }
+#endif
+                        if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) || (SysAudioGetAudioState() == _AUDIO_STATUS_PLAYBACK))
+                        {
+                            return _TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return _FALSE;
+}
+
+//--------------------------------------------------
+// Description  : User OSD Get Audio Source
+// Input Value  : None
+// Output Value : _DIGITAL_AUDIO or _LINE_IN_AUDIO
+//--------------------------------------------------
+EnumAudioInputSource UserInterfaceGetAudioSource(void)
+{
+#if(_INTERNAL_AUDIO_TEST_SUPPORT == _ON)
+    if(ScalerAudioGetInternalAudioGenEnable(SysSourceGetInputPort()) == _ENABLE)
+    {
+        return _DIGITAL_AUDIO;
+    }
+#endif
+
+#if((_SLEEP_AUDIO_SUPPORT == _ON) && (_LINE_IN_SUPPORT == _ON) && (_PS_AUDIO_INPUT == _PS_AUDIO_LINE_IN) && (_SWITCH_TO_LINE_IN_AUDIO_IN_POWER_SAVING_MODE == _ON))
+    if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+    {
+        return _LINE_IN_AUDIO;
+    }
+#endif
+
+    switch(SysSourceGetInputPort())
+    {
+        case _A0_INPUT_PORT:
+
+#if(_D0_INPUT_PORT_TYPE == _D0_DVI_PORT)
+        case _D0_INPUT_PORT:
+#endif
+
+#if(_D1_INPUT_PORT_TYPE == _D1_DVI_PORT)
+        case _D1_INPUT_PORT:
+#endif
+
+#if((_D2_INPUT_PORT_TYPE == _D2_DVI_PORT) || (_D2_INPUT_PORT_TYPE == _D2_DUAL_DVI_PORT))
+        case _D2_INPUT_PORT:
+#endif
+
+#if((_D3_INPUT_PORT_TYPE == _D3_DVI_PORT) || (_D3_INPUT_PORT_TYPE == _D3_DUAL_DVI_PORT))
+        case _D3_INPUT_PORT:
+#endif
+
+#if((_D4_INPUT_PORT_TYPE == _D4_DVI_PORT) || (_D4_INPUT_PORT_TYPE == _D4_DUAL_DVI_PORT))
+        case _D4_INPUT_PORT:
+#endif
+
+#if(_D5_INPUT_PORT_TYPE == _D5_DVI_PORT)
+        case _D5_INPUT_PORT:
+#endif
+
+#if(_LINE_IN_SUPPORT == _ON)
+#if((_SLEEP_AUDIO_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_LINE_IN)))
+            if(UserInterfaceGetAudioStandAloneStatus() == _FALSE)
+#endif
+            {
+                // Don't switch audio source if input source is not found
+                if(SysSourceGetSourceType() == _SOURCE_NONE)
+                {
+                    return ScalerAudioGetInputSource();
+                }
+            }
+
+            return _LINE_IN_AUDIO;
+#else
+            return _NO_AUDIO_SOURCE;
+#endif // End of #if(_LINE_IN_SUPPORT == _ON)
+
+        default:
+
+#if(_LINE_IN_SUPPORT == _ON)
+#if((_SLEEP_AUDIO_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_LINE_IN)))
+            // Don't Switch Audio Source if Line In is Currently Playing unless Digital Source is found
+            if(UserInterfaceGetAudioStandAloneStatus() == _TRUE)
+            {
+                if((SysSourceGetSourceType() == _SOURCE_NONE) && (SysAudioGetAudioState() == _AUDIO_STATUS_PLAYBACK) && (ScalerAudioGetInputSource() == _LINE_IN_AUDIO))
+                {
+                    return _LINE_IN_AUDIO;
+                }
+            }
+#endif
+            return GET_OSD_AUDIO_SOURCE();
+#else
+            return _DIGITAL_AUDIO;
+#endif // End of #if(_LINE_IN_SUPPORT == _ON)
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get Current Audio Mute Status
+// Input Value  : Node
+// Output Value : Node
+//--------------------------------------------------
+bit UserInterfaceGetAudioMuteStatus(void)
+{
+    return GET_OSD_VOLUME_MUTE();
+}
+
+//--------------------------------------------------
+// Description  : User Decide whether to play non-LPCM Audio
+// Input Value  : None
+// Output Value : _ON => Mute Audio
+//--------------------------------------------------
+EnumAudioCodingType UserInterfaceGetAudioNonLPCMStatus(void)
+{
+    if(ScalerAudioLPCMCheckData() == _TRUE)
+    {
+#if(_HDMI_SUPPORT == _ON)
+        if(ScalerAudioDigitalAudioSourceType() == _SOURCE_HDMI)
+        {
+            if(ScalerAudioLPCMCheckInfo() == _TRUE)
+            {
+                return _AUDIO_LPCM;
+            }
+            else
+            {
+                return _AUDIO_NON_LPCM;
+            }
+        }
+#endif
+        return _AUDIO_LPCM;
+    }
+
+    return _AUDIO_NON_LPCM;
+}
+
+//--------------------------------------------------
+// Description  : User Decide whether to Mute Audio
+// Input Value  : None
+// Output Value : _AUDIO_NON_LPCM => Mute Audio
+//--------------------------------------------------
+EnumAudioMuteStatus UserInterfaceAudioGetOutputMuteStatus(void)
+{
+    if(UserInterfaceGetAudioNonLPCMStatus() == _AUDIO_NON_LPCM)
+    {
+        return _AUDIO_MUTE_ON;
+    }
+    else
+    {
+        return _AUDIO_MUTE_OFF;
+    }
+}
+
+//--------------------------------------------------
+// Description  : Get Current Audio Volume
+// Input Value  : None
+// Output Value : Current Volume
+//--------------------------------------------------
+WORD UserInterfaceGetAudioVolume(void)
+{
+    return UserAdjustAudioVolumeMapping(GET_OSD_VOLUME());
+}
+
+//--------------------------------------------------
+// Description  : Get User Define Audio Sampling Freq when no Audio
+// Input Value  : None
+// Output Value : EnumAudioSamplingFreqType
+//--------------------------------------------------
+EnumAudioSamplingFreqType UserInterfaceAudioGetUserSamplingFreq(void)
+{
+    return _AUDIO_FREQ_48K;
+}
+
+#if(_DP_SUPPORT == _ON)
+#if(_DP_DPCD_AUDIO_CAPABILITY_USER_CONTROL_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get User Define Dp Audio Capability Initial State
+// Input Value  : Input Port
+// Output Value : EnumAudioDpDpcdSupport
+//--------------------------------------------------
+EnumAudioDpDpcdSupport UserInterfaceAudioDpGetCapabilityInitialState(BYTE ucInputPort)
+{
+    switch(ucInputPort)
+    {
+#if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+        case _D0_INPUT_PORT:
+
+#if((_D6_INPUT_PORT_TYPE != _D6_NO_PORT) && (_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0))
+        case _D6_INPUT_PORT:
+#endif
+            return _AUDIO_DP_DPCD_SUPPORT;
+
+            break;
+#endif
+
+#if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+        case _D1_INPUT_PORT:
+
+            return _AUDIO_DP_DPCD_SUPPORT;
+
+            break;
+#endif
+
+#if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+        case _D2_INPUT_PORT:
+
+            return _AUDIO_DP_DPCD_SUPPORT;
+
+            break;
+#endif
+
+        default:
+
+            break;
+    }
+
+    return _AUDIO_DP_DPCD_SUPPORT;
+}
+#endif // End of #if(_DP_DPCD_AUDIO_CAPABILITY_USER_CONTROL_SUPPORT == _ON)
+#endif // End of #if(_DP_SUPPORT == _ON)
+
+#if(_EMBEDDED_DAC_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get DAC Output Switch
+// Input Value  : None
+// Output Value : EnumAudioDACOutput
+//--------------------------------------------------
+EnumAudioDACOutput UserInterfaceGetAudioDACOutput(void)
+{
+#if(_DEF_AUDIO_SOURCE_SELECT)
+	if(GET_FUN_AUDIO_SOURCE())
+	{
+		if(GET_FUN_AUDIO_SOURCE() == 1)
+			return _AUDIO_DAC_OUTPUT_SPEAKER;
+		else
+			return _AUDIO_DAC_OUTPUT_HEADPHONE; 
+	}
+
+#endif
+
+	if (PCB_HEADPHONE_DETECT() == _HEADPHONE_DISCONNECT)
+	{
+		return _AUDIO_DAC_OUTPUT_SPEAKER;	
+	}
+	else if (PCB_HEADPHONE_DETECT() == _HEADPHONE_CONNECT)
+	{
+		return _AUDIO_DAC_OUTPUT_HEADPHONE;	
+	}
+	return _AUDIO_DAC_OUTPUT_SPEAKER;	
+}
+
+//--------------------------------------------------
+// Description  : Get if Keep Audio Depop State
+// Input Value  : None
+// Output Value : _TRUE or _FALSE
+//--------------------------------------------------
+bit UserInterfaceGetAudioDACKeepDepopState(void)
+{
+    return _FALSE;
+}
+#endif
+
+#if(_SLEEP_AUDIO_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get Current Audio Stand Alone Status
+// Input Value  : enumPowStatus
+// Output Value : Node
+//--------------------------------------------------
+bit UserInterfaceGetAudioStandAloneStatus(void)
+{
+    return GET_OSD_AUDIO_STAND_ALONE();
+}
+#endif
+
+//--------------------------------------------------
+// Description  : User Audio Reset Process
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustAudioResetProc(void)
+{
+#if(_SLEEP_AUDIO_SUPPORT == _ON)
+    if(UserInterfaceGetAudioStandAloneStatus() == _TRUE)
+    {
+        // if Currently playing digital audio
+        if((SysAudioGetAudioState() == _AUDIO_STATUS_PLAYBACK) && (UserInterfaceGetAudioSource() == _DIGITAL_AUDIO))
+        {
+#if((_DP_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_DP)))
+            if(SysSourceGetAudioPlaybackPort() != SysSourceGetInputPort())
+#endif
+            {
+                DebugMessageAudio("User Audio Reset Process", 0x00);
+
+#if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
+                SysAudioOutputProc(_DISABLE);
+#else
+                SysAudioMuteProc(_ON);
+#endif
+                ScalerAudioDigitalReset(ScalerAudioGetDigitalAudioPortMapping());
+
+                SysAudioChangeAudioState(_AUDIO_STATUS_PREPARING);
+            }
+        }
+    }
+    else
+#endif
+    {
+        if(SysAudioGetAudioState() == _AUDIO_STATUS_PLAYBACK)
+        {
+            DebugMessageAudio("User Audio Reset Process", 0x00);
+
+#if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
+            SysAudioOutputProc(_DISABLE);
+#else
+            SysAudioMuteProc(_ON);
+#endif
+            ScalerAudioDigitalReset(ScalerAudioGetDigitalAudioPortMapping());
+
+            SysAudioChangeAudioState(_AUDIO_STATUS_PREPARING);
+        }
+    }
+}
+
+//--------------------------------------------------
+// Description  : Audio Power Process
+// Input Value  : enumPowStatus
+// Output Value : Node
+//--------------------------------------------------
+void UserInterfaceAdjustAudioPowerProc(EnumPowerStatus enumPowStatus)
+{
+    if(enumPowStatus == _POWER_STATUS_NORMAL)
+    {
+        // Add User interface function
+
+    }
+    else if(enumPowStatus == _POWER_STATUS_SAVING)
+    {
+        // Add User interface function
+    }
+    else
+    {
+        // Add User interface function
+    }
+}
+
+//--------------------------------------------------
+// Description  : Control User Audio Mute Process
+// Input Value  : bMute
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustAudioAmpMuteProc(bit bMute)
+{
+    if(bMute)
+		bMute = _AMP_MUTE_ON;
+	else
+		bMute = _AMP_MUTE_OFF;			
+
+#if(_EMBEDDED_DAC_SUPPORT == _ON)
+    if((UserInterfaceGetAudioDACOutput() == _AUDIO_DAC_OUTPUT_BOTH) || (UserInterfaceGetAudioDACOutput() == _AUDIO_DAC_OUTPUT_SPEAKER))
+    {
+        PCB_AMP_MUTE(bMute);
+    }
+#endif
+}
+
+#if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Control User Audio Mute DSP Process
+// Input Value  : bEnable
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAudioExternalCodecProc(bit bEnable)
+{
+    if(bEnable == _DISABLE)
+    {
+        // Mute On External DSP
+    }
+    else
+    {
+        // Mute Off External DSP
+    }
+}
+#endif
+
+#if((_LINE_IN_SUPPORT == _ON) && (_HW_AUDIO_LINE_IN_TO_DIGITAL_LR_SWAP == _ON))
+//--------------------------------------------------
+// Description  : Swap External Audio Codec Input for Line in
+// Input Value  : _TRUE or _FALSE
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceSwapExternalAudioCodecInput(bit bSwap)
+{
+    if(bSwap == _TRUE)
+    {
+        // Swap External Audio Codec Input(L/R)
+    }
+    else
+    {
+        // No Swap External Audio Codec Input(L/R)
+    }
+}
+#endif
+
+#if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+//--------------------------------------------------
+// Description  : Determine TTS is support or not
+// Input Value  : None
+// Output Value : _TRUE => TTS Support
+//--------------------------------------------------
+bit UserInterfaceAudioGetTtsSupport(void)
+{
+    return GET_OSD_AUDIO_TTS_SUPPORT();
+}
+
+//--------------------------------------------------
+// Description  : Determine Audio Volume when TTS is play
+// Input Value  : None
+// Output Value : ucAudioVolume
+//--------------------------------------------------
+BYTE UserInterfaceAudioGetTtsPlayAudioVolume(void)
+{
+    return GET_OSD_AUDIO_TTS_AUDIO_VOLUME();
+}
+
+//--------------------------------------------------
+// Description  : Determine TTS Volume when TTS is play
+// Input Value  : None
+// Output Value : ucAudioVolume
+//--------------------------------------------------
+BYTE UserInterfaceAudioGetTtsPlayTextVolume(void)
+{
+    return GET_OSD_AUDIO_TTS_TEXT_VOLUME();
+}
+
+//--------------------------------------------------
+// Description  : Determine TTS is Ready for Play or not
+// Input Value  : None
+// Output Value : _TRUE => TTS Play Ready
+//--------------------------------------------------
+bit UserInterfaceAudioGetTtsAudioReady(void)
+{
+#if(_EMBEDDED_DAC_SUPPORT == _ON)
+    if(ScalerAudioDACGetState() != _AUDIO_DAC_READY)
+    {
+        return _FALSE;
+    }
+#endif
+
+    return _TRUE;
+}
+#endif // End of #if(_AUDIO_TTS_SUPPORT_TYPE == _AUDIO_TTS_EMBEDDED_TYPE)
+
+#endif // End of #if(_AUDIO_SUPPORT == _ON)
+
+#if((_OGC_SUPPORT == _ON) || (_OCC_SUPPORT == _ON) || (_OGC_DICOM_SUPPORT == _ON) || (_UNIFORMITY_SUPPORT == _ON))
+//--------------------------------------------------
+// Description  : User function Before Calibration Start
+// Input Value  : EnumCaliType
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustBeforeDisplayCalibration(EnumCaliType enumMode)
+{
+    if(enumMode == _UNIFORMITY_CAL)// for Uniformity
+    {
+        UserAdjustBacklight(GET_OSD_BACKLIGHT());
+    }
+    else // OGC/OCC/DICOM
+    {
+    }
+}
+
+//--------------------------------------------------
+// Description  : User function After Calibration Start
+// Input Value  : EnumCaliType
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustAfterDisplayCalibration(EnumCaliType enumMode)
+{
+    if(enumMode == _UNIFORMITY_CAL)// for Uniformity
+    {
+        UserAdjustBacklight(GET_OSD_BACKLIGHT());
+    }
+    else // OGC/OCC/DICOM
+    {
+    }
+}
+//--------------------------------------------------
+// Description  : User function Backlight Adjust for Calibration
+// Input Value  : 0(Min Backlight) ~ 255(Max Backlight)
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustBacklight(BYTE ucBacklight)
+{
+#if(_BACKLIGHT_PWM_INVERSE == _ON)
+		ucBacklight = 255 - ucBacklight;
+#endif
+	
+		// Adjust backlight by changing PWM duty
+		PCB_BACKLIGHT_PWM(ucBacklight);
+   // UserAdjustBacklight(_BACKLIGHT_MIN + ((DWORD)(_BACKLIGHT_MAX - _BACKLIGHT_MIN) * ucBacklight) / 255);
+}
+#endif
+
+#if(_BACKLIGHT_DIMMING_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User function Before Calibration Start
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustBeforeDimmingCalibration(void)
+{
+}
+
+//--------------------------------------------------
+// Description  : User function After Calibration Start
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustAfterDimmingCalibration(void)
+{
+}
+#endif
+
+#if(_LD_HDR10_BOOST_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : User function For LD Boost White Pattern
+// Input Value  : _ON/_OFF
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustLDBoostCalibration(bit bBoost)
+{
+    BYTE usBoostGain = 150;
+    WORD usBoostPWM;
+    usBoostPWM = (DWORD)_DEVICE_LED_DRIVER_PWM_MAX * usBoostGain / 100;
+    if(bBoost == _ON) // turn on boost
+    {
+        ExternalDeviceInterfaceLedDriverPwm(_DEVICE_LED_DRIVER_PWM_ALL, usBoostPWM, _DEVICE_CALI_ON);
+    }
+    else // turn off boost
+    {
+        ExternalDeviceInterfaceLedDriverPwm(_DEVICE_LED_DRIVER_PWM_ALL, _DEVICE_LED_DRIVER_PWM_MAX, _DEVICE_CALI_ON);
+    }
+}
+#endif
+
+#if(_YPEAKING_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Set Ypeaking Table
+// Input Value  : Request Ypeaking Table
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceAdjustYpeaking(void)
+{
+#if(_ULTRA_VIVID_SUPPORT == _ON)
+    switch(GET_OSD_ULTRA_VIVID_STATUS())
+    {
+        case _ULTRA_VIVID_L:
+			ScalerColorYpeakingAdjust(_YPEAKING_GAIN_MODE, 0x0E, _YPEAKING_N_DIV32, _NULL_POINTER, 0x00, 0x00);
+			break;
+
+        case _ULTRA_VIVID_M:
+            ScalerColorYpeakingAdjust(_YPEAKING_GAIN_MODE, 0x41, _YPEAKING_N_DIV32, _NULL_POINTER, 0x00, 0x00);
+            break;
+
+        case _ULTRA_VIVID_H:
+            ScalerColorYpeakingAdjust(_YPEAKING_GAIN_MODE, 0x7E, _YPEAKING_N_DIV32, _NULL_POINTER, 0x00, 0x00);
+			break;
+			
+        default:
+            ScalerColorYpeakingAdjust(_YPEAKING_GAIN_MODE, 0, _YPEAKING_N_DIV32, _NULL_POINTER, 0x00, 0x00);
+            break;
+    }
+#else
+    // ScalerColorYpeakingAdjust(_YPEAKING_TABLE_MODE, 0x00, _YPEAKING_NO_DIV, tYPEAKING_TABLE[0], _YPEAKING_TABLE_SIZE, GET_CURRENT_BANK_NUMBER());
+    ScalerColorYpeakingAdjust(_YPEAKING_GAIN_MODE, 0x41, _YPEAKING_N_DIV32, _NULL_POINTER, 0x00, 0x00);
+#endif
+}
+#endif // End of #if(_YPEAKING_SUPPORT == _ON)
+
+#if(_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE)
+//--------------------------------------------------
+// Description  : Get DDC-CI Mode
+// Input Value  : None
+// Output Value : EnumDDCCIDebugMode:_DEBUG_MODE / _DDCCI_MODE
+//--------------------------------------------------
+EnumDDCCIDebugMode UserInterfaceGetDdcciMode(void)
+{
+    return GET_OSD_DDCCI_STATUS();
+}
+#endif
+//--------------------------------------------------
+// Description  : DCR 
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+
+#if (_DCR_SUPPORT == _ON)
+void UserInterfaceAdjustDCR(void)
+{
+    UserAdjustPwmDcr();
+}
+
+#if(_DEF_OPPOSITE_DCR)	//_MENU_FUN_DCR_OPPOSITE
+BYTE UserAdjustDCRCalPwm_Opposite(BYTE ucRGBValValue)
+{
+	BYTE i=0;
+	BYTE ucPwm=0;
+	//BYTE tRGBValValue[10] = {0,10,50,75,100,125,150,180,220,255};
+#if 0//
+	BYTE tRGBValValue_opp[17] = {0,15,31,46,62,77,95,110,126,146,167,173,189,205,222,237,255};
+	BYTE tBacklightPwm[17] = 0;
+#else
+	BYTE tRGBValValue_opp[5] = {0,10,50,150,255};
+	BYTE tBacklightPwm[5] = 0;
+#endif
+
+
+#if 0//
+	if(GET_OSD_DCR_OPPOSITE() == 1) //��׼
+	{
+		tBacklightPwm[0] = _BACKLIGHT_MAX;	//100%
+		tBacklightPwm[1] = tBacklight_Table_Value(96);
+		tBacklightPwm[2] = tBacklight_Table_Value(92);
+		tBacklightPwm[3] = tBacklight_Table_Value(87);
+		tBacklightPwm[4] = tBacklight_Table_Value(80);
+		tBacklightPwm[5] = tBacklight_Table_Value(72);
+		tBacklightPwm[6] = tBacklight_Table_Value(61);
+		tBacklightPwm[7] = tBacklight_Table_Value(55);
+		tBacklightPwm[8] = tBacklight_Table_Value(47);
+		tBacklightPwm[9] = tBacklight_Table_Value(35);
+		tBacklightPwm[10] = tBacklight_Table_Value(32);
+		tBacklightPwm[11] = tBacklight_Table_Value(30);
+		tBacklightPwm[12] = tBacklight_Table_Value(28);
+		tBacklightPwm[13] = tBacklight_Table_Value(26);
+		tBacklightPwm[14] = tBacklight_Table_Value(24);
+		tBacklightPwm[15] = tBacklight_Table_Value(22);
+		tBacklightPwm[16] = tBacklight_Table_Value(20);
+	}
+	else	//0-80
+	{
+		tBacklightPwm[0] = _BACKLIGHT_MAX;	//100%
+		tBacklightPwm[1] = tBacklight_Table_Value(96);
+		tBacklightPwm[2] = tBacklight_Table_Value(92);
+		tBacklightPwm[3] = tBacklight_Table_Value(87);
+		tBacklightPwm[4] = tBacklight_Table_Value(75);
+		tBacklightPwm[5] = tBacklight_Table_Value(62);
+		tBacklightPwm[6] = tBacklight_Table_Value(51);
+		tBacklightPwm[7] = tBacklight_Table_Value(45);
+		tBacklightPwm[8] = tBacklight_Table_Value(37);
+		tBacklightPwm[9] = tBacklight_Table_Value(25);
+		tBacklightPwm[10] = tBacklight_Table_Value(22);
+		tBacklightPwm[11] = tBacklight_Table_Value(21);
+		tBacklightPwm[12] = tBacklight_Table_Value(18);
+		tBacklightPwm[13] = tBacklight_Table_Value(15);
+		tBacklightPwm[14] = tBacklight_Table_Value(12);
+		tBacklightPwm[15] = tBacklight_Table_Value(11);
+		tBacklightPwm[16] = tBacklight_Table_Value(10);
+	}
+	
+#elif(_DEF_BACKLIGHT  == 95)
+	if(GET_OSD_DCR_OPPOSITE() == 1) //10-100
+	{
+		tBacklightPwm[0] = _BACKLIGHT_MAX;	//100%
+		tBacklightPwm[1] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*9)+_BACKLIGHT_MIN; //90%
+		tBacklightPwm[2] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*8)+_BACKLIGHT_MIN;;	//80%
+		tBacklightPwm[3] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*4)+_BACKLIGHT_MIN;	//40%
+		tBacklightPwm[4] = ((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)+_BACKLIGHT_MIN;	//10%
+	}
+	else	//0-80
+	{
+		tBacklightPwm[0] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*8)+_BACKLIGHT_MIN;;	//80%
+		tBacklightPwm[1] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*6)+_BACKLIGHT_MIN;;	//60%
+		tBacklightPwm[2] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*4)+_BACKLIGHT_MIN; //40%
+		tBacklightPwm[3] = (((_BACKLIGHT_MAX-_BACKLIGHT_MIN)/10)*2)+_BACKLIGHT_MIN;	//20%
+		tBacklightPwm[4] = _BACKLIGHT_MIN;	//0%
+	}
+
+#else
+	if(GET_OSD_DCR_OPPOSITE() == 1) //10-100
+	{
+		tBacklightPwm[0] = _BACKLIGHT_MAX;	//100%
+		tBacklightPwm[1] = (_BACKLIGHT_MAX-_BACKLIGHT_DEF_PWM)/2+_BACKLIGHT_DEF_PWM; //90%
+		tBacklightPwm[2] = _BACKLIGHT_DEF_PWM;	//80%
+		tBacklightPwm[3] = (((_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/8)*4)+_BACKLIGHT_MIN;	//40%
+		tBacklightPwm[4] = ((_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/8)+_BACKLIGHT_MIN;	//10%
+	}
+	else	//0-80
+	{
+		tBacklightPwm[0] = _BACKLIGHT_DEF_PWM;	//80%
+		tBacklightPwm[1] = (((_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/8)*6)+_BACKLIGHT_MIN;	//60%
+		tBacklightPwm[2] = (((_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/8)*4)+_BACKLIGHT_MIN; //40%
+		tBacklightPwm[3] = (((_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/8)*2)+_BACKLIGHT_MIN;	//20%
+		tBacklightPwm[4] = _BACKLIGHT_MIN;	//0%
+	}
+#endif
+	
+
+#if 0//
+	for(i=0;i < 16;i++)	//��ȡ��ǰ��ɫֵ�׶�
+	{
+		if((tRGBValValue_opp[i] <= ucRGBValValue) && (ucRGBValValue <= tRGBValValue_opp[i+1]))
+		{
+			break;
+		}
+	}
+
+#else	
+	for(i=0;i < 4;i++)	//��ȡ��ǰ��ɫֵ�׶�
+	{
+		if((tRGBValValue_opp[i] <= ucRGBValValue) && (ucRGBValValue <= tRGBValValue_opp[i+1]))
+		{
+			break;
+		}
+	}
+#endif
+
+
+#if 0//
+	if(ucRGBValValue > 249)
+	{
+		i = 15;
+	}
+#else
+	if(ucRGBValValue > 240)
+	{
+		i = 3;
+	}
+#endif
+
+
+
+	ucPwm = tBacklightPwm[i] -(WORD)(ucRGBValValue-tRGBValValue_opp[i])*(tBacklightPwm[i] - tBacklightPwm[i+1])/(tRGBValValue_opp[i+1] -tRGBValValue_opp[i]);
+
+	return ucPwm;
+}
+
+#endif
+
+//--------------------------------------------------
+// Description  : DCR Measure
+// Input Value  : None
+// Output Value : DCR target
+//--------------------------------------------------
+BYTE UserAdjustDCRCalPwm(BYTE ucRGBValValue)
+{
+	BYTE i=0;
+	BYTE ucPwm=0;
+	BYTE tRGBValValue[5] = {0,50,75,175,255};
+	BYTE tBacklightPwm[5] = 0;
+
+#if(_DEF_OPPOSITE_DCR)	//_MENU_FUN_DCR_OPPOSITE
+	if(GET_OSD_DCR_OPPOSITE())	//DCR������
+	{
+		ucPwm = UserAdjustDCRCalPwm_Opposite(ucRGBValValue);
+		return ucPwm;
+	}
+#endif
+
+	if((GET_OSD_MPRT()!=_OFF)&&(SysModeGetModeState() ==_MODE_STATUS_ACTIVE)&&(GET_INPUT_TIMING_VFREQ()> _MPRT_MIN_FRAME_RATE)&&(GET_OSD_FREE_SYNC_STATUS() == _OFF))
+	{
+		tBacklightPwm[0] = _MPRT_PWM_MIN;
+		tBacklightPwm[1] = (_MPRT_PWM_DEF-_MPRT_PWM_MIN)/2+_MPRT_PWM_MIN;
+		tBacklightPwm[2] = _MPRT_PWM_DEF;
+		tBacklightPwm[3] = (_MPRT_PWM_MAX-_MPRT_PWM_DEF)/2+_MPRT_PWM_DEF;
+		tBacklightPwm[4] = _MPRT_PWM_MAX;
+
+	}
+	else
+	{
+
+		tBacklightPwm[0] = _BACKLIGHT_MIN;
+		tBacklightPwm[1] = (_BACKLIGHT_DEF_PWM-_BACKLIGHT_MIN)/2+_BACKLIGHT_MIN;
+		tBacklightPwm[2] = _BACKLIGHT_DEF_PWM;
+		tBacklightPwm[3] = (_BACKLIGHT_MAX-_BACKLIGHT_DEF_PWM)/2+_BACKLIGHT_DEF_PWM;
+		tBacklightPwm[4] = _BACKLIGHT_MAX;
+
+	}
+	
+	for(i=0;i < 4;i++)
+	{
+		if((tRGBValValue[i] <= ucRGBValValue) && (ucRGBValValue <= tRGBValValue[i+1]))
+		{
+			break;
+		}
+	}
+	ucPwm =tBacklightPwm[i] +(WORD)(ucRGBValValue-tRGBValValue[i])*(tBacklightPwm[i+1] - tBacklightPwm[i])/(tRGBValValue[i+1] -tRGBValValue[i]);
+	return ucPwm;
+}
+
+
+/*when use UserAdjustDCRGetPwm fun,must set _RGB_QUANTIZATION_RANGE_SUPPORT _ON, _YCC_QUANTIZATION_RANGE_SUPPORT _ON, if IC support ,must set to on*/
+BYTE UserAdjustDCRGetPwm(void)
+{
+	//ucOffblvalue: off backlight val value,when ucMeasureValueAvg <ucOffblvalue, turn off backlight,when ucOnblvalue >ucMeasureValueAvg,turn on backlight
+    BYTE ucPWM =0;
+	WORD ucOffblvalue=0,ucOnblvalue=0,ucMeasureValueAvg=0;
+	BYTE ucMeasureHighR=0,ucMeasureHighG=0,ucMeasureHighB=0;
+	BYTE ucOffblvalueH=35;   //20;
+	DWORD dwTotalPixel = ((DWORD)GET_MDOMAIN_OUTPUT_HWIDTH()*GET_MDOMAIN_OUTPUT_VHEIGHT()*3);
+
+	DebugMessageOsd("1.dwTotalPixel",dwTotalPixel);
+	// Get val value (R+G+B)/3  of  pixel value above thershold1 value,ucMeasureValueAvg range(0-255 for 8bit dcr;0-1023 for 10 bit dcr)
+	ucMeasureValueAvg = ScalerColorDCRGetAverage(_DCR_ABOVE_TH1_VAL_TOTAL, dwTotalPixel);
+#if(_DCR_BIT_MODE == _DCR_GEN_0_1_8BIT ||_DCR_BIT_MODE == _DCR_GEN_0_0_8BIT)
+
+	//get high level data of R,G,B
+	ucMeasureHighR	  = ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_R);
+	ucMeasureHighG	  = ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_G);
+	ucMeasureHighB	  = ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_B);
+	DebugMessageOsd("0.ucMeasureValueAvg",ucMeasureValueAvg);
+	DebugMessageOsd("0.ucMeasureHighR",ucMeasureHighR);
+#else
+	ucMeasureValueAvg = ucMeasureValueAvg>>2;// change to 8bit dcr
+	//get high level data of R,G,B
+	ucMeasureHighR	  = (ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_R))>>2;
+	ucMeasureHighG	  = (ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_G))>>2;
+	ucMeasureHighB	  = (ScalerColorDCRReadResult(_DCR_HIGH_LV_VAL_B))>>2;
+	DebugMessageOsd("1.ucMeasureValueAvg",ucMeasureValueAvg);
+	DebugMessageOsd("1.ucMeasureHighR",ucMeasureHighR);
+#endif
+
+	//analog source
+	if(SysSourceGetSourceType() == _SOURCE_VGA)
+	{
+		ucOffblvalue =8;
+		ucOnblvalue  =10;
+	}
+	else//digitial source
+	{
+		//_YCC_QUANTIZATION_RANGE_SUPPORT,_RGB_QUANTIZATION_RANGE_SUPPORT must set to on if support
+		//full range use
+		ucOffblvalue =2;
+		ucOnblvalue  =4;
+	}
+
+	ucPWM =UserAdjustDCRCalPwm(ucMeasureValueAvg);
+
+	if(bBACKLIGHTPOWER == _LIGHT_CONTROL_ON)
+	{
+		if((ucMeasureValueAvg <=ucOffblvalue) && (ucMeasureHighR <=ucOffblvalueH)&&(ucMeasureHighG <=ucOffblvalueH)&&(ucMeasureHighB <=ucOffblvalueH))
+		{
+#if(_DCR_PANEL_ON_OFF)
+			ScalerTimerActiveTimerEvent(SEC(15),_USER_TIMER_EVENT_DCR_CAL_TIME);
+#else
+			ScalerTimerActiveTimerEvent(SEC(0.1),_USER_TIMER_EVENT_DCR_CAL_TIME);
+#endif
+		}
+		else
+		{
+			ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DCR_CAL_TIME);
+		}
+		if((g_ucDCR_15SEC_OffBLFlag == _TRUE) &&(ScalerOsdGetOsdEnable() == _DISABLE))// after 15s,we  turn off backlight
+		{
+			ucPWM =0;
+			g_ucDCR_15SEC_OffBLFlag =_FALSE;
+			ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DCR_CAL_TIME);
+#if(_DCR_PANEL_ON_OFF == _ON)
+			PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_OFF);
+#endif
+		}
+	}
+	else if(bBACKLIGHTPOWER == _LIGHT_CONTROL_OFF)
+	{
+		if((ucMeasureValueAvg > ucOnblvalue) || (ucMeasureHighR > ucOffblvalueH) || (ucMeasureHighG > ucOffblvalueH) || (ucMeasureHighB > ucOffblvalueH))
+		{
+#if(_DCR_PANEL_ON_OFF == _ON)
+	    	PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_ON);
+			DebugMessageOsd("1.dcr turn on backlight",1);
+#endif
+		}
+
+	}
+
+	//check OSD if is on, turn on backlight
+	if(ScalerOsdGetOsdEnable() == _ENABLE)
+	{
+#if(_DCR_PANEL_ON_OFF == _ON)
+	    PCB_BACKLIGHT_POWER(_LIGHT_CONTROL_ON);
+#endif
+	}
+
+#if(_BACKLIGHT_PWM_INVERSE == _ON)
+	ucPWM = 0xFF - ucPWM;
+ #endif
+
+	
+	return ucPWM;
+}
+void UserAdjustPwmDcr()
+{
+	BYTE ucPrePwm=0,uctargetPwm=0,ucDevPwm=0;
+	BYTE ucdet=0;
+	ucPrePwm =PCB_GET_BACKLIGHT_PWM();
+	uctargetPwm =UserAdjustDCRGetPwm();
+	ucDevPwm =abs(uctargetPwm -ucPrePwm);
+DebugMessageSystem("ucPrePwm",ucPrePwm);
+DebugMessageSystem("uctargetPwm",uctargetPwm);
+
+	if(ucDevPwm == 0)
+	{
+		g_ucDCR_TUNE_1STEP_Flag =_FALSE;
+		ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DCR_TUNE_PWM_TIMER);
+	}
+	else
+	{
+//		ScalerTimerActiveTimerEvent(SEC(_DCR_TUNE_PWM_1STEP_TIME),_USER_TIMER_EVENT_DCR_TUNE_PWM_TIMER);
+		ScalerTimerActiveTimerEvent(SEC(0.01),_USER_TIMER_EVENT_DCR_TUNE_PWM_TIMER);
+	}
+	#if 0
+	if(ScalerOsdGetOsdEnable() == _ENABLE)
+	{
+		PCB_BACKLIGHT_PWM(uctargetPwm);
+	}
+	else 
+#endif
+		if(g_ucDCR_TUNE_1STEP_Flag == _TRUE)
+	{
+		g_ucDCR_TUNE_1STEP_Flag =_FALSE;
+
+		if(ucDevPwm > 150)
+		{
+			ucdet =3;
+		}
+		else if(ucDevPwm > 50)
+		{
+			ucdet =2;
+		}
+		else
+		{
+			ucdet=1;
+		}
+		if(uctargetPwm > ucPrePwm)
+		{
+			PCB_BACKLIGHT_PWM(ucPrePwm + ucdet);
+		}
+		else
+		{
+			PCB_BACKLIGHT_PWM(ucPrePwm - ucdet);
+		}
+	}
+	//DebugMessageOsd("1.dcrpwm",PCB_GET_BACKLIGHT_PWM());
+}
+
+
+void UserAdjustDCRControl(bit bEn)
+{
+
+	g_ucDCR_15SEC_OffBLFlag =_FALSE;
+	g_ucDCR_TUNE_1STEP_Flag =_FALSE;
+	if(bEn == _ON)
+	{
+
+	}
+	else
+	{
+		ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DCR_CAL_TIME);
+		ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_DCR_TUNE_PWM_TIMER);
+		UserAdjustBacklight(GET_OSD_BACKLIGHT());
+	}
+}
+
+
+
+#endif
+
+
+#if(_MPRT_SUPPORT == _ON)
+extern void ScalerSetDataPortBit(WORD usAddr, BYTE ucValue, BYTE ucAnd, BYTE ucOr);
+extern void ScalerTconGlobalEnable(bit bEnable);
+
+
+void UserAdjustLowMotionBlurDisplay(BYTE ucTconLevel)
+{
+	//WORD g_MPRTValue_i;	
+
+    if((ucTconLevel !=_OFF)&&(SysModeGetModeState() ==_MODE_STATUS_ACTIVE)&&(GET_INPUT_TIMING_VFREQ()> _MPRT_MIN_FRAME_RATE)&&(GET_OSD_FREE_SYNC_STATUS() == _OFF))
+    {
+    
+   		UserAdjustBacklight(GET_OSD_BACKLIGHT());
+    
+        // set GPIO pin = TCON output
+        PCB_MPRT_TCON_PIN_SHARE_CONFIG(_ON);
+
+        // Set TCON on
+        ScalerTconGlobalEnable(_ON);
+        PCB_MPRT_TCON_ENABLE(_ON);
+
+        // Set TCON Inverted output
+        PCB_MPRT_TCON_INVERTED_OUTPUT();
+
+        // Set TCON PWM
+#if(_MPRT_WEAK_MID_HIGH)
+		if(ucTconLevel==1)
+			g_MPRTValue = (DWORD)(GET_MDOMAIN_OUTPUT_VBSTART() + GET_MDOMAIN_OUTPUT_VBHEIGHT())*_MPRT_RATIO/100;	   
+		else if(ucTconLevel==2)
+			g_MPRTValue = (DWORD)(GET_MDOMAIN_OUTPUT_VBSTART() + GET_MDOMAIN_OUTPUT_VBHEIGHT())*_MPRT_MID_RATIO/100;	   
+		else if(ucTconLevel==3)
+			g_MPRTValue = (DWORD)(GET_MDOMAIN_OUTPUT_VBSTART() + GET_MDOMAIN_OUTPUT_VBHEIGHT())*_MPRT_HIGH_RATIO/100;	   
+#else
+		g_MPRTValue = (DWORD)(GET_MDOMAIN_OUTPUT_VBSTART() + GET_MDOMAIN_OUTPUT_VBHEIGHT())*_MPRT_RATIO/100;	   
+#endif
+		ScalerTimerWaitForEvent(_EVENT_DVS);
+		PCB_MPRT_TCON_PWM_ADJUST();     
+    }
+    else
+    {
+        // Set TCON off
+        PCB_MPRT_TCON_ENABLE(_OFF);
+
+        // set GPIO pin = PP output
+        PCB_MPRT_TCON_PIN_SHARE_CONFIG(_OFF);
+		
+        UserAdjustBacklight(GET_OSD_BACKLIGHT());		
+
+    }
+
+}
+#endif
+
+
+
+
+#if(_HDR10_SUPPORT == _ON)
+
+//--------------------------------------------------
+// Description  : Get HDR10 User assigned PCM Table Status. If status is on, please assigned PCM table addr & bank;
+// Input Value  : None
+// Output Value : StructHDR10UserAssignTable
+//--------------------------------------------------
+void UserInterfaceHDRGetHDR10UserAssignTable(StructHDR10Table *pstHDR10Table)
+{
+    pstHDR10Table->enumHDR10UserAssignTableStatus = _HDR10_USER_ASSIGNED_TABLE_OFF;
+}
+#endif
+
+#if(_DP_FREESYNC_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Dp FreeSync Get IVFmax From Look Up Table
+// Input Value  : IVF(unit: 0.1Hz)
+// Output Value : _DP_FREESYNC_WITH_IVF_MAX: Get IVF
+//--------------------------------------------------
+EnumDrrFreeSyncDpGetIVF UserInterfaceDisplayDpFreeSyncGetIVFmaxFromLut(WORD *pusVfreqMax)
+{
+    BYTE ucIndex = 0;
+    WORD usPixelClk = ScalerSyncGetInputPixelClk();
+    WORD usRefHtotalHBound = 0;
+    WORD usRefHtotalLBound = 0;
+    WORD usPixelClkHBound = usPixelClk;
+    WORD usPixelClkLBound = usPixelClk;
+
+    // Htotal margin
+    PDATA_WORD(0) = ((DWORD)_USER_DRR_HTOTAL_MARGIN * GET_INPUT_TIMING_HTOTAL() / 100);
+    usRefHtotalHBound = (GET_INPUT_TIMING_HTOTAL() + PDATA_WORD(0));
+    usRefHtotalLBound = (GET_INPUT_TIMING_HTOTAL() - PDATA_WORD(0));
+
+    // Pixel clk margin
+    PDATA_WORD(0) = ((DWORD)_USER_DRR_CLK_MARGIN * usPixelClk / 100);
+    usPixelClkHBound += PDATA_WORD(0);
+    usPixelClkLBound -= PDATA_WORD(0);
+
+    for(ucIndex = 0; ucIndex < (sizeof(tDrrFreeSyncDpTimingInfo) / sizeof(tDrrFreeSyncDpTimingInfo[0])); ucIndex++)
+    {
+        if((GET_DP_FREESYNC_IHWIDTH(ucIndex) == GET_INPUT_TIMING_HWIDTH()) && (GET_DP_FREESYNC_IVHEIGHT(ucIndex) == GET_INPUT_TIMING_VHEIGHT()) &&
+           ((GET_DP_FREESYNC_IHTOTAL(ucIndex) <= usRefHtotalHBound) && (GET_DP_FREESYNC_IHTOTAL(ucIndex) >= usRefHtotalLBound)) &&
+           ((GET_DP_FREESYNC_ICLK(ucIndex) <= usPixelClkHBound) && (GET_DP_FREESYNC_ICLK(ucIndex) >= usPixelClkLBound)))
+        {
+            *pusVfreqMax = GET_DP_FREESYNC_IVFREQ(ucIndex);
+
+            DebugMessageScaler("ucIndex if Drr user define timing ", ucIndex);
+            return _DP_FREESYNC_WITH_IVF_MAX;
+        }
+    }
+
+    *pusVfreqMax = 0;
+    return _DP_FREESYNC_WITHOUT_IVF_MAX;
+}
+#endif
+
+#if(_HDMI_FREESYNC_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : HDMI FreeSync Get IVFmax From Look Up Table
+// Input Value  : IVF(unit: 0.1Hz)
+// Output Value : _HDMI_FREESYNC_WITH_IVF_MAX: Get IVF
+//--------------------------------------------------
+EnumDrrFreeSyncHdmiGetIVF UserInterfaceDisplayHdmiFreeSyncGetIVFmaxFromLut(WORD *pusVfreqMax)
+{
+    BYTE ucIndex = 0;
+    WORD usPixelClk = ScalerSyncGetInputPixelClk();
+    WORD usRefHtotalHBound = 0;
+    WORD usRefHtotalLBound = 0;
+    WORD usPixelClkHBound = usPixelClk;
+    WORD usPixelClkLBound = usPixelClk;
+
+    // Htotal margin
+    PDATA_WORD(0) = ((DWORD)_USER_DRR_HTOTAL_MARGIN * GET_INPUT_TIMING_HTOTAL() / 100);
+    usRefHtotalHBound = (GET_INPUT_TIMING_HTOTAL() + PDATA_WORD(0));
+    usRefHtotalLBound = (GET_INPUT_TIMING_HTOTAL() - PDATA_WORD(0));
+
+    // Pixel clk margin
+    PDATA_WORD(0) = ((DWORD)_USER_DRR_CLK_MARGIN * usPixelClk / 100);
+    usPixelClkHBound += PDATA_WORD(0);
+    usPixelClkLBound -= PDATA_WORD(0);
+
+    for(ucIndex = 0; ucIndex < (sizeof(tDrrFreeSyncHdmiTimingInfo) / sizeof(tDrrFreeSyncHdmiTimingInfo[0])); ucIndex++)
+    {
+        if((GET_HDMI_FREESYNC_IHWIDTH(ucIndex) == GET_INPUT_TIMING_HWIDTH()) && (GET_HDMI_FREESYNC_IVHEIGHT(ucIndex) == GET_INPUT_TIMING_VHEIGHT()) &&
+           ((GET_HDMI_FREESYNC_IHTOTAL(ucIndex) <= usRefHtotalHBound) && (GET_HDMI_FREESYNC_IHTOTAL(ucIndex) >= usRefHtotalLBound)) &&
+           ((GET_HDMI_FREESYNC_ICLK(ucIndex) <= usPixelClkHBound) && (GET_HDMI_FREESYNC_ICLK(ucIndex) >= usPixelClkLBound)))
+        {
+            *pusVfreqMax = GET_HDMI_FREESYNC_IVFREQ(ucIndex);
+
+            DebugMessageScaler("ucIndex if Drr user define timing ", ucIndex);
+            return _HDMI_FREESYNC_WITH_IVF_MAX;
+        }
+    }
+
+    *pusVfreqMax = 0;
+    return _HDMI_FREESYNC_WITHOUT_IVF_MAX;
+}
+#endif
+
+#if(_HDMI_2_0_SUPPORT == _ON)
+#if(_HDMI_FREESYNC_SUPPORT == _ON)
+//--------------------------------------------------
+// Description  : Get Hdmi Panel Index
+// Input Value  : None
+// Output Value : None
+//--------------------------------------------------
+void UserInterfaceFreeSyncGetHdmiAupiPanelInfo(StructDrrAmdAupiInfo *pstDrrHdmiAmdAupiInfo)
+{
+    pstDrrHdmiAmdAupiInfo->ucPanelManufactureIdL = 0x00;
+    pstDrrHdmiAmdAupiInfo->ucPanelManufactureIdM = 0x00;
+    pstDrrHdmiAmdAupiInfo->ucPanelIdL = 0x00;
+    pstDrrHdmiAmdAupiInfo->ucPanelIdM = 0x00;
+    pstDrrHdmiAmdAupiInfo->ucFwCheckSumL = 0x00;
+    pstDrrHdmiAmdAupiInfo->ucFwCheckSumM = 0x00;
+}
+#endif
+#endif
+
+
+#endif // End of #if(_OSD_TYPE == _REALTEK_2014_OSD)

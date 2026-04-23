@@ -1,0 +1,1384 @@
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RTD2014USERADJUST
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\RTD2014UserAdjust.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Series\RTD2014Function\Code\RTD2014UserAdjust.c LARGE OPTIMIZE(
+                    -9,SPEED) INCDIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\S
+                    -ystem\Header;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFun
+                    -ction\Lib\Header;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Sc
+                    -aler\RL6449_Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Li
+                    -b\Header;.\Kernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Head
+                    -er;.\User\RTD Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factor
+                    -y\Header) DEFINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\
+                    -RTD2014UserAdjust.lst) TABS(2) OBJECT(.\Output\RL6449_Project\RTD2014UserAdjust.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          //----------------------------------------------------------------------------------------------------
+  16          // ID Code      : RTD2014UserAdjust.c No.0000
+  17          // Update Note  :
+  18          //----------------------------------------------------------------------------------------------------
+  19          
+  20          #define __USER_ADJUST__
+  21          #define __USER_PANEL__
+  22          
+  23          #include "UserCommonInclude.h"
+  24          
+  25          #if(_OSD_TYPE == _REALTEK_2014_OSD)
+  26          
+  27          //****************************************************************************
+  28          // DEFINITIONS / MACROS
+  29          //****************************************************************************
+  30          
+  31          #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+  32          #define _HLWIN_TYPE5_MOVE_TIME                      SEC(0.01)
+  33          #endif
+  34          
+  35          //****************************************************************************
+  36          // STRUCT / TYPE / ENUM DEFINITTIONS
+  37          //****************************************************************************
+  38          
+  39          
+  40          //****************************************************************************
+  41          // CODE TABLES
+  42          //****************************************************************************
+  43          //----------------------------------------------------------------------------------------------------
+  44          // IR TABLE
+  45          //----------------------------------------------------------------------------------------------------
+  46          #if(_IR_SUPPORT == _IR_HW_SUPPORT)
+  47          BYTE code tIR_INITIAL_TABLE[] =
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 2   
+
+  48          {
+  49          #if(_IR_PROTOCAL == _IR_NEC_DTV328 || _IR_PROTOCAL == _IR_HUIXIONG_CROSSOVER_KEY14 || _IR_PROTOCAL == _IR_
+             -DATONG_MT1)
+  50              #include "IRRemote/NEC_DTV328.h"
+  51          
+  52          #elif(_IR_PROTOCAL == _IR_SONY_B102P)
+                  #include "IRRemote/SONY_B102P.h"
+              
+              #elif(_IR_PROTOCAL == _IR_PHILIPS_RC6)
+                  #include "IRRemote/PHILIPS_RC6.h"
+              
+              #endif // End of #if(_IR_PROTOCAL == _IR_NEC_DTV328 || _IR_PROTOCAL == _IR_HUIXIONG_CROSSOVER_KEY14)
+  59          };
+  60          #endif
+  61          
+  62          //****************************************************************************
+  63          // VARIABLE DECLARATIONS
+  64          //****************************************************************************
+  65          #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+  66          bit g_bHLWinRLMove = _RIGHT;
+  67          WORD g_usHLWinHPos;
+  68          WORD g_usHLWinHWidth;
+  69          WORD g_usHLWinVPos;
+  70          WORD g_usHLWinVHeight;
+  71          #endif
+  72          
+  73          
+  74          //****************************************************************************
+  75          // FUNCTION DECLARATIONS
+  76          //****************************************************************************
+  77          
+  78          //-------------------------------------------------------
+  79          // Dp Load Edid Related
+  80          //-------------------------------------------------------
+  81          #if((_EMBEDDED_EDID_SUPPORT == _ON) && (_WRITE_EDID_LOCATION_BY_USER_SUPPORT == _ON))
+              EnumEdidSelection UserAdjustGetDpEdidIndex(BYTE ucInputPort);
+              #endif
+  84          
+  85          //-------------------------------------------------------
+  86          // Audio Related
+  87          //-------------------------------------------------------
+  88          #if(_AUDIO_SUPPORT == _ON)
+  89          void UserAdjustAudioMuteSwitch(void);
+  90          void UserAdjustAudioVolume(BYTE ucVolume);
+  91          WORD UserAdjustAudioVolumeMapping(BYTE ucVolume);
+  92          #endif // End of #if(_AUDIO_SUPPORT == _ON)
+  93          
+  94          //-------------------------------------------------------
+  95          // DCC
+  96          //-------------------------------------------------------
+  97          #if(_DCC_FUNCTION == _ON)
+  98          void UserAdjustDCC(BYTE ucColorEffect);
+  99          #endif // End of #if(_DCC_FUNCTION == _ON)
+ 100          
+ 101          //-------------------------------------------------------
+ 102          // ICM
+ 103          //-------------------------------------------------------
+ 104          #if(_ICM_SUPPORT == _ON)
+              void UserAdjustICM(BYTE ucColorEffect);
+              #endif
+ 107          
+ 108          #if(_SCM_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 3   
+
+              void UserAdjustSCM(BYTE ucColorEffect);
+              #endif
+ 111          
+ 112          #if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON
+             -))    
+ 113          void UserAdjustColorEffectMode(void);
+ 114          #endif
+ 115          
+ 116          //-------------------------------------------------------
+ 117          // CTS / BRI
+ 118          //-------------------------------------------------------
+ 119          #if(_CONTRAST_SUPPORT == _ON)
+ 120          void UserAdjustContrast(WORD usContrast);
+ 121          #endif
+ 122          
+ 123          #if(_BRIGHTNESS_SUPPORT == _ON)
+ 124          void UserAdjustBrightness(WORD usBrightness);
+ 125          #endif
+ 126          
+ 127          //-------------------------------------------------------
+ 128          // 3D Gamma
+ 129          //-------------------------------------------------------
+ 130          
+ 131          //-------------------------------------------------------
+ 132          // sRGB
+ 133          //-------------------------------------------------------
+ 134          #if(_GLOBAL_HUE_SATURATION == _ON)
+ 135          void UserAdjustGlobalHueSat(SWORD shHue, WORD usSat);
+ 136          #endif
+ 137          
+ 138          //-------------------------------------------------------
+ 139          // Unifomity
+ 140          //-------------------------------------------------------
+ 141          
+ 142          //-------------------------------------------------------
+ 143          // Output Gamma
+ 144          //-------------------------------------------------------
+ 145          
+ 146          //-------------------------------------------------------
+ 147          // OD
+ 148          //-------------------------------------------------------
+ 149          #if(_OD_SUPPORT == _ON)
+ 150          void UserAdjustOD(void);
+ 151          #endif
+ 152          
+ 153          //-------------------------------------------------------
+ 154          // Highlight window
+ 155          //-------------------------------------------------------
+ 156          #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 157          void UserAdjustHLWinType(BYTE ucHLWinType);
+ 158          void UserAdjustHLWinType5Move(void);
+ 159          void UserAdjustHighLightWindowEffectSpace(void);
+ 160          #endif
+ 161          
+ 162          #if(_FREESYNC_OD_MEASURE == _ON)
+              void UserAdjustFREESYNCODMeasure(void);
+              #endif
+ 165          
+ 166          
+ 167          //-------------------------------------------------------
+ 168          // HW IR Mode
+ 169          //-------------------------------------------------------
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 4   
+
+ 170          #if(_IR_SUPPORT == _IR_HW_SUPPORT)
+ 171          void UserAdjusIR(void);
+ 172          #endif
+ 173          
+ 174          //-------------------------------------------------------
+ 175          // DP
+ 176          //-------------------------------------------------------
+ 177          #if(_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP)
+              void UserAdjustEmbeddedDpSwitch(void);
+              #endif
+ 180          
+ 181          //-------------------------------------------------------
+ 182          // Pixel Shift
+ 183          //-------------------------------------------------------
+ 184          #if(_PIXEL_SHIFT_SUPPORT == _ON)
+              void UserAdjustPixelShifting(void);
+              #endif
+ 187          
+ 188          //-------------------------------------------------------
+ 189          // SDRToHDR
+ 190          //-------------------------------------------------------
+ 191          #if(_SDR_TO_HDR_SUPPORT == _ON)
+              void UserAdjustSDRToHDR(bit bOn);
+              #endif
+ 194          
+ 195          //-------------------------------------------------------
+ 196          // DCR
+ 197          //-------------------------------------------------------
+ 198          #if(_DCR_SUPPORT == _ON)
+ 199          #if(_LD_TUNNEL_DETECT_SUPPORT == _ON)
+              void UserAdjustDCRTHD(void);
+              #endif
+ 202          #endif
+ 203          
+ 204          //****************************************************************************
+ 205          // FUNCTION DEFINITIONS
+ 206          //****************************************************************************
+ 207          //----------------------------------------------------------------------------
+ 208          // Not Kernel Related Function
+ 209          //----------------------------------------------------------------------------
+ 210          
+ 211          #if((_EMBEDDED_EDID_SUPPORT == _ON) && (_WRITE_EDID_LOCATION_BY_USER_SUPPORT == _ON))
+              //--------------------------------------------------
+              // Description  : Get the Mapping of Edid index of Function Application
+              // Input Value  : ucInputPort
+              // Output Value : Edid Index
+              //--------------------------------------------------
+              EnumEdidSelection UserAdjustGetDpEdidIndex(BYTE ucInputPort)
+              {
+                  BYTE ucIndex = 0;
+                  BYTE ucDpResolution = 0;
+              
+              #if(_DP_FREESYNC_SUPPORT == _ON)
+                  if((GET_OSD_FREE_SYNC_STATUS() == _ON))
+                  {
+                      ucIndex += ((_DP_HDR10_SUPPORT == _ON) ? 0x06 : 0x03);
+                  }
+              #endif
+              
+              #if(_DP_HDR10_SUPPORT == _ON)
+                  if((UserInterfaceHDRGetHDR10ModeStatus(ucInputPort) != _HDR10_MODE_OFF))
+                  {
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 5   
+
+                      ucIndex += 0x03;
+                  }
+              #endif
+              
+                  switch(ucInputPort)
+                  {
+                      case _D0_INPUT_PORT:
+                          ucDpResolution = UserCommonNVRamGetSystemData(_EDID_D0_SELECT);
+                          break;
+                      case _D1_INPUT_PORT:
+                          ucDpResolution = UserCommonNVRamGetSystemData(_EDID_D1_SELECT);
+                          break;
+                      case _D2_INPUT_PORT:
+                          ucDpResolution = UserCommonNVRamGetSystemData(_EDID_D2_SELECT);
+                          break;
+                      case _D6_INPUT_PORT:
+                          ucDpResolution = UserCommonNVRamGetSystemData(_EDID_D6_SELECT);
+                          break;
+                      default:
+                          break;
+                  }
+              
+                  switch(ucDpResolution)
+                  {
+                      case _DP_EDID_1080P:
+                          break;
+              
+                      case _DP_EDID_2560_1440:
+                          ucIndex += 0x01;
+                          break;
+              
+                      case _DP_EDID_4K2K_60HZ:
+                          ucIndex += 0x02;
+                          break;
+              
+                      default:
+                          break;
+                  }
+              
+                  return ucIndex;
+              }
+              #endif
+ 274          
+ 275          #if(_AUDIO_SUPPORT == _ON)
+ 276          //--------------------------------------------------
+ 277          // Description  : Mute/Unmute Aduio Volume
+ 278          // Input Value  : bMute
+ 279          // Output Value : None
+ 280          //--------------------------------------------------
+ 281          void UserAdjustAudioMuteSwitch(void)
+ 282          {
+ 283   1          SysAudioMuteProc(UserInterfaceGetAudioMuteStatus());
+ 284   1      }
+ 285          
+ 286          //--------------------------------------------------
+ 287          // Description  : Adjust Aduio Volume
+ 288          // Input Value  : ucVolume
+ 289          // Output Value : Node
+ 290          //--------------------------------------------------
+ 291          void UserAdjustAudioVolume(BYTE ucVolume)
+ 292          {
+ 293   1        if(GET_OSD_VOLUME_MUTE())
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 6   
+
+ 294   1        {
+ 295   2          return;
+ 296   2        }
+ 297   1      
+ 298   1        PCB_AUDIO_VOLUME_PWM(UserCommonAdjustPercentToRealValue(_DEF_VOLUME_PWM, 255, 0, 128));
+ 299   1      
+ 300   1          ScalerAudioDigitalAdjustVolume(UserAdjustAudioVolumeMapping(ucVolume));
+ 301   1      }
+ 302          
+ 303          //--------------------------------------------------
+ 304          // Description  : OSD Volume Mapping to Real Value
+ 305          // Input Value  : usVolume
+ 306          // Output Value : usVolume
+ 307          //--------------------------------------------------
+ 308          WORD UserAdjustAudioVolumeMapping(BYTE ucVolume)
+ 309          {
+ 310   1      
+ 311   1      
+ 312   1      
+ 313   1      
+ 314   1      #if(_LINE_IN_SUPPORT == _ON)
+ 315   1          if(UserInterfaceGetAudioSource() == _LINE_IN_AUDIO)
+ 316   1          {
+ 317   2      #if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217&(_2822NE || _2822NB || _2822NJ))
+*** WARNING C322 IN LINE 317 OF User\RTD Series\RTD2014Function\Code\RTD2014UserAdjust.c: unknown identifier
+                      return _LINE_IN_VOLUME_MAX;
+              #else
+ 320   2              return (UserCommonAdjustPercentToRealValue(ucVolume, _LINE_IN_VOLUME_MAX, _LINE_IN_VOLUME_MIN, _LI
+             -NE_IN_VOLUME_CENTER));
+ 321   2      #endif
+ 322   2          }
+ 323   1          else
+ 324   1      #endif // End of #if(_LINE_IN_SUPPORT == _ON)
+ 325   1          {
+ 326   2              return (UserCommonAdjustPercentToRealValue(ucVolume, _DIGITAL_VOLUME_MAX, _DIGITAL_VOLUME_MIN, _DI
+             -GITAL_VOLUME_CENTER));
+ 327   2          }
+ 328   1      }
+ 329          #endif // End of #if(_AUDIO_SUPPORT == _ON)
+ 330          
+ 331          #if(_DCC_FUNCTION == _ON)
+ 332          //--------------------------------------------------
+ 333          // Description  : Set DCC Table
+ 334          // Input Value  : Request DCC Table
+ 335          // Output Value : None
+ 336          //--------------------------------------------------
+ 337          void UserAdjustDCC(BYTE ucColorEffect)
+ 338          {
+ 339   1      #if 1 //(_CUSTOM_TYPE == _FKX_CUSTOMER)
+ 340   1              ScalerColorDCCAdjust(tDCC_TABLE[ucColorEffect], GET_CURRENT_BANK_NUMBER());
+ 341   1      #else
+                  if((ucColorEffect >= _COLOREFFECT_GAME) && (ucColorEffect < _COLOREFFECT_USER))
+                  {
+                      ScalerColorDCCAdjust(tDCC_TABLE[ucColorEffect], GET_CURRENT_BANK_NUMBER());
+                  }
+              #endif
+ 347   1      }
+ 348          
+ 349          
+ 350          #endif // End of #if(_DCC_FUNCTION == _ON)
+ 351          
+ 352          
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 7   
+
+ 353          #if(_ICM_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Set ICM parameter
+              // Input Value  : Adjust Option
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustICM(BYTE ucColorEffect)
+              {
+                  if((ucColorEffect >= _COLOREFFECT_GAME) && (ucColorEffect < _COLOREFFECT_USER))
+                  {
+                      ScalerColorICMLoadTable(tICM_TABLE[ucColorEffect], GET_CURRENT_BANK_NUMBER());
+                  }
+              }
+              #endif // End of #if(_ICM_SUPPORT == _ON)
+ 367          
+ 368          #if(_SCM_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Set SCM parameter
+              // Input Value  : Adjust Option
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustSCM(BYTE ucColorEffect)
+              {
+              #if(_DEF_COLORFUL)
+                if((ucColorEffect >= _COLOREFFECT_GAME) && (ucColorEffect < _COLOREFFECT_COLORFUL))
+              #else
+                  if((ucColorEffect >= _COLOREFFECT_GAME) && (ucColorEffect < _COLOREFFECT_USER))
+              #endif
+                {
+                      ScalerColorSCMLoadTable(tSCM_TABLE[ucColorEffect], GET_CURRENT_BANK_NUMBER());
+                  }
+              }
+              #endif // End of #if(_SCM_SUPPORT == _ON)
+ 386          
+ 387          #if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON
+             -))
+ 388          //--------------------------------------------------
+ 389          // Description  : Set UltraVivid Settings
+ 390          // Input Value  : None
+ 391          // Output Value : None
+ 392          //--------------------------------------------------
+ 393          void UserAdjustColorEffectMode(void)
+ 394          {
+ 395   1          BYTE ucIndex = 0;
+ 396   1          BYTE ucBackupSixColor = 0;
+ 397   1          BYTE ucBackupHue = 0;
+ 398   1          BYTE ucBackupSaturation = 0;
+ 399   1      
+ 400   1          ucBackupSixColor = GET_OSD_SIX_COLOR();
+ 401   1          ucBackupHue = GET_OSD_SIX_COLOR_HUE();
+ 402   1          ucBackupSaturation = GET_OSD_SIX_COLOR_SATURATION();
+ 403   1      
+ 404   1          switch(GET_OSD_COLOR_EFFECT())
+ 405   1          {
+ 406   2              case _COLOREFFECT_STANDARD:
+ 407   2      #if(_DEF_COLORFUL)
+                  case _COLOREFFECT_COLORFUL:
+              #endif
+ 410   2                  ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+ 411   2      #if(_DCC_PROGRESS_BAR) //(_DCC_FUNCTION == _ON)
+                          ScalerColorDCCEnable(_FUNCTION_OFF);
+              #endif
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 8   
+
+ 414   2      
+ 415   2      #if(_ICM_SUPPORT == _ON)
+                          ScalerColorICMEnable(_FUNCTION_OFF);
+              #endif
+ 418   2      
+ 419   2                  break;
+ 420   2      
+ 421   2              case _COLOREFFECT_USER:
+ 422   2                  ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+ 423   2      #if(_DCC_PROGRESS_BAR) //(_DCC_FUNCTION == _ON)
+                          ScalerColorDCCEnable(_FUNCTION_OFF);
+              #endif
+ 426   2      
+ 427   2      #if(_ICM_SUPPORT == _ON)
+                          ScalerColorICMEnable(_FUNCTION_OFF);
+              #endif
+ 430   2                  break;
+ 431   2      
+ 432   2              case _COLOREFFECT_MOVIE:
+ 433   2              case _COLOREFFECT_GAME:
+ 434   2              case _COLOREFFECT_PHOTO:
+ 435   2              case _COLOREFFECT_VIVID:
+ 436   2                  ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+ 437   2      #if(_DCC_PROGRESS_BAR) //(_DCC_FUNCTION == _ON)
+                          ScalerColorDCCEnable(_FUNCTION_OFF);
+              #endif
+ 440   2      
+ 441   2      #if(_ICM_SUPPORT == _ON)
+                          ScalerColorICMEnable(_FUNCTION_OFF);
+              #endif
+ 444   2      
+ 445   2      #if 0//(_DCC_PROGRESS_BAR) //(_DCC_FUNCTION == _ON)
+                #if 0 //(_CUSTOM_TYPE == _FKX_CUSTOMER)
+                    UserAdjustDCC(GET_OSD_DCC());
+                #else
+                          UserAdjustDCC(GET_OSD_COLOR_EFFECT());
+                #endif
+              #endif
+ 452   2      
+ 453   2      // Adjust SCM Table, Should before ICM Adjust
+ 454   2      #if(_SCM_SUPPORT == _ON)
+                          UserAdjustSCM(GET_OSD_COLOR_EFFECT());
+              #endif
+ 457   2      
+ 458   2      #if(_ICM_SUPPORT == _ON)
+                          UserAdjustICM(GET_OSD_COLOR_EFFECT());
+              #endif
+ 461   2      
+ 462   2      
+ 463   2      #if(_DCC_PROGRESS_BAR) //(_DCC_FUNCTION == _ON)
+                          ScalerColorDCCEnable(_FUNCTION_ON);
+              #endif
+ 466   2      
+ 467   2      #if(_ICM_SUPPORT == _ON)
+                          ScalerColorICMEnable(_FUNCTION_ON);
+              #endif
+ 470   2                  break;
+ 471   2      
+ 472   2              default:
+ 473   2                  break;
+ 474   2          }
+ 475   1      
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 9   
+
+ 476   1          SET_OSD_SIX_COLOR(ucBackupSixColor);
+ 477   1          SET_OSD_SIX_COLOR_HUE(ucBackupHue);
+ 478   1          SET_OSD_SIX_COLOR_SATURATION(ucBackupSaturation);
+ 479   1      }
+ 480          #endif // End of #if(_SIX_COLOR_SUPPORT == _ON)
+ 481          
+ 482          #if(_CONTRAST_SUPPORT == _ON)
+ 483          //--------------------------------------------------
+ 484          // Description  : User Adjust Contrast
+ 485          // Input Value  : 12 bit input, old 8 bit contrast input value must left shift 4 bit
+ 486          //                0 (00h) ~ 1(800h) ~  2(FFFh)
+ 487          // Output Value : void
+ 488          //--------------------------------------------------
+ 489          void UserAdjustContrast(WORD usContrast)
+ 490          {
+ 491   1      
+ 492   1      
+ 493   1      #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 494   1          WORD pusData[6] = {0};
+ 495   1      
+ 496   1      #if(_CTS_TYPE == _CTS_GEN_1_12BIT)
+ 497   1          pusData[3] = 0x800;
+ 498   1          pusData[4] = 0x800;
+ 499   1          pusData[5] = 0x800;
+ 500   1      #else
+                  pusData[3] = 0x80;
+                  pusData[4] = 0x80;
+                  pusData[5] = 0x80;
+              #endif
+ 505   1      
+ 506   1      #else
+                  WORD pusData[3] = {0};
+              #endif
+ 509   1      
+ 510   1        switch(GET_OSD_COLOR_EFFECT())
+ 511   1        {
+ 512   2          case _COLOREFFECT_MOVIE :
+ 513   2            usContrast = _ECO_MOVIE_CONTRAST;
+ 514   2            break;
+ 515   2          case _COLOREFFECT_GAME:
+ 516   2            usContrast = _ECO_GAME_CONTRAST;
+ 517   2            break;
+ 518   2            
+ 519   2      #if(!_DEF_ECO_SET)  
+ 520   2          case _COLOREFFECT_PHOTO :
+ 521   2            usContrast = _ECO_TEXT_CONTRAST;
+ 522   2            break;
+ 523   2      #endif
+ 524   2      
+ 525   2          case _COLOREFFECT_STANDARD :
+ 526   2            usContrast = usContrast;
+ 527   2            break;
+ 528   2      #if(_EOC_RTS_FPS_SUPPORT == _ON)
+ 529   2          case _COLOREFFECT_FPS:
+ 530   2            usContrast = _ECO_FPS_CONTRAST;
+ 531   2            break;
+ 532   2            
+ 533   2          case _COLOREFFECT_RTS :
+ 534   2            usContrast = _ECO_RTS_CONTRAST;
+ 535   2            break;
+ 536   2      #endif
+ 537   2      
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 10  
+
+ 538   2      #if(_EOC_ENERGY_SAVING_SUPPORT == _ON)
+                  case _COLOREFFECT_ENERGY_SAVING :
+                    usContrast = _ECO_ENERGY_SAVING_CONTRAST;
+                    break;
+              #endif
+ 543   2      
+ 544   2          default:
+ 545   2            break;
+ 546   2        }
+ 547   1      
+ 548   1      
+ 549   1        usContrast = UserCommonAdjustPercentToRealValue(usContrast, _CONTRAST_MAX, _CONTRAST_MIN, _CONTRAST_CENTE
+             -R);
+ 550   1      
+ 551   1      #if(_CTS_TYPE == _CTS_GEN_1_12BIT)
+ 552   1          pusData[0] = (WORD)(((DWORD)g_stColorProcData.usColorTempR * usContrast / 2048) > 4095) ? 4095 : (WORD
+             -)((DWORD)g_stColorProcData.usColorTempR * usContrast / 2048);
+ 553   1          pusData[1] = (WORD)(((DWORD)g_stColorProcData.usColorTempG * usContrast / 2048) > 4095) ? 4095 : (WORD
+             -)((DWORD)g_stColorProcData.usColorTempG * usContrast / 2048);
+ 554   1          pusData[2] = (WORD)(((DWORD)g_stColorProcData.usColorTempB * usContrast / 2048) > 4095) ? 4095 : (WORD
+             -)((DWORD)g_stColorProcData.usColorTempB * usContrast / 2048);
+ 555   1          if(_PANEL_DISP_BIT_MODE == _PANEL_DISP_30_BIT)
+ 556   1          {
+ 557   2              // 10-bit Panel
+ 558   2              pusData[0] = UserCommonAdjust10bitPanelCompensate(pusData[0]);
+ 559   2              pusData[1] = UserCommonAdjust10bitPanelCompensate(pusData[1]);
+ 560   2              pusData[2] = UserCommonAdjust10bitPanelCompensate(pusData[2]);
+ 561   2          }
+ 562   1      
+ 563   1      pusData[2] = pusData[2] - (pusData[2]/2 /100*33*GET_OSD_LOW_BLUE());
+ 564   1      
+ 565   1      #else
+                  pusData[0] = (WORD)(((DWORD)g_stColorProcData.usColorTempR * usContrast / 128) > 255) ? 255 : (WORD)((
+             -DWORD)g_stColorProcData.usColorTempR * usContrast / 128);
+                  pusData[1] = (WORD)(((DWORD)g_stColorProcData.usColorTempG * usContrast / 128) > 255) ? 255 : (WORD)((
+             -DWORD)g_stColorProcData.usColorTempG * usContrast / 128);
+                  pusData[2] = (WORD)(((DWORD)g_stColorProcData.usColorTempB * usContrast / 128) > 255) ? 255 : (WORD)((
+             -DWORD)g_stColorProcData.usColorTempB * usContrast / 128);
+                pusData[2] = pusData[2] - (pusData[2]*33*GET_OSD_LOW_BLUE()/2 /100);
+              
+              #endif
+ 572   1      
+ 573   1          ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+ 574   1      
+ 575   1      #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 576   1          if(GET_OSD_HLWIN_TYPE() == _HL_WIN_OFF)
+ 577   1          {
+ 578   2              ScalerColorContrastAdjust(_CONTRAST_COEF_A, pusData);
+ 579   2              ScalerColorContrastAdjust(_CONTRAST_COEF_B, &pusData[3]);
+ 580   2          }
+ 581   1          else
+ 582   1          {
+ 583   2              ScalerColorContrastAdjust(_CONTRAST_COEF_B, pusData);
+ 584   2              ScalerColorContrastAdjust(_CONTRAST_COEF_A, &pusData[3]);
+ 585   2          }
+ 586   1      #else
+                  ScalerColorContrastAdjust(_CONTRAST_COEF_A, pusData);
+              #endif
+ 589   1      
+ 590   1          ScalerColorContrastEnable(_FUNCTION_ON);
+ 591   1      }
+ 592          #endif
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 11  
+
+ 593          
+ 594          #if(_BRIGHTNESS_SUPPORT == _ON)
+ 595          //--------------------------------------------------
+ 596          // Description  : User Adjust Brightness
+ 597          // Input Value  : 10 bit input, old 8 bit brightness input value must left shift 2 bit
+ 598          //                -2048(00h) ~ 0(200h) ~  +2044(3FFh)
+ 599          // Output Value : void
+ 600          //--------------------------------------------------
+ 601          void UserAdjustBrightness(WORD usBrightness)
+ 602          {
+ 603   1      #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 604   1          WORD pusData[6] = {0};
+ 605   1      
+ 606   1      #if(_BRI_TYPE == _BRI_GEN_1_10BIT)
+ 607   1          pusData[3] = 0x200;
+ 608   1          pusData[4] = 0x200;
+ 609   1          pusData[5] = 0x200;
+ 610   1      #else
+                  pusData[3] = 0x80;
+                  pusData[4] = 0x80;
+                  pusData[5] = 0x80;
+              #endif
+ 615   1      
+ 616   1      #else
+                  WORD pusData[3] = {0};
+              #endif
+ 619   1      
+ 620   1          switch(GET_OSD_COLOR_EFFECT())
+ 621   1          {
+ 622   2            case _COLOREFFECT_MOVIE :
+ 623   2              usBrightness = _ECO_MOVIE_BLACKLEVEL;
+ 624   2              break;
+ 625   2            case _COLOREFFECT_GAME:
+ 626   2              usBrightness = _ECO_GAME_BLACKLEVEL;
+ 627   2              break;
+ 628   2              
+ 629   2            case _COLOREFFECT_PHOTO :
+ 630   2              usBrightness = _ECO_TEXT_BLACKLEVEL;
+ 631   2              break;
+ 632   2            case _COLOREFFECT_STANDARD :
+ 633   2              usBrightness = usBrightness;
+ 634   2              break;
+ 635   2      #if(_EOC_RTS_FPS_SUPPORT == _ON)
+ 636   2            case _COLOREFFECT_FPS:
+ 637   2              usBrightness = _ECO_FPS_BLACKLEVEL;
+ 638   2              break;
+ 639   2              
+ 640   2            case _COLOREFFECT_RTS :
+ 641   2              usBrightness = _ECO_RTS_BLACKLEVEL;
+ 642   2              break;
+ 643   2      #endif  
+ 644   2      
+ 645   2      
+ 646   2      #if(_EOC_ENERGY_SAVING_SUPPORT == _ON)
+              
+                    case _COLOREFFECT_ENERGY_SAVING :
+                      usBrightness = _ECO_ENERGY_SAVING_BLACKLEVEL;
+                      break;
+              #endif
+ 652   2      
+ 653   2              
+ 654   2            default:
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 12  
+
+ 655   2              break;
+ 656   2          }
+ 657   1      
+ 658   1          
+ 659   1      #if(_DEF_BRIGHTNESS != 50)
+                usBrightness = UserCommonAdjustPercentToRealValue_BRI(usBrightness, _BRIGHTNESS_MAX, _BRIGHTNESS_MIN, _BR
+             -IGHTNESS_CENTER);
+              #else
+ 662   1        usBrightness = UserCommonAdjustPercentToRealValue(usBrightness, _BRIGHTNESS_MAX, _BRIGHTNESS_MIN, _BRIGHT
+             -NESS_CENTER);
+ 663   1      #endif
+ 664   1      
+ 665   1          pusData[0] = usBrightness;
+ 666   1          pusData[1] = usBrightness;
+ 667   1          pusData[2] = usBrightness;
+ 668   1      
+ 669   1      #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 670   1          if(GET_OSD_HLWIN_TYPE() == _HL_WIN_OFF)
+ 671   1          {
+ 672   2              ScalerColorBrightnessAdjust(_BRIGHTNESS_COEF_A, pusData);
+ 673   2              ScalerColorBrightnessAdjust(_BRIGHTNESS_COEF_B, &pusData[3]);
+ 674   2          }
+ 675   1          else
+ 676   1          {
+ 677   2              ScalerColorBrightnessAdjust(_BRIGHTNESS_COEF_B, pusData);
+ 678   2              ScalerColorBrightnessAdjust(_BRIGHTNESS_COEF_A, &pusData[3]);
+ 679   2          }
+ 680   1      #else
+                  ScalerColorBrightnessAdjust(_BRIGHTNESS_COEF_A, pusData);
+              #endif
+ 683   1      
+ 684   1          ScalerColorBrightnessEnable(_FUNCTION_ON);
+ 685   1      }
+ 686          #endif
+ 687          
+ 688          
+ 689          #if(_GLOBAL_HUE_SATURATION == _ON)
+ 690          //--------------------------------------------------
+ 691          // Description  : Adjust Global Hue Saturation
+ 692          // Input Value  : Hue and Saturation
+ 693          // Output Value : None
+ 694          //--------------------------------------------------
+ 695          void UserAdjustGlobalHueSat(SWORD shHue, WORD usSat)  // for OSD Adjust & Dianliang:  Display Off & ON
+ 696          {
+ 697   1      #if(_DEF_COLORFUL)
+                if(GET_OSD_COLOR_EFFECT() == _COLOREFFECT_COLORFUL)
+                {
+                  usSat = 120;//60
+                }
+              #endif
+ 703   1      
+ 704   1          UserCommonAdjustGlobalHueSat(_DEFAULT_HUE - shHue, usSat);
+ 705   1      }
+ 706          #endif  // Enf of #if(_GLOBAL_HUE_SATURATION == _ON)
+ 707          
+ 708          #if(_OD_SUPPORT == _ON)
+ 709          //--------------------------------------------------
+ 710          // Description  : Load OD LUT
+ 711          // Input Value  : None
+ 712          // Output Value : None
+ 713          //--------------------------------------------------
+ 714          void UserAdjustOD(void)
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 13  
+
+ 715          {
+ 716   1      #if(_FREESYNC_SUPPORT == _ON)
+                  if(ScalerSyncGetFREESYNCEnable() == _TRUE)
+                  {
+                      ScalerODLoadLUT(tOD_FREESYNC_TABLE[0], GET_CURRENT_BANK_NUMBER(), _OD_LUT_MODE);
+                  }
+                  else
+              #endif
+ 723   1          {
+ 724   2              ScalerODLoadLUT(tOD_TABLE[0], GET_CURRENT_BANK_NUMBER(), _OD_LUT_MODE);
+ 725   2          }
+ 726   1      }
+ 727          #endif // End of #if(_OD_SUPPORT == _ON)
+ 728          
+ 729          #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 730          //--------------------------------------------------
+ 731          // Description  : Adjust High Light Window
+ 732          // Input Value  : HLWinType
+ 733          // Output Value : None
+ 734          //--------------------------------------------------
+ 735          void UserAdjustHLWinType(BYTE ucHLWinType)
+ 736          {
+ 737   1          ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_HLWIN_TYPE5_MOVE);
+ 738   1      
+ 739   1          if(ucHLWinType == _HL_WIN_OFF)
+ 740   1          {
+ 741   2              return;
+ 742   2          }
+ 743   1      
+ 744   1          if(GET_MDOMAIN_OUTPUT_HWIDTH() == _PANEL_DH_WIDTH)
+ 745   1          {
+ 746   2              g_usHLWinHPos = 0;
+ 747   2          }
+ 748   1          else
+ 749   1          {
+ 750   2              g_usHLWinHPos = (_PANEL_DH_WIDTH - GET_MDOMAIN_OUTPUT_HWIDTH()) / 2;
+ 751   2          }
+ 752   1      
+ 753   1          if(GET_MDOMAIN_OUTPUT_VHEIGHT() == _PANEL_DV_HEIGHT)
+ 754   1          {
+ 755   2              g_usHLWinVPos = 0;
+ 756   2          }
+ 757   1          else
+ 758   1          {
+ 759   2              g_usHLWinVPos = (_PANEL_DV_HEIGHT - GET_MDOMAIN_OUTPUT_VHEIGHT()) / 2;
+ 760   2          }
+ 761   1      
+ 762   1          switch(ucHLWinType)
+ 763   1          {
+ 764   2              case _HL_WIN_1:
+ 765   2      
+ 766   2                  g_usHLWinHWidth = GET_MDOMAIN_OUTPUT_HWIDTH() - _HL_WIN_BORDER_SIZE;
+ 767   2                  g_usHLWinVHeight = GET_MDOMAIN_OUTPUT_VHEIGHT() - _HL_WIN_BORDER_SIZE;
+ 768   2      
+ 769   2                  break;
+ 770   2      
+ 771   2              case _HL_WIN_2:
+ 772   2      
+ 773   2                  g_usHLWinHWidth = GET_MDOMAIN_OUTPUT_HWIDTH() / 2;
+ 774   2                  g_usHLWinVHeight = GET_MDOMAIN_OUTPUT_VHEIGHT() - _HL_WIN_BORDER_SIZE;
+ 775   2      
+ 776   2                  break;
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 14  
+
+ 777   2      
+ 778   2              case _HL_WIN_3:
+ 779   2      
+ 780   2                  g_usHLWinHWidth = GET_MDOMAIN_OUTPUT_HWIDTH() - _HL_WIN_BORDER_SIZE;
+ 781   2                  g_usHLWinVHeight = GET_MDOMAIN_OUTPUT_VHEIGHT() / 2;
+ 782   2      
+ 783   2                  break;
+ 784   2      
+ 785   2              case _HL_WIN_4:
+ 786   2      
+ 787   2                  g_usHLWinHWidth = GET_MDOMAIN_OUTPUT_HWIDTH() / 2;
+ 788   2                  g_usHLWinVHeight = GET_MDOMAIN_OUTPUT_VHEIGHT() / 2;
+ 789   2                  g_usHLWinHPos = ((GET_MDOMAIN_OUTPUT_HWIDTH() - g_usHLWinHWidth) / 2) + ((_PANEL_DH_WIDTH - GE
+             -T_MDOMAIN_OUTPUT_HWIDTH()) / 2) - 1;
+ 790   2                  g_usHLWinVPos = (GET_MDOMAIN_OUTPUT_VHEIGHT() - g_usHLWinVHeight) / 2 - 1;
+ 791   2      
+ 792   2                  break;
+ 793   2      
+ 794   2              case _HL_WIN_5:
+ 795   2      
+ 796   2                  g_usHLWinHWidth = GET_MDOMAIN_OUTPUT_HWIDTH() / 6;
+ 797   2                  g_usHLWinVHeight = GET_MDOMAIN_OUTPUT_VHEIGHT() - _HL_WIN_BORDER_SIZE;
+ 798   2                  g_usHLWinHPos = (GET_MDOMAIN_OUTPUT_HWIDTH() - g_usHLWinHWidth) / 2;
+ 799   2      
+ 800   2                  ScalerTimerActiveTimerEvent(_HLWIN_TYPE5_MOVE_TIME, _USER_TIMER_EVENT_HLWIN_TYPE5_MOVE);
+ 801   2      
+ 802   2                  break;
+ 803   2      
+ 804   2              default:
+ 805   2      
+ 806   2                  break;
+ 807   2          }
+ 808   1      
+ 809   1          ScalerColorHLWAdjust(g_usHLWinHPos, g_usHLWinHWidth, g_usHLWinVPos, g_usHLWinVHeight, _DB_APPLY_NONE);
+ 810   1      }
+ 811          
+ 812          //--------------------------------------------------
+ 813          // Description  : High Light Window Type5 Move
+ 814          // Input Value  : None
+ 815          // Output Value : None
+ 816          //--------------------------------------------------
+ 817          void UserAdjustHLWinType5Move(void)
+ 818          {
+ 819   1          WORD usNonFullScreenOffset = 0;
+ 820   1      
+ 821   1          if(GET_MDOMAIN_OUTPUT_HWIDTH() == _PANEL_DH_WIDTH)
+ 822   1          {
+ 823   2              // Full screen
+ 824   2              usNonFullScreenOffset = 0;
+ 825   2          }
+ 826   1          else
+ 827   1          {
+ 828   2              // Non full screen
+ 829   2              usNonFullScreenOffset = (_PANEL_DH_WIDTH - GET_MDOMAIN_OUTPUT_HWIDTH()) / 2;
+ 830   2          }
+ 831   1      
+ 832   1          if(g_bHLWinRLMove == _RIGHT)
+ 833   1          {
+ 834   2              g_usHLWinHPos++;
+ 835   2      
+ 836   2              if((GET_MDOMAIN_OUTPUT_HWIDTH() + usNonFullScreenOffset) <= (g_usHLWinHPos + g_usHLWinHWidth + _HL
+             -_WIN_BORDER_SIZE))
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 15  
+
+ 837   2              {
+ 838   3                  g_bHLWinRLMove = _LEFT;
+ 839   3                  g_usHLWinHPos = (GET_MDOMAIN_OUTPUT_HWIDTH() + usNonFullScreenOffset) - (g_usHLWinHWidth + _HL
+             -_WIN_BORDER_SIZE);
+ 840   3              }
+ 841   2          }
+ 842   1          else // _LEFT
+ 843   1          {
+ 844   2              g_usHLWinHPos--;
+ 845   2      
+ 846   2              if(g_usHLWinHPos <= usNonFullScreenOffset)
+ 847   2              {
+ 848   3                  g_bHLWinRLMove = _RIGHT;
+ 849   3                  g_usHLWinHPos = usNonFullScreenOffset;
+ 850   3              }
+ 851   2          }
+ 852   1      
+ 853   1          ScalerColorHLWAdjust(g_usHLWinHPos, g_usHLWinHWidth, g_usHLWinVPos, g_usHLWinVHeight, _DB_APPLY_NO_POL
+             -LING);
+ 854   1      
+ 855   1          ScalerTimerActiveTimerEvent(_HLWIN_TYPE5_MOVE_TIME, _USER_TIMER_EVENT_HLWIN_TYPE5_MOVE);
+ 856   1      }
+ 857          
+ 858          //--------------------------------------------------
+ 859          // Description  : Adjust All High Light Window Effect Space
+ 860          // Input Value  : None
+ 861          // Output Value : None
+ 862          //--------------------------------------------------
+ 863          void UserAdjustHighLightWindowEffectSpace(void)
+ 864          {
+ 865   1      #if((_CONTRAST_SUPPORT == _ON) || (_BRIGHTNESS_SUPPORT == _ON))
+ 866   1          ScalerColorHLWBRICTSAdjust(_BRI_CON_B_ON_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 867   1      #endif
+ 868   1      
+ 869   1      #if(_DCC_FUNCTION == _ON)
+ 870   1          ScalerColorHLWDCCAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 871   1      #endif
+ 872   1      
+ 873   1      #if(_GAMMA_FUNCTION == _ON)
+ 874   1          ScalerColorHLWOutputGammaAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 875   1      #endif
+ 876   1      
+ 877   1      #if(_GLOBAL_HUE_SATURATION == _ON)
+ 878   1          ScalerColorHLWSRGBAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 879   1      #endif
+ 880   1      
+ 881   1      #if(_IAPS_SUPPORT == _ON)
+                  ScalerColorHLWIAPSGainAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 884   1      
+ 885   1      #if(_ICM_SUPPORT == _ON)
+                  ScalerColorHLWICMAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 888   1      
+ 889   1      #if((_DCR_SUPPORT == _ON) || (_IAPS_SUPPORT == _ON))
+ 890   1          ScalerColorHLWDCRAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 891   1      #endif
+ 892   1      
+ 893   1      #if(_ULTRA_VIVID_SUPPORT == _ON)
+                  ScalerColorHLWUltraVividAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 896   1      
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 16  
+
+ 897   1      #if(_YPEAKING_SUPPORT == _ON)
+                  ScalerColorHLWYpeakingAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 900   1      
+ 901   1      #if(_UNIFORMITY_SUPPORT == _ON)
+                  ScalerColorHLWPanelUniformityAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 904   1      
+ 905   1      #if(_PCM_FUNCTION == _ON)
+ 906   1          ScalerColorHLWPCMAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+ 907   1      #endif
+ 908   1      
+ 909   1      #if(_RGB_3D_GAMMA == _ON)
+                  ScalerColorHLWRGB3DGammaAdjust(_HLW_INSIDE_WINDOW, _DB_APPLY_NO_POLLING);
+              #endif
+ 912   1      }
+ 913          #endif // End of #if(_HIGHLIGHT_WINDOW_SUPPORT == _ON)
+ 914          
+ 915          #if(_FREESYNC_OD_MEASURE == _ON)
+              //--------------------------------------------------
+              // Description  : Set FREESYNC OD Measure
+              // Input Value  : Current DHtotal(pixel)/ Current Dclk(kHz)/ Target Measure VFreq(0.1Hz)
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustFREESYNCODMeasure(void)
+              {
+                  // Set Backlight
+                  UserAdjustBacklight(100);
+              
+                  // Enable Backlight
+                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+              
+                  // Disable OSD
+                  ScalerOsdDisableOsd();
+              
+                  // Disable D-domain Pattern Gen.
+                  ScalerDDomainPatternGenEnable(_DISABLE);
+              
+                  // According FREESYNC setting to set accurate Htotal/ Dclk
+                  ScalerMDomainFREESYNCODSetDisplayFormat(((WORD)_PANEL_DH_TOTAL), ((DWORD)_PANEL_PIXEL_CLOCK_MAX_KHZ), 
+             -((WORD)_PANEL_FREESYNC_MIN_FRAME_RATE));
+              
+                  while(_TRUE)
+                  {
+                      ScalerDebug();
+                      ScalerDDomainFREESYNCODSetBackgroundGrayLevel();
+                  }
+              }
+              #endif
+ 945          
+ 946          
+ 947          #if(_IR_SUPPORT == _IR_HW_SUPPORT)
+ 948          //--------------------------------------------------
+ 949          // Description  : Set IR Table
+ 950          // Input Value  : None
+ 951          // Output Value : None
+ 952          //--------------------------------------------------
+ 953          void UserAdjusIR(void)
+ 954          {
+ 955   1          ScalerIRHWModeDecoder(tIR_INITIAL_TABLE, GET_CURRENT_BANK_NUMBER());
+ 956   1      }
+ 957          #endif // End of #if(_IR_SUPPORT == _IR_HW_SUPPORT)
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 17  
+
+ 958          
+ 959          #if(_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP)
+              //--------------------------------------------------
+              // Description  : Set embedded DP switch status
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustEmbeddedDpSwitch(void)
+              {
+              #if(_D0_INPUT_PORT_TYPE == _D0_DP_PORT)
+                  if(ScalerSyncDpCableStatus(_D0_INPUT_PORT) == _TRUE)
+                  {
+                      if(GET_DP_EMBEDDED_SWITCH_SELECT() != _D0_INPUT_PORT)
+                      {
+                          SysSourceEmbeddedDpSwitch(_D0_INPUT_PORT);
+                      }
+                      return;
+                  }
+              #endif
+              
+              #if(_D1_INPUT_PORT_TYPE == _D1_DP_PORT)
+                  if(ScalerSyncDpCableStatus(_D1_INPUT_PORT) == _TRUE)
+                  {
+                      if(GET_DP_EMBEDDED_SWITCH_SELECT() != _D1_INPUT_PORT)
+                      {
+                          SysSourceEmbeddedDpSwitch(_D1_INPUT_PORT);
+                      }
+                      return;
+                  }
+              #endif
+              
+              #if(_D2_INPUT_PORT_TYPE == _D2_DP_PORT)
+                  if(ScalerSyncDpCableStatus(_D2_INPUT_PORT) == _TRUE)
+                  {
+                      if(GET_DP_EMBEDDED_SWITCH_SELECT() != _D2_INPUT_PORT)
+                      {
+                          SysSourceEmbeddedDpSwitch(_D2_INPUT_PORT);
+                      }
+                      return;
+                  }
+              #endif
+              }
+              #endif
+1001          
+1002          #if(_PIXEL_SHIFT_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Pixel orbiting step as following
+              //  -2->
+              // ^    |
+              // |    3
+              // 1    |
+              // |    v
+              // < -0- <-7-
+              //      |     |
+              //      4     6
+              //      |     |
+              //      v -5->
+              // Input Value  :
+              // Output Value :
+              //--------------------------------------------------
+              void UserAdjustPixelShifting(void)
+              {
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 18  
+
+              #if(_PIXEL_SHIFT_MODE == _PIXEL_SHIFT_IN_IDOMAIN)
+                  BYTE ucPixelShift = 0;
+              
+                  WORD usVdelay = 0;
+                  WORD usHdelay = 0;
+                  BYTE ucVstep = 2;
+                  BYTE ucHstep = 2;
+              
+              #if(_FORMAT_CONVERSION_SUPPORT == _ON)
+                  if(ScalerFmtCnvFtoPGetStatus() == _TRUE)
+                  {
+                      ucVstep = (ucVstep + 1) & 0xFE;
+                  }
+              #endif
+              
+                  ScalerGlobalWatchDog(_DISABLE);
+              
+              #if(_VGA_SUPPORT == _ON)
+                  if(SysSourceGetSourceType() == _SOURCE_VGA)
+                  {
+                      usHdelay = ScalerVgaTopGetCaptureHDelay();
+                      usVdelay = ScalerVgaTopGetCaptureVDelay();
+                  }
+                  else
+              #endif
+                  {
+                      usHdelay = ScalerVgipGetCaptureHDelay();
+                      usVdelay = ScalerVgipGetCaptureVDelay();
+                  }
+              
+                  for(ucPixelShift = 0; ucPixelShift < 8; ucPixelShift++)
+                  {
+                      ScalerTimerDelayXms(200);
+              
+                      switch(ucPixelShift)
+                      {
+                          case 0: // _PIXEL0_TURN_LEFT:
+                          case 7: // _PIXEL1_TURN_LEFT:
+                              usHdelay += ucHstep;
+                              break;
+              
+                          case 2: // _PIXEL0_TURN_RIGHT:
+                          case 5: // _PIXEL1_TURN_RIGHT:
+                              if(usHdelay >= ucHstep)
+                              {
+                                  usHdelay -= ucHstep;
+                              }
+                              else
+                              {
+                                  usHdelay = 0;
+                              }
+                              break;
+              
+                          case 1: // _PIXEL0_TURN_UP:
+                          case 6: // _PIXEL1_TURN_UP:
+                              usVdelay += ucVstep;
+                              break;
+              
+                          case 3: // _PIXEL0_TURN_DOWN:
+                          case 4: // _PIXEL1_TURN_DOWN:
+                              if(usVdelay >= ucVstep)
+                              {
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 19  
+
+                                  usVdelay -= ucVstep;
+                              }
+                              else
+                              {
+                                  usVdelay = 0;
+                              }
+                              break;
+              
+                          default:
+                              break;
+                      }
+              
+              #if(_VGA_SUPPORT == _ON)
+                      if(SysSourceGetSourceType() == _SOURCE_VGA)
+                      {
+                          ScalerVgaTopSetCaptureHDelay(usHdelay);
+                          ScalerVgaTopSetCaptureVDelay(usVdelay);
+                          ScalerVgaTopDoubleBufferApply();
+                      }
+                      else
+              #endif
+                      {
+                          ScalerVgipSetCaptureHDelay(usHdelay);
+                          ScalerVgipSetCaptureVDelay(usVdelay);
+                          ScalerGlobalIDomainDBApply(_DB_APPLY_POLLING);
+                      }
+                  }
+              
+                  ScalerTimerWaitForEvent(_EVENT_IVS);
+                  ScalerGlobalWatchDog(_ENABLE);
+              
+              #endif
+              
+              #if(_PIXEL_SHIFT_MODE == _PIXEL_SHIFT_IN_MDOMAIN)
+                  BYTE ucPixelShift = 0;
+                  WORD usDHstart = ScalerMDomainGetDisplayTimingGenActiveRegionHStart();
+                  WORD usDHend = ScalerMDomainGetDisplayTimingGenActiveRegionHEnd();
+                  WORD usDVstart = ScalerMDomainGetDisplayTimingGenActiveRegionVStart();
+                  WORD usDVend = ScalerMDomainGetDisplayTimingGenActiveRegionVEnd();
+                  WORD usDVBGstart = GET_MDOMAIN_OUTPUT_VBSTART();
+                  WORD usDVBGend = GET_MDOMAIN_OUTPUT_VBSTART() + GET_MDOMAIN_OUTPUT_VBHEIGHT();
+                  WORD usDisplayHstart = usDHstart;
+                  WORD usDisplayVstart = usDVstart;
+              
+                  // usDVBGstart/usDVBGend
+                  ScalerMDomainSetDisplayTimingGenBackgroundVStart(HIBYTE(usDVBGstart), LOBYTE(usDVBGstart), _DB_APPLY_N
+             -ONE);
+                  ScalerMDomainSetDisplayTimingGenBackgroundVEnd(HIBYTE(usDVBGend), LOBYTE(usDVBGend), _DB_APPLY_NO_POLL
+             -ING);
+              
+                  // capture H start/end
+                  ScalerMDomainSetCaptureWindowHStart(HIBYTE(usDHstart), LOBYTE(usDHstart));
+                  ScalerMDomainSetCaptureWindowHEnd(HIBYTE(usDHend), LOBYTE(usDHend));
+                  // capture V start/end
+                  ScalerMDomainSetCaptureWindowVStart(HIBYTE(usDVstart), LOBYTE(usDVstart));
+                  ScalerMDomainSetCaptureWindowVEnd(HIBYTE(usDVend), LOBYTE(usDVend));
+              
+                  ScalerMDomainSetCaptureWindowEnable(_ENABLE);
+              
+                  for(ucPixelShift = 0; ucPixelShift < 8; ucPixelShift++)
+                  {
+                      ScalerTimerDelayXms(200);
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 20  
+
+                      switch(ucPixelShift)
+                      {
+                          // H <-
+                          case 0: // _PIXEL0_TURN_LEFT:
+                              usDHend -= 1;
+                              usDisplayHstart -= 1;
+                              break;
+              
+                          // V ^
+                          case 1: // _PIXEL0_TURN_UP:
+                              usDVstart += 1;
+                              usDVBGstart += 1;
+                              usDVBGend += 1;
+                              break;
+              
+                          // H ->
+                          case 2: // _PIXEL0_TURN_RIGHT:
+                              usDHend += 1;
+                              usDisplayHstart += 1;
+                              break;
+              
+                          // V v
+                          case 3: // _PIXEL0_TURN_DOWN:
+                              usDVstart -= 1;
+                              usDVBGstart -= 1;
+                              usDVBGend -= 1;
+                              break;
+              
+                          // V v
+                          case 4: // _PIXEL1_TURN_DOWN:
+                              usDisplayVstart += 1;
+                              usDVstart += 1;
+                              break;
+              
+                          // H ->
+                          case 5: // _PIXEL1_TURN_RIGHT:
+                              usDisplayHstart += 1;
+                              usDHstart += 1;
+                              break;
+              
+                          // V ^
+                          case 6: // _PIXEL1_TURN_UP:
+                              usDisplayVstart -= 1;
+                              usDVstart -= 1;
+                              break;
+              
+                          // H <-
+                          case 7: // _PIXEL1_TURN_LEFT:
+                              usDisplayHstart -= 1;
+                              usDHstart -= 1;
+                              break;
+              
+                          default:
+                              break;
+                      }
+              
+                      switch(ucPixelShift)
+                      {
+                          case 0: // _PIXEL0_TURN_LEFT:
+                          case 2: // _PIXEL0_TURN_RIGHT:
+                          case 5: // _PIXEL1_TURN_RIGHT:
+                          case 7: // _PIXEL1_TURN_LEFT:
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 21  
+
+                              // Display H active start setting
+                              ScalerMDomainSetDisplayTimingGenActiveRegionHStart(HIBYTE(usDisplayHstart), LOBYTE(usDispl
+             -ayHstart), _DB_APPLY_POLLING);
+                              // Capture window H start setting
+                              ScalerMDomainSetCaptureWindowHStart(HIBYTE(usDHstart), LOBYTE(usDHstart));
+                              // Capture window H end setting
+                              ScalerMDomainSetCaptureWindowHEnd(HIBYTE(usDHend), LOBYTE(usDHend));
+              
+                              break;
+              
+                          case 1: // _PIXEL0_TURN_UP:
+                          case 3: // _PIXEL0_TURN_DOWN:
+                          case 4: // _PIXEL1_TURN_DOWN:
+                          case 6: // _PIXEL1_TURN_UP:
+                              // Display V active start setting
+                              ScalerMDomainSetDisplayTimingGenActiveRegionVStart(HIBYTE(usDisplayVstart), LOBYTE(usDispl
+             -ayVstart), _DB_APPLY_POLLING);
+                              // Capture window V start setting
+                              ScalerMDomainSetCaptureWindowVStart(HIBYTE(usDVstart), LOBYTE(usDVstart));
+                              // Display V background start setting
+                              ScalerMDomainSetDisplayTimingGenBackgroundVStart(HIBYTE(usDVBGstart), LOBYTE(usDVBGstart),
+             - _DB_APPLY_POLLING);
+                              // Display V background end setting
+                              ScalerMDomainSetDisplayTimingGenBackgroundVEnd(HIBYTE(usDVBGend), LOBYTE(usDVBGend), _DB_A
+             -PPLY_POLLING);
+                              break;
+              
+                          default:
+                              break;
+                      }
+                  }
+              
+                  ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+                  ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+                  ScalerMDomainSetCaptureWindowEnable(_DISABLE);
+              #endif
+              }
+              #endif
+1238          
+1239          #if(_SDR_TO_HDR_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Set SDRToHDR parameter
+              // Input Value  : Adjust Option
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustSDRToHDR(bit bOn)
+              {
+                  if(bOn == _ON)
+                  {
+              #if(_CONTRAST_SUPPORT == _ON)
+                      ScalerColorContrastEnable(_FUNCTION_OFF);
+              #endif
+                      UserCommonAdjustSDRToHDR(tSDRTOHDR_INPUTGAMMA, tSDRTOHDR_ICM, tSDRTOHDR_DCC, GET_CURRENT_BANK_NUMB
+             -ER());
+                  }
+                  else
+                  {
+              #if((_DCC_FUNCTION == _ON) || (_ICM_SUPPORT == _ON) || (_SCM_SUPPORT == _ON) || (_SIX_COLOR_SUPPORT == _ON
+             -))    
+                      UserAdjustColorEffectMode();
+              #endif
+                      OsdFuncColorPcmAdjust();
+C51 COMPILER V9.60.0.0   RTD2014USERADJUST                                                 10/18/2025 16:54:02 PAGE 22  
+
+                  }
+              }
+              #endif // End of #if(_SDR_TO_HDR_SUPPORT == _ON)
+1263          
+1264          #if(_DCR_SUPPORT == _ON)
+1265          #if(_LD_TUNNEL_DETECT_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : User Adjust DCR initial
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void UserAdjustDCRTHD(void)
+              {
+                  // Adjust DCR Threshold & Source
+              #if(_DCR_BIT_MODE == _DCR_GEN_1_0_10BIT)
+                  ScalerColorDCRAdjust(_DCR_THESHOLD1, _DCR_THESHOLD2, _MEASURE_AVERAGE);
+              #elif((_DCR_BIT_MODE == _DCR_GEN_0_0_8BIT) || (_DCR_BIT_MODE == _DCR_GEN_0_1_8BIT))
+                  ScalerColorDCRAdjust((_DCR_THESHOLD1 >> 2), (_DCR_THESHOLD2 >> 2), _MEASURE_AVERAGE);
+              #endif
+              }
+              #endif // End of #if(_LD_TUNNEL_DETECT_SUPPORT == _ON)
+1281          #endif // End of #if(_DCR_SUPPORT == _ON)
+1282          
+1283          #endif//#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1631    ----
+   CONSTANT SIZE    =    743    ----
+   XDATA SIZE       =      8      36
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

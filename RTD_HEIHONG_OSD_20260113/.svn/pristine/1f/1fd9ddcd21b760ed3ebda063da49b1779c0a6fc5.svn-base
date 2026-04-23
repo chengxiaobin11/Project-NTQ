@@ -1,0 +1,585 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : LuoGang_ProjectDefine.h No.0000  //IDO
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+/*_RL6369_PROJECT                0x0xxx
+ *_RL6410_PROJECT                0x1xxx
+ *_RL6432_PROJECT                0x2xxx //156Pin
+ *_RL6432_PROJECT                0x3xxx //216Pin
+ *_RL6449_PROJECT                0x4xxx
+ *_RL6463_PROJECT                0x5xxx
+ *_RL6492_PROJECT                0x6xxx
+ */
+#define ID_COMMON                                                              0xFFFF
+/*********************RL6369*********************************************/
+
+
+/*********************RL6410*********************************************/
+
+
+/*********************RL6432 156Pin**************************************/
+#define ID_2556_TEST                   0x2201
+#define ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104                   0x2202
+
+#define ID_HK2556E02_M270KCJ_L5B_QHD75HZ_LVDS_20240415										0x2203
+
+
+
+
+/*********************RL6432 216Pin**************************************/
+#define ID_HUIXIONG_HK2785E06_MV315QHM_N40_QHD90HZ_10BIT_EDID_X322Q90_20230713  0x3014
+
+
+
+/*********************RL6449*********************************************/
+#define ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217                          0x443B
+#define ID_TEST_VBY1_HK2775E01_2P2H_UHD60HZ_20240102                                0x443C
+#define ID_TJZG_HK2775E05_M270KCAD8B_EDP4LANHBR2_MD2769_QHD180HZ_20240313           0x443D
+#define ID_TJZG_HK2775E01_SG2451B014_VBY8LANHBR2_FHD240HZ_20240330                  0x443E
+#define ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_F2761QK_QHD180HZ_20240416          0x443F
+#define ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_20240426                  0x4440
+#define ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_G27L61QK_20240509         0x4441
+#define ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528          0x4442
+
+
+#define ID_DATONG_HK2795E01_MV270QUM_N50_EDP4LANHBR2_UHD60HZ_20240511               0x4443  //��ͨ
+
+#define  TEXTF0_ID_KAITENG_2795E04_4LANEHBR									        0x4444//TEXTF0--8LANEHBR 2K180			
+
+#define  TEXTF_ID_KAITENG_2795E04_8LANEHBR2									        0x4445//TEXTF--8LANEHBR 2K180			
+
+
+#define  TEXTF1_ID_KAITENG_XIAOLI_2795E04_4LANEHBR2_1K280					        0x4446//TEXTF--4LANEHBR2 1K280			
+
+
+
+#define  TEXTF2_ID_SONGREN_2795E04_4LANEHBR2_2K185_D8B					            0x4447//TEXTF--4LANEHBR2 1K280		
+
+
+
+#define  ID_WMX_ME270QHB_NF5_2K180											        0x4448//TEXTF--4LANEHBR2 1K280	
+
+#define  _ID_SANSE_2795QR_2K180_NF0_										        0x4449
+
+
+#define  ID_KAIXIA_HK2795E04_SG2451B01_2_8LAN_VBY1_FHD280HZ_8BIT_20240103	        0x444A
+
+#define  ID_KAITENG_HK2795E01_QHD180HZ_EDP									        0x444B
+#define  ID_KAITENG_HK2795E04_FHD300HZ_VB1									        0x444C
+
+#define _ID_KAITENG_2795QR_QHD180HZ_EDP										        0x444D
+#define ID_NTQ_VBY1_HK2775E01_1P1H_UHD60HZ_20251020                                 0x444E
+
+
+/*********************RL6463*********************************************/
+#define ID_CHANGHONG_HK2525E04_1V1P1H_HKC_PN238CT02_FHD75_20201021                  0x5001
+#define ID_CHANGHONG_2513_TEST                                                      0x5002
+//////////////////////////////////////////////////////////////////////////
+
+/*********************RL6492*********************************************/
+
+
+#define _NONE_CUSTOMER                                 0
+#define _FKX_CUSTOMER                                  1
+#define _HUASHUOHUI_CUSTOMER                           8
+
+#define _DEF_HUIXIONG_GCCD      0//���ܹ����˵�
+
+//#define _OSD_7PAGE                                        1   //�˵�7ҳ UserAdjustColorEffectMode
+//_FW_VERSION  ������  _CHECKSUM   UserCommonInterfaceCheckNoSupport  ScalerDisplayDPTx1LinkConfig ScalerDisplaySelectDVFMode
+
+//(Test_BM29SY)HUIXIONG_HK2556E02_BOE_MV290VUB_N10_WFHD75HZ_EDID_BM29SY_LOGO_GREBEAR2_ENGLISH_Code_Heihong_XW_CHECKSUM_7CB6_20230202
+//DrawEDIDInfo  ���޸�
+/*********************************** ***********************************************************/
+#define Project_ID       ID_NTQ_VBY1_HK2775E01_1P1H_UHD60HZ_20251020
+
+/**********************************************************************************************/
+#define _DEF_PROJECT_TEST               _OFF//���Ժ��������ҪOFF
+
+
+#define _KEY_KAITENG0				1
+#define _KEY_WMX					2
+#define _KEY_DJ2415					3
+#define _KEY_ZJ						4
+#define _KEY_DJ						5
+#define _KEY_KAITENG1				6
+#define _KEY_WMX_ZF					7
+#define _KEY_TZ						8
+
+#define _QT							0
+#define _QR							1
+
+
+#define _4_LANE						0
+#define _8_LANE						1
+
+#if(Project_ID == ID_CHANGHONG_2513_TEST)
+#define _IR_VIRTUAL                                             _OFF
+
+#define _FRC_SUPPORT                                            _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OVERCLOCK                                              _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                                _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                     _ON //����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_HUIXIONG_HK2785E06_MV315QHM_N40_QHD90HZ_10BIT_EDID_X322Q90_20230713)
+#define _PCB_TYPE                                               _RL6432__216PIN__HK_M_RT2785E06_1DP2HDMI1USB_LVDS
+#define _PANEL_TYPE                                             _BOE_MV315QHM_N40_LVDS_QHD75HZ
+#define _FRC_SUPPORT                                            _ON
+#define _OVERCLOCK                                              _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OD_SUPPORT                                             _ON
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#define _PANEL_QHD90HZ                                          _ON
+#elif(Project_ID == ID_2556_TEST)
+#define _PCB_TYPE                                               _RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS
+#define _PANEL_TYPE                                             _PANDA_M270HCA_L7B_LVDS_FHD_165HZ
+#define _FRC_SUPPORT                                            _ON
+#define _OVERCLOCK                                              _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OD_SUPPORT                                             _ON
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#define _HDMI2_SUPPORT                                          _ON
+
+#define _HDCP_KEY_WIRTE_FLAG                                          _ON
+
+
+#elif(Project_ID == ID_HK2556E02_M270KCJ_L5B_QHD75HZ_LVDS_20240415)
+#define _KEY_MODE												_KEY_WMX
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#define _PANEL_TYPE                                             _INNOLUX_M270KCJ_L5B_LVDS_QHD
+#define _PCB_TYPE                                               _RL6432__156PIN__HKMRT2556E02__1H1DP__LVDS//            //          
+#define _FRC_SUPPORT                                            _OFF
+#define _OVERCLOCK                                               _ON//   _OFF
+#define _MPRT_SUPPORT                                           _ON//       _OFF
+#define _OD_SUPPORT                                             _ON
+#define _DBL_SUPPORT                                             _ON
+#define _ALL_BLACK_IMAGE_LIGHT_VALUE                            0x4c//176mA     (2)//0-255 pwm in Black image backlight value
+//#define _LED_EFFECT_TJMODE14                                             _ON
+#define _OVERCLOCK_180HZ                                        _ON
+#define _HDMI2_SUPPORT                                          _ON
+#define _LED_EFFECT_TJMODE14                                    _ON
+
+
+#elif(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+#if _DEF_PROJECT_TEST
+#define _PCB_TYPE                                   _RL6432__156PIN__HKMRT2556E12__2H1DP__LVDS//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//   //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//    
+#define _PANEL_TYPE                                _HKC_SN270CS03_1_V11_FHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#else
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//   //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//
+#define _PANEL_TYPE                           _HKC_SN270GS03_1_UHD_60HZ_   //_HKC_SN270GS03_1_UHD_60HZ_//     //   _INX_M280DCA_P3B_EDP_HBR2_UHD60//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//    //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _HDMI_24C02_SUPPORT                                     _ON
+#endif
+#define _FRC_SUPPORT                                            _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OVERCLOCK                                              _ON
+#define _2822NE                                                 _OFF
+#define _2822NB                                                 _OFF
+#define _2822NJ                                                 _ON
+#define _H2822U                                                 _OFF
+#define _MD2869                                                 _OFF
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                                _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                     _ON //����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_TJZG_HK2775E05_M270KCAD8B_EDP4LANHBR2_MD2769_QHD180HZ_20240313)
+#if _DEF_PROJECT_TEST
+#define _PCB_TYPE                                   _RL6432__156PIN__HKMRT2556E12__2H1DP__LVDS//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//   //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//    
+#define _PANEL_TYPE                                _HKC_SN270CS03_1_V11_FHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#else
+#define _HDMI_24C02_SUPPORT                                     _ON
+#define _PCB_TYPE                                   _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1
+#define _PANEL_TYPE                                 _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ// 
+#endif
+#define _SN270ES01_1                                _OFF
+#define _HDMI_QED                                   _OFF  //HDMI ��֤EDID
+#define ARZOPA                                      _ON  //arz�ͻ�
+#define ARZOPB                                      _OFF  //arz�ͻ�
+#if ARZOPA||_SN270ES01_1
+#define _MPRT_SUPPORT                                           _ON
+#define _DAC_HP_OUTPUT_SWAP                                 _OFF //����������
+#define _HDCP_KEY_WIRTE_FLAG										 _ON
+#elif ARZOPB
+#define _MPRT_SUPPORT                                           _ON
+#define _DAC_HP_OUTPUT_SWAP                                 _OFF //����������
+#define _HDCP_KEY_WIRTE_FLAG										 _ON
+#else
+#define _MPRT_SUPPORT                                           _OFF
+#define _DAC_HP_OUTPUT_SWAP                                 _ON //����������
+#endif
+
+#define _FRC_SUPPORT                                            _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                          _ON // ����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528)
+#if _DEF_PROJECT_TEST
+#define _HDMI2_SUPPORT                                     _ON
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1
+#define _PANEL_TYPE                        _SN245ES01_2_EDP_4LANEHBR2_QHD180HZ// 
+#else
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1
+#define _PANEL_TYPE                        _SN245ES01_2_EDP_4LANEHBR2_QHD180HZ// 
+#endif
+#define _HDMI_QED                                      _ON  //HDMI ��֤EDID
+#define ARZOPA                                      _ON  //arz�ͻ�
+#define ARZOPB                                      _OFF  //arz�ͻ�
+#define _MPRT_SUPPORT                                           _OFF
+#define _DAC_HP_OUTPUT_SWAP                                 _ON //����������
+
+#define _FRC_SUPPORT                                            _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                          _ON // ����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_F2761QK_QHD180HZ_20240416)
+
+#define _MPRT_SUPPORT                                           _OFF
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS// //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//
+#define _PANEL_TYPE                       _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//  //  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ////  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _FRC_SUPPORT                                            _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                          _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                 _ON //����������
+#define _OD_SUPPORT                                             _ON
+
+#elif(Project_ID == TEXTF0_ID_KAITENG_2795E04_4LANEHBR)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0
+#define _QTR_MODE												_QR
+#define _FAKE_FREE												_ON//����Ϊ165hz
+
+#elif(Project_ID == TEXTF_ID_KAITENG_2795E04_8LANEHBR2)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_ME270QHB_NF0_EDP_8LANEHBR_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0
+#define _QTR_MODE												_QR
+#define _FAKE_FREE												_ON
+
+#elif(Project_ID == _ID_KAITENG_2795QR_QHD180HZ_EDP)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_CSOT_SG2701G03_3_4LAN_HBR2_QHD180HZ//_ME270QHB_NF0_EDP_8LANEHBR_QHD180HZ//_CSOT_SG2701G03_3_4LAN_HBR2_QHD180HZ				
+#define _FRC_SUPPORT											_ON
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0//_KEY_KAITENG0//_KEY_ZJ
+#define _QTR_MODE												_QR
+#define _PANEL_LANE_DEF 										_8_LANE
+#define _FAKE_FREE												_OFF
+#define _PANEL_PN_SWAP_DEF                             			_ON//_ON//_ON
+
+
+#elif(Project_ID == _ID_SANSE_2795QR_2K180_NF0_)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_ME270QHB_NF0_EDP_8LANEHBR_QHD180HZ//_ME270QHB_NF0_EDP_8LANEHBR_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0//_KEY_KAITENG0//_KEY_ZJ
+#define _QTR_MODE												_QR
+#define _PANEL_LANE_DEF 										_4_LANE
+#define _FAKE_FREE												_OFF
+#define _PANEL_PN_SWAP_DEF                             			_ON//_ON//_ON
+
+#elif(Project_ID == ID_KAITENG_HK2795E01_QHD180HZ_EDP)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1//_RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1
+#define _PANEL_TYPE 											_ME270QHB_NF5_EDP_4LANEHBR2_QHD180HZ//_AUO_M315DVR01_0_EDP_165HZ//_ME270QHB_NF5_EDP_4LANEHBR2_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0
+#define _QTR_MODE												_QT
+#define _FAKE_FREE												_OFF
+#define _PANEL_LANE_DEF 										_4_LANE
+#define _ID_TZ_G27Q10X_DEF										_OFF//_ON//ͬ�ۿͻ� UserInterfaceKeyPadLedControl _DEF_INDICATO_LIGHT_Flick_EANBLE
+#define _PANEL_PN_SWAP_DEF                             			_ON //
+
+#elif(Project_ID == ID_WMX_ME270QHB_NF5_2K180)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_ME270QHB_NF5_EDP_4LANEHBR2_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_WMX_ZF//_KEY_KAITENG0
+#define _QTR_MODE												_QR
+#define _PANEL_LANE_DEF											_4_LANE
+#define _FAKE_FREE												_OFF
+
+
+#elif(Project_ID == TEXTF2_ID_SONGREN_2795E04_4LANEHBR2_2K185_D8B)
+#define _PCB_TYPE												_RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1
+#define _PANEL_TYPE 											_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_WMX_ZF//_KEY_KAITENG0
+#define _QTR_MODE												_QR
+#define _FAKE_FREE												_OFF
+
+#elif(Project_ID == TEXTF1_ID_KAITENG_XIAOLI_2795E04_4LANEHBR2_1K280)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ//_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0
+#define _QTR_MODE												_QT
+#define _FAKE_FREE												_ON
+#define _CAIXIAOLI                             					_ON //
+
+#elif(Project_ID == ID_KAIXIA_HK2795E04_SG2451B01_2_8LAN_VBY1_FHD280HZ_8BIT_20240103)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_CSOT_SG2451B01_2_8LANVBY_FHD280HZ//_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ//_CSOT_SG2451B01_2_8LANVBY_FHD280HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_DJ//_KEY_DJ2415
+#define _QTR_MODE												_QT
+#define _FAKE_FREE												_ON
+
+#elif(Project_ID == ID_KAITENG_HK2795E04_FHD300HZ_VB1)
+#define _PCB_TYPE												_RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1
+#define _PANEL_TYPE 											_CSOT_SG2451B01_2_8LANVBY_FHD280HZ
+//_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ//_CSOT_SG2451B01_2_8LANVBY_FHD280HZ//_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ
+//_CSOT_SG2451B01_2_8LANVBY_FHD280HZ//_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ//_CSOT_SG2451B01_2_8LANVBY_FHD280HZ				
+#define _FRC_SUPPORT											_ON		
+#define _MPRT_SUPPORT											_OFF
+#define _HDMI_24C02_SUPPORT										_OFF
+#define _KEY_MODE												_KEY_KAITENG0//_KEY_DJ//_KEY_KAITENG0//_KEY_DJ//_KEY_DJ2415
+#define _QTR_MODE												_QT
+#define _FAKE_FREE												_ON
+#define _CAIXIAOLI                             					_ON
+
+
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_20240426)
+#if _DEF_PROJECT_TEST
+
+#define _HDMI2_SUPPORT                                     _ON
+
+#define _PCB_TYPE                                 _RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS// //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//
+#define _PANEL_TYPE                       _PANDA_M270HCA_L7B_LVDS_FHD_165HZ//  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//  //  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ////  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#else
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS// //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//
+#define _PANEL_TYPE                       _AUO_SN270ES01_1_EDP_4LANEHBR2_QHD180HZ//  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//  //  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ////  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#endif
+#define _MPRT_SUPPORT                                           _ON
+#define _FRC_SUPPORT                                            _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                          _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                 _ON //����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_G27L61QK_20240509)
+#if _DEF_PROJECT_TEST
+#define _PCB_TYPE                                   _RL6432__156PIN__HKMRT2556E12__2H1DP__LVDS//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//   //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//    
+#define _PANEL_TYPE                                _HKC_SN270CS03_1_V11_FHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#else
+#define _PCB_TYPE                                 _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1//_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS// //  _RL6449__216PIN__HKMRT2795E04__1USB1DP2H__eDPVB1////_RL6432__156PIN__HKMRT2556E01__2H1DP__LVDS//
+#define _PANEL_TYPE                       _AUO_SN270ES01_1_EDP_4LANEHBR2_QHD180HZ//  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ// _AUO_M315DVR01_0_EDP_165HZ//  //  _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ//_M270KCAD8B_EDP_4LANEHBR2_QHD180HZ////  //  //   //_PANDA_M270HCA_L7B_LVDS_FHD_165HZ//
+#define _HDMI_24C02_SUPPORT                                     _ON
+#endif
+#define _MPRT_SUPPORT                                           _ON
+#define _FRC_SUPPORT                                            _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                          _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                 _ON //����������
+#define _OD_SUPPORT                                             _ON
+
+#elif(Project_ID == ID_TJZG_HK2775E01_SG2451B014_VBY8LANHBR2_FHD240HZ_20240330)
+#define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1
+#define _PANEL_TYPE                                             _BOE_SG2451BO1_4_VBO_FHD240HZ
+#define _FRC_SUPPORT                                            _ON
+#define _OVERCLOCK                                              _ON
+#define _MPRT_SUPPORT                                           _ON
+#define _OD_SUPPORT                                             _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+#define _DAC_HP_OUTPUT_SWAP                                     _ON//�������ҷ��򿪹�
+#elif(Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+#define _MD2769                                                 _OFF//�»��� 
+#define _SG2701G013                                             _ON//�»��� 
+#define _KEY_MODE												_KEY_WMX
+#if _SG2701G013
+#define _HDMI_24C02_SUPPORT                                     _OFF
+#define _PANEL_TYPE                                             _BOE_MV315QHM_N40_LVDS_QHD75HZ
+#else
+#define _HDMI_24C02_SUPPORT                                     _ON
+#define _PANEL_TYPE                                             _PANDA_LC238LF1F_LVDS
+#endif
+#define _PCB_TYPE                                               _RL6432__156PIN__HKMRT2556E02__1H1DP__LVDS//            //          
+#define _FRC_SUPPORT                                            _OFF
+#define _OVERCLOCK                                              _ON//   _OFF
+#define _MPRT_SUPPORT                                           _ON//       _OFF
+#define _OD_SUPPORT                                             _ON
+#define _DBL_SUPPORT                                            _ON
+#define _ALL_BLACK_IMAGE_LIGHT_VALUE                            0x4c//176mA     (2)//0-255 pwm in Black image backlight value
+#define _OVERCLOCK_180HZ                                        _ON
+#define _HDMI2_SUPPORT                                          _ON
+#define _LED_EFFECT_TJMODE14                                    _ON
+#elif(Project_ID == ID_TEST_VBY1_HK2775E01_2P2H_UHD60HZ_20240102)
+#define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__2DP2H__eDPVB1
+#define _PANEL_TYPE                                             _INL_M280DGJ_L30_VBY_UHD_60HZ
+#define _FRC_SUPPORT                                            _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OVERCLOCK                                              _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                                _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                     _ON //����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_NTQ_VBY1_HK2775E01_1P1H_UHD60HZ_20251020)
+#define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
+#define _PANEL_TYPE                                             _BOE_DV430QUB_C10_VBY_UHD_60HZ
+#define _FRC_SUPPORT                                            _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OVERCLOCK                                              _ON
+#define _HDMI_24C02_SUPPORT                                     _OFF
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                                _ON
+#define _DAC_HP_OUTPUT_SWAP                                     _ON
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_DATONG_HK2795E01_MV270QUM_N50_EDP4LANHBR2_UHD60HZ_20240511)
+#if _DEF_PROJECT_TEST
+#define _MV270FHM_NF1                                           _ON  // FHD280
+#define _HDMI2_SUPPORT                                          _ON
+#define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1
+#define _PANEL_TYPE                                             _BOE_MV270FHM_NF1_EDP4LANEHBR2_FHD240HZ
+#define _HDMI_24C02_SUPPORT                                     _ON
+#else
+#define _MV270QHM_NF2                                           _ON    // QHD165 
+#define _MV270FHM_NF1                                           _OFF  // FHD280
+#define _MV270QUM_N31                                           _OFF  // UHD 60 240ma
+#define _HDMI_24C02_SUPPORT                                     _ON
+#define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2795E01__2DP2H__eDPVB1
+#if _MV270FHM_NF1
+#define _PANEL_TYPE                                             _BOE_MV270FHM_NF1_EDP4LANEHBR2_FHD240HZ//_INL_M280DGJ_L30_VBY_UHD_60HZ//_INL_M280DGJ_L30_VBY_UHD_60HZ
+#elif _MV270QHM_NF2
+#define _PANEL_TYPE                                             _BOE_MV270QHM_NF2_EDP_HBR2_QHD165HZ//   _AUO_M315DVR01_9_EDP_165HZ//   _CSOT_SG2701G03_3_4LAN_HBR2_QHD180HZ// _BOE_MV270QHM_NF2_EDP_HBR2_QHD165HZ//_INL_M280DGJ_L30_VBY_UHD_60HZ//_INL_M280DGJ_L30_VBY_UHD_60HZ
+#else
+#define _PANEL_TYPE                                             _INX_M280DCA_P3B_EDP_HBR2_UHD60//_INL_M280DGJ_L30_VBY_UHD_60HZ//_INL_M280DGJ_L30_VBY_UHD_60HZ
+#endif
+#endif
+
+#define _IR_VIRTUAL                                             _OFF
+
+#define _FRC_SUPPORT                                            _ON
+#define _MPRT_SUPPORT                                           _OFF
+#define _OVERCLOCK                                              _ON
+
+#define _DAC_SPEAKER_OUTPUT_SWAP                                _ON // ����������
+#define _DAC_HP_OUTPUT_SWAP                                     _ON //����������
+#define _OD_SUPPORT                                             _ON
+#elif(Project_ID == ID_CHANGHONG_HK2525E04_1V1P1H_HKC_PN238CT02_FHD75_20201021)
+#define _PCB_TYPE                                               _RL6463__128PIN__HKMRT2525E04__1A1P1H__LVDS
+#define _PANEL_TYPE                                             _HKC_PN238CT02_14_LVDS_FHD75
+#define _FRC_SUPPORT                                            _OFF
+#define _MPRT_SUPPORT                                           _OFF
+#define _OD_SUPPORT                                             _ON
+#define _HDMI_24C02_SUPPORT                                     _ON
+
+#elif(Project_ID == ID_CHANGHONG_2513_TEST)
+#define _PCB_TYPE                                               _RL6463__128PIN__HKMRT2513E01__1A1H__LVDS
+#define _PANEL_TYPE                                             _HKC_PN238CT02_14_LVDS_FHD75
+#define _FRC_SUPPORT                                            _OFF
+#define _MPRT_SUPPORT                                           _OFF
+#define _OD_SUPPORT                                             _OFF
+#endif
+
+
+
+#ifndef _CUSTOMER_TYPE
+#define _CUSTOMER_TYPE          _NONE_CUSTOMER
+#endif
+
+#ifndef _DEF_2795E06
+#define _DEF_2795E06            _OFF
+#endif
+
+#ifndef _DEF_HDCP1_4
+#define _DEF_HDCP1_4                                        _OFF //HDCP1.4
+#endif
+
+
+#define _DEF_OSD_LOGO_CROSSOVER                             1//Cross Over�˵�LOGO
+#define _DEF_OSD_LOGO_OVERPOWER                             2//OVER power�˵�LOGO
+#define _DEF_OSD_LOGO_CROSSOVER2                            3//Cross Over�˵�LOGO   ��С��
+#define _OSD_LOGO_MUCAI                                     4//MU CAI
+
+
+#ifndef _DEF_FREESYNC_BUG_SMEAR
+#define _DEF_FREESYNC_BUG_SMEAR                             _OFF //ĳЩ�ֱ��ʿ���Freesync������β
+#endif
+
+
+#ifndef _DEF_LED_COLOR_OPPOSITE
+#define _DEF_LED_COLOR_OPPOSITE                             _OFF //ָʾ����ɫ�෴
+#endif
+
+
+#ifndef _MV270QUM_N31
+#define _MV270QUM_N31                             _OFF //ID �ķ�֧���궨����پ���
+#endif
+
+#ifndef _PANEL_QHD90HZ
+#define _PANEL_QHD90HZ                             _OFF //ID �ķ�֧���궨����پ���
+#endif
+
+
+
+#ifndef _KEY_MODE
+#define _KEY_MODE                             _KEY_KAITENG0 //ID �ķ�֧���궨����پ���
+#endif
+
+#ifndef _QTR_MODE
+#define _QTR_MODE                             _QT //ID �ķ�֧���궨����پ���
+#endif
+
+#ifndef _FAKE_FREE
+#define _FAKE_FREE                             _ON //ID �ķ�֧���궨����پ���
+#endif
+
+
+
+#ifndef _CAIXIAOLI
+#define _CAIXIAOLI                             _OFF //ID �ķ�֧���궨����پ���
+#endif
+
+#ifndef  _EDID_QHD100HZ
+#define _EDID_QHD100HZ                             _OFF //ID �ķ�֧���궨����پ���
+#endif
+
+
+#ifndef  _PANEL_PN_SWAP_DEF
+#define  _PANEL_PN_SWAP_DEF                             _OFF //
+#endif
+
+#ifndef  _ID_TZ_G27Q10X_DEF
+#define  _ID_TZ_G27Q10X_DEF                             _OFF //
+#endif
+
+

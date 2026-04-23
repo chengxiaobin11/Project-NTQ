@@ -1,0 +1,620 @@
+/******************************OSD_FUNCTION_DEFINE*****************************************/
+/* 	
+ *	����OSD�Ĺ��ܣ�λ�ÿ��������
+*/
+
+//page1
+#if(_OSD_7PAGE && _DEF_PAGE8 == _OFF)
+
+#ifndef	_DEF_P1_PICTURE_ITEM0
+#define _DEF_P1_PICTURE_ITEM0      _MENU_FUN_BACKLIGHT
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM1
+#define _DEF_P1_PICTURE_ITEM1      _MENU_FUN_CONTRAST
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM2
+#define _DEF_P1_PICTURE_ITEM2      _MENU_FUN_DCR
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM3
+#define _DEF_P1_PICTURE_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM4
+#define _DEF_P1_PICTURE_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM5
+#define _DEF_P1_PICTURE_ITEM5      _MENU_NULL
+#endif
+
+//page2
+
+
+#ifndef	_DEF_P2_DISPLAY_ITEM0
+#define _DEF_P2_DISPLAY_ITEM0      _MENU_FUN_GAMMA 
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM1
+#define _DEF_P2_DISPLAY_ITEM1      _MENU_FUN_ECO
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM2
+#define _DEF_P2_DISPLAY_ITEM2      _MENU_FUN_COLORTEMP
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM3
+#define _DEF_P2_DISPLAY_ITEM3      _MENU_FUN_HUE
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM4
+#define _DEF_P2_DISPLAY_ITEM4      _MENU_FUN_SATURATION
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM5
+#define _DEF_P2_DISPLAY_ITEM5      _MENU_FUN_LOWBLUE
+#endif
+
+//page3
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM0
+#define _DEF_P3_COLORTEMP_ITEM0      _MENU_FUN_SHARPNESS
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM1
+#define _DEF_P3_COLORTEMP_ITEM1      _MENU_FUN_BRIGHTNESS
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM2
+#if _HDR10_SUPPORT
+#define _DEF_P3_COLORTEMP_ITEM2     _MENU_FUN_HDR
+#else
+#define _DEF_P3_COLORTEMP_ITEM2     _MENU_NULL
+#endif
+#endif
+
+#if(_OD_SUPPORT)
+#ifndef	_DEF_P3_COLORTEMP_ITEM3
+#define _DEF_P3_COLORTEMP_ITEM3     _MENU_NULL
+#endif
+
+#else
+#ifndef	_DEF_P3_COLORTEMP_ITEM3
+#define _DEF_P3_COLORTEMP_ITEM3     _MENU_NULL  
+#endif
+
+#endif
+
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM4
+#define _DEF_P3_COLORTEMP_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM5
+#define _DEF_P3_COLORTEMP_ITEM5    	_MENU_NULL
+#endif
+//page 4
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM0
+#define _DEF_P4_OSDSETTING_ITEM0      _MENU_FUN_ASPECT
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM1
+#define _DEF_P4_OSDSETTING_ITEM1      _MENU_NULL 
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM2
+#define _DEF_P4_OSDSETTING_ITEM2     _MENU_NULL   
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM3
+#define _DEF_P4_OSDSETTING_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM4
+#define _DEF_P4_OSDSETTING_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM5
+#define _DEF_P4_OSDSETTING_ITEM5      _MENU_NULL
+#endif
+
+
+#ifndef	_DEF_P4_AUDIO_ITEM0
+#define _DEF_P4_AUDIO_ITEM0      _MENU_FUN_AUDOIMUTE 
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM1
+#define _DEF_P4_AUDIO_ITEM1       _MENU_FUN_AUDOIVOLUME
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM2
+#define _DEF_P4_AUDIO_ITEM2      _MENU_NULL   
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM3
+#define _DEF_P4_AUDIO_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM4
+#define _DEF_P4_AUDIO_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM5
+#define _DEF_P4_AUDIO_ITEM5      _MENU_NULL
+#endif
+
+
+
+
+//page5
+#ifndef	_DEF_P5_RESET_ITEM0
+#define _DEF_P5_RESET_ITEM0     	 _MENU_FUN_LANGUAGE
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM1
+#define _DEF_P5_RESET_ITEM1     	 _MENU_FUN_OSD_HPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM2
+#define _DEF_P5_RESET_ITEM2    	 	 _MENU_FUN_OSD_VPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM3
+#define _DEF_P5_RESET_ITEM3    	  	 _MENU_FUN_OSD_TRANS
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM4
+#define _DEF_P5_RESET_ITEM4     	 _MENU_FUN_OSD_TIME
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM5
+#define _DEF_P5_RESET_ITEM5      	 _MENU_FUN_OSD_RORATE
+#endif
+
+//page 6
+#ifndef	_DEF_P6_MISC_ITEM0
+#if _FREESYNC_SUPPORT
+#define _DEF_P6_MISC_ITEM0      	 _MENU_FUN_FREESYNC
+#else
+#define _DEF_P6_MISC_ITEM0      	 _MENU_FUN_POWER_OFF
+#endif
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM1
+#if _FREESYNC_SUPPORT
+#define _DEF_P6_MISC_ITEM1      	 _MENU_FUN_POWER_OFF
+#else
+#define _DEF_P6_MISC_ITEM1      	 _MENU_FUN_RESET
+#endif
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM2
+#if _FREESYNC_SUPPORT
+#define _DEF_P6_MISC_ITEM2      	 _MENU_FUN_RESET
+#else
+#define _DEF_P6_MISC_ITEM2      	 _MENU_NULL
+#endif
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM3
+#define _DEF_P6_MISC_ITEM3      	 _MENU_NULL 
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM4
+#define _DEF_P6_MISC_ITEM4      	 _MENU_NULL
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM5
+#define _DEF_P6_MISC_ITEM5      	 _MENU_NULL
+#endif
+
+
+#elif(_DEF_PAGE8)
+
+#ifndef	_DEF_P1_PICTURE_ITEM0
+#define _DEF_P1_PICTURE_ITEM0      _MENU_FUN_BACKLIGHT
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM1
+#define _DEF_P1_PICTURE_ITEM1      _MENU_FUN_CONTRAST
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM2
+#define _DEF_P1_PICTURE_ITEM2      _MENU_FUN_DCR
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM3
+#define _DEF_P1_PICTURE_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM4
+#define _DEF_P1_PICTURE_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM5
+#define _DEF_P1_PICTURE_ITEM5      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM6
+#define _DEF_P1_PICTURE_ITEM6      _MENU_NULL
+#endif
+
+
+
+//page2
+
+
+#ifndef	_DEF_P2_DISPLAY_ITEM0
+#define _DEF_P2_DISPLAY_ITEM0      _MENU_FUN_GAMMA 
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM1
+#define _DEF_P2_DISPLAY_ITEM1      _MENU_FUN_ECO
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM2
+#define _DEF_P2_DISPLAY_ITEM2      _MENU_FUN_COLORTEMP
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM3
+#define _DEF_P2_DISPLAY_ITEM3      _MENU_FUN_HUE
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM4
+#define _DEF_P2_DISPLAY_ITEM4      _MENU_FUN_SATURATION
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM5
+#define _DEF_P2_DISPLAY_ITEM5      _MENU_FUN_LOWBLUE
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM6
+#define _DEF_P2_DISPLAY_ITEM6      _MENU_FUN_LOWBLUE
+#endif
+
+
+//page3
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM0
+#define _DEF_P3_COLORTEMP_ITEM0      _MENU_FUN_SHARPNESS
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM1
+#define _DEF_P3_COLORTEMP_ITEM1      _MENU_FUN_BRIGHTNESS
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM2
+#if _HDR10_SUPPORT
+#define _DEF_P3_COLORTEMP_ITEM2     _MENU_FUN_HDR//delete HDR function in page3
+#else
+#define _DEF_P3_COLORTEMP_ITEM2     _MENU_NULL
+#endif
+#endif
+
+
+#if(_OD_SUPPORT)
+#ifndef	_DEF_P3_COLORTEMP_ITEM3
+#define _DEF_P3_COLORTEMP_ITEM3     _MENU_FUN_OD  
+#endif
+
+#else
+#ifndef	_DEF_P3_COLORTEMP_ITEM3
+#define _DEF_P3_COLORTEMP_ITEM3     _MENU_NULL  
+#endif
+
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM4
+#define _DEF_P3_COLORTEMP_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM5
+#define _DEF_P3_COLORTEMP_ITEM5    	_MENU_NULL
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM6
+#define _DEF_P3_COLORTEMP_ITEM6    	_MENU_NULL
+#endif
+
+//page 4
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM0
+#define _DEF_P4_OSDSETTING_ITEM0      _MENU_FUN_ASPECT
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM1
+#define _DEF_P4_OSDSETTING_ITEM1      _MENU_NULL 
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM2
+#define _DEF_P4_OSDSETTING_ITEM2     _MENU_NULL   
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM3
+#define _DEF_P4_OSDSETTING_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM4
+#define _DEF_P4_OSDSETTING_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM5
+#define _DEF_P4_OSDSETTING_ITEM5      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM6
+#define _DEF_P4_OSDSETTING_ITEM6      _MENU_NULL
+#endif
+
+
+
+#ifndef	_DEF_P4_AUDIO_ITEM0
+#define _DEF_P4_AUDIO_ITEM0      _MENU_FUN_AUDOIMUTE 
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM1
+#define _DEF_P4_AUDIO_ITEM1       _MENU_FUN_AUDOIVOLUME
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM2
+#define _DEF_P4_AUDIO_ITEM2      _MENU_NULL   
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM3
+#define _DEF_P4_AUDIO_ITEM3      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM4
+#define _DEF_P4_AUDIO_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM5
+#define _DEF_P4_AUDIO_ITEM5      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_AUDIO_ITEM6
+#define _DEF_P4_AUDIO_ITEM6      _MENU_NULL
+#endif
+
+
+
+//page5
+#ifndef	_DEF_P5_RESET_ITEM0
+#define _DEF_P5_RESET_ITEM0     	 _MENU_FUN_LANGUAGE
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM1
+#define _DEF_P5_RESET_ITEM1     	 _MENU_FUN_OSD_HPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM2
+#define _DEF_P5_RESET_ITEM2    	 	 _MENU_FUN_OSD_VPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM3
+#define _DEF_P5_RESET_ITEM3    	  	 _MENU_FUN_OSD_TRANS
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM4
+#define _DEF_P5_RESET_ITEM4     	 _MENU_FUN_OSD_TIME
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM5
+#define _DEF_P5_RESET_ITEM5      	 _MENU_FUN_OSD_RORATE
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM6
+#define _DEF_P5_RESET_ITEM6      	 _MENU_NULL
+#endif
+
+
+
+//page 6
+#ifndef	_DEF_P6_MISC_ITEM0
+#if _FREESYNC_SUPPORT
+#define _DEF_P6_MISC_ITEM0      	 _MENU_FUN_FREESYNC
+#else
+#define _DEF_P6_MISC_ITEM0      	 _MENU_FUN_RESET
+#endif
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM1
+#if _FREESYNC_SUPPORT
+#define _DEF_P6_MISC_ITEM1      	 _MENU_FUN_RESET
+#else
+#define _DEF_P6_MISC_ITEM1      	 _MENU_NULL
+#endif
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM2
+#define _DEF_P6_MISC_ITEM2      	 _MENU_NULL//_MENU_FUN_POWER_OFF
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM3
+#define _DEF_P6_MISC_ITEM3      	 _MENU_NULL 
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM4
+#define _DEF_P6_MISC_ITEM4      	 _MENU_NULL
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM5
+#define _DEF_P6_MISC_ITEM5      	 _MENU_NULL
+#endif
+
+
+#ifndef	_DEF_P6_MISC_ITEM6
+#define _DEF_P6_MISC_ITEM6      	 _MENU_NULL
+#endif
+
+
+
+
+
+
+
+
+
+
+#else
+
+#ifndef	_DEF_P1_PICTURE_ITEM0
+#define _DEF_P1_PICTURE_ITEM0      _MENU_FUN_BACKLIGHT
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM1
+#define _DEF_P1_PICTURE_ITEM1      _MENU_FUN_CONTRAST
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM2
+#define _DEF_P1_PICTURE_ITEM2      _MENU_FUN_BRIGHTNESS
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM3
+#define _DEF_P1_PICTURE_ITEM3      _MENU_FUN_SHARPNESS
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM4
+#define _DEF_P1_PICTURE_ITEM4      _MENU_FUN_ECO
+#endif
+
+#ifndef	_DEF_P1_PICTURE_ITEM5
+#define _DEF_P1_PICTURE_ITEM5      _MENU_FUN_DCR
+#endif
+
+//page2
+
+
+#ifndef	_DEF_P2_DISPLAY_ITEM0
+#define _DEF_P2_DISPLAY_ITEM0      _MENU_FUN_COLORTEMP 
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM1
+#define _DEF_P2_DISPLAY_ITEM1      _MENU_FUN_R
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM2
+#define _DEF_P2_DISPLAY_ITEM2      _MENU_FUN_G
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM3
+#define _DEF_P2_DISPLAY_ITEM3      _MENU_FUN_B
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM4
+#define _DEF_P2_DISPLAY_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P2_DISPLAY_ITEM5
+#define _DEF_P2_DISPLAY_ITEM5      _MENU_NULL
+#endif
+
+//page3
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM0
+#define _DEF_P3_COLORTEMP_ITEM0      _MENU_FUN_SATURATION
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM1
+#define _DEF_P3_COLORTEMP_ITEM1      _MENU_FUN_LOWBLUE
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM2
+#define _DEF_P3_COLORTEMP_ITEM2     _MENU_FUN_GAMMA 
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM3
+#define _DEF_P3_COLORTEMP_ITEM3     _MENU_FUN_COLORGAMUT  
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM4
+#define _DEF_P3_COLORTEMP_ITEM4      _MENU_FUN_HDR
+#endif
+
+#ifndef	_DEF_P3_COLORTEMP_ITEM5
+#define _DEF_P3_COLORTEMP_ITEM5      _MENU_FUN_MPRT
+#endif
+//page 4
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM0
+#define _DEF_P4_OSDSETTING_ITEM0      _MENU_FUN_ASPECT
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM1
+#define _DEF_P4_OSDSETTING_ITEM1      _MENU_FUN_FREESYNC 
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM2
+#if(_OD_SUPPORT)
+#define _DEF_P4_OSDSETTING_ITEM2     _MENU_FUN_OD   
+#else
+#define _DEF_P4_OSDSETTING_ITEM2     _MENU_NULL   
+#endif
+
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM3
+#define _DEF_P4_OSDSETTING_ITEM3      _MENU_NULL//_HOT_KEY_LOS_TYPE1//_MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM4
+#define _DEF_P4_OSDSETTING_ITEM4      _MENU_NULL
+#endif
+
+#ifndef	_DEF_P4_OSDSETTING_ITEM5
+#define _DEF_P4_OSDSETTING_ITEM5      _MENU_NULL
+#endif
+
+//page5
+#ifndef	_DEF_P5_RESET_ITEM0
+#define _DEF_P5_RESET_ITEM0     	 _MENU_FUN_LANGUAGE
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM1
+#define _DEF_P5_RESET_ITEM1     	 _MENU_FUN_OSD_HPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM2
+#define _DEF_P5_RESET_ITEM2    	 	 _MENU_FUN_OSD_VPOSITON
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM3
+#define _DEF_P5_RESET_ITEM3    	  	 _MENU_FUN_OSD_TRANS
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM4
+#define _DEF_P5_RESET_ITEM4     	 _MENU_FUN_OSD_TIME
+#endif
+
+#ifndef	_DEF_P5_RESET_ITEM5
+#define _DEF_P5_RESET_ITEM5      	 _MENU_NULL
+#endif
+
+//page 6
+#ifndef	_DEF_P6_MISC_ITEM0
+#define _DEF_P6_MISC_ITEM0      	 _MENU_FUN_RESET//
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM1
+#define _DEF_P6_MISC_ITEM1      	 _MENU_FUN_AUDOIMUTE
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM2
+#define _DEF_P6_MISC_ITEM2      	 _MENU_FUN_AUDOIVOLUME
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM3
+#define _DEF_P6_MISC_ITEM3      	 _MENU_NULL//_MENU_FUN_POWER_OFF
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM4
+#define _DEF_P6_MISC_ITEM4      	 _MENU_NULL
+#endif
+
+#ifndef	_DEF_P6_MISC_ITEM5
+#define _DEF_P6_MISC_ITEM5      	 _MENU_NULL
+#endif
+#endif

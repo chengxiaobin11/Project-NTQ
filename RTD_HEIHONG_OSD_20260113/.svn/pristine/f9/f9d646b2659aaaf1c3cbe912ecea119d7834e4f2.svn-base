@@ -1,0 +1,1121 @@
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SYSMODE
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\SysMode.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Kernel\System\Code\SysMode.c LARGE OPTIMIZE(9,SPEED) INCDIR(.\Output\RL6
+                    -449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Header;.\Kernel\Scaler
+                    -\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\Lib\Header;.\Kernel\Sc
+                    -aler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Li
+                    -b\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Header;.\Kernel\User Commo
+                    -n Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User\RTD Factory\Header
+                    -;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header) DEFINE(_PROJECT=_R
+                    -L6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\SysMode.lst) TABS(2) OBJECT(
+                    -.\Output\RL6449_Project\SysMode.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   Copyright (c) 2021 Realtek Semiconductor Corp. All rights reserved.        */
+   3          /*                                                                              */
+   4          /*   SPDX-License-Identifier: LicenseRef-Realtek-Proprietary                    */
+   5          /*                                                                              */
+   6          /*   This software component is confidential and proprietary to Realtek         */
+   7          /*   Semiconductor Corp. Disclosure, reproduction, redistribution, in whole     */
+   8          /*   or in part, of this work and its derivatives without express permission    */
+   9          /*   is prohibited.                                                             */
+  10          /********************************************************************************/
+  11          
+  12          //----------------------------------------------------------------------------------------------------
+  13          // ID Code      : SysMode.c No.0000
+  14          // Update Note  :
+  15          //----------------------------------------------------------------------------------------------------
+  16          
+  17          #define __SYSTEM_MODE__
+  18          
+  19          #include "SysInclude.h"
+  20          
+  21          //****************************************************************************
+  22          // DEFINITIONS / MACROS
+  23          //****************************************************************************
+  24          
+  25          
+  26          //****************************************************************************
+  27          // STRUCT / TYPE / ENUM DEFINITTIONS
+  28          //****************************************************************************
+  29          
+  30          
+  31          //****************************************************************************
+  32          // CODE TABLES
+  33          //****************************************************************************
+  34          
+  35          
+  36          //****************************************************************************
+  37          // VARIABLE DECLARATIONS
+  38          //****************************************************************************
+  39          StructModeInfoType g_stModeInfo;
+  40          // ModeInfo bit[0:4] -- Mode State
+  41          // ModeInfo bit[5] -- Display Ready
+  42          // ModeInfo bit[6] -- Timing Confirm
+  43          // ModeInfo bit[7] -- ModeStateChanged
+  44          
+  45          //****************************************************************************
+  46          // FUNCTION DECLARATIONS
+  47          //****************************************************************************
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 2   
+
+  48          void SysModeHandler(void);
+  49          BYTE SysModeGetModeState(void);
+  50          bit SysModeGetDisplaySettingReady(void);
+  51          bit SysModeGetTimingConfirm(void);
+  52          bit SysModeGetActiveReady(void);
+  53          bit SysModeDisplaySetting(void);
+  54          void SysModeSetUpDisplayInitialization(void);
+  55          void SysModeSetUpInputCapture(void);
+  56          void SysModeSetUpDisplayCapture(void);
+  57          bit SysModeSetUpMDomain(void);
+  58          void SysModeResetState(BYTE ucResetTarget);
+  59          void SysModeSetFreeRun(void);
+  60          bit SysModeGetModeStateChange(void);
+  61          void SysModeClrModeStateChange(void);
+  62          void SysModeSetResetTarget(EnumModeAction enumResetTarget);
+  63          void SysModeColorSpaceConvert(EnumColorSpace enumColorFormat, EnumDBApply enumDBApply);
+  64          void SysModeDisplayTimingInitial(void);
+  65          bit SysModeCheckToDisableGlobalDoubleBuffer(void);
+  66          void SysModeSetupIDomainIniValue(void);
+  67          
+  68          #if(_FREESYNC_SUPPORT == _ON)
+              void SysModeDrrSetMdomainInfo(void);
+              WORD SysModeDrrGetIVFreq(EnumSourceSearchPort enumSearchPort);
+              #endif
+  72          
+  73          
+  74          //****************************************************************************
+  75          // FUNCTION DEFINITIONS
+  76          //****************************************************************************
+  77          //--------------------------------------------------
+  78          // Description  :
+  79          // Input Value  : None
+  80          // Output Value : None
+  81          //--------------------------------------------------
+  82          void SysModeHandler(void)
+  83          {
+  84   1      #if(_URGENT_EVENT_CHECK_MODE == _ON)
+  85   1          if(ScalerSyncCheckUrgentEvent() == _TRUE)
+  86   1          {
+  87   2              return;
+  88   2          }
+  89   1      #endif
+  90   1      
+  91   1          switch(GET_MODE_STATE())
+  92   1          {
+  93   2              case _MODE_STATUS_POWER_OFF:
+  94   2      
+  95   2      #if(_USB3_RETIMER_SUPPORT == _ON)
+                          if(UserCommonPortControllerGetUsbPDStatus() == _USB3_PD_ENABLE)
+                          {
+                              if(SysSourceGetTypeCCableStatusChange() == _TYPE_C_CABLE_UNPLUG)
+                              {
+                                  if(GET_POWER_STATUS() != _POWER_STATUS_OFF)
+                                  {
+                                      SET_TARGET_POWER_STATUS(_POWER_STATUS_OFF);
+                                  }
+                              }
+                              else if((SysSourceGetTypeCCableStatusChange() == _TYPE_C_CABLE_PLUG) && (UserCommonPortCon
+             -trollerGetUsbPDStatus() == _USB3_PD_ENABLE))
+                              {
+                                  if(GET_POWER_STATUS() == _POWER_STATUS_OFF)
+                                  {
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 3   
+
+                                      SET_TARGET_POWER_STATUS(_POWER_STATUS_NORMAL);
+              
+                                      SET_POWER_SWITCH_TO_FAKE_OFF();
+                                  }
+                              }
+                          }
+              #endif
+ 116   2                  break;
+ 117   2      
+ 118   2              case _MODE_STATUS_INITIAL:
+ 119   2      
+ 120   2      #if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+                          if(GET_MODE_STATE_CHANGE_MODE() == _TRUE)
+                          {
+                              g_ucSearchIndex = 0;
+              
+              #if((_D12_INPUT_PORT_TYPE == _D12_HDMI_PORT) && (_D12_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D3))
+                              if(SysSourceGetInputPort() == _D12_INPUT_PORT)
+                              {
+                                  PCB_HDMI_SW_SELECT(_SW_SEL_HDMI3_1);
+                                  g_ucSearchIndex = SysSourceConvertSearchPort(_D3_INPUT_PORT);
+                              }
+                              else if(SysSourceGetInputPort() == _D3_INPUT_PORT)
+                              {
+                                  PCB_HDMI_SW_SELECT(_SW_SEL_HDMI3);
+                              }
+              #endif
+                          }
+              #endif
+ 138   2      
+ 139   2                  break;
+ 140   2      
+ 141   2              case _MODE_STATUS_SEARCH:
+ 142   2              case _MODE_STATUS_NOSIGNAL:
+ 143   2              case _MODE_STATUS_POWER_SAVING:
+ 144   2      
+ 145   2      #if(_DIGITAL_PORT_SUPPORT == _ON)
+ 146   2                  if((GET_SOURCE_JUDGE(g_ucSearchIndex) == _TRUE) && (GET_MODE_TIMING_CONFIRM() == _FALSE))
+ 147   2                  {
+ 148   3                      CLR_INPUT_TIMING_DOUBLE_CHECK();
+ 149   3      
+ 150   3                      // Measure Current Input Timing to gather all required timing Info
+ 151   3                      if(ScalerMeasureInputInfo(GET_SOURCE_TYPE(g_ucSearchIndex), SysSourceGetInputPort()) == _T
+             -RUE)
+ 152   3                      {
+ 153   4                          if(GET_INPUT_TIMING_H_POLARITY() == _HIGH)
+ 154   4                          {
+ 155   5                              DebugMessageSystem("Input Timing H Polarity is Positive", 0);
+ 156   5                          }
+ 157   4                          else
+ 158   4                          {
+ 159   5                              DebugMessageSystem("Input Timing H Polarity is Negative", 0);
+ 160   5                          }
+ 161   4      
+ 162   4                          if(GET_INPUT_TIMING_V_POLARITY() == _HIGH)
+ 163   4                          {
+ 164   5                              DebugMessageSystem("Input Timing V Polarity is Positive", 0);
+ 165   5                          }
+ 166   4                          else
+ 167   4                          {
+ 168   5                              DebugMessageSystem("Input Timing V Polarity is Negative", 0);
+ 169   5                          }
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 4   
+
+ 170   4      
+ 171   4                          DebugMessageSystem("Input Timing InterLace", GET_INPUT_TIMING_INTERLACE_FLG());
+ 172   4                          DebugMessageSystem("Input Timing HFreq", GET_INPUT_TIMING_HFREQ());
+ 173   4                          DebugMessageSystem("Input Timing HTotal", GET_INPUT_TIMING_HTOTAL());
+ 174   4                          DebugMessageSystem("Input Timing HStart", GET_INPUT_TIMING_HSTART());
+ 175   4                          DebugMessageSystem("Input Timing HWidth", GET_INPUT_TIMING_HWIDTH());
+ 176   4                          DebugMessageSystem("Input Timing HSyncWidth", GET_INPUT_TIMING_HSYNCWIDTH());
+ 177   4                          DebugMessageSystem("Input Timing VFreq", GET_INPUT_TIMING_VFREQ());
+ 178   4                          DebugMessageSystem("Input Timing VTotal", GET_INPUT_TIMING_VTOTAL());
+ 179   4                          DebugMessageSystem("Input Timing VStart", GET_INPUT_TIMING_VSTART());
+ 180   4                          DebugMessageSystem("Input Timing VHeight", GET_INPUT_TIMING_VHEIGHT());
+ 181   4                          DebugMessageSystem("Input Timing VSyncSWidth", GET_INPUT_TIMING_VSYNCWIDTH());
+ 182   4      
+ 183   4                          SET_MODE_TIMING_CONFIRM();
+ 184   4                          SET_INPUT_TIMING_DOUBLE_CHECK();
+ 185   4                      }
+ 186   3                  }
+ 187   2      #endif
+ 188   2      
+ 189   2      #if(_DDR1_PHASE_CALIBRATION == _ON)
+                          if((GET_MODE_TIMING_CONFIRM() == _TRUE) && (GET_FIRST_AUTOK_STATUS() == _FALSE))
+                          {
+                              ScalerDDR1SearchPhase();
+                              SET_FIRST_AUTOK_STATUS();
+                          }
+              
+              #elif(_SDRAM_PHASE_CALIBRATION == _ON)
+                          if((GET_MODE_TIMING_CONFIRM() == _TRUE) && (GET_FIRST_AUTOK_STATUS() == _FALSE))
+                          {
+                              ScalerSdramSearchPhase();
+                              SET_FIRST_AUTOK_STATUS();
+                          }
+              #endif
+ 203   2      
+ 204   2                  if(GET_MODE_STATE() == _MODE_STATUS_POWER_SAVING)
+ 205   2                  {
+ 206   3      #if((_USB3_RETIMER_SUPPORT == _ON))
+                              if(UserCommonPortControllerGetUsbPSStatus() == _USB3_PS_ENABLE)
+                              {
+                                  if(SysSourceGetTypeCCableStatusChange() == _TYPE_C_CABLE_UNPLUG)
+                                  {
+                                      if(GET_POWER_STATUS() != _POWER_STATUS_SAVING)
+                                      {
+                                          SET_TARGET_POWER_STATUS(_POWER_STATUS_SAVING);
+                                      }
+                                  }
+                                  else if(SysSourceGetTypeCCableStatusChange() == _TYPE_C_CABLE_PLUG)
+                                  {
+                                      if(GET_POWER_STATUS() != _POWER_STATUS_NORMAL)
+                                      {
+                                          SET_TARGET_POWER_STATUS(_POWER_STATUS_NORMAL);
+                                      }
+                                  }
+                                  else
+                                  {
+                                      if((GET_SOURCE_SWITCH_FINISH() == _TRUE) && (UserInterfaceGetIntoPSStatus() == _TR
+             -UE))
+                                      {
+                                          if(SysPowerGetPowerStatus() != _POWER_STATUS_SAVING)
+                                          {
+                                              SET_TARGET_POWER_STATUS(_POWER_STATUS_SAVING);
+              
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 5   
+
+                                              CLR_SOURCE_SWITCH_FINISH();
+                                          }
+                                      }
+                                  }
+                              }
+                              else
+              #endif
+ 238   3                      {
+ 239   4                          if((GET_SOURCE_SWITCH_FINISH() == _TRUE) && (UserInterfaceGetIntoPSStatus() == _TRUE))
+ 240   4                          {
+ 241   5                              if(SysPowerGetPowerStatus() != _POWER_STATUS_SAVING)
+ 242   5                              {
+ 243   6                                  SET_TARGET_POWER_STATUS(_POWER_STATUS_SAVING);
+ 244   6      
+ 245   6                                  CLR_SOURCE_SWITCH_FINISH();
+ 246   6                              }
+ 247   5                          }
+ 248   4                      }
+ 249   3                  }
+ 250   2      
+ 251   2      #if(_HP_SOURCE_SCAN_SUPPORT == _ON)
+                          if((GET_MODE_STATE() == _MODE_STATUS_NOSIGNAL) || (GET_MODE_STATE() == _MODE_STATUS_POWER_SAVI
+             -NG))
+              #endif
+ 254   2                  {
+ 255   3                      if(UserInterfaceGetCableResetStatus() == _TRUE)
+ 256   3                      {
+ 257   4                          if(SysPowerGetPowerStatus() != _POWER_STATUS_NORMAL)
+ 258   4                          {
+ 259   5                              SET_TARGET_POWER_STATUS(_POWER_STATUS_NORMAL);
+ 260   5                          }
+ 261   4      
+ 262   4                          SET_MODE_RESET_TARGET(_MODE_ACTION_RESET_TO_SEARCH);
+ 263   4      
+ 264   4                          SysSourceCableResetProc();
+ 265   4                      }
+ 266   3                  }
+ 267   2      
+ 268   2                  break;
+ 269   2      
+ 270   2              case _MODE_STATUS_DISPLAY_SETTING:
+ 271   2      
+ 272   2                  if(GET_MODE_DISPLAY_SETTING_READY() == _FALSE)
+ 273   2                  {
+ 274   3      #if(_PANEL_STYLE == _PANEL_VBO)
+ 275   3                      DWORD ulDclk = GET_D_CLK_FREQ();
+ 276   3      #endif
+ 277   3      
+ 278   3                      if(SysModeDisplaySetting() == _TRUE)
+ 279   3                      {
+ 280   4      #if(_DEBUG_MESSAGE_CHECK_MDOMAIN == _ON)
+                                  ScalerMDomainCheckDisplaySetting();
+              #endif
+ 283   4      
+ 284   4      #if(_PANEL_STYLE == _PANEL_VBO)
+ 285   4                          if(ulDclk != GET_D_CLK_FREQ())
+ 286   4                          {
+ 287   5      #if(_PANEL_VBO_CHANGE_CLK_RESET_TYPE == _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN)
+                                      // Turn off Backlight Power to prevent garbage
+                                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+              #else
+ 291   5                              // Turn off Panel Power to prevent garbage
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 6   
+
+ 292   5                              UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+ 293   5      #endif
+ 294   5                          }
+ 295   4      #endif
+ 296   4      
+ 297   4      #if((_PANEL_POW_SEQ_FAST_MODE == _ON) || (_PANEL_POWER_ON_BEFORE_COLOR_SETTING == _ON))
+                                  UserCommonInterfacePanelPowerAction(_PANEL_ON);
+              #endif
+ 300   4                          UserCommonInterfaceAdjustColorProc();
+ 301   4      
+ 302   4                          SET_MODE_DISPLAY_SETTING_READY();
+ 303   4      
+ 304   4                          SET_MODE_RESET_TARGET(_MODE_ACTION_NO_RESET_MODE);
+ 305   4      
+ 306   4                          ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_NOSUPPORT_STATE);
+ 307   4                      }
+ 308   3                  }
+ 309   2      
+ 310   2                  break;
+ 311   2      
+ 312   2              case _MODE_STATUS_ACTIVE:
+ 313   2      
+ 314   2                  if(GET_MODE_STATE_CHANGE_MODE() == _TRUE)
+ 315   2                  {
+ 316   3                      ScalerGlobalFirstActiveProc(GET_SOURCE_TYPE(g_ucSearchIndex), SysSourceGetInputPort());
+ 317   3                      UserCommonInterfaceOsdActiveProc();
+ 318   3                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 319   3                      SysSourceFirstActiveProc();
+ 320   3                  }
+ 321   2      
+ 322   2                  ScalerSyncActiveProc(GET_SOURCE_TYPE(g_ucSearchIndex));
+ 323   2      
+ 324   2      
+ 325   2      #if(((_DDR3_PHASE_CALIBRATION == _ON) && (_MEMORY_PHASE_CALIBRATION_MODE == _MEMORY_PHASE_CALIBRATION_FRC_
+             -MODE)) && (_DDR3_PHASE_CHECK == _OFF))
+                          ScalerDDR3PhaseCalibrationFRCMode();
+              
+              #elif(_DDR1_PHASE_CALIBRATION == _ON)
+                          ScalerTimerActiveTimerEvent(SEC(60), _SCALER_TIMER_EVENT_DDR_PHASE_CNT_CHECK);
+              
+              #elif(_SDRAM_PHASE_CALIBRATION == _ON)
+                          ScalerTimerActiveTimerEvent(SEC(60), _SCALER_TIMER_EVENT_SDRAM_PHASE_CNT_CHECK);
+              
+              #endif
+ 335   2                  break;
+ 336   2      
+ 337   2              case _MODE_STATUS_NOSUPPORT:
+ 338   2      
+ 339   2                  break;
+ 340   2      
+ 341   2              case _MODE_STATUS_FACTORY:
+ 342   2      
+ 343   2                  break;
+ 344   2      
+ 345   2              default:
+ 346   2      
+ 347   2                  break;
+ 348   2          }
+ 349   1      
+ 350   1          CLR_MODE_STATE_CHANGE_MODE();
+ 351   1      }
+ 352          
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 7   
+
+ 353          //--------------------------------------------------
+ 354          // Description  : Return Mode State for other Group
+ 355          // Input Value  : None
+ 356          // Output Value : Mode State
+ 357          //--------------------------------------------------
+ 358          BYTE SysModeGetModeState(void)
+ 359          {
+ 360   1          return GET_MODE_STATE();
+ 361   1      }
+ 362          
+ 363          //--------------------------------------------------
+ 364          // Description  : Return Mode Display Setting Ready
+ 365          // Input Value  : None
+ 366          // Output Value : Mode State
+ 367          //--------------------------------------------------
+ 368          bit SysModeGetDisplaySettingReady(void)
+ 369          {
+ 370   1          return GET_MODE_DISPLAY_SETTING_READY();
+ 371   1      }
+ 372          
+ 373          //--------------------------------------------------
+ 374          // Description  : Return Mode Timing Confirm
+ 375          // Input Value  : None
+ 376          // Output Value : Mode State
+ 377          //--------------------------------------------------
+ 378          bit SysModeGetTimingConfirm(void)
+ 379          {
+ 380   1          return GET_MODE_TIMING_CONFIRM();
+ 381   1      }
+ 382          
+ 383          //--------------------------------------------------
+ 384          // Description  : Return Mode Active Ready
+ 385          // Input Value  : None
+ 386          // Output Value : Mode State
+ 387          //--------------------------------------------------
+ 388          bit SysModeGetActiveReady(void)
+ 389          {
+ 390   1          return GET_MODE_ACTIVE_READY();
+ 391   1      }
+ 392          
+ 393          //--------------------------------------------------
+ 394          // Description  : Include all required settings for Display
+ 395          // Input Value  : Input Source Type
+ 396          // Output Value : None
+ 397          //--------------------------------------------------
+ 398          bit SysModeDisplaySetting(void)
+ 399          {
+ 400   1          bit bMdomainsetup = _FALSE;
+ 401   1      
+ 402   1          // Set up testing flow
+ 403   1          DISPLAY_SETTING_TEST_INIT();
+ 404   1      
+ 405   1          // Set up variables for dispaly setting
+ 406   1          SysModeSetUpDisplayInitialization();
+ 407   1      
+ 408   1          // Set Up Input Timing to I Domain
+ 409   1          SysModeSetUpInputCapture();
+ 410   1      
+ 411   1          // Set D Domain Functions
+ 412   1          SysModeSetUpDisplayCapture();
+ 413   1      
+ 414   1      #if(_URGENT_EVENT_CHECK_MODE == _ON)
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 8   
+
+ 415   1          if((ScalerSyncCheckUrgentEvent() == _TRUE))
+ 416   1          {
+ 417   2              return _FALSE;
+ 418   2          }
+ 419   1      #endif
+ 420   1      
+ 421   1          // Set M Domain Functions
+ 422   1          bMdomainsetup = SysModeSetUpMDomain();
+ 423   1      
+ 424   1          // Start testing
+ 425   1          DISPLAY_SETTING_TEST_UPDATE();
+ 426   1      
+ 427   1          return bMdomainsetup;
+ 428   1      }
+ 429          
+ 430          //--------------------------------------------------
+ 431          // Description  : Set Up variables for display setting
+ 432          // Input Value  : None
+ 433          // Output Value : None
+ 434          //--------------------------------------------------
+ 435          void SysModeSetUpDisplayInitialization(void)
+ 436          {
+ 437   1          UserInterfaceDisplayInitialization();
+ 438   1      
+ 439   1      #if(_ULTRA_HDR_SUPPORT == _ON)
+ 440   1          ScalerSyncGetColorInfoFrame(SysSourceGetInputPort(), _DP_GET_RSV0_INFO_INITIAL);
+ 441   1      #endif
+ 442   1      
+ 443   1          // Check Panel Backlight Action
+ 444   1          if(UserCommonInterfaceGetDisplaySettingBacklightAction() == _DISABLE)
+ 445   1          {
+ 446   2      #if(_PANEL_POW_SEQ_FAST_MODE == _ON)
+                      // Turn off backlight to prevent garbage
+                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+              #else
+ 450   2              // Turn off backlight to prevent garbage
+ 451   2              UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+ 452   2      #endif
+ 453   2          }
+ 454   1      
+ 455   1          SysModeSetupIDomainIniValue();
+ 456   1      
+ 457   1      #if(_M_DOMAIN_IMG_CMP_SUPPORT == _ON)
+                  ScalerImgCmpDecmpPowerControl(_ON);
+              #endif
+ 460   1      
+ 461   1          // Set custom DVF freq.
+ 462   1          UserCommonDisplayGetMDomainCustomInfo(&g_stDisplayCustomizedData);
+ 463   1      
+ 464   1      #if(_RTK_ADVANCED_MOTION_BLUR_REDUCTION_SUPPORT == _ON)
+                  UserCommonInterfaceAdjustRtkAdvMbr();
+              #endif
+ 467   1      
+ 468   1          // Check Case to Disable Global Double Buffer
+ 469   1          if(SysModeCheckToDisableGlobalDoubleBuffer() == _TRUE)
+ 470   1          {
+ 471   2              ScalerGlobalDoubleBufferEnable(_DISABLE);
+ 472   2          }
+ 473   1      
+ 474   1      #if(_DISPLAY_ROTATION_SUPPORT == _ON)
+ 475   1          // Set rotation
+ 476   1          SET_ROT_TYPE(UserInterfaceGetRotationDegree());
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 9   
+
+ 477   1          SET_ROT_DISP_SIZE(UserInterfaceGetRotationDisplayType());
+ 478   1      #endif
+ 479   1      
+ 480   1      #if(_DISP_LATENCY_ADJUST_SUPPORT == _ON)
+                  // Set display latency ratio; 0 if rotation is enabled
+              #if(_DISPLAY_ROTATION_SUPPORT == _ON)
+                  if(GET_ROT_TYPE() != _ROT_DISABLE)
+                  {
+                      SET_DISP_LATENCY_RATIO(0);
+                  }
+                  else
+              #endif
+                  {
+                      SET_DISP_LATENCY_RATIO(UserInterfaceGetDisplayLatencyRatio());
+                  }
+              #endif
+ 493   1      
+ 494   1      #if(_M_DOMAIN_IMG_CMP_SUPPORT == _ON)
+              #if(_HW_M_DOMAIN_IMG_CMP_TYPE == _M_DOMAIN_IMG_CMP_GEN_1)
+                  ScalerGlobalEnableUnderflowMonitor(_DISABLE);
+              #endif
+              #endif
+ 499   1      
+ 500   1      #if(_FRC_SUPPORT == _ON)
+ 501   1          // Disable FRC in change timing / m-domain check fail
+ 502   1          if(ScalerGlobalGetDBStatus() == _FALSE)
+ 503   1          {
+ 504   2              // FRC Disable M1/M2 Capture/Display
+ 505   2              ScalerFRCEn(_FRC_CAP_DISP_ALL, _DISABLE);
+ 506   2      
+ 507   2              // Set Frame sync with line buffer mode
+ 508   2              ScalerFRCSetDDomainSourceSelect(_DDOMAIN_SRC_FRAM_FRAME_SYNC_MODE);
+ 509   2          }
+ 510   1      
+ 511   1      
+ 512   1      #if(_DISPLAY_ROTATION_SUPPORT == _ON)
+ 513   1      
+ 514   1      #if((_MEMORY_TYPE_CONFIG == _MEMORY_DDR2) && (_MEMORY_SIZE_CONFIG == _16M_16BIT_DDR2_2PCS))
+ 515   1          // switch DDR2 mux
+ 516   1          ScalerDDR2RotationSetClientMux();
+ 517   1      #endif
+ 518   1      
+ 519   1      #if(_DISPLAY_ROTATION_TYPE == _DISPLAY_ROTATION_GEN_I)
+                  // Disable FRC
+                  ScalerRotationSetFRCEn(_FRC_ALL_ONOFF, _DISABLE);
+              
+                  // Use information form Frame-Sync Mode
+                  ScalerRotationSetDDomainSourceSelect(_DDOMAIN_SRC_FRAM_FRAME_SYNC_MODE);
+              #endif
+ 526   1      #endif
+ 527   1      #endif  // End of #if(_FRC_SUPPORT == _ON)
+ 528   1      }
+ 529          
+ 530          //--------------------------------------------------
+ 531          // Description  : Set Up stuffs into I-Domain
+ 532          // Input Value  : Timing Info Into VGIP
+ 533          // Output Value : None
+ 534          //--------------------------------------------------
+ 535          void SysModeSetUpInputCapture(void)
+ 536          {
+ 537   1          UserCommonInterfaceAdjustInputTiming();
+ 538   1      
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 10  
+
+ 539   1          ScalerIDomainVgipSetInputCapture();
+ 540   1      }
+ 541          
+ 542          //--------------------------------------------------
+ 543          // Description  : Set Up I-Domain
+ 544          // Input Value  : Timing Info Into D Domain
+ 545          // Output Value : None
+ 546          //--------------------------------------------------
+ 547          void SysModeSetUpDisplayCapture(void)
+ 548          {
+ 549   1          // Initialize Display Timing
+ 550   1          SysModeDisplayTimingInitial();
+ 551   1      
+ 552   1          UserCommonInterfaceAdjustDisplayTiming();
+ 553   1      
+ 554   1          // Check Display Timing
+ 555   1          ScalerMDomainCheckDisplayFormat();
+ 556   1      }
+ 557          
+ 558          //--------------------------------------------------
+ 559          // Description  : Set Up M-Domain
+ 560          // Input Value  : Timing Info Into M Domain
+ 561          // Output Value : None
+ 562          //--------------------------------------------------
+ 563          bit SysModeSetUpMDomain(void)
+ 564          {
+ 565   1          if(ScalerMDomainControl() == _FALSE)
+ 566   1          {
+ 567   2              return _FALSE;
+ 568   2          }
+ 569   1      
+ 570   1          return _TRUE;
+ 571   1      }
+ 572          
+ 573          //--------------------------------------------------
+ 574          // Description  : Mode Reset
+ 575          // Input Value  : Reset Target
+ 576          // Output Value : None
+ 577          //--------------------------------------------------
+ 578          void SysModeResetState(BYTE ucResetTarget)
+ 579          {
+ 580   1          DebugMessageSystem("SysModeResetState!!", ucResetTarget);
+ 581   1      
+ 582   1          switch(ucResetTarget)
+ 583   1          {
+ 584   2              case _MODE_ACTION_RESET_TO_SEARCH:
+ 585   2      
+ 586   2                  // User Reset Process
+ 587   2                  UserCommonInterfaceOsdResetProc();
+ 588   2      
+ 589   2                  // Clear Source Ready Flag
+ 590   2                  SysSourceInfoReset();
+ 591   2      
+ 592   2                  // Clear Measure Ready Flag
+ 593   2                  CLR_MODE_TIMING_CONFIRM();
+ 594   2      
+ 595   2                  // Clear M Domain Ready Flag
+ 596   2                  CLR_MODE_DISPLAY_SETTING_READY();
+ 597   2      
+ 598   2                  // Clear No Wait For Active Flag
+ 599   2                  CLR_MODE_NO_WAIT_FOR_ACTIVE();
+ 600   2      
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 11  
+
+ 601   2                  // Clear Mode Active Ready Flag
+ 602   2                  CLR_MODE_ACTIVE_READY();
+ 603   2      
+ 604   2                  SysModeSetFreeRun();
+ 605   2      
+ 606   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_ACTIVE_STATE);
+ 607   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_NOSIGNAL_STATE);
+ 608   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_NOSUPPORT_STATE);
+ 609   2      
+ 610   2                  break;
+ 611   2      
+ 612   2              case _MODE_ACTION_RESET_TO_DISPLAY_SETTING_WITHOUT_FORCETOBG:
+ 613   2              case _MODE_ACTION_RESET_TO_DISPLAY_SETTING:
+ 614   2      
+ 615   2                  if(GET_MODE_STATE() != _MODE_STATUS_ACTIVE)
+ 616   2                  {
+ 617   3                      // User Reset Process
+ 618   3                      UserCommonInterfaceOsdResetProc();
+ 619   3                  }
+ 620   2      
+ 621   2                  // Clear M Domain Ready Flag
+ 622   2                  CLR_MODE_DISPLAY_SETTING_READY();
+ 623   2      
+ 624   2                  // Set No Wait For Active Flag
+ 625   2                  SET_MODE_NO_WAIT_FOR_ACTIVE();
+ 626   2      
+ 627   2                  // Clear Mode Active Ready Flag
+ 628   2                  CLR_MODE_ACTIVE_READY();
+ 629   2      
+ 630   2                  break;
+ 631   2      
+ 632   2              case _MODE_ACTION_RESET_TO_NOSUPPORT:
+ 633   2      
+ 634   2                  if(GET_MODE_STATE() == _MODE_STATUS_DISPLAY_SETTING)
+ 635   2                  {
+ 636   3                      // Clear M Domain Ready Flag
+ 637   3                      CLR_MODE_DISPLAY_SETTING_READY();
+ 638   3      
+ 639   3                      SysModeSetFreeRun();
+ 640   3                  }
+ 641   2      
+ 642   2                  break;
+ 643   2      
+ 644   2              case _MODE_ACTION_RESET_TO_POWER_SAVING:
+ 645   2      
+ 646   2                  // User Reset Process
+ 647   2                  UserCommonInterfaceOsdResetProc();
+ 648   2      
+ 649   2                  // Clear Source Ready Flag
+ 650   2                  SET_SOURCE_TYPE(g_ucSearchIndex, _SOURCE_NONE);
+ 651   2      
+ 652   2                  // Clear Source Judge
+ 653   2                  CLR_SOURCE_JUDGE(g_ucSearchIndex);
+ 654   2      
+ 655   2      #if(_SOURCE_BACKGROUND_DETECT_SUPPORT == _ON)
+                          CLR_SOURCE_BG_JUDGE(g_ucBgDetectIndex);
+              #endif
+ 658   2      
+ 659   2                  // Clear Measure Ready Flag
+ 660   2                  CLR_MODE_TIMING_CONFIRM();
+ 661   2      
+ 662   2                  // Clear M Domain Ready Flag
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 12  
+
+ 663   2                  CLR_MODE_DISPLAY_SETTING_READY();
+ 664   2      
+ 665   2                  // Clear No Wait For Active Flag
+ 666   2                  CLR_MODE_NO_WAIT_FOR_ACTIVE();
+ 667   2      
+ 668   2                  // Clear Mode Active Ready Flag
+ 669   2                  CLR_MODE_ACTIVE_READY();
+ 670   2      
+ 671   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_ACTIVE_STATE);
+ 672   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_NOSIGNAL_STATE);
+ 673   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_NOSUPPORT_STATE);
+ 674   2      
+ 675   2                  break;
+ 676   2      
+ 677   2              case _MODE_ACTION_RESET_TO_POWER_OFF:
+ 678   2      
+ 679   2                  // User Reset Process
+ 680   2                  UserCommonInterfaceOsdResetProc();
+ 681   2      
+ 682   2                  // Clear Source Ready Flag
+ 683   2                  SysSourceInfoReset();
+ 684   2      
+ 685   2                  CLR_SOURCE_HP_SOURCE_JUDGE();
+ 686   2      
+ 687   2                  // Clear Measure Ready Flag
+ 688   2                  CLR_MODE_TIMING_CONFIRM();
+ 689   2      
+ 690   2                  // Clear M Domain Ready Flag
+ 691   2                  CLR_MODE_DISPLAY_SETTING_READY();
+ 692   2      
+ 693   2                  // Clear No Wait For Active Flag
+ 694   2                  CLR_MODE_NO_WAIT_FOR_ACTIVE();
+ 695   2      
+ 696   2                  // Clear Mode Active Ready Flag
+ 697   2                  CLR_MODE_ACTIVE_READY();
+ 698   2      
+ 699   2                  // Judge Reset Process
+ 700   2                  ScalerTimerCancelTimerEvent(_SYSTEM_TIMER_EVENT_JUDGE_ACTIVE_STATE);
+ 701   2      
+ 702   2                  break;
+ 703   2      
+ 704   2              default:
+ 705   2                  break;
+ 706   2          }
+ 707   1      
+ 708   1          ScalerGlobalResetProc(ucResetTarget, SysSourceGetInputPort());
+ 709   1      }
+ 710          
+ 711          //--------------------------------------------------
+ 712          // Description  : Set Free Run Mode
+ 713          // Input Value  : None
+ 714          // Output Value : None
+ 715          //--------------------------------------------------
+ 716          void SysModeSetFreeRun(void)
+ 717          {
+ 718   1          DWORD ulDclk = GET_D_CLK_FREQ();
+ 719   1      
+ 720   1          // Set D Domain Timing
+ 721   1          SysModeDisplayTimingInitial();
+ 722   1      
+ 723   1          // Disable Global Double Buffer
+ 724   1          ScalerGlobalDoubleBufferEnable(_DISABLE);
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 13  
+
+ 725   1      
+ 726   1          ScalerMDomainSetDisplayFormat(_FREE_RUN_NO_INPUT);
+ 727   1      
+ 728   1          // Enable Spread Spectrum
+ 729   1          ScalerPLLSetDPLLSSC(_DCLK_SPREAD_SPEED, _DCLK_SPREAD_RANGE);
+ 730   1      
+ 731   1          if(ulDclk != GET_D_CLK_FREQ())
+ 732   1          {
+ 733   2      #if(_PANEL_STYLE == _PANEL_VBO)
+ 734   2      #if(_PANEL_VBO_CHANGE_CLK_RESET_TYPE == _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN)
+                      // Turn off Backlight Power to prevent garbage
+                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+              #else
+ 738   2              // Turn off Panel Power to prevent garbage
+ 739   2              UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+ 740   2      #endif
+ 741   2      #elif(_PANEL_STYLE == _PANEL_DPTX)
+              #if(_PANEL_POW_SEQ_FAST_MODE == _ON)
+                      // Turn off backlight to prevent garbage
+                      UserCommonInterfacePanelPowerAction(_BACKLIGHT_OFF);
+              #else
+                      // Turn off backlight to prevent garbage
+                      UserCommonInterfacePanelPowerAction(_PANEL_OFF);
+              #endif
+              #endif
+ 750   2          }
+ 751   1      }
+ 752          
+ 753          //--------------------------------------------------
+ 754          // Description  : Mode State Change Flag for OSD
+ 755          // Input Value  : None
+ 756          // Output Value : None
+ 757          //--------------------------------------------------
+ 758          bit SysModeGetModeStateChange(void)
+ 759          {
+ 760   1          return GET_MODE_STATE_CHANGE_OSD();
+ 761   1      }
+ 762          
+ 763          //--------------------------------------------------
+ 764          // Description  : Clr Mode State Change Flag for OSD
+ 765          // Input Value  : None
+ 766          // Output Value : None
+ 767          //--------------------------------------------------
+ 768          void SysModeClrModeStateChange(void)
+ 769          {
+ 770   1          CLR_MODE_STATE_CHANGE_OSD();
+ 771   1      }
+ 772          
+ 773          
+ 774          //--------------------------------------------------
+ 775          // Description  : Set Reset Status for User
+ 776          // Input Value  : Target Reset State
+ 777          // Output Value : None
+ 778          //--------------------------------------------------
+ 779          void SysModeSetResetTarget(EnumModeAction enumResetTarget)
+ 780          {
+ 781   1          if(GET_MODE_STATE() == _MODE_STATUS_INITIAL)
+ 782   1          {
+ 783   2              return;
+ 784   2          }
+ 785   1      
+ 786   1          SET_MODE_RESET_TARGET(enumResetTarget);
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 14  
+
+ 787   1      }
+ 788          
+ 789          //--------------------------------------------------
+ 790          // Description  : Let User Specify Which Color Space is used
+ 791          // Input Value  : Target Color Space, enumDBApply
+ 792          // Output Value : None
+ 793          //--------------------------------------------------
+ 794          void SysModeColorSpaceConvert(EnumColorSpace enumColorFormat, EnumDBApply enumDBApply)
+ 795          {
+ 796   1          enumDBApply = enumDBApply;
+ 797   1          enumColorFormat = enumColorFormat;
+ 798   1      
+ 799   1      #if(_VGA_SUPPORT == _ON)
+                  if(GET_SOURCE_TYPE(g_ucSearchIndex) == _SOURCE_VGA)
+                  {
+                      ScalerADCClampMode(enumColorFormat);
+              
+                      // Download adc data from NVRam
+                      UserCommonNVRamLoadADCSetting(enumColorFormat);
+              
+                      // Gain Offset Adjust.
+                      UserCommonInterfaceAdjustADCData();
+                  }
+              #endif
+ 811   1      
+ 812   1      #if((_DVI_SUPPORT == _ON) && (_UNDERSCAN_SUPPORT == _ON))
+                  if(GET_SOURCE_TYPE(g_ucSearchIndex) == _SOURCE_DVI)
+                  {
+                      // Adjust porch color for DVI
+                      ScalerTMDSSetPorchColor(SysSourceGetInputPort(), enumColorFormat);
+                  }
+              #endif
+ 819   1      
+ 820   1      #if(_COLOR_IP_COLOR_CONVERT == _ON)
+ 821   1          // Wait for D-domain DB apply ready
+ 822   1          ScalerColorWaitDDomainDBApply();
+ 823   1      
+ 824   1      #if((_M_DOMAIN_FORCE_YUV_FORMAT == _ON) || (_GLOBAL_COLOR_CONVERT_HUE_SATURATION_FUNCTION == _ON))
+                  ScalerColorMdomainForceYUV(enumColorFormat, enumDBApply);
+              #elif(_ULTRA_VIVID_SUPPORT == _ON)
+                  ScalerColorSpaceConvertUltraVividSupport(enumColorFormat, enumDBApply);
+              #else
+ 829   1          ScalerColorSpaceConvert(enumColorFormat, enumDBApply);
+ 830   1      #endif
+ 831   1      #endif // End of #if(_COLOR_IP_COLOR_CONVERT == _ON)
+ 832   1      }
+ 833          
+ 834          //--------------------------------------------------
+ 835          // Description  : Give Display Timing Initial Value
+ 836          // Input Value  : None
+ 837          // Output Value : None
+ 838          //--------------------------------------------------
+ 839          void SysModeDisplayTimingInitial(void)
+ 840          {
+ 841   1          // Set Up Display Timing According to Panel Spec
+ 842   1          SET_MDOMAIN_OUTPUT_HWIDTH(_PANEL_DH_WIDTH);
+ 843   1          SET_MDOMAIN_OUTPUT_HBWIDTH(_PANEL_DH_WIDTH);
+ 844   1          SET_MDOMAIN_OUTPUT_HTOTAL((_PANEL_DH_TOTAL - (_PANEL_DH_TOTAL % _DHTOTAL_MULTIPLE)));
+ 845   1          SET_MDOMAIN_OUTPUT_HSTART(_PANEL_DH_START);
+ 846   1          SET_MDOMAIN_OUTPUT_HBSTART(_PANEL_DH_START);
+ 847   1      
+ 848   1          SET_MDOMAIN_OUTPUT_VHEIGHT(_PANEL_DV_HEIGHT);
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 15  
+
+ 849   1          SET_MDOMAIN_OUTPUT_VBHEIGHT(_PANEL_DV_HEIGHT);
+ 850   1          SET_MDOMAIN_OUTPUT_VTOTAL(_PANEL_DV_TOTAL);
+ 851   1          SET_MDOMAIN_OUTPUT_VSTART(_PANEL_DV_START);
+ 852   1          SET_MDOMAIN_OUTPUT_VBSTART(_PANEL_DV_START);
+ 853   1      
+ 854   1          SET_OUTPUT_VFREQ(_PANEL_TYP_FRAME_RATE);
+ 855   1      }
+ 856          
+ 857          //--------------------------------------------------
+ 858          // Description  : Check To Disable Global Double Buffer
+ 859          // Input Value  : None
+ 860          // Output Value : _TRUE: Disale Global Global Double Buffer
+ 861          //--------------------------------------------------
+ 862          bit SysModeCheckToDisableGlobalDoubleBuffer(void)
+ 863          {
+ 864   1          if(ScalerGlobalGetDBStatus() == _TRUE)
+ 865   1          {
+ 866   2      #if(_DISPLAY_ROTATION_SUPPORT == _ON)
+ 867   2              if(GET_ROT_TYPE() != UserInterfaceGetRotationDegree())
+ 868   2              {
+ 869   3                  return _TRUE;
+ 870   3              }
+ 871   2      #endif
+ 872   2              if(GET_MEMORY_DVF_SELECT() != ScalerDisplaySelectDVFMode())
+ 873   2              {
+ 874   3                  return _TRUE;
+ 875   3              }
+ 876   2          }
+ 877   1          return _FALSE;
+ 878   1      }
+ 879          
+ 880          //--------------------------------------------------
+ 881          // Description  : Set I domain initial value and check
+ 882          // Input Value  : None
+ 883          // Output Value : None
+ 884          //--------------------------------------------------
+ 885          void SysModeSetupIDomainIniValue(void)
+ 886          {
+ 887   1          // Copy Input Timing to I Domain Timing as initial value
+ 888   1          SET_MDOMAIN_INPUT_STRUCTURE(g_stInputTimingData);
+ 889   1      
+ 890   1      #if((_MEASURE_ADJUSTED_IHF_SUPPORT == _ON) || (_MEASURE_ADJUSTED_IVF_SUPPORT == _ON))
+ 891   1      #if(_VGA_SUPPORT == _ON)
+                  if(SysSourceGetSourceType() != _SOURCE_VGA)
+              #endif
+ 894   1          {
+ 895   2              ScalerMDomainUpdateInputInfo();
+ 896   2          }
+ 897   1      #endif
+ 898   1      //SET_MDOMAIN_INPUT_VTOTAL((DWORD)GET_MDOMAIN_INPUT_VHEIGHT() * 105 / 100);
+ 899   1      
+ 900   1      #if(_FORMAT_CONVERSION_SUPPORT == _ON)
+ 901   1          if(ScalerFmtCnvFtoPGetStatus() == _TRUE)
+ 902   1          {
+ 903   2              if(GET_MDOMAIN_INPUT_VHEIGHT_ODD() == _TRUE)
+ 904   2              {
+ 905   3                  SET_MDOMAIN_INPUT_VHEIGHT(GET_MDOMAIN_INPUT_VHEIGHT() - 2);
+ 906   3              }
+ 907   2      
+ 908   2              SET_MDOMAIN_INPUT_VSTART(GET_MDOMAIN_INPUT_VSTART() - (GET_MDOMAIN_INPUT_VSTART() % 2));
+ 909   2          }
+ 910   1      #endif
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 16  
+
+ 911   1      
+ 912   1      #if(_FREESYNC_SUPPORT == _ON)
+                  SysModeDrrSetMdomainInfo();
+              #endif
+ 915   1      
+ 916   1          // Add Required Functions to Modify Input Timing
+ 917   1          if(GET_MDOMAIN_INPUT_VSTART() > (GET_MDOMAIN_INPUT_VTOTAL() - GET_MDOMAIN_INPUT_VHEIGHT()))
+ 918   1          {
+ 919   2              SET_MDOMAIN_INPUT_VSTART((GET_MDOMAIN_INPUT_VTOTAL() - GET_MDOMAIN_INPUT_VHEIGHT()));
+ 920   2          }
+ 921   1      
+ 922   1          if((GET_MDOMAIN_INPUT_HWIDTH() % 2) != 0x00)
+ 923   1          {
+ 924   2              // We should let H-width is even integer in case of the width of memory FIFO read width must even 
+             -integer.
+ 925   2              SET_MDOMAIN_INPUT_HWIDTH(GET_MDOMAIN_INPUT_HWIDTH() + 1);
+ 926   2          }
+ 927   1      //    SET_MDOMAIN_INPUT_VTOTAL(GET_MDOMAIN_INPUT_VSTART() + GET_MDOMAIN_INPUT_VHEIGHT() + 3);
+ 928   1      }
+ 929          
+ 930          #if(_FREESYNC_SUPPORT == _ON)
+              //--------------------------------------------------
+              // Description  : Set Drr Mdomain Info
+              // Input Value  : None
+              // Output Value : None
+              //--------------------------------------------------
+              void SysModeDrrSetMdomainInfo(void)
+              {
+                  EnumSourceSearchPort enumSearchPort = SysSourceGetInputPort();
+              
+              #if(_FREESYNC_SUPPORT == _ON)
+                  ScalerFreeSyncSPDInfoReceive(enumSearchPort);
+              #endif
+              
+                  if(GET_FREESYNC_ENABLED() == _TRUE)
+                  {
+                      WORD usIVfreq = SysModeDrrGetIVFreq(enumSearchPort);
+              
+                      if(usIVfreq != 0)
+                      {
+                          SET_FREESYNC_IVF_INFO(_TRUE);
+                          SET_MDOMAIN_INPUT_VTOTAL((DWORD)GET_MDOMAIN_INPUT_HFREQ() * 1000 / usIVfreq);
+                      }
+                      else
+                      {
+                          SET_FREESYNC_IVF_INFO(_FALSE);
+                          SET_MDOMAIN_INPUT_VTOTAL((DWORD)GET_MDOMAIN_INPUT_VHEIGHT() * 105 / 100);
+              
+                          usIVfreq = ((DWORD)GET_MDOMAIN_INPUT_HFREQ() * 1000 / GET_MDOMAIN_INPUT_VHEIGHT());
+              
+                          if(usIVfreq > _PANEL_FREESYNC_MAX_FRAME_RATE)
+                          {
+                              usIVfreq = _PANEL_FREESYNC_MAX_FRAME_RATE;
+                          }
+                      }
+              
+                      DebugMessageScaler("DRR new Vfreq max", usIVfreq);
+                      SET_MDOMAIN_INPUT_VFREQ(usIVfreq);
+                  }
+              }
+              
+              //--------------------------------------------------
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 17  
+
+              // Description  : Get DRR IVF
+              // Input Value  : Input port
+              // Output Value : IVF in DRR; 0 if not available
+              //--------------------------------------------------
+              WORD SysModeDrrGetIVFreq(EnumSourceSearchPort enumSearchPort)
+              {
+                  WORD usInputPixelClk = 0;
+              
+                  enumSearchPort = enumSearchPort;
+              
+                  if(GET_FREESYNC_VFREQ_MAX() == 590)
+                  {
+                      SET_FREESYNC_VFREQ_MAX(600);
+                  }
+              
+                  if(ScalerFreeSyncVfreqMaxInfoEnable(enumSearchPort, GET_PORT_TYPE(SysSourceGetInputPortType(enumSearch
+             -Port))) == _TRUE)
+                  {
+                      DebugMessageScaler("DRR Get IVF from SPD info", GET_FREESYNC_VFREQ_MAX());
+                      return GET_FREESYNC_VFREQ_MAX();
+                  }
+              
+                  if(GET_FREESYNC_ENABLED() == _TRUE)
+                  {
+                      BYTE *pucReadArray = UserCommonInterfaceEdidGetDDCRamAddress(enumSearchPort);
+                      WORD usIVfreq = 0;
+              
+                      if(pucReadArray == _NULL_POINTER)
+                      {
+                          DebugMessageScaler("warning!!!!  Without EDID, Not Get IVF from EDID analysis", 0);
+                      }
+                      else
+                      {
+                          StructFreeSyncSourceInfo stSourceInfo;
+                          memset(&stSourceInfo, 0, sizeof(stSourceInfo));
+              
+                          ScalerFreeSyncGetSourceInfo(enumSearchPort, GET_PORT_TYPE(SysSourceGetInputPortType(enumSearch
+             -Port)), &stSourceInfo);
+              
+              #if(_DP_SUPPORT == _ON)
+                          if(GET_PORT_TYPE(SysSourceGetInputPortType(enumSearchPort)) == _PORT_DP)
+                          {
+                              usInputPixelClk = GET_DP_NATIVE_INPUT_PIXEL_CLK();
+                          }
+                          else
+              #endif
+                          {
+                              usInputPixelClk = ScalerSyncGetInputPixelClk();
+                          }
+              
+                          // Get IVF from EDID info, if any
+                          if(ScalerFreeSyncEdidAnalysisGetVfreqMax(pucReadArray, usInputPixelClk, &stSourceInfo, &usIVfr
+             -eq) == _TABLE_SEARCHING_WITH_IVF_MAX)
+                          {
+                              DebugMessageScaler("DRR Get IVF from EDID analysis", usIVfreq);
+                              return usIVfreq;
+                          }
+                          else
+                          {
+                              DebugMessageScaler("warning!!!!  Not Get IVF from EDID analysis", 0);
+                          }
+                      }
+C51 COMPILER V9.60.0.0   SYSMODE                                                           10/18/2025 16:52:27 PAGE 18  
+
+              
+                      // Get IVF from user info, if any
+                      if(UserCommonInterfaceFreeSyncGetIVFmax(&usIVfreq, enumSearchPort) == _TABLE_SEARCHING_WITH_IVF_MA
+             -X)
+                      {
+                          DebugMessageScaler("DRR Get IVF from user define", usIVfreq);
+                          return usIVfreq;
+                      }
+                  }
+              
+                  DebugMessageScaler("DRR not Get IVF", 0);
+                  return 0;
+              }
+              
+              #endif
+1045          
+1046          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1072    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      3      11
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,216 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+#if(_PANEL_TYPE == _AUO_M315DVR012_EPD_HBR1_QHD75)
+// TEST   PLease check
+//----------------------------------------------------------------------------------------------------
+// ID Code      : _LG_LM270WR2_EDP_UHD_60HZ.h No.0000
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+#define _PANEL_PRESET_MODE_FRAME_RATE            750//600
+
+//////////////////
+// General Info //
+//////////////////
+
+#define _PANNEL_NAME                            _P_,_A_,_N_,_E_,_L_,_,_COLON__,_,_M__,_3__,_1__,_5__,_D__,_V__,_R__,_0__,_1__,_2__
+//--------------------------------------------------
+// Definitions for Panel Style
+//--------------------------------------------------
+#define _PANEL_STYLE                            _PANEL_DPTX
+
+//--------------------------------------------------
+// Definitions for DPTx Panel Configuration
+//--------------------------------------------------
+#define _PANEL_DPTX_LINK_RATE                   _PANEL_DPTX_LINK_HBR
+#define _PANEL_DPTX_LANE_NUMBER                 _PANEL_DPTX_LANE_NUMBER_4
+#define _PANEL_DPTX_VENDOR_SPECIFIC_TYPE        _PANEL_DPTX_VENDOR_SPECIFIC_NONE
+
+//--------------------------------------------------
+// Definitions for MultiPanel Support
+//--------------------------------------------------
+#define _PANEL_EXIST_MULTIPANEL                 _OFF
+
+
+//--------------------------------------------------
+// Definitions for Panel Manufacturer
+//--------------------------------------------------
+#define _PANEL_MANUFACTURER                     _PANEL_LGD
+
+//--------------------------------------------------
+// Definitions for Panel Display Color Depth
+//--------------------------------------------------
+#define _PANEL_DISP_BIT_MODE                    _PANEL_DISP_24_BIT
+
+//--------------------------------------------------
+// Definitions for Maximum Panel Frame Rate (Unit: 0.1 Hz)
+//--------------------------------------------------
+#define _PANEL_TYP_FRAME_RATE                   600
+#define _PANEL_MAX_FRAME_RATE                   760
+#define _PANEL_MIN_FRAME_RATE                   480
+
+#if(_FREESYNC_SUPPORT == _ON)
+//--------------------------------------------------
+// FREESYNC Maximum Panel Frame Rate (Unit: 0.1 Hz)
+//--------------------------------------------------
+#define _PANEL_FREESYNC_MAX_FRAME_RATE          750
+#define _PANEL_FREESYNC_MIN_FRAME_RATE          480
+#endif
+
+///////////////
+// Parameter //
+///////////////
+
+//--------------------------------------------------
+// Definitions for Panel Parameter
+//--------------------------------------------------
+#define _PANEL_DH_START                         48
+#define _PANEL_DH_WIDTH                         2560
+#define _PANEL_DH_END                           2608
+
+#define _PANEL_DH_TOTAL                         2720
+#define _PANEL_DH_TOTAL_MAX                     4160
+#define _PANEL_DH_TOTAL_MIN                     2660//2716
+
+#define _PANEL_DV_START                         6
+#define _PANEL_DV_HEIGHT                        1440
+#define _PANEL_DV_END                           1446
+
+#define _PANEL_DV_TOTAL                         1481
+#define _PANEL_DV_TOTAL_MAX                     8000//3753
+#define _PANEL_DV_TOTAL_MIN                     1456//1470
+
+#define _PANEL_DH_SYNC_WIDTH                    8
+#define _PANEL_DV_SYNC_HEIGHT                   2
+
+#define _PANEL_PIXEL_CLOCK                      241
+#define _PANEL_PIXEL_CLOCK_MAX                  400//306
+#define _PANEL_PIXEL_CLOCK_MIN                  191
+//640x480“Ï≥°---ÂÂÂÂDCLK:559MHz
+
+#define _PANEL_POWER_ON_T1                      20
+#define _PANEL_POWER_ON_T2                      80
+#define _PANEL_POWER_ON_T3                      510
+
+#define _PANEL_POWER_OFF_T4                     200
+#define _PANEL_POWER_OFF_T5                     15
+#define _PANEL_POWER_OFF_T6                     1050
+
+
+/////////////
+// Display //ScalerMDomainFSLineBufferDclkDvtotalCheck
+/////////////
+
+//--------------------------------------------------
+// Definitions for Last Line Finetune Target
+//--------------------------------------------------
+#define _LAST_LINE_TARGET                       (_PANEL_DH_TOTAL - 300)
+
+//--------------------------------------------------
+// Definitions for Frame Sync Margin (Unit: 0.1Hz)
+//--------------------------------------------------
+#define _FRAME_SYNC_MARGIN                      20
+
+//--------------------------------------------------
+// Definitions for Panel DCLK Unit
+//--------------------------------------------------
+#define _PANEL_PIXEL_CLOCK_UNIT                 _PANEL_CLOCK_MHZ
+
+
+////////////////////
+// VGA Auto Color //
+////////////////////
+
+//--------------------------------------------------
+// Definitions for ADC Gain/Offset Adjust
+//--------------------------------------------------
+#define _PANEL_ADC_OFFSET_BIAS                  (0)
+#define _PANEL_ADC_GAIN_BIAS                    (0)
+
+
+///////////////////////////
+// Color Characteristics //
+///////////////////////////
+
+#if 0
+//--------------------------------------------------
+// I Dither Option
+//--------------------------------------------------
+#define _I_DITHER_TEMP                          _ENABLE
+
+#if((_IDITHER_TYPE == _IDITHER_GEN_0_1_SEQ_TRUNCATE_2_0_BIT) || (_IDITHER_TYPE == _IDITHER_GEN_1_4_SEQ_TRUNCATE_4_2_BIT))
+#define _I_DITHER_VALUE_SIGN                    _DISABLE
+#define _I_DITHER_V_FRAME_MOD                   _DISABLE
+#define _I_DITHER_H_FRAME_MOD                   _DISABLE
+#endif
+
+#if(_IDITHER_TYPE == _IDITHER_GEN_1_4_SEQ_TRUNCATE_4_2_BIT)
+#define _I_DITHER_MULTI_SEQ_ENABLE              _DISABLE
+#define _I_DITHER_SHARE_SEQ_ENABLE              _DISABLE
+#define _I_DITHER_SERIES_SEQ_ENABLE             _DISABLE
+#define _I_DITHER_SEQ_INV_ENABLE                _DISABLE
+#define _I_DITHER_SEQ_INV_MODE                  0
+#endif
+
+#define _I_DITHER_12_TO_10_TEMP                 _I_DITHER_TEMP
+#define _I_DITHER_12_TO_10_VALUE_SIGN           _I_DITHER_VALUE_SIGN
+#define _I_DITHER_12_TO_10_V_FRAME_MOD          _I_DITHER_V_FRAME_MOD
+#define _I_DITHER_12_TO_10_H_FRAME_MOD          _I_DITHER_H_FRAME_MOD
+#define _I_DITHER_12_TO_10_MULTI_SEQ_ENABLE     _I_DITHER_MULTI_SEQ_ENABLE
+#define _I_DITHER_12_TO_10_SHARE_SEQ_ENABLE     _I_DITHER_SHARE_SEQ_ENABLE
+#define _I_DITHER_12_TO_10_SERIES_SEQ_ENABLE    _I_DITHER_SERIES_SEQ_ENABLE
+#define _I_DITHER_12_TO_10_SEQ_INV_ENABLE       _I_DITHER_SEQ_INV_ENABLE
+#define _I_DITHER_12_TO_10_SEQ_INV_MODE         _I_DITHER_SEQ_INV_MODE
+
+//--------------------------------------------------
+// D Dither Option
+//--------------------------------------------------
+#define _D_DITHER_TEMP                          _ENABLE
+
+#if((_DDITHER_TYPE == _DDITHER_GEN_0_4BIT_DITHERTBL) || (_DDITHER_TYPE == _DDITHER_GEN_1_6BIT_DITHERTBL) || (_DDITHER_TYPE == _DDITHER_GEN_3_6BIT_DITHERTBL_6BIT_PANEL))
+#define _D_DITHER_V_FRAME_MOD                   _DISABLE
+#define _D_DITHER_H_FRAME_MOD                   _DISABLE
+#endif
+
+#define _D_DITHER_MULTI_SEQ_ENABLE              _DISABLE
+#define _D_DITHER_SHARE_SEQ_ENABLE              _DISABLE
+#define _D_DITHER_SEQ_INV_ENABLE                _DISABLE
+#define _D_DITHER_SEQ_INV_MODE                  0
+
+#if((_DDITHER_TYPE == _DDITHER_GEN_1_6BIT_DITHERTBL) || (_DDITHER_TYPE == _DDITHER_GEN_3_6BIT_DITHERTBL_6BIT_PANEL))
+#define _D_DITHER_SERIES_SEQ_ENABLE             _DISABLE
+#define _D_DITHER_ADVANCE_SETTING_ENABLE        _DISABLE
+#endif
+
+
+#define _OSD_CROSS_HAIR_X_OFFSET                     (7)                 
+#define _OSD_CROSS_HAIR_Y_OFFSET                     (-2)
+
+#define _OSD_CROSS_HAIR_X_OFFSET_DOUBLE_SIZE		(-2)
+#define _OSD_CROSS_HAIR_Y_OFFSET_DOUBLE_SIZE		(0)
+
+#endif
+
+/////////////////////////
+// Color Default Table //
+/////////////////////////
+#define _PANEL_MAX_LUMINANCE                    0x62 // from OGC Tool
+#define _PANEL_MAX_FRAME_AVERAGE_LUMINANCE      0x62 // from OGC Tool
+
+//--------------------------------------------------
+// Color Default Value
+//--------------------------------------------------
+#include "./RTDColorDefaultTable/ColorTableInclude.h"
+
+#endif // End of #if(_PANEL_TYPE == _LG_LM270WR2_EDP_UHD_60HZ)
+

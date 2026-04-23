@@ -1,0 +1,219 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : User_Panel_include.h No.0000
+// Update Note  :
+//----------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------
+// Panel Include
+//--------------------------------------------------
+#include "./EXAMPLE/PANEL_NONE.h"
+#include "./EXAMPLE/PANEL_LVDS_EXAMPLE.h"
+#include "./EXAMPLE/PANEL_DPTX_EXAMPLE.h"
+#include "./EXAMPLE/PANEL_VBO_EXAMPLE.h"
+#include "./EXAMPLE/PANEL_TTL_EXAMPLE.h"
+
+#if(_PANEL_TYPE == _AUO_M350QVR010_EDP_WQHD100HZ)
+#include "106_AUO_M350QVR010_VBY_WQHD100HZ.h"
+#elif(_PANEL_TYPE == _AUO_M270HAN02_6_LVDS_FHD165HZ)
+#include "105_AUO_M270HAN02_6_LVDS_FHD165HZ.h"
+#elif(_PANEL_TYPE == _BOE_MV270QHM_NF2_EDP_HBR2_QHD165HZ)
+#include "109_BOE_MV270QHM_NF2_EDP_HBR2_4LAN_QHD165HZ.h"
+#elif(_PANEL_TYPE == _BOE_MV290VUB_NX0_LVDS_WFHD100HZ)
+#include "110_BOE_MV290VUB_NX0_LVDS_WFHD100HZ.h"
+#elif(_PANEL_TYPE == _BOE_MV238QHM_NF0_EDP_HBR2_QHD165HZ)
+#include "111_BOE_MV238QHM_NF0_EDP_HBR2_QHD165HZ.h"
+#elif(_PANEL_TYPE == _AUO_M270DAN07_2_LVDS_QHD75HZ)
+#include "112_AUO_M270DAN07_2_LVDS_QHD75HZ.h"
+#elif(_PANEL_TYPE == _BOE_MV315QHM_N40_LVDS_QHD75HZ)
+#include "113_BOE_MV315QHM_N40_LVDS_QHD75HZ.h"
+#elif(_PANEL_TYPE == _LG_LM270WQA_SSA1_EDP_QHD165HZ)
+#include "128_LG_LM270WQA_SSA1_EDP_QHD165HZ.h"
+#elif(_PANEL_TYPE == _AUO_M270DAN09_1_EDP_4LANHBR_QHD75HZ)
+#include "115_AUO_M270DAN09V0_LVDS_QHD_60HZ.h"
+#elif(_PANEL_TYPE == _AUO_M315HVR01_7_4HBR2_FHD240)
+#include "107_AUO_M315HVR01_7_4HBR2_FHD240.h"
+#elif(_PANEL_TYPE == _HKC_PN270EU01_1_4LANHBR2_QHD165HZ)
+#include "117_HKC_PN270EU01_1_4LANHBR2_QHD165HZ.h"
+#elif(_PANEL_TYPE == _M270KCAD8B_EDP_4LANEHBR2_QHD180HZ)
+#include "118_M270KCA_D8B_EDP_4LANEHBR2_QHD180HZ.h"
+#elif(_PANEL_TYPE == _AUO_M340QVR01_1_EDP_WQHD_100HZ)
+#include "127_AUO_M340QVR01_1_EDP_WQHD_100HZ.h"
+#elif(_PANEL_TYPE == _LG_LM270WQA_SSA1_EDP_QHD165HZ)
+#include "128_LG_LM270WQA_SSA1_EDP_QHD165HZ.h"
+#elif(_PANEL_TYPE == _BOE_SG2451BO1_4_VBO_FHD240HZ)
+#include "129_BOE_SG2451BO1_4_VBO_FHD240HZ.h"
+#elif(_PANEL_TYPE == _HKC_SN270CS03_1_V11_FHD180HZ)
+#include "151_SN270CS03_1_V11.h"
+#elif(_PANEL_TYPE == _BOE_MV238QHB_NF0_EDP_HBR2_QHD165HZ)
+#include "152_BOE_MV238QHB_NF0_EDP_HBR2_QHD165HZ.h"
+#elif(_PANEL_TYPE == _HKC_SN270GS03_1_UHD_60HZ_)
+#include "168_HKC_SN270GS03_1_UHD_60HZ.h"
+
+#elif(_PANEL_TYPE == _ME270QHB_NM1_EDP_8LANEHBR_QHD180HZ)
+#include "169_ME270QHB_NM1_EDP_4LANEHBR2_QHD180HZ.h"
+
+
+#elif(_PANEL_TYPE == _ME270QHB_NF5_EDP_4LANEHBR2_QHD180HZ)
+#include "170_ME270QHB_NF2_EDP_4LANEHBR2_QHD180HZ.h"
+
+
+
+#elif(_PANEL_TYPE == _ME270QHB_NF0_EDP_8LANEHBR_QHD180HZ)
+#include "171_ME270QHB_NF0_EDP_4LANEHBR2_QHD180HZ.h"
+
+
+#elif(_PANEL_TYPE == _CSOT_SG2451B01_2_8LANVBY_FHD280HZ)
+#include "172_CSOT_SG2451B01_2_8LANVBY_FHD280HZ.h"
+
+
+
+#elif(_PANEL_TYPE == _INN_M315KCA_E7B_EDP_HBR2_QHD165HZ)
+#include "167_INN_M315KCA_E7B_EDP_HBR2_QHD165HZ.h"
+#elif(_PANEL_TYPE == _AUO_SN270ES01_1_EDP_4LANEHBR2_QHD180HZ)
+#include "120_SN270ES01_1_EDP_4LANEHBR2_QHD180HZ.h"
+#elif(_PANEL_TYPE == _SN245ES01_2_EDP_4LANEHBR2_QHD180HZ)
+#include "130_SN245ES01_2_EDP_4LANEHBR2_QHD180HZ.h"
+#elif(_PANEL_TYPE == _BOE_MV270FHM_NF1_EDP4LANEHBR2_FHD240HZ)
+#include "131_BOE_MV270FHM_NF1_EDP4LANEHBR2_FHD240HZ.h"
+#elif(_PANEL_TYPE == _CSOT_SG2701G03_3_4LAN_HBR2_QHD180HZ)
+#include "132_CSOT_SG2701G03_3_4LAN_HBR2_QHD180HZ.h"
+
+
+#else
+#include "00_CMO_LVDS_17.h"
+#include "01_CMO_LVDS_19_WXGA.h"
+#include "02_AU_LVDS_21_5_WUXGA.h"
+#include "03_AU_LVDS_27_WUXGA_FREESYNC.h"
+#include "04_MULTIPANEL_LVDS_21_5_WUXGA.h"
+#include "05_AU_LVDS_22_WSXGA.h"
+#include "06_AU_LVDS_22_WSXGA_QC.h"
+#include "07_AU_LVDS_23_WUXGA.h"
+#include "08_AU_LVDS_24_WUXGA.h"
+#include "09_AU_DP_21_5_WUXGA.h"
+#include "10_LG_LED_DP_27_UHD.h"
+#include "14_LG_LED_LVDS_27_WUXGA.h"
+#include "15_SAMSUNG_LED_DP_15_6_UHD.h"
+#include "16_AUO_LED_DP_32_UHD.h"
+#include "17_SAMSUNG_LED_DP_23_6_UHD.h"
+#include "18_INNOLUX_LED_VBO_28_UHD.h"
+#include "19_LG_LED_LVDS_23_UHD.h"
+#include "20_INNOLUX_LED_VBO_40_UHD.h"
+#include "21_AU_LVDS_21_5_WUXGA_FREESYNC.h"
+#include "22_LG_LED_DP_27_QQHD.h"
+#include "23_LG_LED_DP_27_QHD.h"
+#include "24_LG_LED_DP_27_QHD_QC.h"
+#include "25_AU_DP_21_5_WUXGA_FREESYNC.h"
+#include "26_INNOLUX_TTL_7.h"
+#include "27_MULTIPANEL_DP_21_5_WUXGA.h"
+#include "28_LG_LED_DP_17_QHD.h"
+#include "29_LG_LED_DP_34_WFHD.h"
+#include "30_AUO_eDP_27_UHD.h"
+#include "31_AUO_VBO_27_WUXGA_FREESYNC.h"
+
+// user add
+
+#include "32_AUO_M270QAN010_EDP_UHD_60HZ.h"
+#include "33_LG_LM270WR2_EDP_UHD_60HZ.h"
+#include "34_LG_LM270WQ4_SSA1_LVDS_QHD_60HZ.h"
+#include "35_INL_M236HJJP02_LVDS_FHD_60.h"
+#include "36_AUO_M270DAN02V0_LVDS_QHD_60HZ.h"
+#include "37_AUO_M238DAN013_LVDS_QHD_60HZ.h"
+#include "38_AUO_T320HVN05A_LVDS_FHD_120.h"
+#include "39_INL_M238DCJ_E50_eDP_UHD.h"
+#include "40_SAMSUNG_LSM315HP01_VBO_FHD_144HZ.h"
+#include "41_AUO_M270DAN010_LVDS_QHD_60HZ.h"
+#include "42_AUO_M250HTN011_LVDS_FHD_60.h"
+#include "43_AUO_M195RTN01_0_LVDS_60HZ.h"
+#include "44_AUO_T215HVN05_1_LVDS_60HZ.h"
+#include "45_AUO_M238FHB_N40_LVDS_60HZ.h"
+#include "46_CSOT_ST2151B01_1_LVDS_60HZ.h"
+#include "47_AUO_M270DTR01_0_EDP_165HZ.h"
+#include "48_AUO_M315DVR01_0_EDP_165HZ.h"
+#include "49_SAMSUNG_LSM270DP01_0_EDP2_144HZ.h"
+#include "50_SAMSUNG_LSM236HP02_G02_165HZ.h"
+#include "51_AUO_P320HVN05_0_144HZ.h"
+#include "52_AUO_M250HTN01_LVDS_60HZ.h"
+#include "53_AUO_M250HTN01_6_VBY_144HZ.h"
+#include "54_AUO_M250HTN01_0_VBY_240HZ.h"
+#include "55_AUO_M270HTN02_0_VBY_240HZ.h"
+#include "56_LG_LM230WF9_SSA3_LVDS_60HZ.h"
+#include "57_AUO_M270HTN02_5_VBY_60HZ.h"
+#include "58_LG_LM238WF4_SSB1_LVDS_FHD_60HZ.h"
+#include "59_AUO_M315DVR01_9_EDP_165HZ.h"
+#include "60_AUO_LC185TT7A_LVDS_60HZ.h"
+#include "61_BOE_HV320QHM_C80_LVDS_75HZ.h"
+#include "62_CSOT_SG3151B02_1_LVDS_144HZ.h"
+#include "63_INL_M280DGJ_L30_LVDS_FHD_60HZ.h"
+#include "64_BOE_MV238FHB_N40_LVDS_FHD_60HZ.h"
+#include "65_BOE_MV230FHM_N30__LVDS_FHD_60HZ.h"
+#include "66_CSOT_ST2151B03_1_LVDS_60HZ.h"
+#include "67_AUO_M320QAN01_0_EDP_60HZ.h"
+
+#include "68_INL_M280DGJ_L30_VBY_UHD_60HZ.h"
+
+#include "69_SAMSUNG_LSM270HP06_LVDS.h"
+#include "70_PANDA_LC238LF1L_LVDS.h"
+#include "71_SAMSUNG_LSM315DP01_EDP.h"
+#include "72_AUO_M238HVN010_LVDS.h"
+#include "73_SAMSUNG_LSM315DP06_EDP.h"
+#include "74_AUO_M270KCJ_K7B_VBY_QHD.h"
+#include "75_INNOLUX_M270KCJ_L5B_LVDS_QHD.h"
+#include "76_AUO_M350DVR01V0_VBY_QHD.h"
+#include "77_AUO_M270HVR01_LVDS_FHD.h"
+#include "78_BOE_MV270QUM_N10_EDP_UHD.h"
+#include "79_BOE_HV320FHB_N00_LVDS_FHD.h"
+
+#include "80_AUO_M270DTN01_V8_EDP_165HZ.h"
+#include "81_BOE_MV270QUM_N20_EDP_UHD.h"
+#include "82_AUO_M270QAN021_EDP_UHD_60HZ.h"
+
+
+#include "83_LHCX_2380_FHD_75_LVDS.h"
+#include "84_LHCX_29.5_QHD_75_LVDS.h"
+#include "85_LHCX_315_FHD_144HZ_LVDS.h"
+#include "86__LHCX_35_UHD_100HZ_EDP.h"
+
+#include "87_CSOT_SG2701B01_3_165HZ.h"
+#include "88_BOE_MV315QHB_N10_LVDS_75HZ.h"
+#include "89_INN_M315DJJ_Q01_VBY1_60HZ.h"
+#include "90_CSOT_SG3151B05_6_LVDS_240HZ.h"
+#include "91_AUO_M270HAN02_2_165HZ.h"
+#include "92_HSMB270_1QAN02_UHD60HZ.h"
+#include "93_LG_LM270WQA_SSA1_EDP_QHD.h"
+#include "94_LC270LF1F_LVDS_FHD144.h"
+#include "95_M315DJJ_VBO_UHD60.h"
+#include "96_BOE_MV270QHB_N50_LVDS_75HZ.h"
+#include "97_CSOT_SG2701G01_1_EDP_QHD.h"
+#include "98_HKC_PN238CT02_14_LVDS_FHD75.h"
+#include "99_PANDA_LC238LF1F_LVDS_144HZ.h"
+#include "100_INX_M280DCA_P3B_EDP_HBR2_UHD60.h"
+#include "101_AUO_M315DVR012_EDP_HBR1_QHD75.h"
+#include "102_AUO_M270HVR01_LVDS_FHD165.h"
+
+#include "103_AUO_M315HVR01_LVDS_FHD165.h"
+#include "104_AUO_M270HVR01_0_LVDS_FHD_144.h"
+#include "105_BOE_MV238FHM_NG2_EDP_FHD280HZ.h"
+#include "108_LG_LM270WF9_SSA1_EDP_HBR2_FHD280HZ.h"
+//#include "94_CSOT_SG2701G01_1_EDP_QHD.h"
+
+#include "173_BOE_DV430QUB_C10_VBY_UHD_60HZ.h"
+
+#include "150_PANDA_M270HCA_L7B_LVDS_FHD_165HZ.h"
+#endif
+
+
+

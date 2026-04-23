@@ -1,0 +1,526 @@
+/********************************************************************************/
+/*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+/*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+/*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+/*   rights, and other similar rights and interests, are reserved to Realtek.   */
+/*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+/*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+/*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+/*   disclosed to or otherwise accessed by any third party.                     */
+/*   c<2003> - <2012>                                                           */
+/*   The Software is provided "AS IS" without any warranty of any kind,         */
+/*   express, implied, statutory or otherwise.                                  */
+/********************************************************************************/
+
+//----------------------------------------------------------------------------------------------------
+// ID Code      : ColorTempDefaultNo.0000
+// Update Note  :
+//
+//----------------------------------------------------------------------------------------------------
+
+//****************************************************************************
+// COLOR TEMP DEFAULT DATA
+#if(_CTS_TYPE == _CTS_GEN_1_12BIT)
+#if(Project_ID == ID_TJZG_TMDTMD2822_HK2775E01_2P2H_UHD60HZ_20231217)
+#define _CT9300_RED 								(91 << 4)
+#define _CT9300_GREEN								(108 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(105 << 4)
+#define _CT7500_GREEN								(118 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(114 << 4)
+#define _CT6500_GREEN								(122 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#elif(Project_ID == ID_TJZG_HK2775E05_M270KCAD8B_EDP4LANHBR2_MD2769_QHD180HZ_20240313)
+#if ARZOPA
+#define _CT9300_RED 								(110 << 4)
+#define _CT9300_GREEN								(116 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(122 << 4)
+#define _CT7500_GREEN								(118 << 4)
+#define _CT7500_BLUE								(115 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(114 << 4)
+#define _CT6500_BLUE								(104 << 4)
+#else
+#define _CT9300_RED 								(115 << 4)
+#define _CT9300_GREEN								(128 << 4)
+#define _CT9300_BLUE								(122 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(110 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(120 << 4)
+#define _CT6500_BLUE								(95 << 4)
+#endif
+#elif(Project_ID == ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528)
+#define _CT9300_RED 								(110 << 4)
+#define _CT9300_GREEN								(116 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(122 << 4)
+#define _CT7500_GREEN								(118 << 4)
+#define _CT7500_BLUE								(115 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(114 << 4)
+#define _CT6500_BLUE								(104 << 4)
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_F2761QK_QHD180HZ_20240416)
+#define _CT9300_RED 								(115 << 4)
+#define _CT9300_GREEN								(128 << 4)
+#define _CT9300_BLUE								(122 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(110 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(120 << 4)
+#define _CT6500_BLUE								(95 << 4)
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_20240426)
+#define _CT9300_RED 								(110 << 4)
+#define _CT9300_GREEN								(124 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(122 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(121 << 4)
+#define _CT6500_BLUE								(120 << 4)
+#elif(Project_ID == ID_HK2556E02_M270KCJ_L5B_QHD75HZ_LVDS_20240415)
+#define _CT9300_RED 								(110 << 4)
+#define _CT9300_GREEN								(124 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(122 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(121 << 4)
+#define _CT6500_GREEN								(116 << 4)
+#define _CT6500_BLUE								(105 << 4)
+#elif(Project_ID == ID_KAITENG_HK2795E04_FHD300HZ_VB1)
+#define _CT9300_RED 								(116 << 4)
+#define _CT9300_GREEN								(120 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 							    (128 << 4)
+#define _CT6500_GREEN								(122 << 4)
+#define _CT6500_BLUE							    (118 << 4)
+
+#elif(Project_ID == ID_KAIXIA_HK2795E04_SG2451B01_2_8LAN_VBY1_FHD280HZ_8BIT_20240103)
+#define _CT9300_RED 								(116 << 4)
+#define _CT9300_GREEN								(120 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 							    (128 << 4)
+#define _CT6500_GREEN								(128 << 4)
+#define _CT6500_BLUE							    (126 << 4)
+#elif(Project_ID == _ID_SANSE_2795QR_2K180_NF0_)
+#define _CT9300_RED 								(125 << 4)
+#define _CT9300_GREEN								(121 << 4)
+#define _CT9300_BLUE								(125 << 4)
+
+#define _CT7500_RED 								(119 << 4)
+#define _CT7500_GREEN								(110 << 4)
+#define _CT7500_BLUE								(107 << 4)
+
+#define _CT6500_RED 								(122 << 4)
+#define _CT6500_GREEN								(109 << 4)
+#define _CT6500_BLUE								(100 << 4)
+
+
+#elif(Project_ID == ID_KAITENG_HK2795E01_QHD180HZ_EDP)
+#define _CT9300_RED 								(96 << 4)
+#define _CT9300_GREEN								(97 << 4)
+#define _CT9300_BLUE								(101 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(123 << 4)
+#define _CT7500_BLUE								(122 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(123 << 4)
+#define _CT6500_BLUE								(111 << 4)
+
+#elif(Project_ID == ID_WMX_ME270QHB_NF5_2K180)
+#define _CT6500_RED 								(120 << 4)
+#define _CT6500_GREEN								(130 << 4)
+#define _CT6500_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(104 << 4)
+#define _CT7500_GREEN								(105 << 4)
+#define _CT7500_BLUE								(107 << 4)
+
+#define _CT9300_RED 								(106 << 4)
+#define _CT9300_GREEN								(112 << 4)
+#define _CT9300_BLUE								(127 << 4)
+
+#elif(Project_ID == ID_TJZG_HK2775E01_SN270ES011_EDP4LANHBR2_QHD180HZ_G27L61QK_20240509)
+#define _CT9300_RED 								(110 << 4)
+#define _CT9300_GREEN								(124 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(122 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(121 << 4)
+#define _CT6500_BLUE								(120 << 4)
+#elif(Project_ID == ID_TEST_VBY1_HK2775E01_2P2H_UHD60HZ_20240102)
+#define _CT9300_RED 								(91 << 4)
+#define _CT9300_GREEN								(108 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(105 << 4)
+#define _CT7500_GREEN								(118 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(128 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#elif(Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_DV430QUB_C10_UHD60HZ)
+#define _CT9300_RED 								(115 << 4)
+#define _CT9300_GREEN								(112 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(114 << 4)
+#define _CT7500_BLUE								(119 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(109 << 4)
+#define _CT6500_BLUE								(105 << 4)
+#elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
+#define _CT9300_RED 								(107 << 4)
+#define _CT9300_GREEN								(110 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(118 << 4)
+#define _CT7500_GREEN								(117 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(125 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
+#define _CT9300_RED 								(128 << 4)
+#define _CT9300_GREEN								(128 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(128 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
+#define _CT9300_RED 								(98 << 4)
+#define _CT9300_GREEN								(105 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(109 << 4)
+#define _CT7500_GREEN								(113 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(120 << 4)
+#define _CT6500_GREEN								(121 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#elif(Project_ID == ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ)
+#define _CT9300_RED 								(116 << 4)
+#define _CT9300_GREEN								(117 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(125 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(123 << 4)
+#define _CT6500_BLUE								(118 << 4)
+#elif(Project_ID == ID_DATONG_HK2795E01_MV270QUM_N50_EDP4LANHBR2_UHD60HZ_20240511)
+#define _CT9300_RED 								(107 << 4)
+#define _CT9300_GREEN								(108 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(110 << 4)
+#define _CT7500_GREEN								(110 << 4)
+#define _CT7500_BLUE								(127 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(120 << 4)
+#define _CT6500_BLUE								(128 << 4)
+
+
+#elif(Project_ID == ID_TJZG_HK2775E01_SG2451B014_VBY8LANHBR2_FHD240HZ_20240330)
+#define _CT9300_RED 								(114 << 4)
+#define _CT9300_GREEN								(120 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(128 << 4)
+#define _CT7500_BLUE								(124 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(128 << 4)
+#define _CT6500_BLUE								(118 << 4)
+
+#define _CT5800_RED 								(128 << 4)
+#define _CT5800_GREEN								(128 << 4)
+#define _CT5800_BLUE								(128 << 4)
+#define _CTSRGB_RED 								_CT6500_RED
+#define _CTSRGB_GREEN								_CT6500_GREEN
+#define _CTSRGB_BLUE								_CT6500_BLUE
+		
+#define _CTUSER_RED 								(128 << 4)
+#define _CTUSER_GREEN								(128 << 4)
+#define _CTUSER_BLUE								(128 << 4)
+
+#elif (Project_ID == ID_TJ_2556E01_SN270CS03_1_LOGO_FUEGO_27TZ180FIG2_FHD165_20240104)
+
+#if _MD2769
+#define _CT9300_RED 								(101 << 4)
+#define _CT9300_GREEN								(117 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(116 << 4)
+#define _CT7500_GREEN								(122 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(128 << 4)
+#define _CT6500_BLUE								(127 << 4)
+
+#define _CT5800_RED 								(128 << 4)
+#define _CT5800_GREEN								(128 << 4)
+#define _CT5800_BLUE								(128 << 4)
+#define _CTSRGB_RED 								_CT6500_RED
+#define _CTSRGB_GREEN								_CT6500_GREEN
+#define _CTSRGB_BLUE								_CT6500_BLUE
+	
+#define _CTUSER_RED 								(128 << 4)
+#define _CTUSER_GREEN								(128 << 4)
+#define _CTUSER_BLUE								(128 << 4)
+
+#else
+#define _CT9300_RED 								(112 << 4)
+#define _CT9300_GREEN								(113 << 4)
+#define _CT9300_BLUE								(133 << 4)
+#define _CT7500_RED 								(108 << 4)
+#define _CT7500_GREEN								(108 << 4)
+#define _CT7500_BLUE								(117 << 4)
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(115 << 4)
+#define _CT6500_BLUE								(108 << 4)
+#define _CT5800_RED 								(128 << 4)
+#define _CT5800_GREEN								(128 << 4)
+#define _CT5800_BLUE								(128 << 4)
+#define _CTSRGB_RED 								_CT6500_RED
+#define _CTSRGB_GREEN								_CT6500_GREEN
+#define _CTSRGB_BLUE								_CT6500_BLUE
+	
+#define _CTUSER_RED 								(128 << 4)
+#define _CTUSER_GREEN								(128 << 4)
+#define _CTUSER_BLUE								(128 << 4)
+#endif
+#elif(Project_ID == ID_HUIXIONG_HK2785E06_MV315QHM_N40_QHD90HZ_10BIT_EDID_X322Q90_20230713)
+#define _CT9300_RED                                 (101 << 4)
+#define _CT9300_GREEN                              	(108 << 4)
+#define _CT9300_BLUE                                (128 << 4)
+
+#define _CT7500_RED                                 (111 << 4)
+#define _CT7500_GREEN                               (118 << 4)
+#define _CT7500_BLUE                                (128 << 4)
+
+#define _CT6500_RED                                 (114 << 4)
+#define _CT6500_GREEN                               (123 << 4)
+#define _CT6500_BLUE                                (127 << 4)
+#elif(Project_ID == ID_2556_TEST)
+#define _CT9300_RED 								(127 << 4)
+#define _CT9300_GREEN								(112 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(115 << 4)
+#define _CT7500_BLUE								(120 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(114 << 4)
+#define _CT6500_BLUE								(111 << 4)
+
+#define _CT5800_RED 								(122 << 4)
+#define _CT5800_GREEN								(119 << 4)
+#define _CT5800_BLUE								(105 << 4)
+
+#define _CTSRGB_RED 								_CT6500_RED
+#define _CTSRGB_GREEN								_CT6500_GREEN
+#define _CTSRGB_BLUE								_CT6500_BLUE
+	
+#define _CTUSER_RED 								(128 << 4)
+#define _CTUSER_GREEN								(128 << 4)
+#define _CTUSER_BLUE								(128 << 4)
+#else
+#define _CT9300_RED 								(106 << 4)
+#define _CT9300_GREEN								(112 << 4)
+#define _CT9300_BLUE								(127 << 4)
+#define _CT7500_RED 								(0x68 << 4)
+#define _CT7500_GREEN								(0x69 << 4)
+#define _CT7500_BLUE								(0x6B << 4)
+#define _CT6500_RED 								(126 << 4)
+#define _CT6500_GREEN								(122 << 4)
+#define _CT6500_BLUE								(128 << 4)
+#define _CT5800_RED 								(0x7A << 4)
+#define _CT5800_GREEN								(0x77 << 4)
+#define _CT5800_BLUE								(0x69 << 4)
+#define _CTSRGB_RED 								_CT6500_RED
+#define _CTSRGB_GREEN								_CT6500_GREEN
+#define _CTSRGB_BLUE								_CT6500_BLUE
+	
+#define _CTUSER_RED 								(128 << 4)
+#define _CTUSER_GREEN								(128 << 4)
+#define _CTUSER_BLUE								(128 << 4)
+#endif
+
+
+#ifndef _CT9300_RED
+#define _CT9300_RED									(120 << 4)
+#endif
+
+#ifndef _CT9300_GREEN
+#define _CT9300_GREEN								(120 << 4)
+#endif
+
+#ifndef _CT9300_BLUE
+#define _CT9300_BLUE								(128 << 4)
+#endif
+
+#ifndef _CT7500_RED
+#define _CT7500_RED									(128 << 4)
+#endif
+
+#ifndef _CT7500_GREEN
+#define _CT7500_GREEN								(128 << 4)
+#endif
+
+#ifndef _CT7500_BLUE
+#define _CT7500_BLUE								(128 << 4)
+#endif
+
+
+#ifndef _CT6500_RED
+#define _CT6500_RED									(128 << 4)
+#endif
+
+#ifndef _CT6500_GREEN
+#define _CT6500_GREEN								(122 << 4)
+#endif
+
+#ifndef _CT6500_BLUE
+#define _CT6500_BLUE								(120 << 4)
+#endif
+
+
+#ifndef _CT5800_RED
+#define _CT5800_RED									(128 << 4)
+#endif
+
+#ifndef _CT5800_GREEN
+#define _CT5800_GREEN								(120 << 4)
+#endif
+
+#ifndef _CT5800_BLUE
+#define _CT5800_BLUE								(118 << 4)
+#endif
+
+#ifndef _CTSRGB_RED
+#define _CTSRGB_RED									(128 << 4)
+#endif
+
+#ifndef _CTSRGB_GREEN
+#define _CTSRGB_GREEN								(128 << 4)
+#endif
+
+#ifndef _CTSRGB_BLUE
+#define _CTSRGB_BLUE								(128 << 4)
+#endif
+
+#ifndef _CTUSER_RED
+#define _CTUSER_RED									(128 << 4)
+#endif
+
+#ifndef _CTUSER_GREEN
+#define _CTUSER_GREEN								(128 << 4)
+#endif
+
+#ifndef _CTUSER_BLUE
+#define _CTUSER_BLUE								(128 << 4)
+#endif
+
+
+#else
+
+#if(Project_ID == ID_CHANGHONG_HK2525E04_1V1P1H_HKC_PN238CT02_FHD75_20201021)
+
+
+#define _CT9300_RED                                 0x62
+#define _CT9300_GREEN                               0x68
+#define _CT9300_BLUE                                0x6F
+#define _CT7500_RED                                 0x68
+#define _CT7500_GREEN                               0x69
+#define _CT7500_BLUE                                0x6B
+#define _CT6500_RED                                 0x71
+#define _CT6500_GREEN                               0x70
+#define _CT6500_BLUE                                0x68
+#define _CT5800_RED                                 0x7A
+#define _CT5800_GREEN                               0x77
+#define _CT5800_BLUE                                0x69
+#define _CTSRGB_RED                                 0x80
+#define _CTSRGB_GREEN                               0x80
+#define _CTSRGB_BLUE                                0x80
+#define _CTUSER_RED                                 0x80
+#define _CTUSER_GREEN                               0x80
+#define _CTUSER_BLUE                                0x80
+
+#else
+
+#define _CT9300_RED                                 0x62
+#define _CT9300_GREEN                               0x68
+#define _CT9300_BLUE                                0x6F
+#define _CT7500_RED                                 0x68
+#define _CT7500_GREEN                               0x69
+#define _CT7500_BLUE                                0x6B
+#define _CT6500_RED                                 0x71
+#define _CT6500_GREEN                               0x70
+#define _CT6500_BLUE                                0x68
+#define _CT5800_RED                                 0x7A
+#define _CT5800_GREEN                               0x77
+#define _CT5800_BLUE                                0x69
+#define _CTSRGB_RED                                 0x80
+#define _CTSRGB_GREEN                               0x80
+#define _CTSRGB_BLUE                                0x80
+#define _CTUSER_RED                                 0x80
+#define _CTUSER_GREEN                               0x80
+#define _CTUSER_BLUE                                0x80
+
+
+#endif
+#endif
+//****************************************************************************

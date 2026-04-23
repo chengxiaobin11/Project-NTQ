@@ -1,0 +1,2761 @@
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RTD2014OSD
+OBJECT MODULE PLACED IN .\Output\RL6449_Project\RTD2014Osd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE User\RTD Series\RTD2014Osd\Code\RTD2014Osd.c LARGE OPTIMIZE(9,SPEED) INC
+                    -DIR(.\Output\RL6449_Project;.\Project\Header;.\Pcb;.\Panel;.\Kernel\Device\Header;.\Kernel\Common;.\Kernel\System\Header
+                    -;.\Kernel\Scaler\ScalerFunction\Header;.\Kernel\Scaler\ScalerCommonFunction\Header;.\Kernel\Scaler\ScalerFunction\Lib\He
+                    -ader;.\Kernel\Scaler\ScalerCommonFunction\Lib\Header;.\Kernel\Scaler\RL6449_Series_Scaler\Header;.\Kernel\Scaler\RL6449_
+                    -Series_Scaler\Lib\Header;.\Kernel\Scaler\RL6449_Series_Common\Header;.\Kernel\Scaler\RL6449_Series_Common\Lib\Header;.\K
+                    -ernel\User Common Function\Header;.\User\RTD Series\RTD2014Function\Header;.\User\RTD Series\RTD2014Osd\Header;.\User\RT
+                    -D Factory\Header;.\User\None Series\NoneFunction\Header;.\User\None Series\NoneOsd\Header;.\User\None Factory\Header) DE
+                    -FINE(_PROJECT=_RL6449_PROJECT,_SCALER_TYPE=_RL6449_SERIES) DEBUG OBJECTEXTEND PRINT(.\Output\RL6449_Project\RTD2014Osd.l
+                    -st) TABS(2) OBJECT(.\Output\RL6449_Project\RTD2014Osd.obj)
+
+line level    source
+
+   1          /********************************************************************************/
+   2          /*   The  Software  is  proprietary,  confidential,  and  valuable to Realtek   */
+   3          /*   Semiconductor  Corporation  ("Realtek").  All  rights, including but not   */
+   4          /*   limited  to  copyrights,  patents,  trademarks, trade secrets, mask work   */
+   5          /*   rights, and other similar rights and interests, are reserved to Realtek.   */
+   6          /*   Without  prior  written  consent  from  Realtek,  copying, reproduction,   */
+   7          /*   modification,  distribution,  or  otherwise  is strictly prohibited. The   */
+   8          /*   Software  shall  be  kept  strictly  in  confidence,  and  shall  not be   */
+   9          /*   disclosed to or otherwise accessed by any third party.                     */
+  10          /*   c<2003> - <2012>                                                           */
+  11          /*   The Software is provided "AS IS" without any warranty of any kind,         */
+  12          /*   express, implied, statutory or otherwise.                                  */
+  13          /********************************************************************************/
+  14          
+  15          //----------------------------------------------------------------------------------------------------
+  16          // ID Code      : RTD2014Osd.c No.0000  //IDO
+  17          // Update Note  :
+  18          //----------------------------------------------------------------------------------------------------
+  19          
+  20          #define __RTD_OSD__
+  21          
+  22          #include "UserCommonInclude.h"
+  23          
+  24          #if(_OSD_TYPE == _REALTEK_2014_OSD)
+  25          BYTE g_flag_Nosignal = 0;
+  26          
+  27          #if(_DEF_PAGE8)
+              BYTE idata OsdStateDefine[_OSD_MAIN_MENU_COUNT][7]={0};
+              #else
+  30          BYTE idata OsdStateDefine[_OSD_MAIN_MENU_COUNT][6]={0};
+  31          #endif
+  32          
+  33          BYTE idata OSD_MASK[_OSD_MAIN_MENU_COUNT] = {0};
+  34          
+  35          BYTE idata OSD_MAIN_MENU_ITEM = 0;
+  36          BYTE idata OSD_SubMenuCur = 0;
+  37          
+  38          #if(_PROJECT == _RL6463_PROJECT)
+              BYTE idata OSD_ITEM_BASE[_MENU_NULL - _MENU_FUN_BACKLIGHT] = {0};
+              #else
+  41          BYTE xdata OSD_ITEM_BASE[_MENU_NULL - _MENU_FUN_BACKLIGHT] = {0};
+  42          #endif
+  43          BYTE idata OSD_ITEM_MASK[10] = {0}; //wwq   ����뺯����������������
+             -�ʵ�ʲ˵��ϵĺ�������
+  44          //BYTE idata OSD_ITEM_MASK[_OSD_MAIN_MENU_COUNT] = {0}; 
+  45          
+  46          
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 2   
+
+  47          BYTE xdata g_ucOsdRorateState = _DEF_OSDROTATE;
+  48          
+  49          BYTE xdata g_ucBacktoHotKeyState = 0;
+  50          //****************************************************************************
+  51          // DEFINITIONS / MACROS
+  52          //****************************************************************************
+  53          #if((_FREESYNC_SUPPORT == _ON)&&(_OSD_VFREQ_CHANGE == _ON))
+              WORD BackUpTempVFreq = 0;
+              #endif
+  56          
+  57          
+  58          
+  59          #if(_DEF_2795E06)
+              BYTE xdata g_SouceSelect = 1;
+              #endif
+  62          
+  63          //****************************************************************************
+  64          // STRUCT / TYPE / ENUM DEFINITTIONS
+  65          //****************************************************************************
+  66          
+  67          
+  68          //****************************************************************************
+  69          // CODE TABLES
+  70          //****************************************************************************
+  71          
+  72          
+  73          //****************************************************************************
+  74          // VARIABLE DECLARATIONS
+  75          //****************************************************************************
+  76          StructOsdInfo g_stOsdInfo;
+  77          
+  78          WORD g_usAdjustValue;
+  79          WORD g_usBackupValue;
+  80          BYTE xdata g_ucLogoTimerCounter;
+  81          WORD xdata g_usPowerDownCount;
+  82          BYTE xdata g_usPowerDownCount_MSG;
+  83          void MenuCross(void);
+  84          
+  85          #if(_DEF_HOTKEY_REPLACE)
+              //ѡ��̫��,��ҳ�õ�
+              BYTE g_ucHotKey_Left = 0;
+              BYTE g_ucHotKey_Right = 0;
+              BYTE g_ucHotKey_Exit = 0;
+              #endif
+  91          
+  92          BYTE g_ucLanguage = 0 ;
+  93          BYTE g_ucPowerPage = 0 ;
+  94          
+  95          #if (_LED_EFFECT_TJMODE14==_ON)
+              extern BYTE led_start;
+              #endif
+  98          
+  99          //****************************************************************************
+ 100          // FUNCTION DECLARATIONS
+ 101          //****************************************************************************
+ 102          void UserOsdHandler(void);
+ 103          void RTDOsdSystemFlowProc(void);
+ 104          void RTDOsdEventMsgProc(void);
+ 105          #if((_HDMI_HDR10_SUPPORT == _ON) && (_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT) &&(_HDMI_MAC_PAGE72_USE == _ON)
+             -)
+              extern void ScalerTMDSRx3GetHDR10Data(BYTE *pucHDRData);
+              #endif
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 3   
+
+ 108          //***************************************************************************
+ 109          // FUNCTION DEFINITIONS
+ 110          //****************************************************************************
+ 111          //--------------------------------------------------
+ 112          // Description  : OSD Handler, executed in the main loop
+ 113          // Input Value  : None
+ 114          // Output Value : None
+ 115          //--------------------------------------------------
+ 116          
+ 117          
+ 118          #if 1
+ 119          #define TYPEC_CC1       (P1_5) // _156PIN_PIN_132, P7D2
+ 120          
+ 121          #define TYPEC_CC2   (P1_6) // _156PIN_PIN_131, P7D2
+ 122          
+ 123          
+ 124          #define _3036_ROTATION1       (MCU_FE23_PORT83_PIN_REG) // _156PIN_PIN_68, P8D1
+ 125          
+ 126          #define _3036_ROTATION2   (MCU_FE14_PORT64_PIN_REG) // _156PIN_PIN_49, P6D4
+ 127          
+ 128          
+ 129          
+ 130          #define _ROTATION_IN_A       (MCU_FE13_PORT63_PIN_REG) // _156PIN_PIN_48, P6D3 
+ 131          
+ 132          #define _ROTATION_IN_D    (MCU_FE12_PORT62_PIN_REG) // _156PIN_PIN_47, P6D2
+ 133          
+ 134          #define _ROTATION_OUT_B   (MCU_FE21_PORT81_PIN_REG) // _156PIN_PIN_67, P8D0
+ 135          
+ 136          #define _ROTATION_OUT_C   (MCU_FE1F_PORT77_PIN_REG) // _156PIN_PIN_66, P7D7 
+ 137          #endif
+ 138          
+ 139          void TypeC_Proc(void)
+ 140          {
+ 141   1                                                                                  
+ 142   1      #if(_PCB_TYPE == _RL6449__216PIN__HK_M_RTD2795E02__1T1DP1H__eDPVB1)||(_PCB_TYPE == _RL6449__216PIN__HK_M_R
+             -TD2795E06__1T1DP1H__eDPVB1 || _DEF_2795E06)
+                    
+                ScalerDpRx0SetDpLaneMapping(0,0);
+              
+                if(GET_FUN_KVM() == _OFF)//�Զ�
+                {
+                  if(SysSourceGetInputPort()== _D0_INPUT_PORT )
+                    HUB_SWITCH(0);
+                  else
+                    HUB_SWITCH(1);
+                }
+                else
+                {
+                  if(GET_FUN_KVM() == 1)  //PC
+                    HUB_SWITCH(1);
+                  else if(GET_FUN_KVM() == 2) //Type-c
+                    HUB_SWITCH(0);
+                  else
+                    HUB_SWITCH(0);
+                }
+              
+              #if 0 //����TYPE C�����TYPE-C�ӿ�
+                if((g_SouceSelect != 0))
+                {   
+              
+                  if((bD0_DP_PIN16_CONNECT == _FALSE)&&((MCU_FFE4_DDC0_EDID_IRQ & _BIT0) == _TRUE)&&(SysSourceGetInputPor
+             -t() != _D1_INPUT_PORT || SysSourceGetInputPort() != _D2_INPUT_PORT))
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 4   
+
+                  {
+              
+                    if(SysSourceGetInputPort() != _D0_INPUT_PORT)
+                    {
+                    
+                      SET_FORCE_POW_SAV_STATUS(_FALSE);
+                      SysModeSetResetTarget(_MODE_ACTION_RESET_TO_SEARCH);
+                      MCU_FFE4_DDC0_EDID_IRQ |=  (_BIT0);
+                      SysSourceSwitchInputPort(_D0_INPUT_PORT);
+                      SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+                    }
+              
+                  }   
+                }
+              #endif
+              
+              #endif
+ 185   1      #if (_PCB_TYPE == _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1)
+                      if(bD0_DP_PIN16_CONNECT == _FALSE)
+                        ScalerDpRx0SetDpLaneMapping(_TYPE_C_PIN_ASSIGNMENT_C,_TYPE_C_ORIENTATION_UNFLIP);
+              
+              #elif (_PCB_TYPE == _RL6432__156PIN__HKMRT2556E12__1H1DP1T__LVDS)
+                    
+                ScalerDpRx0SetDpLaneMapping(_TYPE_C_PIN_ASSIGNMENT_E,0);
+              //  if(SysSourceGetInputPort()== _D0_INPUT_PORT &&  GET_HUB_SWITCH()!=_HUB_C)
+              //  {
+              //    HUB_SWITCH(_HUB_C);
+              //    HUB_SWITCH_INIT(_HUB_INIT_ON);
+              //    ScalerTimerDelayXms(100);
+              //    HUB_SWITCH_INIT(_HUB_INIT_OFF);
+              
+              //  }
+              //  else if(SysSourceGetInputPort()!= _D0_INPUT_PORT &&  GET_HUB_SWITCH()!=_HUB_B)
+              //  {
+              //    HUB_SWITCH(_HUB_B);
+              //    HUB_SWITCH_INIT(_HUB_INIT_ON);
+              //    ScalerTimerDelayXms(100);
+              //    HUB_SWITCH_INIT(_HUB_INIT_OFF);
+              
+              //  }
+              
+                
+              #endif
+ 211   1      
+ 212   1      }
+ 213          
+ 214          
+ 215          void UserOsdHandler(void)
+ 216          {
+ 217   1          RTDOsdSystemFlowProc(); 
+ 218   1          RTDOsdEventMsgProc();
+ 219   1      
+ 220   1      #if (_DEF_2795E06||_PCB_TYPE == _RL6449__216PIN__HK_M_RTD2775E05__1T1DP1H__eDPVB1)
+                TypeC_Proc();
+              #endif
+ 223   1      }
+ 224          
+ 225          //--------------------------------------------------
+ 226          // Description  : OSD system flow
+ 227          // Input Value  : None
+ 228          // Output Value : None
+ 229          //--------------------------------------------------
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 5   
+
+ 230          void RTDOsdSystemFlowProc(void)
+ 231          {
+ 232   1          switch(SysModeGetModeState())
+ 233   1          {
+ 234   2              case _MODE_STATUS_POWER_OFF:
+ 235   2      
+ 236   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 237   2                  {
+ 238   3                      SET_FORCE_POW_SAV_STATUS(_FALSE);
+ 239   3                  }
+ 240   2      
+ 241   2                  break;
+ 242   2      
+ 243   2              case _MODE_STATUS_INITIAL:
+ 244   2      
+ 245   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 246   2                  {
+ 247   3      
+ 248   3                g_flag_Nosignal=1;
+ 249   3            
+ 250   3      #if(_FREESYNC_OD_MEASURE == _ON)
+                              UserAdjustFREESYNCODMeasure();
+              #endif
+ 253   3      #if(_LOGO_TYPE != _NONE_LOGO)
+                        if(GET_OSD_BURNING_MODE() == _OFF&&GET_OSD_LOGO() == _ON)
+                      {
+                                OsdDispShowLogo();
+                                UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+                            OsdFuncEnableOsd();
+                                  PCB_LED_ACTIVE();
+              
+                        
+                        ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_120s);
+                        ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);       
+                        ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BUININ_MSG);
+                                ScalerTimerActiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE_OSD_LOGO);
+                      }
+                      else
+                      {
+                        OsdDispDisableOsd();
+                      }
+              #else       
+ 272   3              OsdDispDisableOsd();
+ 273   3      #endif
+ 274   3      
+ 275   3      
+ 276   3              if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+ 277   3              {
+ 278   4                ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 279   4              
+ 280   4                OSD_LED_CONTRL(_OSD_LED_OFF);
+ 281   4              }
+ 282   3              else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+ 283   3              {
+ 284   4                ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 285   4              
+ 286   4                OSD_LED_CONTRL(_OSD_LED_ON);
+ 287   4              
+ 288   4              }
+ 289   3              else if(GET_OSD_LED_TYPE() == _OSDLedType_FLASH)
+ 290   3              {
+ 291   4                ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER);  
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 6   
+
+ 292   4              }
+ 293   3      
+ 294   3            }
+ 295   2      
+ 296   2                  break;
+ 297   2      
+ 298   2              case _MODE_STATUS_SEARCH:
+ 299   2      
+ 300   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 301   2                  {
+ 302   3      #if(_FREEZE_SUPPORT == _ON)
+                              if(GET_OSD_FREEZE_STATUS() == _ON)
+                              {
+                                  SET_OSD_FREEZE_STATUS(_OFF);
+                              }
+              #endif
+ 308   3                      if(SysPowerGetPowerStatus() == _POWER_STATUS_NORMAL)
+ 309   3                      {
+ 310   4                          UserInterfaceKeyPadLedControl(_LED_POWER_SEARCH);
+ 311   4                      }
+ 312   3                  }
+ 313   2      
+ 314   2                  break;
+ 315   2      
+ 316   2              case _MODE_STATUS_DISPLAY_SETTING:
+ 317   2      
+ 318   2                  break;
+ 319   2      
+ 320   2              case _MODE_STATUS_ACTIVE:
+ 321   2      
+ 322   2            if(g_flag_Nosignal&&GET_OSD_FACTORY_MODE()==_OFF)
+ 323   2            {
+ 324   3              DebugMessageSystem("_USER_TIMER_EVENT_AUTO_POWER_DOWN",0);  
+ 325   3              g_flag_Nosignal=0;
+ 326   3              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN);       
+ 327   3              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+ 328   3              if(GET_OSD_AUTO_POWEROFF())
+ 329   3              {
+ 330   4                g_usPowerDownCount = GET_OSD_AUTO_POWEROFF() * 60;
+ 331   4                ScalerTimerActiveTimerEvent(SEC(60), _USER_TIMER_EVENT_AUTO_POWER_DOWN);
+ 332   4              }
+ 333   3              
+ 334   3                      ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 335   3            }
+ 336   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 337   2                  {     
+ 338   3      
+ 339   3      #if(_DEF_2795E06)
+                      PCB_USB_HUB_POWER(0);
+                      ScalerTimerDelayXms(300);
+                      PCB_USB_HUB_POWER(1);
+              #endif
+ 344   3      
+ 345   3      #if(_MPRT_SUPPORT == _ON)
+                      UserAdjustLowMotionBlurDisplay(GET_OSD_MPRT());     
+              #endif
+ 348   3      
+ 349   3                      if(SysPowerGetPowerStatus() == _POWER_STATUS_NORMAL)
+ 350   3                      {
+ 351   4                          UserInterfaceKeyPadLedControl(_LED_POWER_ACTIVE);
+ 352   4                      }
+ 353   3      
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 7   
+
+ 354   3                      
+ 355   3      #if(_LED_EFFECT_TJMODE14 == _ON)
+                          
+                                  OSD_LED_CONTRL(_OSD_LED_ON);
+                                  led_start = 1;
+              #else
+ 360   3                          if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+ 361   3                          {
+ 362   4                              ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 363   4                          
+ 364   4                              OSD_LED_CONTRL(_OSD_LED_OFF);
+ 365   4              
+ 366   4                          }
+ 367   3                          else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+ 368   3                          {
+ 369   4                              ScalerTimerCancelTimerEvent( _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 370   4                          
+ 371   4                              OSD_LED_CONTRL(_OSD_LED_ON);
+ 372   4                          
+ 373   4                          
+ 374   4                          }
+ 375   3                          else if(GET_OSD_LED_TYPE() == _OSDLedType_FLASH)
+ 376   3                          {
+ 377   4                              ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER);  
+ 378   4                          }
+ 379   3      #endif
+ 380   3      
+ 381   3                  }
+ 382   2                  
+ 383   2            if(GET_OSD_FACTORY_MODE()==_ON)
+ 384   2                    ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER);  
+ 385   2      
+ 386   2                  
+ 387   2                  break;
+ 388   2      
+ 389   2              case _MODE_STATUS_NOSUPPORT:
+ 390   2      
+ 391   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 392   2                  {
+ 393   3                      if(SysPowerGetPowerStatus() == _POWER_STATUS_NORMAL)
+ 394   3                      {
+ 395   4                          SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_NOSUPPORT_MSG);
+ 396   4                          UserInterfaceKeyPadLedControl(_LED_POWER_NOSUPPORT);
+ 397   4                      }
+ 398   3                  }
+ 399   2      
+ 400   2                  break;
+ 401   2      
+ 402   2              case _MODE_STATUS_NOSIGNAL:
+ 403   2      
+ 404   2                  if(SysModeGetModeStateChange() == _TRUE)
+ 405   2                  {
+ 406   3                if(GET_OSD_BURNING_MODE() == _ON)
+ 407   3                {
+ 408   4      #if(_SOURCE_AUTO_ON)  //���ź�ѡ����Զ�ѡ��,��ѡ��Ϊ�Զ�ʱ��ѡ��
+                        if(GET_OSD_INPUT_PORT_OSD_ITEM() == _OSD_INPUT_AUTO)        
+              #endif
+ 411   4                {
+ 412   5                  SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+ 413   5                }
+ 414   4      #if(_INTERNAL_AUDIO_TEST_SUPPORT)
+                        if(GET_BURNING_AUDIO_TEST()==_ON)
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 8   
+
+                        {
+                          SET_FORCE_POW_SAV_STATUS(_FALSE);
+                          SysSourceSwitchInputPort(_D1_INPUT_PORT);
+                          SysSourceSetScanType(_SOURCE_SWITCH_FIXED_PORT);
+                          SysAudioInternalGenTestProc(_ON);
+                          SysAudioMuteProc(_OFF);
+                              UserAdjustAudioVolume(12);//0.5w
+                      
+                        }
+              #endif        
+ 426   4      
+ 427   4      
+ 428   4      #if(_LED_EFFECT_TJMODE14==_ON)
+              
+                                  led_start =1;
+                                  OSD_LED_CONTRL(_OSD_LED_ON);
+              
+              #else
+ 434   4      
+ 435   4                          if(GET_OSD_LED_TYPE() == _OSDLedType_OFF)
+ 436   4                          {
+ 437   5      
+ 438   5                          OSD_LED_CONTRL(_OSD_LED_OFF);
+ 439   5                          }
+ 440   4                          else if(GET_OSD_LED_TYPE() == _OSDLedType_ON)
+ 441   4                          {
+ 442   5      
+ 443   5                          OSD_LED_CONTRL(_OSD_LED_ON);
+ 444   5      
+ 445   5                          }
+ 446   4      
+ 447   4      #endif
+ 448   4                ScalerTimerActiveTimerEvent(SEC(2), _USER_TIMER_EVENT_BUININ_MSG);
+ 449   4                #if  (_BURNIN_MSG_MENU_SUPPORT==_ON)
+ 450   4                  RTDBurnInMenu();
+ 451   4                #endif
+ 452   4      
+ 453   4                UserAdjustContrast(100);
+ 454   4                UserAdjustBacklight(100);
+ 455   4                          ScalerTimerActiveTimerEvent(SEC(0.5), _USER_TIMER_EVENT_LED_MODE_FLICKER); 
+ 456   4                UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 457   4              }
+ 458   3              else
+ 459   3              {
+ 460   4      //�������ź�״̬�Զ�����һ���ź�
+ 461   4      #if(_AUTO_SearchSource) 
+              //                SET_OSD_INPUT_PORT_OSD_ITEM(_OSD_INPUT_AUTO);
+              
+                              SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+                              if(UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType())
+                              {
+                                  UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+                                  SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+                              }
+                              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_LED_MODE_FLICKER); 
+              #endif
+ 472   4      
+ 473   4      
+ 474   4      
+ 475   4      //=====================================
+ 476   4      
+ 477   4                g_flag_Nosignal=1;
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 9   
+
+ 478   4                        if(SysSourceGetCableDetect(UserCommonNVRamGetSystemData(_SEARCH_PORT)) == _TRUE)
+ 479   4                        {
+ 480   5                            ScalerTimerActiveTimerEvent(SEC(2), _USER_TIMER_EVENT_OSD_SHOW_NO_SIGNAL);
+ 481   5                        }
+ 482   4                        else
+ 483   4                        {
+ 484   5                            ScalerTimerActiveTimerEvent(SEC(2), _USER_TIMER_EVENT_OSD_SHOW_NO_CABLE);
+ 485   5                        }
+ 486   4              }
+ 487   3                  }
+ 488   2            
+ 489   2                  break;
+ 490   2      
+ 491   2              case _MODE_STATUS_POWER_SAVING:
+ 492   2      
+ 493   2                  if(SysSourceGetCableDetect(SysSourceGetInputPort()) == _FALSE)
+ 494   2                  {
+ 495   3                      SET_FORCE_POW_SAV_STATUS(_FALSE);
+ 496   3                  }
+ 497   2      
+ 498   2                  if(SysPowerGetPowerStatus() == _POWER_STATUS_NORMAL)
+ 499   2                  {
+ 500   3      #if(_SOURCE_AUTO_ON)||(_DEF_SAVING_SOURCE)
+                              if(GET_OSD_POWER_SAVING_SHOW_SOURCE() == _TRUE)
+                              {
+                                  SET_OSD_POWER_SAVING_SHOW_SOURCE(_FALSE);
+              
+                                  SET_OSD_EVENT_MESSAGE(_OSDEVENT_SHOW_CHANGE_SOURCE_MENU_MSG);
+                              }
+               #endif
+ 508   3                  }
+ 509   2      
+ 510   2                  break;
+ 511   2      
+ 512   2              case _MODE_STATUS_FACTORY:
+ 513   2      
+ 514   2                  break;
+ 515   2      
+ 516   2              default:
+ 517   2      
+ 518   2                  break;
+ 519   2          }
+ 520   1        
+ 521   1      
+ 522   1      #if(_DP_EMBEDDED_SWITCH_SUPPORT_TYPE == _DP_EMBEDDED_SWITCH_2_DP)
+                  // Check embedded DP switch status
+                  UserCommonAdjustEmbeddedDpSwitch();
+              #endif
+ 526   1      
+ 527   1      
+ 528   1          if(GET_KEYMESSAGE() < _KEY_AMOUNT)
+ 529   1          {
+ 530   2              // hot key
+ 531   2              if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) ||
+ 532   2              
+ 533   2                 (SysModeGetModeState() == _MODE_STATUS_NOSUPPORT) ||
+ 534   2                 (SysModeGetModeState() == _MODE_STATUS_NOSIGNAL) ||
+ 535   2                 (SysModeGetModeState() == _MODE_STATUS_POWER_SAVING))
+ 536   2              {
+ 537   3                  if((((((GET_OSD_STATE() < _MENU_END)&&(_MENU_FUN_BACKLIGHT <= GET_OSD_STATE())&& GetOsdShowTyp
+             -e(OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]) == _TYPE_SLIDER)||(_MENU_HOT_KEY_FUNC == GET_OSD_STATE() && GetOsd
+             -ShowType(OSD_SubMenuCur) == _TYPE_SLIDER) )&& ((GET_KEYMESSAGE() == _LEFT_KEY_MESSAGE) || (GET_KEYMESSAGE() == _RIGHT_KE
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 10  
+
+             -Y_MESSAGE)))||((GetOsdShowType(GET_OSD_STATE())==_TYPE_SLIDER)&& ((GET_KEYMESSAGE() == _LEFT_KEY_MESSAGE) || (GET_KEYMES
+             -SAGE() == _RIGHT_KEY_MESSAGE))))\
+ 538   3                      ||(((GET_KEYMESSAGE() == _LEFT_KEY_MESSAGE) || (GET_KEYMESSAGE() == _RIGHT_KEY_MESSAGE))&&
+             -((GET_OSD_STATE()>=_MENU_FACTORY_CT1_RED_ADJ&&GET_OSD_STATE()<=_MENU_FACTORY_CT4_BLUE_ADJ)&&GET_OSD_IN_FACTORY_MENU_STAT
+             -US()==_ON)))
+ 539   3                  {
+ 540   4                      SET_KEYREPEATENABLE();
+ 541   4                  }
+ 542   3      #if(_DEF_STA_SIX_COLOR)
+                    if(GET_OSD_STATE() >= _MENU_FUN_SAT_RED && _MENU_FUN_HUE_YELLOW >= GET_OSD_STATE())
+                    {
+                      SET_KEYREPEATENABLE();
+                    }
+              #endif
+ 548   3      
+ 549   3      
+ 550   3              }
+ 551   2          
+ 552   2          
+ 553   2              if(GET_OSD_IN_FACTORY_MENU_STATUS() == _TRUE)
+ 554   2              {
+ 555   3                  RTDFactoryMenuOperation();
+ 556   3                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+ 557   3                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_120s);
+ 558   3              }
+ 559   2              else
+ 560   2              {
+ 561   3                  // back up previous OSD State
+ 562   3                  SET_OSD_STATE_PREVIOUS(GET_OSD_STATE());
+ 563   3            
+ 564   3            {
+ 565   4                    (*OperationTable[GET_OSD_STATE()])();
+ 566   4            }
+ 567   3            
+ 568   3                  if(GET_OSD_IN_FACTORY_MENU_STATUS() == _FALSE)
+ 569   3                  {
+ 570   4                      if(SysModeGetModeState() == _MODE_STATUS_ACTIVE &&((GET_OSD_STATE() < _MENU_END)&&(_MENU_N
+             -ONE < GET_OSD_STATE())))
+ 571   4                      {
+ 572   5                          if((GET_OSD_STATE() == _HOT_KEY_LOS_TYPE1) || (GET_OSD_STATE() == _HOT_KEY_LOS_TYPE2))
+ 573   5                          {
+ 574   6                          
+ 575   6                              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);                       
+ 576   6                    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_120s);
+ 577   6                         }
+ 578   5      //#if(_DEF_REAL_TIME_HZ)
+ 579   5      //          else if(GET_OSD_FV_INFORMATION() && (GET_OSD_HZ_DISPLAYSTATUS()&(~(_BIT1|_BIT2|_BIT3|_BIT4|_BIT5|_B
+             -IT6|_BIT7))))
+ 580   5      //          {
+ 581   5      //            ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+ 582   5      //          }
+ 583   5      //#endif
+ 584   5                          else
+ 585   5                          {
+ 586   6                  if(GET_OSD_TIME_OUT() > 60)
+ 587   6                  {
+ 588   7      //              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+ 589   7      //              ScalerTimerReactiveTimerEvent(SEC((GET_OSD_TIME_OUT()-60)), _USER_TIMER_EVENT_OSD_DISABLE_120s);
+ 590   7                    
+ 591   7                  }
+ 592   6                  else
+ 593   6                  {
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 11  
+
+ 594   7                    ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_120s);
+ 595   7                    ScalerTimerReactiveTimerEvent(SEC(GET_OSD_TIME_OUT()), _USER_TIMER_EVENT_OSD_DISABLE);
+ 596   7                  }
+ 597   6      //                        ScalerTimerReactiveTimerEvent(SEC(GET_OSD_TIME_OUT()), _USER_TIMER_EVENT_OSD_DIS
+             -ABLE);
+ 598   6                          }
+ 599   5                      }
+ 600   4                  }
+ 601   3      
+ 602   3      
+ 603   3      /*
+ 604   3                  if((GET_OSD_STATE() >= _MENU_NONE) &&
+ 605   3                      (GET_OSD_STATE() < _MENU_END) &&
+ 606   3                      ((SysModeGetModeState() == _MODE_STATUS_POWER_SAVING) || (SysModeGetModeState() == _MODE_S
+             -TATUS_NOSIGNAL)))
+ 607   3                  {
+ 608   3                      ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+ 609   3                      ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING);
+ 610   3                  }
+ 611   3                  else//(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+ 612   3                  {
+ 613   3                      ScalerTimerReactiveTimerEvent(SEC(GET_OSD_TIME_OUT()), _USER_TIMER_EVENT_OSD_DISABLE);
+ 614   3                  }
+ 615   3      
+ 616   3                  if(GET_OSD_IN_FACTORY_MENU_STATUS())
+ 617   3                  {
+ 618   3                      ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);
+ 619   3                  }
+ 620   3      */
+ 621   3              }
+ 622   2          }
+ 623   1      }
+ 624          
+ 625          //--------------------------------------------------
+ 626          // Description  : OSD event message processing function
+ 627          // Input Value  : None
+ 628          // Output Value : None
+ 629          //--------------------------------------------------
+ 630          void RTDOsdEventMsgProc(void)
+ 631          {
+ 632   1          switch(GET_OSD_EVENT_MESSAGE())
+ 633   1          {
+ 634   2              case _OSDEVENT_SHOW_NOSIGNAL_MSG:
+ 635   2            
+ 636   2            ScalerDDomainBackgroundSetColor(0, 0, 0);
+ 637   2            ScalerDDomainBackgroundEnable(_ENABLE);
+ 638   2            
+ 639   2            ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+ 640   2            ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG);       
+ 641   2                  OsdDispOsdMessage(_OSD_DISP_NOSIGNAL_MSG);
+ 642   2                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 643   2                  ScalerTimerActiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING);
+ 644   2                  break;
+ 645   2      
+ 646   2              case _OSDEVENT_SHOW_NOCABLE_MSG:
+ 647   2            ScalerDDomainBackgroundSetColor(0, 0, 0);
+ 648   2            ScalerDDomainBackgroundEnable(_ENABLE);
+ 649   2            ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+ 650   2            ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+ 651   2                  OsdDispOsdMessage(_OSD_DISP_NOSIGNAL_MSG);
+ 652   2                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 653   2                  ScalerTimerActiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING);
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 12  
+
+ 654   2                  break;
+ 655   2      
+ 656   2              case _OSDEVENT_SHOW_NOSUPPORT_MSG:
+ 657   2      
+ 658   2                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_CABLE);
+ 659   2                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_SIGNAL);
+ 660   2      
+ 661   2                  OsdDispOsdMessage(_OSD_DISP_NOSUPPORT_MSG);
+ 662   2                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 663   2      
+ 664   2            //if(GET_FUN_OVERCLOCK_HINT() == _OFF);
+ 665   2                  ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING);
+ 666   2            break;
+ 667   2      
+ 668   2              case _OSDEVENT_SHOW_FAIL_SAFE_MODE_MSG:
+ 669   2                  OsdDispOsdMessage(_OSD_DISP_FAIL_SAFE_MODE_MSG);
+ 670   2                  break;
+ 671   2      
+ 672   2              case _OSDEVENT_SHOW_POWER_SAVING_EVENT_MSG:        
+ 673   2                  OsdDispDisableOsd();
+ 674   2                  OsdDispOsdMessage(_OSD_DISP_POWER_SAVING_MSG);
+ 675   2                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 676   2                  ScalerTimerActiveTimerEvent(SEC(2), _USER_TIMER_EVENT_GO_TO_POWER_SAVING);
+ 677   2      
+ 678   2                  break;
+ 679   2      
+ 680   2              case _OSDEVENT_GO_TO_POWER_SAVING_EVENT_MSG:
+ 681   2            Cross_flag = 0;
+ 682   2      
+ 683   2                  OsdDispDisableOsd();
+ 684   2      #if(_LED_EFFECT_TJMODE14==_ON)
+                                      SET_OSD_LED_TYPE(_OSDLedType_OFF);
+                                      led_start =1;                 //�رյ�Ч
+                                       // ScalerTimerDelayXms(30);
+              #endif
+ 689   2                  SysPowerSetTargetPowerStatus(_POWER_STATUS_SAVING);
+ 690   2                  break;
+ 691   2      
+ 692   2      #if(_VGA_SUPPORT == _ON)
+                      case _OSDEVENT_DO_AUTO_CONFIG_MSG:
+              #if(_FREEZE_SUPPORT == _ON)
+                          ScalerTimerWaitForActiveTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_FREEZE_MSG);
+              #endif
+                          OsdDispAutoConfigProc();
+                          break;
+              #endif
+ 700   2      
+ 701   2              case _OSDEVENT_ACTIVE_DO_ONE_TIME_MSG:
+ 702   2      
+ 703   2      #if(_FREEZE_SUPPORT == _ON)
+                          ScalerTimerWaitForActiveTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE_FREEZE_MSG);
+              #endif
+ 706   2      
+ 707   2      #if(_VGA_SUPPORT == _ON)
+                          if(SysSourceGetSourceType() == _SOURCE_VGA)
+                          {
+                              if(UserInterfaceGetFirstAutoConfigStatus() == _TRUE)
+                              {
+                                  OsdDispAutoConfigProc();
+                              }
+                          }
+              #endif
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 13  
+
+ 716   2      
+ 717   2                  if(GET_OSD_STATE() == _MENU_NONE)
+ 718   2                  {
+ 719   3              if(GET_OSD_CROSS_STATUS()==_ON)//)(Cross_flag == 1)
+ 720   3              {
+ 721   4                //RTDOsdDispHotkeyFuncAdjust(_HOT_KEY_LOS_TYPE1-_MENU_FUN_BACKLIGHT); 
+ 722   4                                        MenuCross();
+ 723   4                
+ 724   4              }
+ 725   3              else
+ 726   3              {
+ 727   4                OsdDispOsdMessage(_OSD_DISP_INPUT_SIGNAL_MSG);
+ 728   4                          ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_DISABLE);//��ֹ��RESET֮��
+             -���ͬ���ɲ˵�����ʧʱ��
+ 729   4                          ScalerTimerActiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE);
+ 730   4              }
+ 731   3                  }
+ 732   2                  break;
+ 733   2      
+ 734   2              case _OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG:
+ 735   2                  UserCommonNVRamSaveSystemData();
+ 736   2                  break;
+ 737   2      
+ 738   2      #if(_VGA_SUPPORT == _ON)
+                      case _OSDEVENT_SAVE_NVRAM_MODEUSERDATA_MSG:
+                          UserCommonNVRamSaveModeUserData();
+                          break;
+              #endif
+ 743   2              case _OSDEVENT_SAVE_NVRAM_OSDUSERDATA_MSG:
+ 744   2                  RTDNVRamSaveOSDData();
+ 745   2                  break;
+ 746   2      
+ 747   2      #if(_VGA_SUPPORT == _ON)
+                      case _OSDEVENT_SAVE_NVRAM_ADCDATA_MSG:
+                          if(ScalerColorGetColorSpaceRGB(UserCommonInterfaceGetColorFormat()) == _TRUE)
+                          {
+                              UserCommonNVRamSaveADCSetting(_COLOR_SPACE_RGB);
+                          }
+                          else
+                          {
+                              UserCommonNVRamSaveADCSetting(_COLOR_SPACE_YPBPR);
+                          }
+                          break;
+              #endif
+ 759   2      
+ 760   2              case _OSDEVENT_SAVE_NVRAM_COLORPROC_MSG:
+ 761   2                  RTDNVRamSaveColorSetting(GET_COLOR_TEMP_TYPE());
+ 762   2                  break;
+ 763   2      
+ 764   2              case _OSDEVENT_SAVE_NVRAM_BRICON_MSG:
+ 765   2                  RTDNVRamSaveBriCon(SysSourceGetSourceType());
+ 766   2                  break;
+ 767   2      
+ 768   2              case _OSDEVENT_SAVE_NVRAM_OSDSIXCOLORDATA_MSG:
+ 769   2                  RTDNVRamSaveSixColorData();
+ 770   2                  break;
+ 771   2      
+ 772   2            case _OSDEVENT_SHOW_CHANGE_SOURCE_MENU_MSG:
+ 773   2      //#if(_DEF_2795E06) ->ֻ����һ����־λ  �����Ժ����
+ 774   2            /*
+ 775   2            SET_OSD_POWER_SAVING_SHOW_SOURCE(_FALSE);
+ 776   2              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_GO_TO_POWER_SAVING);
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 14  
+
+ 777   2                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_CABLE);
+ 778   2                  ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_OSD_SHOW_NO_SIGNAL);
+ 779   2                  OsdFuncSetOsdItemFlag();
+ 780   2                  UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 781   2                  ScalerTimerReactiveTimerEvent(SEC(GET_OSD_TIME_OUT()), _USER_TIMER_EVENT_OSD_SHOW_POWER_SAVING
+             -);
+ 782   2            
+ 783   2            RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_SIGNAL -_MENU_FUN_BACKLIGHT);
+ 784   2      */
+ 785   2            OsdInputSourceHotkey();
+ 786   2            UserCommonInterfacePanelPowerAction(_BACKLIGHT_ON);
+ 787   2            if((SysSourceGetSourceType() == _SOURCE_NONE))
+ 788   2            {
+ 789   3              SET_FORCE_POW_SAV_STATUS(_TRUE);
+ 790   3            }
+ 791   2      
+ 792   2      
+ 793   2            break;
+ 794   2      
+ 795   2            case _OSDEVENT_BUININ_MSG:
+ 796   2                  if((SysModeGetModeState() == _MODE_STATUS_NOSIGNAL) && GET_OSD_BURNING_MODE())
+ 797   2                  {
+ 798   3              FactoryBurnInEvent();     
+ 799   3                }
+ 800   2            else
+ 801   2            {
+ 802   3            
+ 803   3        #if (_BURNIN_MSG_MENU_SUPPORT==_ON)
+ 804   3              OsdDispDisableOsd();
+ 805   3        #endif
+ 806   3              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_BUININ_MSG);
+ 807   3            }
+ 808   2            break;
+ 809   2              default:
+ 810   2                  break;
+ 811   2          }
+ 812   1      
+ 813   1          SET_OSD_EVENT_MESSAGE(_OSDEVENT_NONE_MSG);
+ 814   1      }
+ 815          
+ 816          #if(_NAVIGAT_MENU_SURPPORT)
+              
+              void MenuNavigatNone(void)
+              {
+                  switch(GET_KEYMESSAGE())
+                  {
+                      case _MENU_KEY_MESSAGE:
+                    
+                          if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+                          {
+                              SET_OSD_STATE(_MENU_NAVIGAT_NONE);
+                      
+                      if(GET_OSD_FACTORY_MODE() == _ON)
+                      {
+                        RTDFactoryMainMenu();
+                      }
+                      else
+                      {
+                        OsdDispNavigatMenu();        
+                      }
+                          }
+              
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 15  
+
+                    break;
+                      case _RIGHT_KEY_MESSAGE:
+                      case _LEFT_KEY_MESSAGE:
+                          if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) && (GET_OSD_FACTORY_MODE() == _OFF))
+                          {
+                              SET_OSD_STATE(_MENU_NAVIGAT_NONE);
+                      
+                      OsdDispNavigatMenu();        
+                          }
+                          break;
+                  case _EXIT_KEY_MESSAGE:
+                          if((SysModeGetModeState() == _MODE_STATUS_ACTIVE) && (GET_OSD_FACTORY_MODE() == _OFF))
+                     {
+                       SET_OSD_STATE(_MENU_NAVIGAT_NONE);
+                       OsdDispNavigatMenu();        
+                     }
+                          
+              #if(_SOURCE_AUTO_ON)
+                    else if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+                    {
+                      SET_OSD_POWER_SAVING_SHOW_SOURCE(_TRUE);
+              
+                      if((SysPowerGetPowerStatus() == _POWER_STATUS_SAVING))
+                      {
+                        SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+                      }
+                    }
+              #endif            
+                    break;
+              
+                      default:
+                          break;
+                  }
+              }
+              
+              #endif
+ 874          
+ 875          #if(_DEF_HOTKEY_REPLACE)
+              void RTDOsdDispHotKeyUser(BYTE User_HotKey_i)
+              {
+                if(User_HotKey_i == _OFF)
+                {
+                  return;
+                }
+              
+                if(User_HotKey_i == 11) //�ź�ѡ��
+                {
+                  if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+                    {
+                      SET_OSD_POWER_SAVING_SHOW_SOURCE(_TRUE);
+                      if((SysPowerGetPowerStatus() == _POWER_STATUS_SAVING))
+                      {
+                       SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+                      }
+                    ScalerTimerActiveTimerEvent(SEC(8),_USER_TIMER_EVENT_OSD_DISABLE);
+                    }
+                  else
+                  {
+                    OsdDispDisableOsd();
+                    OsdInputSourceHotkey();
+                  }
+                  return;
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 16  
+
+                }
+              
+                if(SysModeGetModeState() != _MODE_STATUS_ACTIVE)
+                {
+                  return;
+                }
+              
+                if(User_HotKey_i == 1)  //����
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_BACKLIGHT-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 2) //�Աȶ�
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_CONTRAST-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 3) //�龰ģʽ
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_ECO-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 4) //ɫ��
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_COLORGAMUT-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 5) //��׼��
+                {
+                  SET_OSD_HOTKEY_RIGHT(_HOT_KEY_LOS_TYPE1-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 6) //֡��׷��
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_FV_INFORMATION-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 7) //����
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_AUDOIVOLUME-_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 8) //ɫ��
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_BRIGHTNESS -_MENU_FUN_BACKLIGHT);
+                }
+                else if(User_HotKey_i == 9) //������ǿ
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_COLORTEMP-_MENU_FUN_BACKLIGHT);
+                }
+              #if(_DEF_OPPOSITE_DCR)
+                else if(User_HotKey_i == 10) //��̬����ģʽ
+                {
+                  SET_OSD_HOTKEY_RIGHT(_MENU_FUN_DCR_OPPOSITE-_MENU_FUN_BACKLIGHT);
+                }
+              #endif
+              
+                RTDOsdDispHotkeyFuncAdjust(GET_OSD_HOTKEY_RIGHT());
+                return;
+              }
+              
+              #endif
+ 955          
+ 956          
+ 957          void MenuCross(void)
+ 958          {
+ 959   1      
+ 960   1      
+ 961   1      
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 17  
+
+ 962   1                Cross_flag = 1;
+ 963   1          //      OsdFuncDisableOsd();
+ 964   1                          OsdDispDisableOsd();
+ 965   1                OsdFuncApplyMap(WIDTH(4), HEIGHT(2), COLOR(_CP_BG, _CP_BG));   
+ 966   1      
+ 967   1      #if(_OSD_ROTATE_FUNCTION == _OSD_ROTATE_HARDWARE)
+ 968   1              ScalerOsdMapRotation(GET_OSD_ROTATE_STATUS(), _ENABLE, HEIGHT(2), _DISABLE, 0, _ENABLE);  
+ 969   1      #endif
+ 970   1              OsdFuncBlending(_OSD_TRANSPARENCY_ONLY_WINDOW);    
+ 971   1              OsdFuncTransparency(_OSD_TRANSPARENCY_ALL); 
+ 972   1      
+ 973   1              // Adjust Color Palette
+ 974   1              OsdPaletteSelectPalette(_PALETTE_MAIN_MENU);
+ 975   1      
+ 976   1      
+ 977   1              OsdFontVLCLoadFont(_HOTKEY_1BIT_ICON);
+ 978   1      
+ 979   1      
+ 980   1      #if(_OSD_CROSS_SMALL)
+              
+              if(0 == GET_OSD_CROSS_HAIR_TYPE1())
+              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON_SMALL0, COLOR(_CP_RED, _CP_BG),0);
+              else if(1 == GET_OSD_CROSS_HAIR_TYPE1())
+              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON_SMALL0, COLOR(_CP_GREEN, _CP_BG),0);
+              else if(2 == GET_OSD_CROSS_HAIR_TYPE1())
+              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1_SMALL1, COLOR(_CP_GREEN, _CP_BG),0);
+              else
+              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1_SMALL2, COLOR(_CP_GREEN, _CP_BG),0);
+              
+              OsdDispSetPosition(_POS_PERCENT, _OSD_POSITION_GLOBAL_A, 50, 50);
+                 OsdFuncEnableOsd();
+              
+              
+              
+              #else
+ 997   1              if(0 == GET_OSD_CROSS_HAIR_TYPE1())
+ 998   1              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON, COLOR(_CP_RED, _CP_BG),0);
+ 999   1              else if(1 == GET_OSD_CROSS_HAIR_TYPE1())
+1000   1              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1, COLOR(_CP_RED, _CP_BG),0);
+1001   1              else if(2 == GET_OSD_CROSS_HAIR_TYPE1())
+1002   1              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON, COLOR(_CP_GREEN, _CP_BG),0);
+1003   1              else
+1004   1              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1, COLOR(_CP_GREEN, _CP_BG),0);
+1005   1      
+1006   1              OsdDispSetPosition(_POS_PERCENT, _OSD_POSITION_GLOBAL_A, 50, 50);
+1007   1                       OsdFuncEnableOsd();
+1008   1      
+1009   1      #endif
+1010   1      
+1011   1      }
+1012          
+1013          
+1014          void MenuNone(void)
+1015          {
+1016   1          switch(GET_KEYMESSAGE())
+1017   1          {
+1018   2              case _MENU_KEY_MESSAGE:
+1019   2                  if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+1020   2                  {
+1021   3                      OsdFuncSetOsdItemFlag();
+1022   3              ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+1023   3              {
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 18  
+
+1024   4      #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                          SET_OSD_ENGER(_OFF);
+                        OSD_SubMenuCur=0;                   
+                        g_ucBacktoHotKeyState = 0;
+              #endif
+1029   4      #if _LONG_PRESS_MENU_LOCK_OSD_ENABLE
+                        if(GET_OSD_LOCK())
+                        {
+                          RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_LOCK_MENU-_MENU_FUN_BACKLIGHT);
+                          ScalerTimerReactiveTimerEvent(SEC(3),_USER_TIMER_EVENT_OSD_DISABLE);
+                        }
+                        else
+              #endif
+1037   4                {
+1038   5      
+1039   5      #if _ENABLE_ENERGE_NOTICE_MENU//��Ч����
+                          if(GET_OSD_ENERGE_NOTICE_FLAG()&&(GET_OSD_FACTORY_MODE() != _ON))
+                            RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_SHOW_ENERGE_MENU-_MENU_FUN_BACKLIGHT);
+                          else
+              #endif
+1044   5                            OsdDispMainMenu();
+1045   5                }
+1046   4              }
+1047   3                  }
+1048   2                  break;
+1049   2      
+1050   2              case _RIGHT_KEY_MESSAGE:
+1051   2                  if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+1052   2                  {
+1053   3      #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                      SET_OSD_ENGER(_OFF);
+                      g_ucBacktoHotKeyState = 1;
+              #endif
+1057   3      
+1058   3      #if _LONG_PRESS_MENU_LOCK_OSD_ENABLE
+                      if(GET_OSD_LOCK())
+                      {
+                        RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_LOCK_MENU-_MENU_FUN_BACKLIGHT);
+                        ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE);
+                      }
+                      else
+              #endif
+1066   3              {
+1067   4              
+1068   4      #if(_DEF_HOTKEY_REPLACE)
+                        RTDOsdDispHotKeyUser(GET_OSD_HOT_REPLACE_RIGHT());
+              #else
+1071   4                RTDOsdDispHotkeyFuncAdjust(GET_OSD_HOTKEY_RIGHT());
+1072   4      #endif
+1073   4              }
+1074   3                }
+1075   2        
+1076   2                  break;
+1077   2      
+1078   2              case _LEFT_KEY_MESSAGE:
+1079   2      
+1080   2                  if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+1081   2                  {
+1082   3      #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                      if(GET_OSD_HOTKEY_LEFT()!=_HOT_KEY_LOS_TYPE1)
+                      {
+                        SET_OSD_ENGER(_OFF);
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 19  
+
+                        g_ucBacktoHotKeyState = 1;
+                      }
+              #endif
+1089   3      #if _LONG_PRESS_MENU_LOCK_OSD_ENABLE
+                      if(GET_OSD_LOCK())
+                      {
+                        RTDOsdDispHotkeyFuncAdjust(_MENU_FUN_LOCK_MENU-_MENU_FUN_BACKLIGHT);
+                        ScalerTimerReactiveTimerEvent(SEC(3), _USER_TIMER_EVENT_OSD_DISABLE);
+                      }
+                      else
+              #endif
+1097   3              {
+1098   4      #if(_DEF_HOTKEY_REPLACE)
+                        RTDOsdDispHotKeyUser(GET_OSD_HOT_REPLACE_LEFT());
+              #else
+1101   4                RTDOsdDispHotkeyFuncAdjust(GET_OSD_HOTKEY_LEFT());
+1102   4      #endif
+1103   4              }
+1104   3                }
+1105   2                  break;
+1106   2      
+1107   2              case _EXIT_KEY_MESSAGE:
+1108   2      #if(_DEF_HOTKEY_REPLACE)
+                    if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+                    {
+                      SET_OSD_POWER_SAVING_SHOW_SOURCE(_TRUE);
+                      if((SysPowerGetPowerStatus() == _POWER_STATUS_SAVING))
+                      {
+                         SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+                      }
+                      ScalerTimerActiveTimerEvent(SEC(8),_USER_TIMER_EVENT_OSD_DISABLE);
+                    }
+                    else
+                    {
+                      if(SysModeGetModeState() == _MODE_STATUS_ACTIVE && SysSourceGetInputPort() != _NO_INPUT_PORT)
+                      {
+                        RTDOsdDispHotKeyUser(GET_OSD_HOT_REPLACE_EXIT());
+                      }
+                      else
+                      {
+                        OsdDispDisableOsd();
+                        OsdInputSourceHotkey();
+                      }
+                    } 
+                    break;  
+              #endif
+1132   2      
+1133   2      
+1134   2            
+1135   2      #if(_DEF_SAVING_SOURCE || _SOURCE_AUTO_ON)
+                    if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+                      {
+                        SET_OSD_POWER_SAVING_SHOW_SOURCE(_TRUE);
+                        if((SysPowerGetPowerStatus() == _POWER_STATUS_SAVING))
+                        {
+                         SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+                        }
+                      ScalerTimerActiveTimerEvent(SEC(8),_USER_TIMER_EVENT_OSD_DISABLE);
+                      }
+                    else
+                    {
+                      OsdDispDisableOsd();
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 20  
+
+                      OsdInputSourceHotkey();
+                    }     
+              #elif((_NAVIGAT_MENU_SURPPORT == _OFF)&&(_SOURCE_AUTO_ON))
+                          if(SysModeGetModeState() == _MODE_STATUS_POWER_SAVING)
+                          {
+                              SET_OSD_POWER_SAVING_SHOW_SOURCE(_TRUE);
+              
+                              if((SysPowerGetPowerStatus() == _POWER_STATUS_SAVING))
+                              {
+                                  SysPowerSetTargetPowerStatus(_POWER_STATUS_NORMAL);
+                              }
+                          }     
+              #else
+1161   2                  if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+1162   2                {
+1163   3      
+1164   3                  OsdDispDisableOsd();
+1165   3                  OsdInputSourceHotkey();
+1166   3                }
+1167   2      
+1168   2      #endif
+1169   2                  break;
+1170   2      
+1171   2      
+1172   2      
+1173   2      #if(_OSD_7_KEY_SUPPROT)   
+                  case _UP_KEY_MESSAGE:
+                    
+                    if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+                    {
+                      RTDOsdDispHotkeyFuncAdjust(_DEF_HOTKEY_UP - _MENU_FUN_BACKLIGHT);
+                    }
+                    break;  
+                    
+                  case _DOWN_KEY_MESSAGE:
+                    
+                    if(SysModeGetModeState() == _MODE_STATUS_ACTIVE)
+                    {
+                      RTDOsdDispHotkeyFuncAdjust(_DEF_HOTKEY_DOWN - _MENU_FUN_BACKLIGHT);
+                    }
+                    break;
+              
+              #endif
+1191   2      
+1192   2              default:
+1193   2                  break;
+1194   2          }
+1195   1      }
+1196          
+1197          void MenuInputSouce(void)
+1198          {
+1199   1      #if 0//
+              BYTE i;
+              #endif
+1202   1      
+1203   1          switch(GET_KEYMESSAGE())
+1204   1          {
+1205   2              case _MENU_KEY_MESSAGE:
+1206   2      #if 0//
+                    if(SysSourceGetInputPort() == _D0_INPUT_PORT)
+                      i = 1;
+                    else if(SysSourceGetInputPort() == _D1_INPUT_PORT)
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 21  
+
+                      i = 0;
+                    else if(SysSourceGetInputPort() == _D2_INPUT_PORT)
+                      i = 2;
+                    g_usBackupValue = i;
+              #else
+1215   2      
+1216   2            g_usBackupValue = GET_OSD_INPUT_PORT_OSD_ITEM();
+1217   2      #endif
+1218   2            g_usAdjustValue = g_usBackupValue;
+1219   2            //OSDSubMenuMove();
+1220   2            SET_OSD_STATE(_MENU_FUN_SIGNAL);
+1221   2      
+1222   2      #if 0//
+                    OsdWindowDrawingHighlight(_OSD_WINDOW_4_8,_ITEM_2_COL*12,(_ITEM_1_ROW+2*(i))*18, (_ITEM_2_COL+_ITEM_COL
+             -_LENGTH)*12, ((_ITEM_1_ROW+2*(i))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+                    OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_2_COL*12-10,((_ITEM_1_ROW+2*(i)))*18-9, (_ITEM_2_COL+_ITEM_COL_LEN
+             -GTH)*12-2, ((_ITEM_1_ROW+2*(i))+1)*18+7, _COLOR_WINDOW_BG); 
+              #else
+1226   2            OsdWindowDrawingHighlight(_OSD_WINDOW_4_8,_ITEM_2_COL*12,(_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM())
+             -)*18, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM()))+1)*18, _COLOR_WINDOW_BG, _COLO
+             -R_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+1227   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_2_COL*12-10,((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM())))*18-9
+             -, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM()))+1)*18+7, _COLOR_WINDOW_BG); 
+1228   2      #endif
+1229   2            break;
+1230   2      
+1231   2              case _RIGHT_KEY_MESSAGE:
+1232   2                  if(GET_OSD_FACTORY_MODE())
+1233   2              {
+1234   3                  UpdateOSDMainInterface(_OSD_MAIN_FACTORY);
+1235   3              }
+1236   2            else
+1237   2              {
+1238   3            UpdateOSDMainInterface(_OSD_MAIN_OTHER);
+1239   3              }
+1240   2                  break;
+1241   2      
+1242   2              case _LEFT_KEY_MESSAGE:
+1243   2            
+1244   2            UpdateOSDMainInterface(_OSD_MAIN_BRI_CON);
+1245   2                  break;
+1246   2      
+1247   2              case _EXIT_KEY_MESSAGE:
+1248   2            OsdDispDisableOsd();
+1249   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1250   2                  {
+1251   3      
+1252   3                  MenuCross();
+1253   3      
+1254   3                  }
+1255   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1259   2                  break;
+1260   2      
+1261   2              default:
+1262   2                  break;
+1263   2          }
+1264   1      }
+1265          
+1266          void MenuBri_Con(void)
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 22  
+
+1267          {
+1268   1          switch(GET_KEYMESSAGE())
+1269   1          {
+1270   2              case _MENU_KEY_MESSAGE:
+1271   2              
+1272   2            OSDSubMenuMove();
+1273   2                  break;
+1274   2      
+1275   2              case _RIGHT_KEY_MESSAGE:
+1276   2            
+1277   2            UpdateOSDMainInterface(_OSD_MAIN_SOURCE);
+1278   2                  break;
+1279   2      
+1280   2              case _LEFT_KEY_MESSAGE:
+1281   2            
+1282   2            UpdateOSDMainInterface(_OSD_MAIN_COLOR_SETTING);
+1283   2                  break;
+1284   2      
+1285   2              case _EXIT_KEY_MESSAGE:
+1286   2            OsdDispDisableOsd();
+1287   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1291   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1292   2                  {
+1293   3                  
+1294   3                  MenuCross();
+1295   3                  
+1296   3                  }
+1297   2      
+1298   2                  break;
+1299   2      
+1300   2              default:
+1301   2                  break;
+1302   2          }
+1303   1      }
+1304          void MenuColorSetting(void)
+1305          {
+1306   1          switch(GET_KEYMESSAGE())
+1307   1          {
+1308   2              case _MENU_KEY_MESSAGE:
+1309   2              
+1310   2            OSDSubMenuMove();
+1311   2                  break;
+1312   2      
+1313   2              case _RIGHT_KEY_MESSAGE:
+1314   2            
+1315   2            UpdateOSDMainInterface(_OSD_MAIN_BRI_CON);
+1316   2                  break;
+1317   2      
+1318   2              case _LEFT_KEY_MESSAGE:
+1319   2            
+1320   2            UpdateOSDMainInterface(_OSD_MAIN_PQ_SETTING );
+1321   2                  break;
+1322   2      
+1323   2              case _EXIT_KEY_MESSAGE:
+1324   2            OsdDispDisableOsd();
+1325   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1326   2                  {
+1327   3      
+1328   3                  MenuCross();
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 23  
+
+1329   3      
+1330   3                  }
+1331   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1335   2                  break;
+1336   2      
+1337   2              default:
+1338   2                  break;
+1339   2          }
+1340   1      }
+1341          
+1342          void MenuPQSetting(void)
+1343          {
+1344   1          switch(GET_KEYMESSAGE())
+1345   1          {
+1346   2              case _MENU_KEY_MESSAGE:
+1347   2                
+1348   2            OSDSubMenuMove();
+1349   2                  break;
+1350   2      
+1351   2              case _RIGHT_KEY_MESSAGE:
+1352   2            
+1353   2            UpdateOSDMainInterface(_OSD_MAIN_COLOR_SETTING);
+1354   2                  break;
+1355   2      
+1356   2              case _LEFT_KEY_MESSAGE:
+1357   2            
+1358   2            UpdateOSDMainInterface(_OSD_MAIN_DISPLAY );
+1359   2                  break;
+1360   2      
+1361   2              case _EXIT_KEY_MESSAGE:
+1362   2            OsdDispDisableOsd();
+1363   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1364   2                  {
+1365   3      
+1366   3                  MenuCross();
+1367   3      
+1368   3                  }
+1369   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1373   2                  break;
+1374   2      
+1375   2              default:
+1376   2                  break;
+1377   2          }
+1378   1      }
+1379          
+1380          void MenuDisplay(void)
+1381          {
+1382   1          switch(GET_KEYMESSAGE())
+1383   1          {
+1384   2              case _MENU_KEY_MESSAGE:
+1385   2                
+1386   2            OSDSubMenuMove();
+1387   2                  break;
+1388   2      
+1389   2              case _RIGHT_KEY_MESSAGE:
+1390   2            
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 24  
+
+1391   2            UpdateOSDMainInterface(_OSD_MAIN_PQ_SETTING);
+1392   2                  break;
+1393   2      
+1394   2              case _LEFT_KEY_MESSAGE:
+1395   2      
+1396   2      #if(_OSD_7PAGE || _DEF_PAGE8)
+1397   2            UpdateOSDMainInterface(_OSD_MAIN_AUDIO );
+1398   2      #else
+                          UpdateOSDMainInterface(_OSD_MAIN_OSD );
+              #endif
+1401   2                  break;
+1402   2      
+1403   2              case _EXIT_KEY_MESSAGE:
+1404   2            OsdDispDisableOsd();
+1405   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1406   2                  {
+1407   3      
+1408   3                  MenuCross();
+1409   3      
+1410   3                  }
+1411   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1415   2                  break;
+1416   2      
+1417   2              default:
+1418   2                  break;
+1419   2          }
+1420   1      }
+1421          #if(_OSD_7PAGE || _DEF_PAGE8)
+1422          
+1423          void MenAudio(void)
+1424          {
+1425   1          switch(GET_KEYMESSAGE())
+1426   1          {
+1427   2              case _MENU_KEY_MESSAGE:
+1428   2                
+1429   2            OSDSubMenuMove();
+1430   2                  break;
+1431   2      
+1432   2              case _RIGHT_KEY_MESSAGE:
+1433   2            
+1434   2            UpdateOSDMainInterface(_OSD_MAIN_DISPLAY);
+1435   2                  break;
+1436   2      
+1437   2              case _LEFT_KEY_MESSAGE:
+1438   2            
+1439   2            UpdateOSDMainInterface(_OSD_MAIN_OSD );
+1440   2                  break;
+1441   2      
+1442   2              case _EXIT_KEY_MESSAGE:
+1443   2            OsdDispDisableOsd();
+1444   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1445   2                  {
+1446   3      
+1447   3                  MenuCross();
+1448   3      
+1449   3                  }
+1450   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 25  
+
+              #endif
+1454   2                  break;
+1455   2      
+1456   2              default:
+1457   2                  break;
+1458   2          }
+1459   1      }
+1460          
+1461          
+1462          #endif
+1463          void MenuOSD(void)
+1464          {
+1465   1          switch(GET_KEYMESSAGE())
+1466   1          {
+1467   2              case _MENU_KEY_MESSAGE:
+1468   2                
+1469   2            OSDSubMenuMove();
+1470   2                  break;
+1471   2      
+1472   2              case _RIGHT_KEY_MESSAGE:
+1473   2      #if(_OSD_7PAGE || _DEF_PAGE8)
+1474   2           UpdateOSDMainInterface(_OSD_MAIN_AUDIO);
+1475   2      #else
+                    UpdateOSDMainInterface(_OSD_MAIN_DISPLAY);
+              #endif
+1478   2                  break;
+1479   2      
+1480   2              case _LEFT_KEY_MESSAGE:
+1481   2            
+1482   2            UpdateOSDMainInterface(_OSD_MAIN_OTHER);
+1483   2                  break;
+1484   2      
+1485   2              case _EXIT_KEY_MESSAGE:
+1486   2            OsdDispDisableOsd();
+1487   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1488   2                  {
+1489   3      
+1490   3                  MenuCross();
+1491   3      
+1492   3                  }
+1493   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1497   2                  break;
+1498   2      
+1499   2              default:
+1500   2                  break;
+1501   2          }
+1502   1      }
+1503          
+1504          
+1505          void MenuOther(void)
+1506          {
+1507   1          switch(GET_KEYMESSAGE())
+1508   1          {
+1509   2              case _MENU_KEY_MESSAGE:
+1510   2                
+1511   2            OSDSubMenuMove();
+1512   2                  break;
+1513   2      
+1514   2              case _RIGHT_KEY_MESSAGE:
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 26  
+
+1515   2            
+1516   2            UpdateOSDMainInterface(_OSD_MAIN_OSD);
+1517   2                  break;
+1518   2      
+1519   2              case _LEFT_KEY_MESSAGE:
+1520   2                  if(GET_OSD_FACTORY_MODE())
+1521   2                  UpdateOSDMainInterface(_OSD_MAIN_FACTORY);
+1522   2            else
+1523   2            UpdateOSDMainInterface(_OSD_MAIN_SOURCE);
+1524   2            
+1525   2                  break;
+1526   2      
+1527   2              case _EXIT_KEY_MESSAGE:
+1528   2            OsdDispDisableOsd();
+1529   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1530   2                  {
+1531   3      
+1532   3                  MenuCross();
+1533   3      
+1534   3                  }
+1535   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1539   2                  break;
+1540   2            
+1541   2      
+1542   2              default:
+1543   2                  break;
+1544   2          }
+1545   1      }
+1546          
+1547          
+1548          void MenuFactory(void)
+1549          {
+1550   1          switch(GET_KEYMESSAGE())
+1551   1          {
+1552   2              case _MENU_KEY_MESSAGE:
+1553   2                
+1554   2            RTDFactoryMainMenu();
+1555   2                  break;
+1556   2      
+1557   2              case _RIGHT_KEY_MESSAGE:
+1558   2            
+1559   2            UpdateOSDMainInterface(_OSD_MAIN_OTHER);
+1560   2                  break;
+1561   2      
+1562   2              case _LEFT_KEY_MESSAGE:
+1563   2            
+1564   2            UpdateOSDMainInterface(_OSD_MAIN_SOURCE);
+1565   2                  break;
+1566   2      
+1567   2              case _EXIT_KEY_MESSAGE:
+1568   2            OsdDispDisableOsd();
+1569   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1570   2                  {
+1571   3      
+1572   3                  MenuCross();
+1573   3      
+1574   3                  }
+1575   2      #if(_DEF_REAL_TIME_HZ)
+                    if(GET_OSD_FV_INFORMATION())
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 27  
+
+                      SET_OSD_HZ_DISPLAYSTATUS((GET_OSD_HZ_DISPLAYSTATUS()|_BIT0));
+              #endif
+1579   2                  break;
+1580   2      
+1581   2              default:
+1582   2                  break;
+1583   2          }
+1584   1      }
+1585          
+1586          void MENU_FUN_COMMON(void)
+1587          {
+1588   1          switch(GET_KEYMESSAGE())
+1589   1          {
+1590   2              case _MENU_KEY_MESSAGE: 
+1591   2              case _EXIT_KEY_MESSAGE:
+1592   2                OSDSubMenuMove();
+1593   2                  break;
+1594   2      
+1595   2      
+1596   2              case _RIGHT_KEY_MESSAGE:
+1597   2              case _LEFT_KEY_MESSAGE:
+1598   2              
+1599   2      #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                  if(GetOSDMSG(GET_OSD_STATE())==1&&GET_OSD_ENGER()==_OFF&&GET_KEYMESSAGE() == _RIGHT_KEY_MESSAGE){
+                    OsdDispDisableOsd();
+                    OsdDispOsdMessageEngerConsumption();
+                  }else if(GetOSDMSG(GET_OSD_STATE())==2&&GET_OSD_ENGER()==_OFF)
+                  {   
+                    OsdDispDisableOsd();
+                    OsdDispOsdMessageEngerConsumption();
+                  }
+                  else
+              #endif
+1610   2                  DebugMessageOsd("MENU_FUN_COMMON", 1111);
+1611   2      
+1612   2            OSDSubMenuMove();
+1613   2                  break;
+1614   2      
+1615   2              default:
+1616   2                  break;
+1617   2          }
+1618   1      }
+1619          
+1620          void MENU_FUN_INPUT_SOURCE(void)
+1621          {
+1622   1          switch(GET_KEYMESSAGE())
+1623   1          {
+1624   2              case _MENU_KEY_MESSAGE: 
+1625   2            if(GET_OSD_INPUT_PORT_OSD_ITEM() != g_usBackupValue)
+1626   2            {
+1627   3              SET_FORCE_POW_SAV_STATUS(_FALSE);
+1628   3              SysModeSetResetTarget(_MODE_ACTION_RESET_TO_SEARCH);
+1629   3          
+1630   3        #if(_SOURCE_AUTO_ON)
+                      if(GET_OSD_INPUT_PORT_OSD_ITEM() == _OSD_INPUT_AUTO)
+                      {
+                        SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP); //�Զ������ź�
+                        
+                        if(UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType())
+                        {
+                          UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+                          SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 28  
+
+                        }
+                      }
+                      else
+                      {   
+                        SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+                        SysSourceSetScanType(_SOURCE_SWITCH_FIXED_PORT);  //�ֶ������ź�
+                        if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+                           (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+                        {
+                          UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+                          UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+                          SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+                        }
+                      }
+                #else         
+1654   3              SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+1655   3              SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+1656   3              if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+1657   3                 (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+1658   3              {
+1659   4                UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+1660   4                UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+1661   4                SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+1662   4              }           
+1663   3        #endif    
+1664   3        
+1665   3              SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_OSDUSERDATA_MSG);
+1666   3            }
+1667   2          
+1668   2      
+1669   2            
+1670   2            SET_OSD_STATE(_OSD_MAIN_SOURCE);
+1671   2            ScalerOsdWindowDisable(_OSD_WINDOW_4_8);
+1672   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_1_COL*12-10,((_ITEM_1_ROW))*18-9, (_ITEM_1_COL+_ITEM_COL_LENGTH)*1
+             -2-2, ((_ITEM_1_ROW)+1)*18+7, _COLOR_WINDOW_BG);
+1673   2                  break;
+1674   2      
+1675   2              case _RIGHT_KEY_MESSAGE:
+1676   2              case _LEFT_KEY_MESSAGE:
+1677   2            {
+1678   3              g_usAdjustValue = (BYTE)(OsdDisplayDetOverRangeRotation(GET_OSD_INPUT_PORT_OSD_ITEM() , _OSD_INPUT_AMO
+             -UNT-1, 0, _ON));
+1679   3            }
+1680   2            SET_OSD_INPUT_PORT_OSD_ITEM(g_usAdjustValue);
+1681   2            OsdWindowDrawingHighlight(_OSD_WINDOW_4_8,_ITEM_2_COL*12,(_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM())
+             -)*18, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM()))+1)*18, _COLOR_WINDOW_BG, _COLO
+             -R_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+1682   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_2_COL*12-10,((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM())))*18-9
+             -, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*(GET_OSD_INPUT_PORT_OSD_ITEM()))+1)*18+7, _COLOR_WINDOW_BG); 
+1683   2            
+1684   2      
+1685   2            break;
+1686   2      
+1687   2      
+1688   2              case _EXIT_KEY_MESSAGE:
+1689   2            SET_OSD_STATE(_OSD_MAIN_SOURCE);
+1690   2            ScalerOsdWindowDisable(_OSD_WINDOW_4_8);
+1691   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_1_COL*12-10,((_ITEM_1_ROW))*18-9, (_ITEM_1_COL+_ITEM_COL_LENGTH)*1
+             -2-2, ((_ITEM_1_ROW)+1)*18+7, _COLOR_WINDOW_BG); 
+1692   2            SET_OSD_INPUT_PORT_OSD_ITEM(g_usBackupValue);
+1693   2                  break;
+1694   2      
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 29  
+
+1695   2              default:
+1696   2                  break;
+1697   2          }
+1698   1      }
+1699          
+1700          
+1701          
+1702          
+1703          void MENU_HOT_KEY_FUNC(void)
+1704          {
+1705   1        switch(GET_KEYMESSAGE())
+1706   1        {
+1707   2          case _MENU_KEY_MESSAGE: 
+1708   2          case _EXIT_KEY_MESSAGE:
+1709   2      #if(_KEY_IR_HUIXIONG_CROOSSOVER)
+                    //SET_IR_HOTKEY_STATUS(_OFF);
+              #endif
+1712   2            OsdHotKeyFuncSpacialProc();     
+1713   2            OsdDispDisableOsd();
+1714   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1715   2                  {
+1716   3                  
+1717   3                  MenuCross();
+1718   3                  
+1719   3                  }
+1720   2      
+1721   2              break;
+1722   2            
+1723   2          case _RIGHT_KEY_MESSAGE:
+1724   2          case _LEFT_KEY_MESSAGE:
+1725   2          
+1726   2            if(OSD_SubMenuCur == 0xff)
+1727   2              return;
+1728   2      
+1729   2          
+1730   2      #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                      if(GetOSDMSG(OSD_SubMenuCur)==1&&GET_OSD_ENGER()==_OFF&&GET_KEYMESSAGE() == _RIGHT_KEY_MESSAGE){
+                        OsdDispDisableOsd();
+                        OsdDispOsdMessageEngerConsumption();
+                      }else if(GetOSDMSG(OSD_SubMenuCur)==2&&GET_OSD_ENGER()==_OFF)
+                      {
+                        OsdDispDisableOsd();
+                        OsdDispOsdMessageEngerConsumption();
+                      }
+                      else
+              #endif
+1741   2      {
+1742   3            switch(GetOsdShowType(OSD_SubMenuCur))
+1743   3            {
+1744   4              case _TYPE_SLIDER:
+1745   4      #if(_CUSTOM_TYPE == _FKX_CUSTOMER)
+                                  OsdDispSliderAndNumber(1, OSD_SubMenuCur, GetOsdValue(OSD_SubMenuCur));   
+                        
+                        OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_HOTKEY_SILDER_START*12,1*18,(_HOTKEY_SILDER_START+(GET_SIL
+             -DER_PERCENT(OSD_SubMenuCur)))*12+1,1*18+18,  _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);
+              #else
+1750   4      
+1751   4                OsdDispSliderAndNumber(1, OSD_SubMenuCur, GetOsdValue(OSD_SubMenuCur));   
+1752   4                OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_HOTKEY_SILDER_START*12,1*18,(_HOTKEY_SILDER_START+(GET_SIL
+             -DER_PERCENT(OSD_SubMenuCur)))*12+1,1*18+18,  _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+1753   4      #endif
+1754   4                  break;
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 30  
+
+1755   4            
+1756   4              case _TYPE_ARROW:
+1757   4                
+1758   4                OsdFuncAdjHotKey();     
+1759   4      #if _RUSSIAN_SUPPORT
+1760   4                  OsdFuncClearOsd(_HOTKEY_ROW_START, 13, 17 , 1);
+1761   4      #else
+                          OsdFuncClearOsd(_HOTKEY_ROW_START, _HOTKEY_SLIDER_COL, 8 , 1);      
+              #endif
+1764   4      
+1765   4      
+1766   4      //            RTDOsdTableFuncPutStringProp(_HOTKEY_ROW_START, _HOTKEY_SLIDER_COL, _PFONT_PAGE_ITEM_1, OSD_SubMen
+             -uCur, GetOsdValue(OSD_SubMenuCur), COLOR(_COLOR_MENU_FONT, _CP_BG), GET_OSD_LANGUAGE());
+1767   4                          RTDOsdTableFuncPutStringProp(_HOTKEY_ROW_START, _HOTKEY_SLIDER_COL, _PFONT_PAGE_ITEM_1
+             -, OSD_SubMenuCur, GetOsdValue(OSD_SubMenuCur), COLOR(_COLOR_MENU_FONT, _CP_BG), GET_OSD_LANGUAGE());
+1768   4      
+1769   4      
+1770   4                  break;
+1771   4            
+1772   4              case _TYPE_SUBMENU: 
+1773   4                
+1774   4                OsdFuncAdjHotKey();     
+1775   4                OsdFuncClearOsd(_HOTKEY_ROW_START, _HOTKEY_SLIDER_COL+1, 12 , 1);          
+1776   4                RTDOsdTableFuncPutStringCenter(_HOTKEY_ROW_START, _HOTKEY_SLIDER_COL+1, _HOTKEY_SLIDER_COL+12, _PFONT
+             -_PAGE_ITEM_1 , OSD_SubMenuCur,  GetOsdValue(OSD_SubMenuCur), COLOR(_COLOR_MENU_FONT, _CP_BG), 0, 0);
+1777   4                  break;
+1778   4                    
+1779   4              default :
+1780   4                break;  
+1781   4            
+1782   4            }
+1783   3            break;
+1784   3      
+1785   3          default:
+1786   3            break;
+1787   3        }
+1788   2          }
+1789   1      }
+1790          
+1791          void MENU_HOT_KEY_LOS1(void)
+1792          {
+1793   1      
+1794   1        switch(GET_KEYMESSAGE())
+1795   1        {
+1796   2          case _EXIT_KEY_MESSAGE: 
+1797   2            Cross_flag = 0;
+1798   2      
+1799   2            OsdDispDisableOsd();    
+1800   2            break;
+1801   2          case _MENU_KEY_MESSAGE: 
+1802   2            Cross_flag = 0;
+1803   2      
+1804   2            OsdDispDisableOsd();    
+1805   2              break;
+1806   2            
+1807   2          case _RIGHT_KEY_MESSAGE:
+1808   2          case _LEFT_KEY_MESSAGE:
+1809   2            SET_OSD_CROSS_HAIR_TYPE1(OsdDisplayDetOverRange(GET_OSD_CROSS_HAIR_TYPE1() ,3 ,0 , _ON));
+1810   2                
+1811   2      #if(_OSD_CROSS_SMALL)
+                        
+                        if(0 == GET_OSD_CROSS_HAIR_TYPE1())
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 31  
+
+                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON_SMALL0, COLOR(_CP_RED, _CP_BG),0);
+                        else if(1 == GET_OSD_CROSS_HAIR_TYPE1())
+                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON_SMALL0, COLOR(_CP_GREEN, _CP_BG),0);
+                        else if(2 == GET_OSD_CROSS_HAIR_TYPE1())
+                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1_SMALL1, COLOR(_CP_GREEN, _CP_BG),0);
+                        else
+                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1_SMALL2, COLOR(_CP_GREEN, _CP_BG),0);
+                        
+                        OsdDispSetPosition(_POS_PERCENT, _OSD_POSITION_GLOBAL_A, 50, 50);
+                           OsdFuncEnableOsd();
+                        
+                        
+                        
+              #else
+1828   2                        if(0 == GET_OSD_CROSS_HAIR_TYPE1())
+1829   2                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON, COLOR(_CP_RED, _CP_BG),0);
+1830   2                        else if(1 == GET_OSD_CROSS_HAIR_TYPE1())
+1831   2                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1, COLOR(_CP_RED, _CP_BG),0);
+1832   2                        else if(2 == GET_OSD_CROSS_HAIR_TYPE1())
+1833   2                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON, COLOR(_CP_GREEN, _CP_BG),0);
+1834   2                        else
+1835   2                        OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE1_ICON1, COLOR(_CP_GREEN, _CP_BG),0);
+1836   2                
+1837   2                        OsdDispSetPosition(_POS_PERCENT, _OSD_POSITION_GLOBAL_A, 50, 50);
+1838   2                           OsdFuncEnableOsd();
+1839   2                
+1840   2      #endif
+1841   2      
+1842   2                  RTDNVRamSaveOSDData();
+1843   2              break;
+1844   2                
+1845   2          default :
+1846   2            break;        
+1847   2        }
+1848   1      }
+1849          
+1850          
+1851          #if 1//(_LONG_PRESS_MENU_LOCK_OSD_ENABLE||_LONG_PRESS_POWER_LOCK_POWER_KEY_ENABLE)
+1852          void MENU_FUN_LOCK_OSD(void)
+1853          {
+1854   1      
+1855   1        switch(GET_KEYMESSAGE())
+1856   1        {
+1857   2          case _MENU_KEY_MESSAGE: 
+1858   2          case _EXIT_KEY_MESSAGE:
+1859   2          case _RIGHT_KEY_MESSAGE:
+1860   2          case _LEFT_KEY_MESSAGE:
+1861   2      
+1862   2                      OsdDispDisableOsd();    
+1863   2      
+1864   2            break;
+1865   2        
+1866   2          default:
+1867   2            break;
+1868   2        }
+1869   1      }
+1870          #endif
+1871          
+1872          
+1873          #if _ENABLE_ENERGE_NOTICE_MENU
+              void MENU_SHOW_ENERGE_MENU(void)
+              {
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 32  
+
+                switch(GET_KEYMESSAGE())
+                {
+                  case _MENU_KEY_MESSAGE:     
+                      if(g_usAdjustValue == 1)
+                       {
+                            SET_OSD_ENERGE_NOTICE_FLAG(_OFF);
+                            RTDNVRamSaveOSDData();
+                      ScalerOsdWindowDisable(_OSD_WINDOW_4_8);// henry 
+                     
+                      OsdDispMainMenu();
+                     }
+                    else
+                      OsdDispDisableOsd();
+                    break;
+              
+                  case _LEFT_KEY_MESSAGE:     
+                  case _RIGHT_KEY_MESSAGE:
+                           if(g_usAdjustValue == 1)
+                           {
+                        g_usAdjustValue = 0;
+                        OsdWindowDrawingHighlight(_OSD_WINDOW_4_8, g_ucOsdWidth*6, 108, g_ucOsdWidth*12, 126, _CP_BLACK, _CO
+             -LOR_MENU_FONT_SELECT, _CP_BLACK, _ON);
+                           }
+                     else
+                     {
+                        g_usAdjustValue = 1;
+                              OsdWindowDrawingHighlight(_OSD_WINDOW_4_8, 0, 108, g_ucOsdWidth*6, 126, _CP_BLACK, _COLOR_M
+             -ENU_FONT_SELECT, _CP_BLACK, _ON);
+                     }
+                    
+                    break;
+              
+                  case _EXIT_KEY_MESSAGE:
+                     OsdDispDisableOsd();
+                    break;
+                }
+              }
+              #endif
+1912          
+1913          void MENU_HOT_KEY_SOURCE(void)
+1914          {
+1915   1        switch(GET_KEYMESSAGE())
+1916   1        {
+1917   2          case _MENU_KEY_MESSAGE: 
+1918   2            
+1919   2            if(g_usBackupValue == GET_OSD_INPUT_PORT_OSD_ITEM())
+1920   2                  {
+1921   3                  OsdDispDisableOsd();
+1922   3                  if(GET_OSD_CROSS_STATUS()==_ON)
+1923   3                  {
+1924   4      
+1925   4                  MenuCross();
+1926   4      
+1927   4                  } 
+1928   3      
+1929   3                   }
+1930   2            else
+1931   2            { 
+1932   3      #if(_DEF_2795E06)
+                      g_SouceSelect = 0;
+              #endif
+1935   3              SET_FORCE_POW_SAV_STATUS(_FALSE);
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 33  
+
+1936   3              SysModeSetResetTarget(_MODE_ACTION_RESET_TO_SEARCH);
+1937   3          
+1938   3            #if(_SOURCE_AUTO_ON)
+                      if(GET_OSD_INPUT_PORT_OSD_ITEM() == _OSD_INPUT_AUTO)
+                      {
+                        SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+                        
+                        if(UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType())
+                        {
+                          UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+                          SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+                        }
+                      }
+                      else
+                      {   
+                        SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+                        SysSourceSetScanType(_SOURCE_SWITCH_FIXED_PORT);
+                        if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+                           (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+                        {
+                          UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+                          UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+                          SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+                        }
+                      }
+                  #else         
+1962   3              SysSourceSwitchInputPort(OsdFuncGetOsdItemFlag());
+1963   3              SysSourceSetScanType(_SOURCE_SWITCH_AUTO_IN_GROUP);
+1964   3              if((UserCommonNVRamGetSystemData(_SEARCH_PORT) != SysSourceGetInputPort()) ||
+1965   3                 (UserCommonNVRamGetSystemData(_SOURCE_SCAN_TYPE) != SysSourceGetScanType()))
+1966   3              {
+1967   4                UserCommonNVRamSetSystemData(_SEARCH_PORT, SysSourceGetInputPort());
+1968   4                UserCommonNVRamSetSystemData(_SOURCE_SCAN_TYPE, SysSourceGetScanType());
+1969   4                SET_OSD_EVENT_MESSAGE(_OSDEVENT_SAVE_NVRAM_SYSTEMDATA_MSG);
+1970   4              }           
+1971   3          #endif        
+1972   3      
+1973   3      
+1974   3            }
+1975   2            
+1976   2            break;
+1977   2              case _EXIT_KEY_MESSAGE:
+1978   2                  OsdDispDisableOsd();    
+1979   2                  if(GET_OSD_CROSS_STATUS()==_ON)
+1980   2                  {
+1981   3      
+1982   3                  MenuCross();
+1983   3      
+1984   3                  }   
+1985   2                  break;
+1986   2      
+1987   2              case _RIGHT_KEY_MESSAGE:
+1988   2              case _LEFT_KEY_MESSAGE:
+1989   2                  
+1990   2                  SET_OSD_INPUT_PORT_OSD_ITEM(OsdDisplayDetOverRangeRotation(GET_OSD_INPUT_PORT_OSD_ITEM() , _OS
+             -D_INPUT_AMOUNT-1, 0, _ON));
+1991   2      
+1992   2      #if(_OSD_BLACK_TYPE)  //��ɫ
+1993   2                  OsdWindowDrawingHighlight(_OSD_WINDOW_4_1, 0, (3+GET_OSD_INPUT_PORT_OSD_ITEM()*2)*18, 12*12, (
+             -4+GET_OSD_INPUT_PORT_OSD_ITEM()*2)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+1994   2      #else
+                          OsdWindowDrawingHighlight(_OSD_WINDOW_4_1, 0, (1+GET_OSD_INPUT_PORT_OSD_ITEM()*2)*18, 12*12, (
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 34  
+
+             -2+GET_OSD_INPUT_PORT_OSD_ITEM()*2)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+              #endif
+1997   2                  break;
+1998   2        }
+1999   1      }
+2000          
+2001          void MENU_HOT_KEY_LOS2(void)
+2002          {
+2003   1      
+2004   1        switch(GET_KEYMESSAGE())
+2005   1        {
+2006   2          case _MENU_KEY_MESSAGE: 
+2007   2          case _EXIT_KEY_MESSAGE:
+2008   2      
+2009   2            OsdDispDisableOsd();    
+2010   2              break;
+2011   2            
+2012   2          case _RIGHT_KEY_MESSAGE:
+2013   2          case _LEFT_KEY_MESSAGE:
+2014   2            SET_OSD_CROSS_HAIR_TYPE2(OsdDisplayDetOverRange(GET_OSD_CROSS_HAIR_TYPE2() ,5 ,0 , _ON));
+2015   2                
+2016   2            if(0 == GET_OSD_CROSS_HAIR_TYPE2())
+2017   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON1, COLOR(_CP_YELLOW, _CP_BG),0);
+2018   2            else if(1 == GET_OSD_CROSS_HAIR_TYPE2())
+2019   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON2, COLOR(_CP_RED, _CP_BG),0);
+2020   2            else if(2 == GET_OSD_CROSS_HAIR_TYPE2())
+2021   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON3, COLOR(_CP_YELLOW, _CP_BG),0);
+2022   2            else if(3 == GET_OSD_CROSS_HAIR_TYPE2())
+2023   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON4, COLOR(_CP_RED, _CP_BG),0);
+2024   2            else if(4 == GET_OSD_CROSS_HAIR_TYPE2())
+2025   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON5, COLOR(_CP_YELLOW, _CP_BG),0);
+2026   2            else if(5 == GET_OSD_CROSS_HAIR_TYPE2())
+2027   2              OsdFontPut1BitTable(ROW(0), COL(0), tOSD_TYPE2_ICON6, COLOR(_CP_RED, _CP_BG),0);
+2028   2      
+2029   2                  RTDNVRamSaveOSDData();
+2030   2              break;
+2031   2                
+2032   2          default :
+2033   2            break;        
+2034   2        }
+2035   1      }
+2036          
+2037          #if(_DEF_STA_SIX_COLOR)//_MENU_FUN_SAT_STATE
+              
+              void MENU_FUN_HUE_SIX_COLOR(void)
+              {
+                  BYTE i = 0;
+                  switch(GET_KEYMESSAGE())
+                  {
+                  case _RIGHT_KEY_MESSAGE:
+                  case _LEFT_KEY_MESSAGE:
+                     OsdDispSliderAndNumber(_ITEM_1_ROW+(GET_OSD_STATE()-_MENU_FUN_HUE_RED)*2,(GET_OSD_STATE()),GetOsdValu
+             -e(GET_OSD_STATE()));
+                     OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+2*(GET_OSD_STATE()-_MENU_FUN_HU
+             -E_RED))*18, (_ITEM_3_COL+_ITEM_SLIDER_OFFSET+GET_SILDER_PERCENT(GET_OSD_STATE()))*12, ((_ITEM_1_ROW+2*(GET_OSD_STATE()-_
+             -MENU_FUN_HUE_RED))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);    
+                     ScalerTimerDelayXms(80);//����ʱ�ᵼ���ٶ�̫��,�����������
+             -�����ٶȲ�һ��
+                    break;
+              
+                  
+                      case _MENU_KEY_MESSAGE: 
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 35  
+
+                  case _EXIT_KEY_MESSAGE:
+                    //�����ǰ������
+                    OsdFuncClearOsd(ROW(_ITEM_1_ROW+GET_HUE_STATE()*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1
+             -));
+                    for(i = 0; i < 6;i++)//������ѡ�����´�ӡ
+                    {
+                      RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+i*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + i,_MENU_FUN_SAT_STATE,
+             -i, COLOR(_COLOR_MENU_FONT, _CP_BG),_ENGLISH);
+                    }
+                    OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+GET_HUE_STATE()*2)*18, (_ITEM_3_C
+             -OL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+GET_HUE_STATE()*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENA
+             -BLE);
+                    OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*GET_HUE_STATE()))*18-9, (_ITEM_3_COL+_
+             -ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*GET_HUE_STATE())+1)*18+7, _COLOR_WINDOW_BG);
+                    SET_OSD_STATE(_MENU_FUN_HUE_STATE);
+                }
+              }
+              
+              
+              void MENU_FUN_STA_SIX_COLOR(void)
+              {
+                  BYTE i = 0;
+                  switch(GET_KEYMESSAGE())
+                  {
+                  case _RIGHT_KEY_MESSAGE:
+                  case _LEFT_KEY_MESSAGE:
+                     OsdDispSliderAndNumber(_ITEM_1_ROW+(GET_OSD_STATE()-_MENU_FUN_SAT_RED)*2,(GET_OSD_STATE()),GetOsdValu
+             -e(GET_OSD_STATE()));
+                     OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+2*(GET_OSD_STATE()-_MENU_FUN_SA
+             -T_RED))*18, (_ITEM_3_COL+_ITEM_SLIDER_OFFSET+GET_SILDER_PERCENT(GET_OSD_STATE()))*12, ((_ITEM_1_ROW+2*(GET_OSD_STATE()-_
+             -MENU_FUN_SAT_RED))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);    
+                     ScalerTimerDelayXms(80); //����ʱ�ᵼ���ٶ�̫��,�����������
+             -������ٶȲ�һ��
+                    break;
+              
+                  
+                      case _MENU_KEY_MESSAGE: 
+                  case _EXIT_KEY_MESSAGE:
+                    //�����ǰ������
+                    OsdFuncClearOsd(ROW(_ITEM_1_ROW+GET_SAT_STATE()*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1
+             -));
+                    for(i = 0; i < 6;i++)//������ѡ�����´�ӡ
+                    {
+                      RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+i*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + i,_MENU_FUN_SAT_STATE,
+             -i, COLOR(_COLOR_MENU_FONT, _CP_BG),_ENGLISH);
+                    }
+                    
+                    OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+GET_SAT_STATE()*2)*18, (_ITEM_3_C
+             -OL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+GET_SAT_STATE()*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENA
+             -BLE);
+                    OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*GET_SAT_STATE()))*18-9, (_ITEM_3_COL+_
+             -ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*GET_SAT_STATE())+1)*18+7, _COLOR_WINDOW_BG);
+                    SET_OSD_STATE(_MENU_FUN_SAT_STATE);
+                }
+              }
+              #endif
+2095          
+2096          
+2097          
+2098          
+2099          void MENU_FUN_RGB(void)
+2100          {
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 36  
+
+2101   1          BYTE i = 0;
+2102   1          DebugMessageOsd("MENU_FUN_RGB_FUN",GET_OSD_STATE());
+2103   1      #if(_DEF_CT_JX)
+              
+              #if 1
+                BYTE CT_DATA_ORDER[_CT_COLORTEMP_AMOUNT+1];
+                CT_DATA_ORDER[_CT_9300] = 0;
+                CT_DATA_ORDER[_CT_7500] = 2;
+                CT_DATA_ORDER[_CT_6500] = 4;
+                CT_DATA_ORDER[_CT_5800] = 5;
+                CT_DATA_ORDER[_CT_SRGB] = _OFF;
+                CT_DATA_ORDER[_CT_USER] = 6;
+                CT_DATA_ORDER[_CT_7000] = 3;
+                CT_DATA_ORDER[_CT_8000] = 1;
+                CT_DATA_ORDER[_CT_GAMMA18] = 6;
+                CT_DATA_ORDER[_CT_GAMMA20] = 6;
+                CT_DATA_ORDER[_CT_GAMMA22] = 6;
+                CT_DATA_ORDER[_CT_GAMMA24] = 6;
+                CT_DATA_ORDER[_CT_GAMMA26] = 6;
+              #else
+                BYTE CT_DATA_ORDER[_CT_COLORTEMP_AMOUNT+1] =
+                {
+                  0,//_CT_9300
+                  2,//_CT_7500
+                  4,//_CT_6500
+                  5,//_CT_5800
+                  _OFF,//_CT_SRGB
+                  6,//_CT_USER
+                  3,//_CT_7000
+                  1,//_CT_8000
+                  6,//_CT_GAMMA18
+                  6,//_CT_GAMMA20
+                  6,//_CT_GAMMA22
+                  6,//_CT_GAMMA24
+                  6//_CT_GAMMA26
+                };
+              #endif
+              
+              #endif  //(_DEF_CT_JX)
+2140   1      
+2141   1      
+2142   1        
+2143   1          switch(GET_KEYMESSAGE())
+2144   1        {
+2145   2          case _MENU_KEY_MESSAGE: 
+2146   2            for(i = 0; i<3; i++)
+2147   2            OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+2148   2                   SET_OSD_STATE(_MENU_FUN_R+g_usBackupValue);
+2149   2             OsdDispSliderAndNumber(_ITEM_1_ROW+g_usBackupValue*2,_MENU_FUN_R+g_usBackupValue,GetOsdValue(_MENU_FUN
+             -_R+g_usBackupValue));
+2150   2             OsdFontPut1BitTable(ROW(_ITEM_1_ROW+g_usBackupValue*2), COL(_ITEM_3_COL+_ITEM_SLIDER_OFFSET), tOSD_SLI
+             -DER,  COLOR(_COLOR_MENU_FONT, _CP_BG), 0);
+2151   2             OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+2*g_usBackupValue)*18, (_ITEM_3_
+             -COL+_ITEM_SLIDER_OFFSET+GET_SILDER_PERCENT(_MENU_FUN_R+g_usBackupValue))*12, ((_ITEM_1_ROW+2*g_usBackupValue)+1)*18, _CO
+             -LOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+2152   2             OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*g_usBackupValue))*18-9, (_ITEM_3_COL+
+             -_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*g_usBackupValue)+1)*18+7, _COLOR_WINDOW_BG);
+2153   2             g_usAdjustValue = GetOsdValue(_MENU_FUN_R+g_usBackupValue);
+2154   2            break;
+2155   2            
+2156   2          case _RIGHT_KEY_MESSAGE:
+2157   2          case _LEFT_KEY_MESSAGE:
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 37  
+
+2158   2              g_usBackupValue = (BYTE)(OsdDisplayDetOverRangeRotation(g_usBackupValue , 2, 0, _ON));
+2159   2                  OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+g_usBackupValue*2)*18, (
+             -_ITEM_3_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+g_usBackupValue*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP
+             -_BG, _ENABLE);  
+2160   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*g_usBackupValue))*18-9, (_ITEM_3_COL+_
+             -ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*g_usBackupValue)+1)*18+7, _COLOR_WINDOW_BG); 
+2161   2            break;
+2162   2      
+2163   2             
+2164   2      
+2165   2          case _EXIT_KEY_MESSAGE:
+2166   2                   SET_OSD_STATE(_MENU_FUN_COLORTEMP);
+2167   2             g_usAdjustValue = _CT_USER;
+2168   2                   for(i = 0; i<3; i++)
+2169   2               OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+2170   2      
+2171   2      #if(_DEF_CT_JX)
+                    for(i = _CT_9300; i <= _CT_8000; i++)
+                    {
+                      if(i != _CT_SRGB)
+                      {
+                        RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+CT_DATA_ORDER[i]*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + CT_DAT
+             -A_ORDER[i], _MENU_FUN_COLORTEMP,i, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+                      }
+                    }
+                    OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+CT_DATA_ORDER[_CT_USER]*2)*18, (_
+             -ITEM_3_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+CT_DATA_ORDER[_CT_USER]*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELE
+             -CT, _CP_BG, _ENABLE); 
+                    OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*CT_DATA_ORDER[_CT_USER]))*18-9, (_ITEM
+             -_3_COL+_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*CT_DATA_ORDER[_CT_USER])+1)*18+7, _COLOR_WINDOW_BG);
+              #else
+2182   2            RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+0*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + 0, (OsdStateDefine[OSD_
+             -MAIN_MENU_ITEM][OSD_SubMenuCur]),  0, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2183   2            RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+1*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + 1, (OsdStateDefine[OSD_
+             -MAIN_MENU_ITEM][OSD_SubMenuCur]),  1, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2184   2              RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+2*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + 2, (OsdStateDefine[O
+             -SD_MAIN_MENU_ITEM][OSD_SubMenuCur]),  2, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2185   2            RTDOsdTableFuncPutStringProp(_ITEM_1_ROW+3*2, _ITEM_3_COL, _PFONT_PAGE_ITEM_1 + 3, (OsdStateDefine[OSD_
+             -MAIN_MENU_ITEM][OSD_SubMenuCur]),  3, COLOR(_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2186   2      
+2187   2            OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+3*2)*18, (_ITEM_3_COL+_ITEM_COL_L
+             -ENGTH)*12, ((_ITEM_1_ROW+3*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE); 
+2188   2            OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*3))*18-9, (_ITEM_3_COL+_ITEM_COL_LENGT
+             -H)*12-2, ((_ITEM_1_ROW+2*3)+1)*18+7, _COLOR_WINDOW_BG);
+2189   2      
+2190   2      #endif
+2191   2             break;
+2192   2                
+2193   2          default :
+2194   2            break;        
+2195   2        }
+2196   1      }
+2197          
+2198          
+2199          
+2200          
+2201          void MENU_FUN_RGB_ADJUST(void)
+2202          {
+2203   1      
+2204   1          BYTE i = 0;
+2205   1          DebugMessageOsd("MENU_FUN_RGB_ADJUST",1);
+2206   1          switch(GET_KEYMESSAGE())
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 38  
+
+2207   1        { 
+2208   2          case _RIGHT_KEY_MESSAGE:
+2209   2          case _LEFT_KEY_MESSAGE:
+2210   2             OsdDispSliderAndNumber(_ITEM_1_ROW+(GET_OSD_STATE()-_MENU_FUN_R)*2,(GET_OSD_STATE()),GetOsdValue(GET_
+             -OSD_STATE()));
+2211   2             OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+2*(GET_OSD_STATE()-_MENU_FUN_R)
+             -)*18, (_ITEM_3_COL+_ITEM_SLIDER_OFFSET+GET_SILDER_PERCENT(GET_OSD_STATE()))*12, ((_ITEM_1_ROW+2*(GET_OSD_STATE()-_MENU_F
+             -UN_R))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);    
+2212   2            break;
+2213   2      
+2214   2             
+2215   2              case _MENU_KEY_MESSAGE: 
+2216   2          case _EXIT_KEY_MESSAGE:
+2217   2             g_usBackupValue = (GET_OSD_STATE()-_MENU_FUN_R);
+2218   2                   SET_OSD_STATE(_MENU_FUN_RGB);
+2219   2             
+2220   2                   for(i = 0; i<_HENG_COUNT; i++)
+2221   2               OsdFuncClearOsd(ROW(_ITEM_1_ROW+i*2), COL(_ITEM_3_COL), WIDTH(_ITEM_COL_LENGTH), HEIGHT(1));
+2222   2      
+2223   2             RTDOsdTableFuncPutStringProp(_ITEM_1_ROW, _ITEM_3_COL, _PFONT_PAGE_ITEM_1, _OSD_STRING_RGB,  0, COLOR(
+             -_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2224   2             RTDOsdTableFuncPutStringProp(_ITEM_2_ROW, _ITEM_3_COL, _PFONT_PAGE_ITEM_2, _OSD_STRING_RGB,  1, COLOR(
+             -_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2225   2             RTDOsdTableFuncPutStringProp(_ITEM_3_ROW, _ITEM_3_COL, _PFONT_PAGE_ITEM_3, _OSD_STRING_RGB,  2, COLOR(
+             -_COLOR_MENU_FONT, _CP_BG),  GET_OSD_LANGUAGE());
+2226   2                   
+2227   2             OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,_ITEM_3_COL*12,(_ITEM_1_ROW+g_usBackupValue*2)*18, (_ITEM_3_
+             -COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+g_usBackupValue*2)+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _EN
+             -ABLE);  
+2228   2             OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_3_COL*12-10,((_ITEM_1_ROW+2*g_usBackupValue))*18-9, (_ITEM_3_COL+
+             -_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*g_usBackupValue)+1)*18+7, _COLOR_WINDOW_BG);
+2229   2             break;
+2230   2                
+2231   2          default :
+2232   2            break;        
+2233   2        }
+2234   1      }
+2235          
+2236          
+2237          void MEMU_MESSAGE()
+2238          { 
+2239   1        
+2240   1        ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN_MSG); 
+2241   1        ScalerTimerCancelTimerEvent(_USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+2242   1        if(!GET_OSD_FACTORY_MODE()&&GET_OSD_AUTO_POWEROFF())
+2243   1        {
+2244   2          g_usPowerDownCount = GET_OSD_AUTO_POWEROFF()*60;
+2245   2        ScalerTimerActiveTimerEvent(SEC(60), _USER_TIMER_EVENT_AUTO_POWER_DOWN); 
+2246   2        }
+2247   1        
+2248   1        ScalerTimerWaitForEvent(_EVENT_DEN_STOP);
+2249   1        OsdDispDisableOsd();
+2250   1      }
+2251          
+2252          #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+              
+              void MENU_ENGER_CONSUMPTION(void)
+              {
+                  switch(GET_KEYMESSAGE())
+                  {
+                      case _MENU_KEY_MESSAGE: 
+                  if(GET_OSD_ENGER()==_ON)
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 39  
+
+                  {
+                    if(g_ucBacktoHotKeyState)
+                      RTDOsdDispHotkeyFuncAdjust(OSD_SubMenuCur-_MENU_FUN_BACKLIGHT);
+                    else
+                      OsdDispEngerMainMenu();
+                  }
+                  else
+              
+                  {
+                    OsdDispDisableOsd();
+                  }
+                         break;
+              
+                      case _RIGHT_KEY_MESSAGE:
+                      case _LEFT_KEY_MESSAGE:
+              
+                  g_usAdjustValue = GET_OSD_ENGER();// GetOsdValue(OsdStateDefine[OSD_MAIN_MENU_ITEM][OSD_SubMenuCur]);
+              
+                  g_usAdjustValue = (BYTE)OsdDisplayDetOverRange(g_usAdjustValue, 1, 0, _ON);
+              
+                  SET_OSD_ENGER(g_usAdjustValue);
+              //  {
+              //    OsdFuncClearOsd(5, (11), 11 , 1);          
+              //    RTDOsdTableFuncPutStringCenter(ROW(9),COL(4),COL(8), _PFONT_PAGE_ITEM_1, _OSD_YES_NO, 0,COLOR(_COLOR_B
+             -G_2,_CP_BG), _OSD_MESSAGE_PIXEL_OFFSET,GET_OSD_LANGUAGE());   
+              //      RTDOsdTableFuncPutStringCenter(ROW(9),COL(14),COL(18), _PFONT_PAGE_ITEM_1, _OSD_YES_NO, 1,COLOR(_C
+             -OLOR_BG_2,_CP_BG), _OSD_MESSAGE_PIXEL_OFFSET,GET_OSD_LANGUAGE());      
+              //  }
+                      
+                      OsdWindowDrawingHighlight(_OSD_WINDOW_4_7,XSTART(24*12-GET_OSD_ENGER()*15*12), YSTART(9*18), XEND(
+             -29*12-GET_OSD_ENGER()*15*12), YEND(10*18), _COLOR_WINDOW_BG, _CP_RED, _CP_BG, _ENABLE); 
+              //        (_OSD_WINDOW_5, XSTART(6*12+GET_OSD_ENGER()*12*12), YSTART(9*18), XEND(10*12+GET_OSD_ENGER()*12*
+             -12), YEND(10*18), _CP_RED);    
+              
+                  break;
+              
+              
+              
+                        case _EXIT_KEY_MESSAGE:
+                 
+                    OsdDispDisableOsd();
+              
+                  break;
+              
+                      default:
+                          break;
+                  }
+              }
+              
+              #endif
+2306          
+2307          void MENU_FUN_NULL(void)//����һЩ��ʱ���õĺ������ֲ��붯kernel���
+             -�֣���ֹ������������
+2308          {
+2309   1        BYTE test = 0;
+2310   1        
+2311   1        if(test == 1)
+2312   1        {
+2313   2      #if(_SIX_COLOR_SUPPORT == _ON)    
+                  ScalerColorSixColorInitial();
+                  ScalerColorSixColorAdjust(0,0,0);
+              #endif
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 40  
+
+2317   2          OsdFuncChangeColor1Bit(0,0,0,0,0,0);
+2318   2          ScalerOsdDataPort(0);
+2319   2          ScalerOsdSramAddressCount(0,0,_OSD_BYTE0);  
+2320   2          UserInterfaceGetNVRamDataStatus(_CHECK_ADC_SAVE);   
+2321   2      #if(_FREESYNC_SUPPORT == _ON)
+                  ScalerFreeSyncGetFreeSyncInfo(_NO_INPUT_PORT,_SPD_INFO_OUI);
+              #endif
+2324   2      #if((_HDMI_HDR10_SUPPORT == _ON) && (_D3_INPUT_PORT_TYPE != _D3_HDMI_PORT) &&(_HDMI_MAC_PAGE72_USE == _ON)
+             -)
+                  ScalerTMDSRx3GetHDR10Data(pData);
+              #endif
+2327   2          OsdFontPut2BitTable(0,0,0,0,0,0,0);
+2328   2        }
+2329   1      }
+2330          
+2331          
+2332          code void (*OperationTable[])(void) =
+2333          {
+2334          #if(_NAVIGAT_MENU_SURPPORT)
+                MenuNavigatNone,
+              #endif
+2337              MenuNone,
+2338              
+2339            MenuInputSouce,
+2340            MenuBri_Con,
+2341            MenuColorSetting,
+2342            MenuPQSetting,
+2343            MenuDisplay,  //7
+2344          
+2345          #if(_OSD_7PAGE || _DEF_PAGE8)
+2346                MenAudio,
+2347          #endif
+2348            MenuOSD,
+2349            MenuOther,
+2350            MenuFactory, //11
+2351          
+2352          // �����˵� 
+2353            OSDSubMenuMove,
+2354            OSDSubMenuMove,
+2355            OSDSubMenuMove,
+2356            OSDSubMenuMove,
+2357            OSDSubMenuMove,
+2358            OSDSubMenuMove,  //17
+2359          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2362          
+2363            OSDSubMenuMove,
+2364            OSDSubMenuMove,
+2365            OSDSubMenuMove,
+2366            OSDSubMenuMove,
+2367            OSDSubMenuMove,
+2368            OSDSubMenuMove,  //23
+2369          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2372            
+2373            OSDSubMenuMove,
+2374            OSDSubMenuMove,
+2375            OSDSubMenuMove,
+2376            OSDSubMenuMove,
+2377            OSDSubMenuMove,
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 41  
+
+2378            OSDSubMenuMove,  //29
+2379          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2382            
+2383            OSDSubMenuMove,
+2384            OSDSubMenuMove,
+2385            OSDSubMenuMove,
+2386            OSDSubMenuMove,
+2387            OSDSubMenuMove,
+2388            OSDSubMenuMove,  //35
+2389          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2392          
+2393          
+2394          #if(_OSD_7PAGE || _DEF_PAGE8)
+2395          
+2396              OSDSubMenuMove,
+2397            OSDSubMenuMove,
+2398            OSDSubMenuMove,
+2399            OSDSubMenuMove,
+2400            OSDSubMenuMove,
+2401            OSDSubMenuMove,  //41
+2402          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2405          #endif
+2406            
+2407            OSDSubMenuMove,
+2408            OSDSubMenuMove,
+2409            OSDSubMenuMove,
+2410            OSDSubMenuMove,
+2411            OSDSubMenuMove,
+2412            OSDSubMenuMove,  //47
+2413          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2416            
+2417            OSDSubMenuMove,
+2418            OSDSubMenuMove,
+2419            OSDSubMenuMove,
+2420            OSDSubMenuMove,
+2421            OSDSubMenuMove,
+2422            OSDSubMenuMove,  //53
+2423          #if(_DEF_PAGE8)
+                OSDSubMenuMove,  //17
+              #endif
+2426          
+2427            MENU_FUN_COMMON,//MENU_FUN_BACKLIGHT, 
+2428            MENU_FUN_COMMON,//MENU_FUN_CONTRAST,
+2429            MENU_FUN_COMMON,//MENU_FUN_BRIGHTNESS,
+2430            MENU_FUN_COMMON,//MENU_FUN_SHARPNESS,
+2431            MENU_FUN_COMMON,//MENU_FUN_ECO,
+2432            MENU_FUN_COMMON,//MENU_FUN_DCR,
+2433            MENU_FUN_COMMON,//MENU_FUN_HDR,  //60
+2434          
+2435            MENU_FUN_COMMON,//_MENU_FUN_VGA_HPOSITON, 
+2436            MENU_FUN_COMMON,//_MENU_FUN_VGA_VPOSITON, 
+2437            MENU_FUN_COMMON,//_MENU_FUN_VGA_CLK, 
+2438            MENU_FUN_COMMON,//_MENU_FUN_VGA_PHASE,
+2439            MENU_FUN_COMMON,//_MENU_FUN_ASPECT,  //65
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 42  
+
+2440          
+2441            
+2442            MENU_FUN_COMMON,//_MENU_FUN_COLORTEMP,  
+2443            MENU_FUN_RGB_ADJUST,
+2444            MENU_FUN_RGB_ADJUST,
+2445            MENU_FUN_RGB_ADJUST,
+2446            MENU_FUN_COMMON,//_MENU_FUN_LANGUAGE
+2447            MENU_FUN_COMMON,//_MENU_FUN_OSD_HPOSITON, 
+2448            MENU_FUN_COMMON,//_MENU_FUN_OSD_VPOSITON, 
+2449            MENU_FUN_COMMON,//_MENU_FUN_OSD_TIME, 
+2450            MENU_FUN_COMMON,//_MENU_FUN_OSD_TRANS, //74
+2451          
+2452            
+2453            MENU_FUN_NULL,//MENU_FUN_AUTO_ADJUST, 
+2454            MENU_FUN_NULL,//MENU_FUN_AUTO_COLOR,  
+2455            MENU_FUN_NULL,//MENU_FUN_RESET, //77
+2456          
+2457            MENU_FUN_INPUT_SOURCE,//_MENU_FUN_SIGNAL, 
+2458            MENU_FUN_COMMON,//_MENU_FUN_LOWBLUE,    
+2459            MENU_FUN_COMMON,//_MENU_FUN_AUDOIMUTE,
+2460            MENU_FUN_COMMON,//_MENU_FUN_AUDOIVOLUME,  //81
+2461            
+2462            #if _FREESYNC_SUPPORT
+                MENU_FUN_COMMON,//_MENU_FUN_FREESYNC,
+                #endif
+2465            MENU_FUN_COMMON,//_MENU_FUN_OD,
+2466            MENU_FUN_COMMON,//_MENU_FUN_POWER_OFF,
+2467            MENU_FUN_COMMON,//_MENU_FUN_LED,  //85
+2468              
+2469            MENU_FUN_COMMON,//_MENU_FUN_FLICKER_FREE,
+2470            MENU_FUN_COMMON,//_MENU_FUN_MPRT,
+2471            MENU_FUN_COMMON,//_MENU_FUN_GAMMA,  
+2472            MENU_FUN_COMMON,//_MENU_FUN_COLORGAMUT,
+2473            MENU_FUN_COMMON,//_MENU_FUN_SATURATION
+2474            MENU_FUN_COMMON,//_MENU_FUN_OVERCLOCK, //91
+2475            
+2476            MENU_FUN_COMMON,//_MENU_FUN_HUE,  
+2477            MENU_FUN_COMMON,//_MENU_FUN_DCC,
+2478            
+2479             MENU_FUN_COMMON,//_MENU_FUN_FV_INFORMATION
+2480             MENU_FUN_COMMON,//_MENU_FUN_DDCCI,
+2481             
+2482            MENU_FUN_COMMON,//_MENU_FUN_DP_VER  //96
+2483            MENU_FUN_COMMON,//_MENU_FUN_OSD_RORATE,
+2484            MENU_FUN_COMMON,//_MENU_FUN_VIVID
+2485            MENU_FUN_COMMON,//_MENU_FUN_AUDIO_SOURCE
+2486            MENU_FUN_COMMON,//_MENU_FUN_CHAOPING_TISHI
+2487            MENU_FUN_COMMON,//_MENU_FUN_KVM
+2488            MENU_FUN_COMMON,//_MENU_FUN_HDR_COLOR
+2489             MENU_FUN_COMMON,//_MENU_FUN_CROSS,
+2490          
+2491          #if(_DEF_HOTKEY_REPLACE)
+                  MENU_FUN_COMMON,//_MENU_FUN_HOT_REPLACE_LEFT
+                  MENU_FUN_COMMON,//_MENU_FUN_HOT_REPLACE_RIGHT
+                  MENU_FUN_COMMON,//_MENU_FUN_HOT_REPLACE_EXIT
+              #endif
+2496          
+2497          #if(_DEF_STA_SIX_COLOR)
+                MENU_FUN_COMMON,//MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_STATE
+                MENU_FUN_COMMON, //_MENU_FUN_HUE_STATE
+              
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_RED
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 43  
+
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_GREEN
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_BLUE
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_CYAN
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_MAGENTA
+                MENU_FUN_STA_SIX_COLOR, //_MENU_FUN_SAT_YELLOW
+              
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_RED
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_GREEN
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_BLUE
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_CYAN
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_MAGENTA
+                MENU_FUN_HUE_SIX_COLOR, //_MENU_FUN_HUE_YELLOW
+              
+              #endif
+2516          
+2517          #if(_DEF_OPPOSITE_DCR)
+                MENU_FUN_COMMON,//_MENU_FUN_DCR_OPPOSITE
+              #endif
+2520          #if(_LED_EFFECT_TJMODE14)
+                      MENU_FUN_COMMON,//_MENU_FUN_LIGHTMODE,//turn off monitor 
+                      MENU_FUN_COMMON,//_MENU_FUN_COLOR,//turn off monitor 
+              #endif
+2524          
+2525            MENU_FUN_COMMON,//_MENU_FUN_HOTLEFT,
+2526            MENU_FUN_COMMON,//_MENU_FUN_HOTRIGHT,   //102
+2527            MENU_FUN_RGB,//_MENU_FUN_RGB
+2528            MENU_FUN_NULL,  //_MENU_NULL
+2529          /***********************Spacil Hotkey*****************************/
+2530            MENU_HOT_KEY_LOS1,//_HOT_KEY_LOS_TYPE1
+2531            MENU_HOT_KEY_LOS2,//_HOT_KEY_LOS_TYPE2  //106
+2532            MENU_HOT_KEY_SOURCE,//_MENU_FUN_SOURCE_HOTKEY
+2533          
+2534          #if _ENABLE_ENERGE_NOTICE_MENU
+                MENU_SHOW_ENERGE_MENU,//_MENU_FUN_SHOW_ENERGE_MENU
+              #endif
+2537          
+2538          #if 1//_LONG_PRESS_MENU_LOCK_OSD_ENABLE
+2539            MENU_FUN_LOCK_OSD,// _MENU_FUN_LOCK_MENU
+2540          #endif
+2541            
+2542          #if 1//_LONG_PRESS_POWER_LOCK_POWER_KEY_ENABLE
+2543            MENU_FUN_LOCK_OSD,// _MENU_FUN_POWERKEY_LOCK_MENU
+2544          #endif
+2545          
+2546          /*****************************************************************/
+2547            MEMU_MESSAGE,//_MENU_MESSAGE //111
+2548          #if(_REMIND_ENERGY_EFFICIENCY_FUNCTION==_ON)
+                MENU_ENGER_CONSUMPTION,//_MENU_ENGER_CONSUMPTION
+              #endif
+2551          
+2552            MENU_HOT_KEY_FUNC,//_MENU_HOT_KEY_FUNC  //123
+2553            MENU_FUN_NULL,//_MENU_END, 
+2554          };
+2555          
+2556          #endif//#if(_OSD_TYPE == _REALTEK_2014_OSD)
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   4053    ----
+   CONSTANT SIZE    =    339    ----
+   XDATA SIZE       =     80       2
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   RTD2014OSD                                                        10/18/2025 16:54:09 PAGE 44  
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =     61    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
