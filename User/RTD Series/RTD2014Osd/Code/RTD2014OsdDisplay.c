@@ -4868,16 +4868,23 @@ void OsdDispMainMenu(void)
 #endif	
 	}
 
-	if(GET_OSD_STATE_PREVIOUS() == _MENU_FUN_LANGUAGE||GET_OSD_STATE_PREVIOUS() == _MENU_FUN_OSD_RORATE)
+	if(GET_OSD_STATE_PREVIOUS() == _MENU_FUN_LANGUAGE)
 	{
 		UpdateOSDMainInterface(_OSD_MAIN_OTHER);   //hh
 		if(GET_OSD_STATE_PREVIOUS() == _MENU_FUN_LANGUAGE)
 		{
-			OSD_SubMenuCur = 0;	//��һ��
+			OSD_SubMenuCur = 0;	//锟斤拷一锟斤拷
 		}
+		SET_OSD_STATE((_MENU_PICTURE_TATE0+(OSD_MAIN_MENU_ITEM)*_OSD_NUM_DATA+OSD_SubMenuCur));
+		OsdWindowDrawingHighlight(_OSD_WINDOW_4_8,_ITEM_2_COL*12,(_ITEM_1_ROW+2*(OSD_SubMenuCur))*18, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+2*(OSD_SubMenuCur))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);	
+		OsdWindowDrawing(_OSD_WINDOW_8,_ITEM_2_COL*12-10,((_ITEM_1_ROW+2*(OSD_SubMenuCur)))*18-9, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12-2, ((_ITEM_1_ROW+2*(OSD_SubMenuCur))+1)*18+7, _COLOR_WINDOW_BG);	
+	}
+	else if(GET_OSD_STATE_PREVIOUS() == _MENU_FUN_OSD_RORATE)
+	{
+		UpdateOSDMainInterface(_OSD_MAIN_OSD);   //hh
 		if(GET_OSD_STATE_PREVIOUS() == _MENU_FUN_OSD_RORATE)
 		{
-			OSD_SubMenuCur = 5;	//��6��
+			OSD_SubMenuCur = 4;	//锟斤拷6锟斤拷
 		}
 		SET_OSD_STATE((_MENU_PICTURE_TATE0+(OSD_MAIN_MENU_ITEM)*_OSD_NUM_DATA+OSD_SubMenuCur));
 		OsdWindowDrawingHighlight(_OSD_WINDOW_4_8,_ITEM_2_COL*12,(_ITEM_1_ROW+2*(OSD_SubMenuCur))*18, (_ITEM_2_COL+_ITEM_COL_LENGTH)*12, ((_ITEM_1_ROW+2*(OSD_SubMenuCur))+1)*18, _COLOR_WINDOW_BG, _COLOR_MENU_FONT_SELECT, _CP_BG, _ENABLE);	
