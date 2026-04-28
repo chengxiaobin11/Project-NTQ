@@ -1410,9 +1410,9 @@
 #define _DEF_LANGUAGE										    _ENGLISH
 #define _LOGO_TYPE											    _NONE_LOGO
     
-#define _BACKLIGHT_MAX										    0xFFF
-#define _BACKLIGHT_DEF_PWM									    0x800
-#define _BACKLIGHT_MIN										    0x000
+#define _BACKLIGHT_MAX										    0xFF
+#define _BACKLIGHT_DEF_PWM									    0x80
+#define _BACKLIGHT_MIN										    0x00
 #define _DEF_BACKLIGHT                                          50
 #define _ADJ_BACKLIGHT_BY_TABLE								    _ON
 #define _REMIND_ENERGY_EFFICIENCY_FUNCTION                      _OFF

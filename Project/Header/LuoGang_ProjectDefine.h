@@ -105,7 +105,7 @@
 #define _DEF_HUIXIONG_GCCD                                      0
 
 /*********************************** ***********************************************************/
-#define Project_ID                                              ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ
+#define Project_ID                                              ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ
 
 /**********************************************************************************************/
 #define _DEF_PROJECT_TEST                                       _OFF
@@ -503,7 +503,7 @@
 #define _DAC_SPEAKER_OUTPUT_SWAP                                _ON
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
-#define _NTQ_PRJ_TP_ENABLE                                      _ON
+#define _NTQ_PRJ_TP_ENABLE                                      _OFF
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _HDMI_24C02_SUPPORT                                     _OFF
 #elif(Project_ID == ID_DATONG_HK2795E01_MV270QUM_N50_EDP4LANHBR2_UHD60HZ_20240511)
