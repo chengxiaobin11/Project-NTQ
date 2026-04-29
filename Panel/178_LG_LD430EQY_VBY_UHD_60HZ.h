@@ -79,9 +79,9 @@
 //--------------------------------------------------
 // Definitions for Panel Parameter
 //--------------------------------------------------
-#define _PANEL_DH_START                         480
+#define _PANEL_DH_START                         48
 #define _PANEL_DH_WIDTH                         3840
-#define _PANEL_DH_END                           4320
+#define _PANEL_DH_END                           3888
 
 #define _PANEL_DH_TOTAL                         4400
 #define _PANEL_DH_TOTAL_MAX                     4800
