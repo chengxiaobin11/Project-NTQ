@@ -1158,6 +1158,15 @@ sbit KEY3_KEY								 	=P1^4;	//Pin_67
 #elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
 #define _MAIN_PAGE_MODEL_NAME                 _M__,_O__,_D__,_E__,_L__,_COLON__,_Q__,_X__,_T__,_3__,_2__,_0__,_T__
 
+#elif (Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
+#define _MAIN_PAGE_MODEL_NAME                 _M__,_O__,_D__,_E__,_L__,_COLON__,_Q__,_X__,_T__,_4__,_3__,_0__,_T__,_J__
+
+#elif (Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
+#define _MAIN_PAGE_MODEL_NAME                 _M__,_O__,_D__,_E__,_L__,_COLON__,_Q__,_X__,_T__,_4__,_9__,_0__,_T__,_J__
+
+#elif (Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
+#define _MAIN_PAGE_MODEL_NAME                 _M__,_O__,_D__,_E__,_L__,_COLON__,_Q__,_X__,_T__,_5__,_5__,_0__,_T__,_J__
+
 #else
 #define _MAIN_PAGE_MODEL_NAME                 _M__,_O__,_D__,_E__,_L__,_COLON__,_Q__,_X__,_T__,_3__,_2__,_0__,_T__
 
