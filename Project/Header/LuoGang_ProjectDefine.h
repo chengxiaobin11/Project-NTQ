@@ -105,7 +105,7 @@
 #define _DEF_HUIXIONG_GCCD                                      0
 
 /*********************************** ***********************************************************/
-#define Project_ID                                              ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ
+#define Project_ID                                              ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ
 
 /**********************************************************************************************/
 #define _DEF_PROJECT_TEST                                       _OFF
@@ -445,7 +445,7 @@
 #define _OD_SUPPORT                                             _ON
 #elif(Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
-#define _PANEL_TYPE                                             _LG_LD430EQY_VBY_UHD_60HZ    //_AUO_P430QVR010_VBY_UHD_60HZ
+#define _PANEL_TYPE                                             _AUO_P430QVR010_VBY_UHD_60HZ    //_LG_LD430EQY_VBY_UHD_60HZ
 #define _FRC_SUPPORT                                            _ON
 #define _MPRT_SUPPORT                                           _OFF
 #define _HDMI_24C02_SUPPORT                                     _OFF
@@ -467,6 +467,8 @@
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
+#define _ENABLE_WRITE_EDID_CTX									_ON	
+#define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 #elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _AUO_P550QVR010_VBY_UHD_60HZ
@@ -478,6 +480,8 @@
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
+#define _ENABLE_WRITE_EDID_CTX									_ON	
+#define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 #elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _BOE_MV315QUM_N70_EDP_UHD_60HZ

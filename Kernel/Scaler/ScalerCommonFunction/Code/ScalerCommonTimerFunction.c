@@ -3274,7 +3274,7 @@ bit ScalerTimerPollingFlagProc(WORD usTimeout, WORD usRegister, BYTE ucBit, bit 
         {
             return _TRUE;
         }
-
+        //DebugMessageSystem("usTimeElapsed-------", usTimeElapsed);
         if(usPreviousTime != g_usTimerCounter)
         {
             usTimeElapsed++;
