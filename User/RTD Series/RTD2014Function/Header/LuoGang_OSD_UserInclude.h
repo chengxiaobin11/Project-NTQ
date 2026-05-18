@@ -1410,11 +1410,12 @@
 #define _DEF_LANGUAGE										    _ENGLISH
 #define _LOGO_TYPE											    _NONE_LOGO
     
-#define _BACKLIGHT_MAX										    0xFF
-#define _BACKLIGHT_DEF_PWM									    0x80
+#define _BACKLIGHT_MAX										    0x60
+#define _BACKLIGHT_DEF_PWM									    0x60
 #define _BACKLIGHT_MIN										    0x00
+#define _DEF_OSD_BACKLIGHT                          			100
 #define _DEF_BACKLIGHT                                          50
-#define _ADJ_BACKLIGHT_BY_TABLE								    _ON
+#define _ADJ_BACKLIGHT_BY_TABLE								    _OFF
 #define _REMIND_ENERGY_EFFICIENCY_FUNCTION                      _OFF
 #define _OSD_7PAGE											    _OFF
 #define _EN_AUDIO_PAGE										    _OFF
@@ -1866,6 +1867,9 @@
 #define _OSD_CROSS_SMALL										_OFF	//KAITENG SMALL CROSS
 #endif
 
+#ifndef _DEF_OSD_BACKLIGHT
+#define _DEF_OSD_BACKLIGHT                          	100
+#endif
 
 #ifndef _OSD_7PAGE
 #define _OSD_7PAGE										0	//�˵�7ҳ

@@ -152,7 +152,7 @@
 //--------------------------------------------------
 // PWM Setting
 //--------------------------------------------------
-#define _PWM_DUT_RESOLUTION                     _PWM_12BIT
+#define _PWM_DUT_RESOLUTION                     _PWM_8BIT//_PWM_12BIT
 
 #define _BACKLIGHT_PWM                          _PWM2
 #define _BACKLIGHT_PWM_INVERSE                  _OFF

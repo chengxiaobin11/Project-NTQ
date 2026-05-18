@@ -26,9 +26,8 @@
 //--------------------------------------------------
 // Version Code of NVRam
 //--------------------------------------------------
-#define _CHECKSUM                                   0x02//e
+#define _CHECKSUM                                   0x03
 #define _VERSION_CODE                               _CHECKSUM
-#define _DEF_OSD_BACKLIGHT                          100
 //--------------------------------------------------
 // Brightness/Contrast Default Value
 //--------------------------------------------------

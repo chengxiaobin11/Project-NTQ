@@ -212,7 +212,7 @@
 // OGC and OCC (On-Line Calibration) Option
 //-------------------------------------------------
 #define _OCC_SUPPORT                                            _ON
-#define _OGC_SUPPORT                                            _OFF
+#define _OGC_SUPPORT                                            _OFF//_OFF
 #define _OGC_DICOM_SUPPORT                                      _OFF
 #define _HDR_DICOM_TWO_BRI_CALIBRATION                          _OFF
 

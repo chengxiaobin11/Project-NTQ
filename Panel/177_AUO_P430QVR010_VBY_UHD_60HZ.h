@@ -102,13 +102,13 @@
 #define _PANEL_PIXEL_CLOCK_MAX                  616
 #define _PANEL_PIXEL_CLOCK_MIN                  528
 
-#define _PANEL_POWER_ON_T1                      5
-#define _PANEL_POWER_ON_T2                      80
-#define _PANEL_POWER_ON_T3                      700
+#define _PANEL_POWER_ON_T1                      100
+#define _PANEL_POWER_ON_T2                      50
+#define _PANEL_POWER_ON_T3                      550
 
-#define _PANEL_POWER_OFF_T4                     150
-#define _PANEL_POWER_OFF_T5                     100
-#define _PANEL_POWER_OFF_T6                     500
+#define _PANEL_POWER_OFF_T4                     210
+#define _PANEL_POWER_OFF_T5                     20
+#define _PANEL_POWER_OFF_T6                     1200
 
 
 /////////////

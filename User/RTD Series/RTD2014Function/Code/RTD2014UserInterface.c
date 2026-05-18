@@ -5816,7 +5816,7 @@ void UserInterfaceAdjustBacklight(BYTE ucBacklight)
 	
 		// Adjust backlight by changing PWM duty
 		PCB_BACKLIGHT_PWM(ucBacklight);
-   // UserAdjustBacklight(_BACKLIGHT_MIN + ((DWORD)(_BACKLIGHT_MAX - _BACKLIGHT_MIN) * ucBacklight) / 255);
+   		UserAdjustBacklight(_BACKLIGHT_MIN + ((DWORD)(_BACKLIGHT_MAX - _BACKLIGHT_MIN) * ucBacklight) / 255);
 }
 #endif
 
