@@ -378,9 +378,15 @@
 // System Display Setting Check Time Option
 //-------------------------------------------------
 #define _WAIT_TIME_TO_ACTIVE_VGA                                SEC(0.05)
+#if(Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
+#define _WAIT_TIME_TO_ACTIVE_DVI                                SEC(0.8)
+#define _WAIT_TIME_TO_ACTIVE_HDMI                               SEC(0.8)
+#define _WAIT_TIME_TO_ACTIVE_DP                                 SEC(0.8)
+#else
 #define _WAIT_TIME_TO_ACTIVE_DVI                                SEC(0.1)
 #define _WAIT_TIME_TO_ACTIVE_HDMI                               SEC(0.1)
 #define _WAIT_TIME_TO_ACTIVE_DP                                 SEC(0.1)
+#endif
 
 //--------------------------------------------------
 // System Support Timing Option
