@@ -6345,7 +6345,7 @@ void UserCommonInterfaceTmdsHdcpVersionCapabilitySwitch(EnumSourceSearchPort enu
 // Input Value  : None
 // Output Value : None
 //--------------------------------------------------
-//ÉÕÍêÈí¼şµÚÒ»´ÎÍù24C02ÀïÃæĞ´EDID
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½24C02ï¿½ï¿½ï¿½ï¿½Ğ´EDID
 
 void UserCommonInterfaceNVRamSaveEDIDWhenProgramming(void)
 {	

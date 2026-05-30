@@ -12,12 +12,12 @@
 /*   express, implied, statutory or otherwise.                                  */
 /********************************************************************************/
 
-#if(_PANEL_TYPE == _AUO_P430QVR010_VBY_UHD_60HZ)
+#if(_PANEL_TYPE == _CTOT_LD490EQY_VBY_UHD_60HZ)
 //----------------------------------------------------------------------------------------------------
 // ID Code      : 173_BOE_DV430QUB_C10_VBY_UHD_60HZ.h No.0173
 // Update Note  :
 //----------------------------------------------------------------------------------------------------
-#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_P__,_4__,_3__,_0__,_Q__,_V__,_R__,_0__,_1__,_0__
+#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_L__,_D__,_4__,_9__,_0__,_E__,_Q__,_Y__
 
 //////////////////
 // General Info //
@@ -38,12 +38,7 @@
 #define _VBO_PANEL_SECTION                      _VBO_PANEL_2_SECTION
 #define _VBO_HS_CONTROL                         _VBO_HS_NORMAL
 #define _VBO_VS_CONTROL                         _VBO_VS_NORMAL
-
-// #undef _PANEL_POW_SEQ_FAST_MODE
-// #define _PANEL_POW_SEQ_FAST_MODE                _ON
-// #define _PANEL_VBO_CHANGE_CLK_RESET_TYPE        _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN
-
-#define _VBO_VIDEO_TRANSFER_TYPE                _VBO_VIDEO_TRANSFER_IN_HORIZONTAL_BLANK
+#define _VBO_VIDEO_TRANSFER_TYPE                _VBO_VIDEO_TRANSFER_IN_VERTICAL_BLANK
 #define _CDR_TRANSFER_ALN_LATENCY               0
 
 //--------------------------------------------------
@@ -88,32 +83,32 @@
 #define _PANEL_DH_WIDTH                         3840
 #define _PANEL_DH_END                           3888
 
-#define _PANEL_DH_TOTAL                         4320    //4400
+#define _PANEL_DH_TOTAL                         4400
 #define _PANEL_DH_TOTAL_MAX                     4800
-#define _PANEL_DH_TOTAL_MIN                     4240
+#define _PANEL_DH_TOTAL_MIN                     4320
 
 #define _PANEL_DV_START                         6
 #define _PANEL_DV_HEIGHT                        2160
 #define _PANEL_DV_END                           2166
 
 #define _PANEL_DV_TOTAL                         2250
-#define _PANEL_DV_TOTAL_MAX                     2715
+#define _PANEL_DV_TOTAL_MAX                     2760
 #define _PANEL_DV_TOTAL_MIN                     2200
 
 #define _PANEL_DH_SYNC_WIDTH                    8
 #define _PANEL_DV_SYNC_HEIGHT                   2
 
 #define _PANEL_PIXEL_CLOCK                      594
-#define _PANEL_PIXEL_CLOCK_MAX                  650  //616
-#define _PANEL_PIXEL_CLOCK_MIN                  528
+#define _PANEL_PIXEL_CLOCK_MAX                  624
+#define _PANEL_PIXEL_CLOCK_MIN                  536
 
-#define _PANEL_POWER_ON_T1                      100
-#define _PANEL_POWER_ON_T2                      200  //80
-#define _PANEL_POWER_ON_T3                      1000
+#define _PANEL_POWER_ON_T1                      5
+#define _PANEL_POWER_ON_T2                      80
+#define _PANEL_POWER_ON_T3                      700
 
-#define _PANEL_POWER_OFF_T4                     200
+#define _PANEL_POWER_OFF_T4                     150
 #define _PANEL_POWER_OFF_T5                     100
-#define _PANEL_POWER_OFF_T6                     1050
+#define _PANEL_POWER_OFF_T6                     1200
 
 
 /////////////
@@ -170,4 +165,4 @@
 //--------------------------------------------------
 #include "./RTDColorDefaultTable/ColorTableInclude.h"
 
-#endif // End of #if(_PANEL_TYPE == _INNOLUX_LED_VBO_28_UHD)
+#endif // End of #if(_PANEL_TYPE == _CTOT_LD490EQY_VBY_UHD_60HZ)

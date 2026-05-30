@@ -191,6 +191,10 @@
 #define _BOE_MV315QUM_N70_EDP_UHD_60HZ                      176 //3840X2160@60
 #define _AUO_P430QVR010_VBY_UHD_60HZ                        177 //3840X2160@60
 #define _LG_LD430EQY_VBY_UHD_60HZ                           178 //3840X2160@60
+
+#define _CTOT_SG4251D02_1_VBY_UHD_60HZ                      179 //3840X2160@60
+#define _CTOT_LD490EQY_VBY_UHD_60HZ                         180 //3840X2160@60
+#define _CTOT_SG5461D18_1_VBY_UHD_60HZ                      181 //3840X2160@60
 //--------------------------------------------------
 // Panel Led Driver List (Can Not Be 0xFF)
 //--------------------------------------------------

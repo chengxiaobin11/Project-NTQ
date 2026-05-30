@@ -1398,7 +1398,7 @@
 #define _CZECH_SUPPORT											_OFF
 #define _LANG_19									_OFF
 #elif((Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ) || (Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)||(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)||(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)\
-||(Project_ID == ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ))
+||(Project_ID == ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ) || (Project_ID == ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ) || (Project_ID == ID_NTQ_CO49AFL_HK2775E01_1P1H_LD490EQY_UHD60HZ) || (Project_ID == ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ))
 #define _DEF_CONTRAST                                           50
 #define _DEF_VOLUME										        50
 #define _DEF_VOLUME_PWM										    80
@@ -1410,9 +1410,9 @@
 #define _DEF_LANGUAGE										    _ENGLISH
 #define _LOGO_TYPE											    _NONE_LOGO
     
-#define _BACKLIGHT_MAX										    0x60
-#define _BACKLIGHT_DEF_PWM									    0x60
-#define _BACKLIGHT_MIN										    0x00
+#define _BACKLIGHT_MAX										    0xFF
+#define _BACKLIGHT_DEF_PWM									    0xFF
+#define _BACKLIGHT_MIN										    0x10
 #define _DEF_OSD_BACKLIGHT                          			100
 #define _DEF_BACKLIGHT                                          50
 #define _ADJ_BACKLIGHT_BY_TABLE								    _OFF
