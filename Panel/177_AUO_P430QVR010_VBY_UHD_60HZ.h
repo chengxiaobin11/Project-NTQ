@@ -88,7 +88,7 @@
 #define _PANEL_DH_WIDTH                         3840
 #define _PANEL_DH_END                           3888
 
-#define _PANEL_DH_TOTAL                         4304    //4400
+#define _PANEL_DH_TOTAL                         4320    //4400
 #define _PANEL_DH_TOTAL_MAX                     4800
 #define _PANEL_DH_TOTAL_MIN                     4240
 

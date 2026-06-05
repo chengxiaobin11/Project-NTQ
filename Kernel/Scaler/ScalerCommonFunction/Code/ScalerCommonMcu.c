@@ -442,7 +442,7 @@ BYTE ScalerMcuDdcciGetInputPort_EXINT1(void) using 2
 #endif
 
 #if(_DEBUG_MESSAGE_SUPPORT == _OFF)
-#define _DDCCI_OPCODE_VCP_AUTOALIGN						0x7B//ÐÂ°æÉ«ÎÂ×Ôµ÷Èí¼þ
+#define _DDCCI_OPCODE_VCP_AUTOALIGN						0x7B//ï¿½Â°ï¿½É«ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½
 //--------------------------------------------------
 // Description  : Get DDC-CI Data in Interrupt Process
 // Input Value  : pReadArray --> Data received
