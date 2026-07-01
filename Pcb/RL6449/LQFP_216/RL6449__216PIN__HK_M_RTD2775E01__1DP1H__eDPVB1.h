@@ -137,11 +137,12 @@
 #define _VBO_LANE_SWAP                          _DISABLE
 #define _VBO_ML_SWAP                            _DISABLE
 #define _VBO_PN_SWAP                            _ENABLE
-#define _VBO_LANE_DRIV_CONTROL                  _VBO_DRIV_CONTROL_3_5
 #if(Project_ID == ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ)
 #define _VBO_PRE_EMPHASIS_CONTROL               _VBO_PRE_EMPHASIS_3
+#define _VBO_LANE_DRIV_CONTROL                  _VBO_DRIV_CONTROL_3_5
 #else
 #define _VBO_PRE_EMPHASIS_CONTROL               _VBO_PRE_EMPHASIS_0
+#define _VBO_LANE_DRIV_CONTROL                  _VBO_DRIV_CONTROL_3_5
 #endif
 //--------------------------------------------------
 // V by One SSC Config
