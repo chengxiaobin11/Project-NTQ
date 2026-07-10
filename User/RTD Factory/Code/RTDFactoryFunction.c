@@ -81,7 +81,11 @@ extern bit IS_HDCP_KEY_READY(void);
 #elif(Project_ID == ID_TJZG_HK2775E05_SN245ES01_2_EDP4LANHBR2_MD2569_QHD180HZ_20240528)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_6__,__,_2__,_0__,_2__,_4__,_0__,_5__,_3__,_1__
 #elif(Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
+#if (_PANEL_TYPE == _AUO_P430QVR010_VBY_UHD_60HZ)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_5__,_3__,_0__
+#elif (_PANEL_TYPE == _LG_LD430EQY_VBY_UHD_60HZ)
+#define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_0__,_8__
+#endif
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_4__,_2__,_8__
 #elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
@@ -90,6 +94,12 @@ extern bit IS_HDCP_KEY_READY(void);
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_5__,__,_2__,_0__,_2__,_6__,_0__,_4__,_2__,_3__
 #elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_4__,__,_2__,_0__,_2__,_6__,_0__,_4__,_3__,_0__
+#elif(Project_ID == ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ)
+#define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_0__,_8__
+#elif(Project_ID == ID_NTQ_CO49AFL_HK2775E01_1P1H_LD490EQY_UHD60HZ)
+#define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_0__,_8__
+#elif(Project_ID == ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ)
+#define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_0__,_8__
 #else
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_5__,_1__,_0__,_2__,_0__
 #endif

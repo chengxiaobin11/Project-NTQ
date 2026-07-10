@@ -1410,8 +1410,8 @@
 #define _DEF_LANGUAGE										    _ENGLISH
 #define _LOGO_TYPE											    _NONE_LOGO
     
-#define _BACKLIGHT_MAX										    0xFF
-#define _BACKLIGHT_DEF_PWM									    0xFF
+#define _BACKLIGHT_MAX										    0xFF     //0xA0
+#define _BACKLIGHT_DEF_PWM									    0xFF     //0xA0
 #define _BACKLIGHT_MIN										    0x10
 #define _DEF_OSD_BACKLIGHT                          			100
 #define _DEF_BACKLIGHT                                          50

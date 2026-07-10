@@ -464,6 +464,14 @@
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
+
+//For bin name
+#if (_PANEL_TYPE = _AUO_P430QVR010_VBY_UHD_60HZ)
+#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_P430QVR010_VC01"
+#else
+#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_LD430EQY_VC01"
+#endif
+
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _AUO_P490QAR010_VBY_UHD_60HZ
@@ -477,6 +485,9 @@
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
+
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT490TJ_RT2775E01_P490QAR010_VC01"
 #elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _AUO_P550QVR010_VBY_UHD_60HZ
@@ -490,6 +501,9 @@
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
+
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT550TJ_RT2775E01_P550QVR010_VC01"
 #elif(Project_ID == ID_NTQ_CO32AL_HK2775E01_1P1H_MV315QUM_N70_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _BOE_MV315QUM_N70_EDP_UHD_60HZ
@@ -504,6 +518,8 @@
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT320T_RT2775E01_MV315QUMN70_VC04"
 #elif(Project_ID == ID_NTQ_CO27AL_HK2775E01_1P1H_MV270QUM_N10_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _BOE_MV270QUM_N10_EDP_UHD
@@ -519,6 +535,13 @@
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _HDMI_24C02_SUPPORT                                     _OFF
 
+//For bin name
+if (_NTQ_PRJ_TP_ENABLE = _ON)
+#define CUSTOMER_BIN_NAME                                        "QXT270T_RT2775E01_M270QAN06.0_VC05"
+#else
+#define CUSTOMER_BIN_NAME                                        "QXT270G_RT2775E01_M270QAN06.0_VC05"
+#endif
+
 #elif(Project_ID == ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _CTOT_SG4251D02_1_VBY_UHD_60HZ
@@ -532,6 +555,9 @@
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
+
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT430TF_RT2775E01_SG4251D02.1_VC01"
 #elif(Project_ID == ID_NTQ_CO49AFL_HK2775E01_1P1H_LD490EQY_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _CTOT_LD490EQY_VBY_UHD_60HZ
@@ -545,6 +571,9 @@
 #define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
+
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT490TF_RT2775E01_LD490EQY_VC01"
 #elif(Project_ID == ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
 #define _PANEL_TYPE                                             _CTOT_SG5461D18_1_VBY_UHD_60HZ
@@ -559,6 +588,8 @@
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 
+//For bin name
+#define CUSTOMER_BIN_NAME                                        "QXT550TF_RT2775E01_SG5461D18.1_VC01"
 #elif(Project_ID == ID_DATONG_HK2795E01_MV270QUM_N50_EDP4LANHBR2_UHD60HZ_20240511)
 #if _DEF_PROJECT_TEST
 #define _MV270FHM_NF1                                           _ON  // FHD280

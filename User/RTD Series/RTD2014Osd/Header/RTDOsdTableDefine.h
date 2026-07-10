@@ -5632,10 +5632,17 @@ _p_,_e_,_x97_,_x8a_,_END_,
 };
 
 #if (Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
+#if (_PANEL_TYPE == _AUO_P430QVR010_VBY_UHD_60HZ)
 BYTE code tsOSD_MODEL_VER[] =
 {
 	_Q_,_X_,_T_,_4_,_3_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
 };
+#elif (_PANEL_TYPE == _LG_LD430EQY_VBY_UHD_60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_3_,_0_,_T_,_J_,_x44_,_V_,_0_,_1_,_END_,
+};
+#endif
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 BYTE code tsOSD_MODEL_VER[] =
 {
