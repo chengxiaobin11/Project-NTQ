@@ -466,11 +466,7 @@
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 
 //For bin name
-#if (_PANEL_TYPE = _AUO_P430QVR010_VBY_UHD_60HZ)
-#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_P430QVR010_VC01"
-#else
-#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_LD430EQY_VC01"
-#endif
+#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_LD430EQY_VC01" //"QXT430TJ_RT2775E01_P430QVR010_VC01"
 
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
@@ -536,7 +532,7 @@
 #define _HDMI_24C02_SUPPORT                                     _OFF
 
 //For bin name
-if (_NTQ_PRJ_TP_ENABLE = _ON)
+#if _NTQ_PRJ_TP_ENABLE
 #define CUSTOMER_BIN_NAME                                        "QXT270T_RT2775E01_M270QAN06.0_VC05"
 #else
 #define CUSTOMER_BIN_NAME                                        "QXT270G_RT2775E01_M270QAN06.0_VC05"
