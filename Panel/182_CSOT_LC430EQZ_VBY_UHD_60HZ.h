@@ -12,12 +12,12 @@
 /*   express, implied, statutory or otherwise.                                  */
 /********************************************************************************/
 
-#if(_PANEL_TYPE == _CTOT_SG4251D02_1_VBY_UHD_60HZ)
+#if(_PANEL_TYPE == _CSOT_LC430EQZ_VBY_UHD_60HZ)
 //----------------------------------------------------------------------------------------------------
-// ID Code      : 179_CTOT_SG4251D02_1_VBY_UHD_60HZ.h No.0179
+// ID Code      : 182_CSOT_LC430EQZ_VBY_UHD_60HZ.h No.0182
 // Update Note  :
 //----------------------------------------------------------------------------------------------------
-#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_S__,_G__,_4__,_2__,_5__,_1__,_D__,_0__,_2__,_SLINE__,_1__
+#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_L__,_C__,_4__,_3__,_0__,_E__,_Q__,_Z__
 
 //////////////////
 // General Info //
@@ -35,9 +35,14 @@
 #define _VBO_BYTE_MODE                          _VBO_DISP_4_BYTE_MODE
 #define _VBO_OUTPUT_PORT                        _VBO_8_DATA_LANE
 #define _VBO_BIT_MODE                           _VBO_DISP_30_BIT
-#define _VBO_PANEL_SECTION                      _VBO_PANEL_2_SECTION
+#define _VBO_PANEL_SECTION                      _VBO_PANEL_1_SECTION
 #define _VBO_HS_CONTROL                         _VBO_HS_NORMAL
 #define _VBO_VS_CONTROL                         _VBO_VS_NORMAL
+
+// #undef _PANEL_POW_SEQ_FAST_MODE
+// #define _PANEL_POW_SEQ_FAST_MODE                _ON
+// #define _PANEL_VBO_CHANGE_CLK_RESET_TYPE        _VBO_CHANGE_CLK_RESET_BY_RE_LINK_TRAIN
+
 #define _VBO_VIDEO_TRANSFER_TYPE                _VBO_VIDEO_TRANSFER_IN_HORIZONTAL_BLANK
 #define _CDR_TRANSFER_ALN_LATENCY               0
 
@@ -49,7 +54,7 @@
 //--------------------------------------------------
 // Definitions for Panel Manufacturer
 //--------------------------------------------------
-#define _PANEL_MANUFACTURER                     _PANEL_AUO
+#define _PANEL_MANUFACTURER                     _PANEL_CSOT
 
 //--------------------------------------------------
 // Definitions for Panel Display Color Depth
@@ -92,23 +97,23 @@
 #define _PANEL_DV_END                           2166
 
 #define _PANEL_DV_TOTAL                         2250
-#define _PANEL_DV_TOTAL_MAX                     2350
+#define _PANEL_DV_TOTAL_MAX                     2850
 #define _PANEL_DV_TOTAL_MIN                     2200
 
 #define _PANEL_DH_SYNC_WIDTH                    8
 #define _PANEL_DV_SYNC_HEIGHT                   2
 
 #define _PANEL_PIXEL_CLOCK                      594
-#define _PANEL_PIXEL_CLOCK_MAX                  614
-#define _PANEL_PIXEL_CLOCK_MIN                  574
+#define _PANEL_PIXEL_CLOCK_MAX                  624
+#define _PANEL_PIXEL_CLOCK_MIN                  480
 
-#define _PANEL_POWER_ON_T1                      100
+#define _PANEL_POWER_ON_T1                      10
 #define _PANEL_POWER_ON_T2                      100
-#define _PANEL_POWER_ON_T3                      600
+#define _PANEL_POWER_ON_T3                      700
 
-#define _PANEL_POWER_OFF_T4                     210
-#define _PANEL_POWER_OFF_T5                     20
-#define _PANEL_POWER_OFF_T6                     1200
+#define _PANEL_POWER_OFF_T4                     100
+#define _PANEL_POWER_OFF_T5                     150
+#define _PANEL_POWER_OFF_T6                     1050
 
 /////////////
 // Display //
@@ -164,4 +169,4 @@
 //--------------------------------------------------
 #include "./RTDColorDefaultTable/ColorTableInclude.h"
 
-#endif // End of #if(_PANEL_TYPE == _CTOT_SG4251D02_1_VBY_UHD_60HZ)
+#endif // End of #if(_PANEL_TYPE == _CSOT_LC430EQZ_VBY_UHD_60HZ)

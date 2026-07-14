@@ -85,6 +85,8 @@ extern bit IS_HDCP_KEY_READY(void);
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_5__,_3__,_0__
 #elif (_PANEL_TYPE == _LG_LD430EQY_VBY_UHD_60HZ)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_0__,_8__
+#elif (_PANEL_TYPE == _CSOT_LC430EQZ_VBY_UHD_60HZ)
+#define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_1__,_4__
 #endif
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _FW_VERSION                         _F__,_W__,__,_COLON__,__,_V__,_C__,_0__,_1__,__,_2__,_0__,_2__,_6__,_0__,_7__,_1__,_0__

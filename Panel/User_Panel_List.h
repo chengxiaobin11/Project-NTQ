@@ -195,6 +195,7 @@
 #define _CTOT_SG4251D02_1_VBY_UHD_60HZ                      179 //3840X2160@60
 #define _CTOT_LD490EQY_VBY_UHD_60HZ                         180 //3840X2160@60
 #define _CTOT_SG5461D18_1_VBY_UHD_60HZ                      181 //3840X2160@60
+#define _CSOT_LC430EQZ_VBY_UHD_60HZ                         182 //3840X2160@60
 //--------------------------------------------------
 // Panel Led Driver List (Can Not Be 0xFF)
 //--------------------------------------------------

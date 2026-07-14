@@ -113,7 +113,7 @@
 #define _DEF_HUIXIONG_GCCD                                      0
 
 /*********************************** ***********************************************************/
-#define Project_ID                                              ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ
+#define Project_ID                                              ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ
 
 /**********************************************************************************************/
 #define _DEF_PROJECT_TEST                                       _OFF
@@ -453,7 +453,7 @@
 #define _OD_SUPPORT                                             _ON
 #elif(Project_ID == ID_NTQ_CO43AJ_HK2775E01_1P1H_P430QVR010_C10_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1
-#define _PANEL_TYPE                                             _LG_LD430EQY_VBY_UHD_60HZ    //_LG_LD430EQY_VBY_UHD_60HZ  //_AUO_P430QVR010_VBY_UHD_60HZ
+#define _PANEL_TYPE                                             _CSOT_LC430EQZ_VBY_UHD_60HZ    //_LG_LD430EQY_VBY_UHD_60HZ  //_AUO_P430QVR010_VBY_UHD_60HZ
 #define _FRC_SUPPORT                                            _ON
 #define _MPRT_SUPPORT                                           _OFF
 #define _HDMI_24C02_SUPPORT                                     _OFF
@@ -466,7 +466,7 @@
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 
 //For bin name
-#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_LD430EQY_VC01" //"QXT430TJ_RT2775E01_P430QVR010_VC01"
+#define CUSTOMER_BIN_NAME                                        "QXT430TJ_RT2775E01_LC430EQZ_VC01" //"QXT430TJ_RT2775E01_LD430EQY_VC01" //"QXT430TJ_RT2775E01_P430QVR010_VC01"
 
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _PCB_TYPE                                               _RL6449__216PIN__HK_M_RTD2775E01__1DP1H__eDPVB1

@@ -221,6 +221,18 @@
 #define _CT6500_RED 								(128 << 4)
 #define _CT6500_GREEN								(119 << 4)
 #define _CT6500_BLUE								(126 << 4)
+#elif (_PANEL_TYPE == _CSOT_LC430EQZ_VBY_UHD_60HZ)
+#define _CT9300_RED 								(114 << 4)
+#define _CT9300_GREEN								(113 << 4)
+#define _CT9300_BLUE								(128 << 4)
+
+#define _CT7500_RED 								(128 << 4)
+#define _CT7500_GREEN								(121 << 4)
+#define _CT7500_BLUE								(128 << 4)
+
+#define _CT6500_RED 								(128 << 4)
+#define _CT6500_GREEN								(119 << 4)
+#define _CT6500_BLUE								(126 << 4)
 #endif
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
 #define _CT9300_RED 								(97 << 4)
