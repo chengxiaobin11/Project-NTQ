@@ -223,16 +223,16 @@
 #define _CT6500_BLUE								(126 << 4)
 #endif
 #elif(Project_ID == ID_NTQ_CO49AJL_HK2775E01_1P1H_P490QAR010_UHD60HZ)
-#define _CT9300_RED 								(107 << 4)
-#define _CT9300_GREEN								(110 << 4)
+#define _CT9300_RED 								(97 << 4)
+#define _CT9300_GREEN								(96 << 4)
 #define _CT9300_BLUE								(128 << 4)
 
-#define _CT7500_RED 								(118 << 4)
-#define _CT7500_GREEN								(117 << 4)
+#define _CT7500_RED 								(106 << 4)
+#define _CT7500_GREEN								(103 << 4)
 #define _CT7500_BLUE								(128 << 4)
 
-#define _CT6500_RED 								(128 << 4)
-#define _CT6500_GREEN								(125 << 4)
+#define _CT6500_RED 								(114 << 4)
+#define _CT6500_GREEN								(108 << 4)
 #define _CT6500_BLUE								(128 << 4)
 #elif(Project_ID == ID_NTQ_CO55AJL_HK2775E01_1P1H_P550QVR010_UHD60HZ)
 #define _CT9300_RED 								(107 << 4)
