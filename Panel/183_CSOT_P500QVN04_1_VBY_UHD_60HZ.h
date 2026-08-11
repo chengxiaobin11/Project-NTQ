@@ -12,12 +12,12 @@
 /*   express, implied, statutory or otherwise.                                  */
 /********************************************************************************/
 
-#if(_PANEL_TYPE == _CTOT_SG4251D02_1_VBY_UHD_60HZ)
+#if(_PANEL_TYPE == _CSOT_P500QVN04_1_VBY_UHD_60HZ)
 //----------------------------------------------------------------------------------------------------
-// ID Code      : 179_CTOT_SG4251D02_1_VBY_UHD_60HZ.h No.0179
+// ID Code      : 180_CSOT_P500QVN04_1_VBY_UHD_60HZ.h No.0180
 // Update Note  :
 //----------------------------------------------------------------------------------------------------
-#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_S__,_G__,_4__,_2__,_5__,_1__,_D__,_0__,_2__,_SLINE__,_1__
+#define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_P__,_5__,_0__,_0__,_Q__,_V__,_N__,_0__,_4__
 
 //////////////////
 // General Info //
@@ -38,7 +38,7 @@
 #define _VBO_PANEL_SECTION                      _VBO_PANEL_2_SECTION
 #define _VBO_HS_CONTROL                         _VBO_HS_NORMAL
 #define _VBO_VS_CONTROL                         _VBO_VS_NORMAL
-#define _VBO_VIDEO_TRANSFER_TYPE                _VBO_VIDEO_TRANSFER_IN_HORIZONTAL_BLANK
+#define _VBO_VIDEO_TRANSFER_TYPE                _VBO_VIDEO_TRANSFER_IN_VERTICAL_BLANK
 #define _CDR_TRANSFER_ALN_LATENCY               0
 
 //--------------------------------------------------
@@ -85,30 +85,31 @@
 
 #define _PANEL_DH_TOTAL                         4400
 #define _PANEL_DH_TOTAL_MAX                     4800
-#define _PANEL_DH_TOTAL_MIN                     4320
+#define _PANEL_DH_TOTAL_MIN                     4240
 
 #define _PANEL_DV_START                         6
 #define _PANEL_DV_HEIGHT                        2160
 #define _PANEL_DV_END                           2166
 
 #define _PANEL_DV_TOTAL                         2250
-#define _PANEL_DV_TOTAL_MAX                     2350
+#define _PANEL_DV_TOTAL_MAX                     2715
 #define _PANEL_DV_TOTAL_MIN                     2200
 
 #define _PANEL_DH_SYNC_WIDTH                    8
 #define _PANEL_DV_SYNC_HEIGHT                   2
 
 #define _PANEL_PIXEL_CLOCK                      594
-#define _PANEL_PIXEL_CLOCK_MAX                  614
-#define _PANEL_PIXEL_CLOCK_MIN                  574
+#define _PANEL_PIXEL_CLOCK_MAX                  616
+#define _PANEL_PIXEL_CLOCK_MIN                  528
 
-#define _PANEL_POWER_ON_T1                      100
-#define _PANEL_POWER_ON_T2                      100
-#define _PANEL_POWER_ON_T3                      600
+#define _PANEL_POWER_ON_T1                      5
+#define _PANEL_POWER_ON_T2                      50
+#define _PANEL_POWER_ON_T3                      1000
 
-#define _PANEL_POWER_OFF_T4                     210
-#define _PANEL_POWER_OFF_T5                     20
+#define _PANEL_POWER_OFF_T4                     150
+#define _PANEL_POWER_OFF_T5                     100
 #define _PANEL_POWER_OFF_T6                     1200
+
 
 /////////////
 // Display //
@@ -164,4 +165,4 @@
 //--------------------------------------------------
 #include "./RTDColorDefaultTable/ColorTableInclude.h"
 
-#endif // End of #if(_PANEL_TYPE == _CTOT_SG4251D02_1_VBY_UHD_60HZ)
+#endif // End of #if(_PANEL_TYPE == _CSOT_P500QVN04_1_VBY_UHD_60HZ)

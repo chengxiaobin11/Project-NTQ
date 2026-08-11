@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     1
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                 +2    54     
                 +2    55     
                 +2    56     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     2
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     2
 
                 +2    57     
                 +2    58     
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   120     
                 +2   121     
                 +2   122     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     3
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     3
 
                 +2   123     
                 +2   124     
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   186     
                 +2   187     
                 +2   188     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     4
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     4
 
                 +2   189     
                 +2   190     
@@ -269,7 +269,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   252     
                 +2   253     
                 +2   254     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     5
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     5
 
                 +2   255     
                 +2   256     
@@ -337,7 +337,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   318     
                 +2   319     
                 +2   320     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     6
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     6
 
                 +2   321     
                 +2   322     
@@ -405,7 +405,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   384     
                 +2   385     
                 +2   386     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     7
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     7
 
                 +2   387     
                 +2   388     
@@ -473,7 +473,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   450     
                 +2   451     
                 +2   452     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     8
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     8
 
                 +2   453     
                 +2   454     
@@ -541,7 +541,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   516     
                 +2   517     
                 +2   518     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE     9
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE     9
 
                 +2   519     
                 +2   520     
@@ -609,7 +609,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   582     
                 +2   583     
                 +2   584     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    10
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    10
 
                 +2   585     
                 +2   586     
@@ -677,7 +677,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   648     
                 +2   649     
                 +2   650     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    11
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    11
 
                 +2   651     
                 +2   652     
@@ -745,7 +745,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   714     
                 +2   715     
                 +2   716     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    12
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    12
 
                 +2   717     
                 +2   718     
@@ -813,7 +813,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   780     
                 +2   781     
                 +2   782     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    13
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    13
 
                 +2   783     
                 +2   784     
@@ -881,7 +881,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   846     
                 +2   847     
                 +2   848     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    14
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    14
 
                 +2   849     
                 +2   850     
@@ -949,7 +949,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   912     
                 +2   913     
                 +2   914     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    15
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    15
 
                 +2   915     
                 +2   916     
@@ -1017,7 +1017,7 @@ LOC  OBJ            LINE     SOURCE
                 +2   978     
                 +2   979     
                 +2   980     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    16
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    16
 
                 +2   981     
                 +2   982     
@@ -1085,7 +1085,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1044     
                 +2  1045     
                 +2  1046     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    17
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    17
 
                 +2  1047     
                 +2  1048     
@@ -1153,7 +1153,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1110     
                 +2  1111     
                 +2  1112     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    18
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    18
 
                 +2  1113     
                 +2  1114     
@@ -1221,7 +1221,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1176     
                 +2  1177     
                 +2  1178     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    19
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    19
 
                 +2  1179     
                 +2  1180     
@@ -1289,7 +1289,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1242     
                 +2  1243     
                 +2  1244     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    20
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    20
 
                 +2  1245     
                 +2  1246     
@@ -1357,7 +1357,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1308     
                 +2  1309     
                 +2  1310     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    21
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    21
 
                 +2  1311     
                 +2  1312     
@@ -1425,7 +1425,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1374     
                 +2  1375     
                 +2  1376     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    22
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    22
 
                 +2  1377     
                 +2  1378     
@@ -1493,7 +1493,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1440     
                 +2  1441     
                 +2  1442     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    23
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    23
 
                 +2  1443     
                 +2  1444     
@@ -1561,7 +1561,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1506     
                 +2  1507     
                 +2  1508     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    24
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    24
 
                 +2  1509     
                 +2  1510     
@@ -1629,7 +1629,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1572     
                 +2  1573     
                 +2  1574     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    25
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    25
 
                 +2  1575     
                 +2  1576     
@@ -1697,7 +1697,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1638     
                 +2  1639     
                 +2  1640     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    26
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    26
 
                 +2  1641     
                 +2  1642     
@@ -1765,7 +1765,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1704     
                 +2  1705     
                 +2  1706     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    27
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    27
 
                 +2  1707     
                 +2  1708     
@@ -1833,7 +1833,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1770     
                 +2  1771     
                 +2  1772     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    28
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    28
 
                 +2  1773     
                 +2  1774     
@@ -1901,7 +1901,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1836     
                 +2  1837     
                 +2  1838     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    29
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    29
 
                 +2  1839     
                 +2  1840     
@@ -1969,7 +1969,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  1902     
                 +3  1903     
                 +3  1904     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    30
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    30
 
                 +3  1905     
                 +3  1906     
@@ -2037,7 +2037,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  1968     
                 +2  1969     
                 +2           
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    31
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    31
 
                 +1  2741     
                 +1  2742     ;#include "RL6432_Gen_Option.h"
@@ -2105,7 +2105,7 @@ LOC  OBJ            LINE     SOURCE
                 +2  5112     
                 +2  5113     
                 +2  5114     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    32
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    32
 
                 +2  5115     
                 +2  5116     
@@ -2173,7 +2173,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  6713     
                 +3  6714     
                 +3  6715     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    33
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    33
 
                 +3  6716     
                 +3  6717     
@@ -2190,8 +2190,8 @@ LOC  OBJ            LINE     SOURCE
                 +3  6728     
                 +3  6729     ;#include "SG_ProjectDefine.h"
                 +3  6730     
-*** ERROR #A318 IN 6731 (\OPENGORK\OPENGROK\OPENGROK-1.14.11\SOURCE\RTD_HEIHONG_OSD_20260316\PROJECT\HEADER\RL6369_PROJE
-                             CT.H, LINE 21): can't open file 'SG_ProjectDefine.h'
+*** ERROR #A318 IN 6731 (\WORKDIR\WORKDIR\NTQ\PROJECT-NTQ\PROJECT\HEADER\RL6369_PROJECT.H, LINE 21): can't open file 'SG
+                             _ProjectDefine.h'
                 +3  6731     
                 +3  6732     
                 +3  6733     
@@ -2241,7 +2241,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  6777     
                 +3  6778     
                 +3  6779     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    34
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    34
 
                 +3  6780     
                 +3  6781     
@@ -2309,7 +2309,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  6843     
                 +3  6844     
                 +3  6845     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    35
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    35
 
                 +3  6846     
                 +3  6847     
@@ -2377,7 +2377,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  6909     
                 +3  6910     
                 +3  6911     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    36
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    36
 
                 +3  6912     
                 +3  6913     
@@ -2445,7 +2445,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  6975     
                 +3  6976     
                 +3  6977     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    37
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    37
 
                 +3  6978     
                 +3  6979     
@@ -2513,7 +2513,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  7041     
                 +3  7042     
                 +3  7043     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    38
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    38
 
                 +3  7044     
                 +3  7045     
@@ -2581,7 +2581,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  7107     
                 +3  7108     
                 +3  7109     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    39
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    39
 
                 +3  7110     
                 +3  7111     
@@ -2649,7 +2649,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  7173     
                 +3  7174     
                 +3  7175     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    40
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    40
 
                 +3  7176     
                 +3  7177     
@@ -2717,7 +2717,7 @@ LOC  OBJ            LINE     SOURCE
                 +3  7798     
                 +3  7799     
                 +3  7800     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    41
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    41
 
                 +3  7801     
                 +3  7802     
@@ -2754,14 +2754,8 @@ LOC  OBJ            LINE     SOURCE
                 +3  8425     
                 +3  8426     
                 +3           
-                +2  9032     
-                +2  9033     ;#include "RL6463_Project.h"
-                +3  9034     
-                +3  9035     
-                +3  9036     
-                +3  9037     
-                +3  9038     
-                +3  9039     
+                +2  9038     
+                +2  9039     ;#include "RL6463_Project.h"
                 +3  9040     
                 +3  9041     
                 +3  9042     
@@ -2776,23 +2770,23 @@ LOC  OBJ            LINE     SOURCE
                 +3  9051     
                 +3  9052     
                 +3  9053     
+                +3  9054     
+                +3  9055     
+                +3  9056     
+                +3  9057     
+                +3  9058     
+                +3  9059     
                 +3           
-                +2  9568     
-                +2  9569     ;#include "RL6492_Project.h"
-                +3  9570     
-                +3  9571     
-                +3  9572     
-                +3  9573     
-                +3  9574     
-                +3  9575     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    42
-
+                +2  9574     
+                +2  9575     ;#include "RL6492_Project.h"
                 +3  9576     
                 +3  9577     
                 +3  9578     
                 +3  9579     
                 +3  9580     
                 +3  9581     
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    42
+
                 +3  9582     
                 +3  9583     
                 +3  9584     
@@ -2801,15 +2795,15 @@ LOC  OBJ            LINE     SOURCE
                 +3  9587     
                 +3  9588     
                 +3  9589     
+                +3  9590     
+                +3  9591     
+                +3  9592     
+                +3  9593     
+                +3  9594     
+                +3  9595     
                 +3           
-                +2 10127     
-                +2 10128     ;#include "RL6851_Project.h"
-                +3 10129     
-                +3 10130     
-                +3 10131     
-                +3 10132     
-                +3 10133     
-                +3 10134     
+                +2 10133     
+                +2 10134     ;#include "RL6851_Project.h"
                 +3 10135     
                 +3 10136     
                 +3 10137     
@@ -2821,17 +2815,17 @@ LOC  OBJ            LINE     SOURCE
                 +3 10143     
                 +3 10144     
                 +3 10145     
+                +3 10146     
+                +3 10147     
+                +3 10148     
+                +3 10149     
+                +3 10150     
+                +3 10151     
                 +3           
-                +2 10648     
-                +2 10649     
-                +1 10650     
-                +1 10651     ;#include "Project_Asm_Option.h"
-                +2 10652     
-                +2 10653     
                 +2 10654     
                 +2 10655     
-                +2 10656     
-                +2 10657     
+                +1 10656     
+                +1 10657     ;#include "Project_Asm_Option.h"
                 +2 10658     
                 +2 10659     
                 +2 10660     
@@ -2853,14 +2847,14 @@ LOC  OBJ            LINE     SOURCE
                 +2 10676     
                 +2 10677     
                 +2 10678     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    43
-
                 +2 10679     
                 +2 10680     
                 +2 10681     
                 +2 10682     
                 +2 10683     
                 +2 10684     
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    43
+
                 +2 10685     
                 +2 10686     
                 +2 10687     
@@ -2888,13 +2882,13 @@ LOC  OBJ            LINE     SOURCE
                 +2 10709     
                 +2 10710     
                 +2 10711     
-                +2           
+                +2 10712     
+                +2 10713     
+                +2 10714     
                 +2 10715     
                 +2 10716     
                 +2 10717     
-                +2 10718     
-                +2 10719     
-                +2 10720     
+                +2           
                 +2 10721     
                 +2 10722     
                 +2 10723     
@@ -2903,144 +2897,148 @@ LOC  OBJ            LINE     SOURCE
                 +2 10726     
                 +2 10727     
                 +2 10728     
-                +1 10729     
-                   10730     
-                   10731     
-                   10732     $nomod51  NOLINES
-                   10733     $nocond 
-                   10734     ;------------------------------------------------------------------------------
-                   10735     ;  This file is part of the BL51 / LX51 Banked Linker/Locater package
-                   10736     ;  Copyright (c) 1988 - 2001 Keil Elektronik GmbH and Keil Software, Inc.
-                   10737     ;  Version 2.21 (Code and Variable Banking for Classic 8051 Derivatives)
-                   10738     ;------------------------------------------------------------------------------
-                   10739     ;************************ Configuration Section *******************************
-                   10740     ; Define maximum Number of Banks                                              *
-  0010             10741     ?B_NBANKS       EQU  0x10;                  *
-                   10742     ;                         ; following values are allowed: 2, 4, 8, 16, 32, 64 *
-                   10743     ;                         ; for BL51 the maximum value for ?B_BANKS is 32     *
-                   10744     ;                         ; for LX51 the maximum value for ?B_BANKS is 64     *
-                   10745     ;                                                                             *
-  0001             10746     ?B_MODE         EQU  1    ; 0 for Bank-Switching via 8051 Port                *
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    44
+                +2 10729     
+                +2 10730     
+                +2 10731     
+                +2 10732     
+                +2 10733     
+                +2 10734     
+                +1 10735     
+                   10736     
+                   10737     
+                   10738     $nomod51  NOLINES
+                   10739     $nocond 
+                   10740     ;------------------------------------------------------------------------------
+                   10741     ;  This file is part of the BL51 / LX51 Banked Linker/Locater package
+                   10742     ;  Copyright (c) 1988 - 2001 Keil Elektronik GmbH and Keil Software, Inc.
+                   10743     ;  Version 2.21 (Code and Variable Banking for Classic 8051 Derivatives)
+                   10744     ;------------------------------------------------------------------------------
+                   10745     ;************************ Configuration Section *******************************
+                   10746     ; Define maximum Number of Banks                                              *
+  0010             10747     ?B_NBANKS       EQU  0x10;                  *
+                   10748     ;                         ; following values are allowed: 2, 4, 8, 16, 32, 64 *
+                   10749     ;                         ; for BL51 the maximum value for ?B_BANKS is 32     *
+                   10750     ;                         ; for LX51 the maximum value for ?B_BANKS is 64     *
+                   10751     ;                                                                             *
+  0001             10752     ?B_MODE         EQU  1    ; 0 for Bank-Switching via 8051 Port                *
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    44
 
-                   10747     ;                         ; 1 for Bank-Switching via XDATA Port               *
-                   10748     ;                         ; 4 for user-provided bank switch code              *
-                   10749     ;                                                                             *
-  0000             10750     ?B_RTX          EQU  0    ; 0 for applications without real-time OS           *
-                   10751     ;                         ; 1 for applications using the RTX-51 real-time OS  *
-                   10752     ;                                                                             *
-  0000             10753     ?B_VAR_BANKING  EQU  0    ; Variable Banking via L51_BANK (far memory support)*
-                   10754     ;                         ; 0 Variable Banking does not use L51_BANK.A51      *
-                   10755     ;                         ; 1 Variable Banking uses this L51_BANK.A51 module  *
-                   10756     ; Notes: ?B_VAR_BANKING uses the 'far' and 'far const' C51 memory types to    *
-                   10757     ;        extent the space for variables in RAM and/or ROM of classic 8051     *
-                   10758     ;        device.  The same hardware as for code banking is used.  Program     *
-                   10759     ;        code banking and variable banking share the same hardware I/O pins.  *
-                   10760     ;        The C51 Compiler must be used with the VARBANKING directive.         *
-                   10761     ;        Variable Banking is only supported with the LX51 linker/locater.     *
-                   10762     ;                                                                             *
-  00FF             10763     ?B_RST_BANK     EQU  0xFF ; specifies the active code bank number after CPU   *
-                   10764     ;                         ; Reset.  Used to reduce the entries in the         *
-                   10765     ;                         ; INTERBANK CALL TABLE.  The value 0xFF disables    *
-                   10766     ;                         ; this LX51 linker/locater optimization.            *
-                   10767     ; Note:  Interbank Call Table optimization is only possible with LX51.        *
+                   10753     ;                         ; 1 for Bank-Switching via XDATA Port               *
+                   10754     ;                         ; 4 for user-provided bank switch code              *
+                   10755     ;                                                                             *
+  0000             10756     ?B_RTX          EQU  0    ; 0 for applications without real-time OS           *
+                   10757     ;                         ; 1 for applications using the RTX-51 real-time OS  *
+                   10758     ;                                                                             *
+  0000             10759     ?B_VAR_BANKING  EQU  0    ; Variable Banking via L51_BANK (far memory support)*
+                   10760     ;                         ; 0 Variable Banking does not use L51_BANK.A51      *
+                   10761     ;                         ; 1 Variable Banking uses this L51_BANK.A51 module  *
+                   10762     ; Notes: ?B_VAR_BANKING uses the 'far' and 'far const' C51 memory types to    *
+                   10763     ;        extent the space for variables in RAM and/or ROM of classic 8051     *
+                   10764     ;        device.  The same hardware as for code banking is used.  Program     *
+                   10765     ;        code banking and variable banking share the same hardware I/O pins.  *
+                   10766     ;        The C51 Compiler must be used with the VARBANKING directive.         *
+                   10767     ;        Variable Banking is only supported with the LX51 linker/locater.     *
                    10768     ;                                                                             *
-                   10769     ;-----------------------------------------------------------------------------*
-                   10770     ;                                                                             *
+  00FF             10769     ?B_RST_BANK     EQU  0xFF ; specifies the active code bank number after CPU   *
+                   10770     ;                         ; Reset.  Used to reduce the entries in the         *
+                   10771     ;                         ; INTERBANK CALL TABLE.  The value 0xFF disables    *
+                   10772     ;                         ; this LX51 linker/locater optimization.            *
+                   10773     ; Note:  Interbank Call Table optimization is only possible with LX51.        *
+                   10774     ;                                                                             *
+                   10775     ;-----------------------------------------------------------------------------*
+                   10776     ;                                                                             *
                              ENDIF;                                                                        *
-                   10783     ;                                                                             *
-                   10784     IF  ?B_MODE = 1;                                                              *
-                   10785     ;-----------------------------------------------------------------------------*
-                   10786     ; if ?BANK?MODE is 1 define the following values                              *
-                   10787     ; For Bank-Switching via XDATA Port define XDATA Port Address / Bits          *
-  FFFF             10788     ?B_XDATAPORT    EQU     0FFFFH   ; default is XDATA Port Address 0FFFFH       *
-  0000             10789     ?B_FIRSTBIT     EQU     0        ; default is Bit 0                           *
-                   10790     ;-----------------------------------------------------------------------------*
-                   10791     ENDIF;                                                                        *
-                   10792     ;                                                                             *
+                   10789     ;                                                                             *
+                   10790     IF  ?B_MODE = 1;                                                              *
+                   10791     ;-----------------------------------------------------------------------------*
+                   10792     ; if ?BANK?MODE is 1 define the following values                              *
+                   10793     ; For Bank-Switching via XDATA Port define XDATA Port Address / Bits          *
+  FFFF             10794     ?B_XDATAPORT    EQU     0FFFFH   ; default is XDATA Port Address 0FFFFH       *
+  0000             10795     ?B_FIRSTBIT     EQU     0        ; default is Bit 0                           *
+                   10796     ;-----------------------------------------------------------------------------*
+                   10797     ENDIF;                                                                        *
+                   10798     ;                                                                             *
                              ENDIF;                                                                        *
-                   10851     ;                                                                             *
+                   10857     ;                                                                             *
                              ENDIF;                                                                        *
-                   10872     ;                                                                             *
-                   10873     ;******************************************************************************
-                   10874     ;                                                                             *
-                   10875     ; THEORY OF OPERATION                                                         *
-                   10876     ; -------------------                                                         *
-                   10877     ; The section below describes the code generated by BL51 or LX51 and the      *
-                   10878     ; operation of the L51_BANK.A51 module.  BL51/LX51 generates for each         *
-                   10879     ; function that is located in a code memory bank and called from the common   *
-                   10880     ; area or a different code bank and entry into the INTRABANK CALL TABLE.  The *
-                   10881     ; INTRABANK CALL TABLE is located in the SEGMENT ?BANK?SELECT and listed in   *
-                   10882     ; the Linker MAP file. The entries in that TABLE have the following format:   *
-                   10883     ;                                                                             *
-                   10884     ;   ?FCT?1:  MOV  DPTR,#FCT     ; Load Address of target FCT                  *
-                   10885     ;            JMP  ?B_BANKn      ; Switch to Bank and Jump to Target Code      *
-                   10886     ;                                                                             *
-                   10887     ; Instead of directly calling the function FCT, the Linker changes the entry  *
-                   10888     ; to ?FCT?1.  This entry selects the bank where the function FCT is located   *
-                   10889     ; and calls that function via the routines defined in this L51_BANK.A51 file. *
-                   10890     ; The L51_BANK.A51 file contains two sets of functions for each bank:         *
-                   10891     ;                                                                             *
-                   10892     ; ?B_BANKn    is a routine which saves the entry of the ?B_SWITCHn function   *
-                   10893     ;             for the current active bank on the STACK and switches to the    *
-                   10894     ;             bank 'n'.  Then it jumps to the address specified by the DPTR   *
-                   10895     ;             register.  It is allowed to modify the following registers in   *
-                   10896     ;             the ?B_BANKn routine:  A, B, R0, DPTR, PSW                      *
+                   10878     ;                                                                             *
+                   10879     ;******************************************************************************
+                   10880     ;                                                                             *
+                   10881     ; THEORY OF OPERATION                                                         *
+                   10882     ; -------------------                                                         *
+                   10883     ; The section below describes the code generated by BL51 or LX51 and the      *
+                   10884     ; operation of the L51_BANK.A51 module.  BL51/LX51 generates for each         *
+                   10885     ; function that is located in a code memory bank and called from the common   *
+                   10886     ; area or a different code bank and entry into the INTRABANK CALL TABLE.  The *
+                   10887     ; INTRABANK CALL TABLE is located in the SEGMENT ?BANK?SELECT and listed in   *
+                   10888     ; the Linker MAP file. The entries in that TABLE have the following format:   *
+                   10889     ;                                                                             *
+                   10890     ;   ?FCT?1:  MOV  DPTR,#FCT     ; Load Address of target FCT                  *
+                   10891     ;            JMP  ?B_BANKn      ; Switch to Bank and Jump to Target Code      *
+                   10892     ;                                                                             *
+                   10893     ; Instead of directly calling the function FCT, the Linker changes the entry  *
+                   10894     ; to ?FCT?1.  This entry selects the bank where the function FCT is located   *
+                   10895     ; and calls that function via the routines defined in this L51_BANK.A51 file. *
+                   10896     ; The L51_BANK.A51 file contains two sets of functions for each bank:         *
                    10897     ;                                                                             *
-                   10898     ; ?B_SWITCHn  is a function which selects the bank 'n'.  This function is     *
-                   10899     ;             used at the end of a user function to return to the calling     *
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    45
+                   10898     ; ?B_BANKn    is a routine which saves the entry of the ?B_SWITCHn function   *
+                   10899     ;             for the current active bank on the STACK and switches to the    *
+                   10900     ;             bank 'n'.  Then it jumps to the address specified by the DPTR   *
+                   10901     ;             register.  It is allowed to modify the following registers in   *
+                   10902     ;             the ?B_BANKn routine:  A, B, R0, DPTR, PSW                      *
+                   10903     ;                                                                             *
+                   10904     ; ?B_SWITCHn  is a function which selects the bank 'n'.  This function is     *
+                   10905     ;             used at the end of a user function to return to the calling     *
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    45
 
-                   10900     ;             code bank.  Only the following registers may be altered in the  *
-                   10901     ;             ?B_SWITCHn function:  R0, DPTR                                  *
-                   10902     ;                                                                             *
-                   10903     ; The current active bank is stored in ?B_CURRENTBANK.  RTX-51 uses this      *
-                   10904     ; variable to restore the code bank after a task switch.  To get correct      *
-                   10905     ; results, ?B_CURRENTBANK must be set to the code bank before the hardware    *
-                   10906     ; switch is done, or the code banking sequences must be interrupt protected.  *
-                   10907     ;******************************************************************************
-                   10908     
-                   10909                     NAME    ?BANK?SWITCHING
-                   10910     
-                   10911                     PUBLIC  ?B_NBANKS, ?B_MODE, ?B_CURRENTBANK, ?B_MASK
-                   10912                     PUBLIC  ?B_FACTOR, ?B_RST_BANK
-                             ENDIF
+                   10906     ;             code bank.  Only the following registers may be altered in the  *
+                   10907     ;             ?B_SWITCHn function:  R0, DPTR                                  *
+                   10908     ;                                                                             *
+                   10909     ; The current active bank is stored in ?B_CURRENTBANK.  RTX-51 uses this      *
+                   10910     ; variable to restore the code bank after a task switch.  To get correct      *
+                   10911     ; results, ?B_CURRENTBANK must be set to the code bank before the hardware    *
+                   10912     ; switch is done, or the code banking sequences must be interrupt protected.  *
+                   10913     ;******************************************************************************
+                   10914     
+                   10915                     NAME    ?BANK?SWITCHING
                    10916     
-                   10917     ; Standard SFR Symbols required in L51_BANK.A51
-  00E0             10918     ACC     DATA    0E0H
-  00F0             10919     B       DATA    0F0H
-  0082             10920     DPL     DATA    82H
-  0083             10921     DPH     DATA    83H
-  00A8             10922     IE      DATA    0A8H
-  00AF             10923     EA      BIT     IE.7
-                   10924     
-                   10925     
-                   10926     ; generate Mask and Bank Number Information
-                             ELSEIF  ?B_NBANKS <= 16
-  000F             10934       MASK          EQU     00001111B
+                   10917                     PUBLIC  ?B_NBANKS, ?B_MODE, ?B_CURRENTBANK, ?B_MASK
+                   10918                     PUBLIC  ?B_FACTOR, ?B_RST_BANK
                              ENDIF
-                   10940     
+                   10922     
+                   10923     ; Standard SFR Symbols required in L51_BANK.A51
+  00E0             10924     ACC     DATA    0E0H
+  00F0             10925     B       DATA    0F0H
+  0082             10926     DPL     DATA    82H
+  0083             10927     DPH     DATA    83H
+  00A8             10928     IE      DATA    0A8H
+  00AF             10929     EA      BIT     IE.7
+                   10930     
+                   10931     
+                   10932     ; generate Mask and Bank Number Information
+                             ELSEIF  ?B_NBANKS <= 16
+  000F             10940       MASK          EQU     00001111B
+                             ENDIF
+                   10946     
                              ENDIF  ; close block IF ?B_MODE = 0 *******************************************
-                   11194     
-                   11195     
-                   11196     IF ?B_MODE = 1 ;***************************************************************
-                   11197     
-  0001             11198     ?B_FACTOR       EQU     1 SHL ?B_FIRSTBIT
-                   11199     
-  000F             11200     ?B_MASK         EQU     MASK SHL ?B_FIRSTBIT
+                   11200     
                    11201     
-                   11202     BANKN           MACRO   N
-                   11203     BANK&N          EQU     N SHL ?B_FIRSTBIT
-                   11204                     ENDM
+                   11202     IF ?B_MODE = 1 ;***************************************************************
+                   11203     
+  0001             11204     ?B_FACTOR       EQU     1 SHL ?B_FIRSTBIT
                    11205     
-  0000             11206     CNT             SET     0
+  000F             11206     ?B_MASK         EQU     MASK SHL ?B_FIRSTBIT
                    11207     
-                   11208                     REPT    ?B_NBANKS
-                   11209                     BANKN   %CNT
-                   11210     CNT             SET     CNT+1
-                   11211                     ENDM
-                   11212+1                   BANKN   %CNT
-                   11215+1                   BANKN   %CNT
+                   11208     BANKN           MACRO   N
+                   11209     BANK&N          EQU     N SHL ?B_FIRSTBIT
+                   11210                     ENDM
+                   11211     
+  0000             11212     CNT             SET     0
+                   11213     
+                   11214                     REPT    ?B_NBANKS
+                   11215                     BANKN   %CNT
+                   11216     CNT             SET     CNT+1
+                   11217                     ENDM
                    11218+1                   BANKN   %CNT
                    11221+1                   BANKN   %CNT
                    11224+1                   BANKN   %CNT
@@ -3055,201 +3053,203 @@ LOC  OBJ            LINE     SOURCE
                    11251+1                   BANKN   %CNT
                    11254+1                   BANKN   %CNT
                    11257+1                   BANKN   %CNT
-                   11260     
-                   11261     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    46
-
-                   11262     ?C_INITSEG      SEGMENT CODE            ; Segment for Variable Initialization
-----               11263                     RSEG    ?C_INITSEG
-0000 01            11264                     DB      01H             ; IData
-0001 00       F    11265                     DB      ?B_CURRENTBANK  ; Init Current Bank
-0002 00            11266                     DB      0               ; Set to Zero
+                   11260+1                   BANKN   %CNT
+                   11263+1                   BANKN   %CNT
+                   11266     
                    11267     
-                   11268     
-                   11269     
-                   11270     
-                   11271     
-                   11272     ;User/both Code don't do this for use relocte function 30H
-                   11273     ;Boot Code and No Dual bank case do this.
-0003 41            11274                     DB      41H                        ; XData
-0004 FFFF          11275                     DW      ?B_XDATAPORT               ; Init XDATA Port
-0006 00            11276                     DB      0 ; Set to intial bank
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    46
+
+                   11268     ?C_INITSEG      SEGMENT CODE            ; Segment for Variable Initialization
+----               11269                     RSEG    ?C_INITSEG
+0000 01            11270                     DB      01H             ; IData
+0001 00       F    11271                     DB      ?B_CURRENTBANK  ; Init Current Bank
+0002 00            11272                     DB      0               ; Set to Zero
+                   11273     
+                   11274     
+                   11275     
+                   11276     
                    11277     
-                   11278     
-                   11279                     PUBLIC  ?B_XDATAPORT
-                   11280     
-                   11281     ?BANK?DATA      SEGMENT DATA
-----               11282                     RSEG    ?BANK?DATA
-0000               11283     ?B_CURRENTBANK: DS      1
+                   11278     ;User/both Code don't do this for use relocte function 30H
+                   11279     ;Boot Code and No Dual bank case do this.
+0003 41            11280                     DB      41H                        ; XData
+0004 FFFF          11281                     DW      ?B_XDATAPORT               ; Init XDATA Port
+0006 00            11282                     DB      0 ; Set to intial bank
+                   11283     
                    11284     
-                   11285     
+                   11285                     PUBLIC  ?B_XDATAPORT
+                   11286     
+                   11287     ?BANK?DATA      SEGMENT DATA
+----               11288                     RSEG    ?BANK?DATA
+0000               11289     ?B_CURRENTBANK: DS      1
+                   11290     
+                   11291     
                              ENDIF
-                   11362     
-                   11363     
-                   11364     IF ?B_NBANKS <= 16
-                   11365       ; Convert Bank No in Accu to Address * 16
-                   11366       IF  ?B_FIRSTBIT = 0
-                   11367       CONVBANKNO    MACRO
-                   11368                     SWAP    A
-                   11369                     ENDM
-                   11370       ENDIF
-                   11371     
+                   11368     
+                   11369     
+                   11370     IF ?B_NBANKS <= 16
+                   11371       ; Convert Bank No in Accu to Address * 16
+                   11372       IF  ?B_FIRSTBIT = 0
+                   11373       CONVBANKNO    MACRO
+                   11374                     SWAP    A
+                   11375                     ENDM
+                   11376       ENDIF
+                   11377     
                                ENDIF
-                   11378     
-                               ENDIF
-                   11385     
+                   11384     
                                ENDIF
                    11391     
                                ENDIF
-                   11396     
+                   11397     
                                ENDIF
                    11402     
                                ENDIF
-                   11409     
+                   11408     
                                ENDIF
-                   11416     
-                   11417       SWITCH        MACRO   N
-                   11418                     ORG     N * 16
-                   11419                     PUBLIC  ?B_SWITCH&N
-                   11420       ?B_SWITCH&N:
-                   11421                     MOV     R0,A
-                   11422                     MOV     A,#BANK&N
-                   11423                     MOV     DPTR,#?B_XDATAPORT
-                   11424                     MOV     ?B_CURRENTBANK,A
-                   11425     
+                   11415     
+                               ENDIF
+                   11422     
+                   11423       SWITCH        MACRO   N
+                   11424                     ORG     N * 16
+                   11425                     PUBLIC  ?B_SWITCH&N
+                   11426       ?B_SWITCH&N:
+                   11427                     MOV     R0,A
+                   11428                     MOV     A,#BANK&N
+                   11429                     MOV     DPTR,#?B_XDATAPORT
+                   11430                     MOV     ?B_CURRENTBANK,A
+                   11431     
                              
                                              
-                   11428     
-                   11429                     MOVX    @DPTR,A
-                   11430                     MOV     A,R0
-                   11431                     RET
-                   11432                     ENDM
-                   11433     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    47
-
-                   11434     ENDIF
-                   11435     
-                   11436     
-                   11437     SELECT          MACRO   N
-                   11438     LOCAL           XLABEL, YLABEL
+                   11434     
+                   11435                     MOVX    @DPTR,A
+                   11436                     MOV     A,R0
+                   11437                     RET
+                   11438                     ENDM
                    11439     
-                   11440                     PUBLIC  ?B_BANK&N
-                   11441     ?B_BANK&N:
-                   11442                     MOV     A,?B_CURRENTBANK
-                   11443                     ANL     A,#?B_MASK
-                   11444                     CONVBANKNO         ; Convert Bank Number to Address
-                   11445                     PUSH    ACC
-                   11446                     MOV     A,#HIGH ?BANK?SWITCH
-                   11447                     PUSH    ACC
-                   11448                     PUSH    DPL
-                   11449                     PUSH    DPH
-                   11450                     LJMP    ?B_SWITCH&N
-                   11451     
-                   11452                     ENDM
-                   11453     
-                   11454     
-                   11455     ?BANK?SELECT    SEGMENT  CODE
-                   11456     
-----               11457                     RSEG    ?BANK?SELECT
-  0000             11458     CNT             SET     0
-                   11459     
-                   11460                     REPT    ?B_NBANKS
-                   11461                     SELECT  %CNT
-                   11462     CNT             SET     CNT+1
-                   11463     
-                   11464                     ENDM
-                   11465+1                   SELECT  %CNT
-                   11482+1                   SELECT  %CNT
-                   11499+1                   SELECT  %CNT
-                   11516+1                   SELECT  %CNT
-                   11533+1                   SELECT  %CNT
-                   11550+1                   SELECT  %CNT
-                   11567+1                   SELECT  %CNT
-                   11584+1                   SELECT  %CNT
-                   11601+1                   SELECT  %CNT
-                   11618+1                   SELECT  %CNT
-                   11635+1                   SELECT  %CNT
-                   11652+1                   SELECT  %CNT
-                   11669+1                   SELECT  %CNT
-                   11686+1                   SELECT  %CNT
-                   11703+1                   SELECT  %CNT
-                   11720+1                   SELECT  %CNT
-                   11737     
-                             
-                   11744     
-                   11745     
-                   11746     ?BANK?SWITCH    SEGMENT  CODE  PAGE
-                   11747     
-----               11748                     RSEG    ?BANK?SWITCH
-  0000             11749     CNT             SET     0
-                   11750     
-                   11751                     REPT    ?B_NBANKS
-                   11752                     SWITCH  %CNT
-                   11753     
-                   11754     CNT             SET     CNT+1
-                   11755                     ENDM
-                   11756+1                   SWITCH  %CNT
-                   11773+1                   SWITCH  %CNT
-                   11790+1                   SWITCH  %CNT
-                   11807+1                   SWITCH  %CNT
-                   11824+1                   SWITCH  %CNT
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    48
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    47
 
-                   11841+1                   SWITCH  %CNT
-                   11858+1                   SWITCH  %CNT
-                   11875+1                   SWITCH  %CNT
-                   11892+1                   SWITCH  %CNT
-                   11909+1                   SWITCH  %CNT
-                   11926+1                   SWITCH  %CNT
-                   11943+1                   SWITCH  %CNT
-                   11960+1                   SWITCH  %CNT
-                   11977+1                   SWITCH  %CNT
-                   11994+1                   SWITCH  %CNT
-                   12011+1                   SWITCH  %CNT
-                   12028     
+                   11440     ENDIF
+                   11441     
+                   11442     
+                   11443     SELECT          MACRO   N
+                   11444     LOCAL           XLABEL, YLABEL
+                   11445     
+                   11446                     PUBLIC  ?B_BANK&N
+                   11447     ?B_BANK&N:
+                   11448                     MOV     A,?B_CURRENTBANK
+                   11449                     ANL     A,#?B_MASK
+                   11450                     CONVBANKNO         ; Convert Bank Number to Address
+                   11451                     PUSH    ACC
+                   11452                     MOV     A,#HIGH ?BANK?SWITCH
+                   11453                     PUSH    ACC
+                   11454                     PUSH    DPL
+                   11455                     PUSH    DPH
+                   11456                     LJMP    ?B_SWITCH&N
+                   11457     
+                   11458                     ENDM
+                   11459     
+                   11460     
+                   11461     ?BANK?SELECT    SEGMENT  CODE
+                   11462     
+----               11463                     RSEG    ?BANK?SELECT
+  0000             11464     CNT             SET     0
+                   11465     
+                   11466                     REPT    ?B_NBANKS
+                   11467                     SELECT  %CNT
+                   11468     CNT             SET     CNT+1
+                   11469     
+                   11470                     ENDM
+                   11471+1                   SELECT  %CNT
+                   11488+1                   SELECT  %CNT
+                   11505+1                   SELECT  %CNT
+                   11522+1                   SELECT  %CNT
+                   11539+1                   SELECT  %CNT
+                   11556+1                   SELECT  %CNT
+                   11573+1                   SELECT  %CNT
+                   11590+1                   SELECT  %CNT
+                   11607+1                   SELECT  %CNT
+                   11624+1                   SELECT  %CNT
+                   11641+1                   SELECT  %CNT
+                   11658+1                   SELECT  %CNT
+                   11675+1                   SELECT  %CNT
+                   11692+1                   SELECT  %CNT
+                   11709+1                   SELECT  %CNT
+                   11726+1                   SELECT  %CNT
+                   11743     
+                             
+                   11750     
+                   11751     
+                   11752     ?BANK?SWITCH    SEGMENT  CODE  PAGE
+                   11753     
+----               11754                     RSEG    ?BANK?SWITCH
+  0000             11755     CNT             SET     0
+                   11756     
+                   11757                     REPT    ?B_NBANKS
+                   11758                     SWITCH  %CNT
+                   11759     
+                   11760     CNT             SET     CNT+1
+                   11761                     ENDM
+                   11762+1                   SWITCH  %CNT
+                   11779+1                   SWITCH  %CNT
+                   11796+1                   SWITCH  %CNT
+                   11813+1                   SWITCH  %CNT
+                   11830+1                   SWITCH  %CNT
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    48
+
+                   11847+1                   SWITCH  %CNT
+                   11864+1                   SWITCH  %CNT
+                   11881+1                   SWITCH  %CNT
+                   11898+1                   SWITCH  %CNT
+                   11915+1                   SWITCH  %CNT
+                   11932+1                   SWITCH  %CNT
+                   11949+1                   SWITCH  %CNT
+                   11966+1                   SWITCH  %CNT
+                   11983+1                   SWITCH  %CNT
+                   12000+1                   SWITCH  %CNT
+                   12017+1                   SWITCH  %CNT
+                   12034     
                                ENDIF
-                   12041     
+                   12047     
                                ENDIF
-                   12053     
-                   12054     ENDIF  ; close block IF ?B_MODE = 1 *******************************************
-                   12055     
-                   12056     
+                   12059     
+                   12060     ENDIF  ; close block IF ?B_MODE = 1 *******************************************
+                   12061     
+                   12062     
                              ENDIF  ; close block IF ?B_MODE = 4 *******************************************
-                   12129     
-----               12130                     RSEG    ?BANK?SELECT
-                   12131     
-                   12132     ;************************  SWITCHBANK FUNCTION  *******************************
-                   12133     ;                                                                             *
-                   12134     ; SWITCHBANK allows use of bank-switching for C programs                      *
-                   12135     ;                                                                             *
-                   12136     ; prototype:   extern switchbank (unsigned char bank_number);                 *
-                   12137     ;                                                                             *
-                   12138     ;******************************************************************************
-                   12139                     PUBLIC  _SWITCHBANK, ?B_SWITCHBANK_A
-                   12140     
-0120 EF            12141     _SWITCHBANK:    MOV     A,R7
-                   12142     
+                   12135     
+----               12136                     RSEG    ?BANK?SELECT
+                   12137     
+                   12138     ;************************  SWITCHBANK FUNCTION  *******************************
+                   12139     ;                                                                             *
+                   12140     ; SWITCHBANK allows use of bank-switching for C programs                      *
+                   12141     ;                                                                             *
+                   12142     ; prototype:   extern switchbank (unsigned char bank_number);                 *
+                   12143     ;                                                                             *
+                   12144     ;******************************************************************************
+                   12145                     PUBLIC  _SWITCHBANK, ?B_SWITCHBANK_A
+                   12146     
+0120 EF            12147     _SWITCHBANK:    MOV     A,R7
+                   12148     
                              ENDIF  ; close block IF ?B_MODE = 0 *******************************************
-                   12159     
-                   12160     IF ?B_MODE = 1 ;***************************************************************
-                   12161     
-0121               12162     ?B_SWITCHBANK_A:
-                             ENDIF
+                   12165     
+                   12166     IF ?B_MODE = 1 ;***************************************************************
                    12167     
-                   12168     IF ?B_NBANKS <= 16
-0121 C4            12169                     SWAP    A
-                   12170     ENDIF
-0122 900000   F    12171                     MOV     DPTR,#?BANK?SWITCH
-0125 73            12172                     JMP     @A+DPTR
+0121               12168     ?B_SWITCHBANK_A:
+                             ENDIF
                    12173     
-                   12174     ENDIF  ; close block IF ?B_MODE = 1 *******************************************
-                   12175     
+                   12174     IF ?B_NBANKS <= 16
+0121 C4            12175                     SWAP    A
+                   12176     ENDIF
+0122 900000   F    12177                     MOV     DPTR,#?BANK?SWITCH
+0125 73            12178                     JMP     @A+DPTR
+                   12179     
+                   12180     ENDIF  ; close block IF ?B_MODE = 1 *******************************************
+                   12181     
                              ENDIF  ; close block IF ?B_MODE = 4 *******************************************
-                   12205     
-                   12206     
+                   12211     
+                   12212     
                              ENDIF  ; close block IF ?B_VAR_BANKING ****************************************
-                   12625     
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    49
+                   12631     
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    49
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -3317,7 +3317,7 @@ BANK14 . . . . . .  N NUMB   000EH   A
 BANK15 . . . . . .  N NUMB   000FH   A   
 BANK2. . . . . . .  N NUMB   0002H   A   
 BANK3. . . . . . .  N NUMB   0003H   A   
-A51 MACRO ASSEMBLER  L51_BANK                                                             04/23/2026 10:22:04 PAGE    50
+A51 MACRO ASSEMBLER  L51_BANK                                                             07/13/2026 16:00:55 PAGE    50
 
 BANK4. . . . . . .  N NUMB   0004H   A   
 BANK5. . . . . . .  N NUMB   0005H   A   

@@ -12,9 +12,9 @@
 /*   express, implied, statutory or otherwise.                                  */
 /********************************************************************************/
 
-#if(_PANEL_TYPE == _CTOT_LD490EQY_VBY_UHD_60HZ)
+#if(_PANEL_TYPE == _CSOT_LD490EQY_VBY_UHD_60HZ)
 //----------------------------------------------------------------------------------------------------
-// ID Code      : 180_CTOT_LD490EQY_VBY_UHD_60HZ.h No.0180
+// ID Code      : 180_CSOT_LD490EQY_VBY_UHD_60HZ.h No.0180
 // Update Note  :
 //----------------------------------------------------------------------------------------------------
 #define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_L__,_D__,_4__,_9__,_0__,_E__,_Q__,_Y__
@@ -165,4 +165,4 @@
 //--------------------------------------------------
 #include "./RTDColorDefaultTable/ColorTableInclude.h"
 
-#endif // End of #if(_PANEL_TYPE == _CTOT_LD490EQY_VBY_UHD_60HZ)
+#endif // End of #if(_PANEL_TYPE == _CSOT_LD490EQY_VBY_UHD_60HZ)

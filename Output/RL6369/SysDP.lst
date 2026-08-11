@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 1   
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SYSDP
@@ -33,88 +33,73 @@ line level    source
   17          #define __SYSTEM_DP__
   18          
   19          #include "SysInclude.h"
-*** WARNING C318 IN LINE 21 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Project\Header\RL6369
-             -_Project.h: can't open file 'SG_ProjectDefine.h'
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 22 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Pre_Check.h: unknown identifier
-*** WARNING C320 IN LINE 79 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Pre_Check.h: "_PANEL_PIXEL_TYPE should be defined at Panel.h"
-*** WARNING C322 IN LINE 75 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_D
-             -efault.h: unknown identifier
-*** WARNING C317 IN LINE 715 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD0_CONNECT'
-*** WARNING C317 IN LINE 716 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD1_CONNECT'
-*** WARNING C317 IN LINE 717 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 2   
-
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD2_CONNECT'
-*** WARNING C317 IN LINE 732 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D0_DP_SOURCE_POWER'
-*** WARNING C317 IN LINE 733 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D1_DP_SOURCE_POWER'
-*** WARNING C317 IN LINE 734 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D2_DP_SOURCE_POWER'
+*** WARNING C318 IN LINE 21 OF \Workdir\workdir\NTQ\Project-NTQ\Project\Header\RL6369_Project.h: can't open file 'SG_Pro
+             -jectDefine.h'
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 22 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Pre_Check.h: unknown identifi
+             -er
+*** WARNING C320 IN LINE 79 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Pre_Check.h: "_PANEL_PIXEL_TY
+             -PE should be defined at Panel.h"
+*** WARNING C322 IN LINE 75 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Default.h: unknown identifier
+*** WARNING C317 IN LINE 715 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD0_CONNECT'
+*** WARNING C317 IN LINE 716 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD1_CONNECT'
+*** WARNING C317 IN LINE 717 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD2_CONNECT'
+*** WARNING C317 IN LINE 732 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D0_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 733 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D1_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 734 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D2_DP_SOURCE_POWER'
 *** WARNING C322 IN LINE 55 OF .\User\RTD Series\RTD2014Osd\Header\RTD2014TimerEventIDUser.h: unknown identifier
-*** WARNING C320 IN LINE 113 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_FRC_SUPPORT Should Be _ON!!!"
-*** WARNING C320 IN LINE 256 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_YPEAKING_SUPPORT and _ULTRA_VIVID_SUPPORT Should Same Setting!!!"
-*** WARNING C320 IN LINE 994 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_DVI_DE_ONLY_SUPPORT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 998 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_HDMI_FROM_DVI_CONNECT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 1002 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "_HDMI_FREESYNC_SUPPORT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 1358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "Type-C Can't Work Under DP OFF Case ~ !!"
-*** WARNING C320 IN LINE 1592 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "INPUTCLOCK_RANGE_DP and _INPUTCLOCK_RANG_HDMI Should <= 225M when _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPO
-             -RT is _OFF!!!"
-*** WARNING C320 IN LINE 34 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Check.h: "_PANEL_PIXEL_CLOCK_MAX_KHZ Should Be Under 225M When _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF"
-*** WARNING C320 IN LINE 537 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_
-             -Config_Check.h: "_PANEL_DV_TOTAL_MAX Should Be Larger than (DVTotal * FreeSync Vfreq Ratio)!"
-*** WARNING C320 IN LINE 244 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D0 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
-             -OT_EXIST"
-*** WARNING C320 IN LINE 270 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D1 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
-             -OT_EXIST"
-*** WARNING C320 IN LINE 343 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D0 SMBUS IIC Not Defined When D0 Port Controller = 5400"
-*** WARNING C320 IN LINE 347 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D1 SMBUS IIC Not Defined When D1 Port Controller = 5400"
-*** WARNING C320 IN LINE 358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "'_D0_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D0_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
-             -OLLER_NONE' !!!"
-*** WARNING C320 IN LINE 362 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "'_D1_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D1_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
-             -OLLER_NONE' !!!"
-*** WARNING C320 IN LINE 1004 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio HPOUT R/L When _DAC_HP_OUTPUT_SUPPORT Support _ON"
-*** WARNING C320 IN LINE 1014 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio LINE_IN R/L When _LINE_IN_SUPPORT Support _ON"
-*** WARNING C320 IN LINE 1025 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio SPEAKER_OUTPUT R/L When _DAC_SPEAKER_OUTPUT_SUPPORT Support _ON"
-*** WARNING C322 IN LINE 54 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Debug.h
-             -: unknown identifier
+*** WARNING C320 IN LINE 113 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_FRC_SUPPORT Sho
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 2   
+
+             -uld Be _ON!!!"
+*** WARNING C320 IN LINE 256 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_YPEAKING_SUPPOR
+             -T and _ULTRA_VIVID_SUPPORT Should Same Setting!!!"
+*** WARNING C320 IN LINE 994 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_DVI_DE_ONLY_SUP
+             -PORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 998 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_HDMI_FROM_DVI_C
+             -ONNECT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1002 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_HDMI_FREESYNC_
+             -SUPPORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1358 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "Type-C Can't Wo
+             -rk Under DP OFF Case ~ !!"
+*** WARNING C320 IN LINE 1592 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "INPUTCLOCK_RANG
+             -E_DP and _INPUTCLOCK_RANG_HDMI Should <= 225M when _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF!!!"
+*** WARNING C320 IN LINE 34 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Check.h: "_PANEL_PIXEL_CLOCK_
+             -MAX_KHZ Should Be Under 225M When _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF"
+*** WARNING C320 IN LINE 537 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Check.h: "_PANEL_DV_TOTAL_MA
+             -X Should Be Larger than (DVTotal * FreeSync Vfreq Ratio)!"
+*** WARNING C320 IN LINE 244 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D0 Discrete Port Con
+             -troller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_NOT_EXIST"
+*** WARNING C320 IN LINE 270 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D1 Discrete Port Con
+             -troller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_NOT_EXIST"
+*** WARNING C320 IN LINE 343 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D0 SMBUS IIC Not Def
+             -ined When D0 Port Controller = 5400"
+*** WARNING C320 IN LINE 347 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D1 SMBUS IIC Not Def
+             -ined When D1 Port Controller = 5400"
+*** WARNING C320 IN LINE 358 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "'_D0_DP_CONNECTOR_TY
+             -PE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D0_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTROLLER_NONE' !!!"
+*** WARNING C320 IN LINE 362 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "'_D1_DP_CONNECTOR_TY
+             -PE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D1_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTROLLER_NONE' !!!"
+*** WARNING C320 IN LINE 1004 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio HPOUT R/L When _DAC_HP_OUTPUT_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1014 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio LINE_IN R/L When _LINE_IN_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1025 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio SPEAKER_OUTPUT R/L When _DAC_SPEAKER_OUTPUT_SUPPORT Support _ON"
+*** WARNING C322 IN LINE 54 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Debug.h: unknown identifier
 *** ERROR C136 IN LINE 563 OF .\Kernel\System\Header\SysInclude.h: invalid dimension size: [0]
   20          
   21          //****************************************************************************
@@ -126,8 +111,6 @@ line level    source
   27          // Definitions of mode search status
   28          //--------------------------------------------------
   29          
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 3   
-
   30          
   31          //****************************************************************************
   32          // STRUCT / TYPE / ENUM DEFINITTIONS
@@ -143,6 +126,8 @@ line level    source
   42          //****************************************************************************
   43          
   44          //****************************************************************************
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 3   
+
   45          // FUNCTION DECLARATIONS
   46          //****************************************************************************
   47          #if(_DP_SUPPORT == _ON)
@@ -190,8 +175,6 @@ line level    source
               void SysDpRxHandler(void)
               {
                   SysDpCableDetection();
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 4   
-
               
               #if(_DP_TX_SUPPORT == _ON)
                   ScalerSyncDpTxHdcpUpstreamSwitchProc(SysSourceGetInputPort());
@@ -207,6 +190,8 @@ line level    source
               #if(_DP_MST_AUTO_SEARCH_SUPPORT == _ON)
                   if((GET_MODE_STATE() == _MODE_STATUS_SEARCH) || (GET_MODE_STATE() == _MODE_STATUS_NOSIGNAL) || (GET_MO
              -DE_STATE() == _MODE_STATUS_POWER_SAVING))
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 4   
+
                   {
                       SysDpMstAutoSwitch();
                   }
@@ -254,8 +239,6 @@ line level    source
               // Description  : DP Cable Detection
               // Input Value  : None
               // Output Value : None
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 5   
-
               //--------------------------------------------------
               void SysDpCableDetection(void)
               {
@@ -271,6 +254,8 @@ line level    source
                           {
               #if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) && (_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0))
                               if(GET_D6_SWITCH_SELECT() == _D0_INPUT_PORT)
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 5   
+
               #endif
                               {
                                   if((GET_DP_DC_OFF_HPD_HIGH() == _ON) || (SysPowerGetPowerStatus() != _POWER_STATUS_OFF
@@ -318,8 +303,6 @@ line level    source
                                   // Cable Unplug Reset
                                   ScalerDpRxMstCableUnplugReset(_D0_INPUT_PORT);
               
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 6   
-
                                   // Reset MST Backup
                                   ScalerDpRxMstInfoBackup(_D0_INPUT_PORT, _DP_MST_BACKUP_INFO_RESET);
               #endif
@@ -335,6 +318,8 @@ line level    source
                                   DebugMessageSystem("HPD - Low", SysTypeCGetAltModeReady(_D0_INPUT_PORT));
               #endif
               
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 6   
+
                                   ScalerDpHDCPUnplugReset(_D0_INPUT_PORT);
                               }
                           }
@@ -382,8 +367,6 @@ line level    source
               #else
                                   if(!((SysPowerGetPowerStatus() == _POWER_STATUS_OFF) && (UserCommonInterfaceGetDpMstCa
              -pablePort() == _DP_MST_RX1_PORT)))
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 7   
-
               #endif
                                   {
               #if(_D1_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON)
@@ -399,6 +382,8 @@ line level    source
               #if(_DP_MST_SUPPORT == _ON)
                               // Fake Off to Off while MST port unplug
                               if((SysPowerGetPowerStatus() == _POWER_STATUS_OFF) && (GET_DP_RX_MST_DC_OFF_HPD_TOGGLE_HOL
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 7   
+
              -D() == _TRUE))
                               {
                                   if(ScalerDpRxMstGetCapablePort() == _DP_MST_RX1_PORT)
@@ -446,8 +431,6 @@ line level    source
               #endif
               
               #if(_DP_MST_SUPPORT == _ON)
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 8   
-
                       ScalerDpAuxChPowerStatusCheck(_D1_INPUT_PORT, ScalerSyncDpCableStatus(_D1_INPUT_PORT));
               #endif
                   }
@@ -463,6 +446,8 @@ line level    source
                       {
                           if(SysDpCableStatus(_D2_INPUT_PORT) == _TRUE)
                           {
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 8   
+
                               if((GET_DP_DC_OFF_HPD_HIGH() == _ON) || (SysPowerGetPowerStatus() != _POWER_STATUS_OFF))
                               {
                                   ScalerTimerReactiveTimerEvent(SEC(0.1), _SCALER_TIMER_EVENT_DP_RX2_HOTPLUG_ASSERTED);
@@ -510,8 +495,6 @@ line level    source
                       {
               #if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) && (_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0))
                           if(GET_D6_SWITCH_SELECT() == _D6_INPUT_PORT)
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 9   
-
               #endif
                           {
                               if((GET_DP_DC_OFF_HPD_HIGH() == _ON) || (SysPowerGetPowerStatus() != _POWER_STATUS_OFF))
@@ -527,6 +510,8 @@ line level    source
               #if(_D6_DP_TYPE_C_PORT_CTRL_SUPPORT == _ON)
                                       DebugMessageSystem("HPD - High Event", SysTypeCGetAltModeReady(_D6_INPUT_PORT));
               #endif
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 9   
+
                                       ScalerTimerReactiveTimerEvent(SEC(0.1), _SCALER_TIMER_EVENT_DP_RX0_HOTPLUG_ASSERTE
              -D);
                                   }
@@ -574,8 +559,6 @@ line level    source
               #endif
               
                               ScalerDpHDCPUnplugReset(_D0_INPUT_PORT);
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 10  
-
                           }
                       }
               
@@ -591,6 +574,8 @@ line level    source
               #endif
               
               #if(_DP_MST_SUPPORT == _ON)
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 10  
+
                   ScalerDpAuxChPowerStatusCheck(_D6_INPUT_PORT, ScalerSyncDpCableStatus(_D6_INPUT_PORT));
               #endif
               #endif // End of #if(_D6_DP_SUPPORT == _ON)
@@ -638,8 +623,6 @@ line level    source
                           if((UserInterfaceGetDpMstTargetPort() != _DP_MST_NO_PORT) && (SysSourceGetInputPort() != _D1_I
              -NPUT_PORT))
                           {
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 11  
-
                               return _FALSE;
                           }
               #endif
@@ -655,6 +638,8 @@ line level    source
                       case _D2_INPUT_PORT:
               
               #if(_DP_MST_CAP_ON_INACTIVE_PORT_HPD_LOW == _ON)
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 11  
+
                           if((UserInterfaceGetDpMstTargetPort() != _DP_MST_NO_PORT) && (SysSourceGetInputPort() != _D2_I
              -NPUT_PORT))
                           {
@@ -702,8 +687,6 @@ line level    source
                       switch(GET_POWER_STATUS())
                       {
                           case _POWER_STATUS_OFF:
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 12  
-
               
                               ScalerDpJudgeHPDToggle(_POWER_ACTION_NORMAL_TO_OFF);
                               break;
@@ -719,6 +702,8 @@ line level    source
               #if(_DP_MST_SUPPORT == _ON)
                                   if(GET_DP_RX_MST_DC_OFF_HPD_TOGGLE_HOLD() == _FALSE)
               #endif
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 12  
+
                                   {
                                       ScalerDpJudgeHPDToggle(_POWER_ACTION_OFF_TO_NORMAL);
                                   }
@@ -766,8 +751,6 @@ line level    source
               bit SysDpSourceKeepDetectingCheck(void)
               {
               #if((_SLEEP_AUDIO_SUPPORT == _ON) && (_DP_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 13  
-
              -AUDIO_INPUT == _PS_AUDIO_DP)))
                   if((GET_AUDIO_PLAYING_ALONE() == _TRUE) && (UserInterfaceGetAudioSource() == _DIGITAL_AUDIO))
                   {
@@ -783,6 +766,8 @@ line level    source
                       if((ScalerDpRxMstGetSrcMsgEnable(SysSourceGetInputPort()) == _TRUE) &&
                          (ScalerDpGetPowerStatus(SysSourceGetInputPort()) == _DP_POWER_NORMAL))
                       {
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 13  
+
                           return _TRUE;
                       }
                   }
@@ -830,8 +815,6 @@ line level    source
               {
                   switch(ucInputPort)
                   {
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 14  
-
                       case _D0_INPUT_PORT:
               #if((_D0_INPUT_PORT_TYPE == _D0_DP_PORT) && (_D0_TWO_CHIP_DATA_EXCHANGE_MODE != _DATA_EXCHANGE_MODE_NONE))
                           return _TRUE;
@@ -847,6 +830,8 @@ line level    source
                           return _FALSE;
               #endif
                           break;
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 14  
+
               
                       default:
               
@@ -894,8 +879,6 @@ line level    source
               //--------------------------------------------------
               bit SysDpTxCloneOutputStatus(void)
               {
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 15  
-
                   if(UserInterfaceGetDpCloneOutputStatus() == _FALSE)
                   {
                       return _FALSE;
@@ -911,6 +894,8 @@ line level    source
               #if((_D0_INPUT_PORT_TYPE == _D0_DP_PORT) && (_D0_DP_MST_PORT_SUPPORT == _OFF))
                       if(SysSourceGetInputPort() == _D0_INPUT_PORT)
                       {
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 15  
+
                           return _FALSE;
                       }
               #endif
@@ -958,8 +943,6 @@ line level    source
               
                       SET_DP_TX_HDCP2_LOAD_KEY_FINISH();
                   }
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 16  
-
               }
               #endif
               #endif
@@ -975,6 +958,8 @@ line level    source
                   if(GET_POWER_STATUS() == _POWER_STATUS_NORMAL)
                   {
                       ScalerDpRxMstHandler();
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 16  
+
               
               #if(_DP_TX_SUPPORT == _ON)
                       ScalerDpTxMstHandler();
@@ -1022,8 +1007,6 @@ line level    source
                       // Disable other ports
               #if(_D0_DP_EXIST == _ON)
               
-C51 COMPILER V9.60.0.0   SYSDP                                                             04/23/2026 10:22:05 PAGE 17  
-
               #if((_D6_INPUT_PORT_TYPE == _D6_DP_PORT) && (_D6_INPUT_PORT_SWITCH_FROM == _SWITCH_FROM_D0))
                       if((SysSourceGetInputPort() != _D0_INPUT_PORT) && (SysSourceGetInputPort() != _D6_INPUT_PORT))
               #else
@@ -1039,6 +1022,8 @@ line level    source
                       {
                           ScalerDpRxMstCapabilitySwitch(_D1_INPUT_PORT, _DISABLE);
                       }
+C51 COMPILER V9.60.0.0   SYSDP                                                             07/13/2026 16:00:56 PAGE 17  
+
               #endif
               
                       if(ScalerDpRxMstGetCapablePort() == _DP_MST_NO_PORT)

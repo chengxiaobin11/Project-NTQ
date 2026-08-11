@@ -12,9 +12,9 @@
 /*   express, implied, statutory or otherwise.                                  */
 /********************************************************************************/
 
-#if(_PANEL_TYPE == _CTOT_SG5461D18_1_VBY_UHD_60HZ)
+#if(_PANEL_TYPE == _CSOT_SG5461D18_1_VBY_UHD_60HZ)
 //----------------------------------------------------------------------------------------------------
-// ID Code      : 181_CTOT_SG5461D18_1_VBY_UHD_60HZ.h No.0181
+// ID Code      : 181_CSOT_SG5461D18_1_VBY_UHD_60HZ.h No.0181
 // Update Note  :
 //----------------------------------------------------------------------------------------------------
 #define _PANNEL_NAME                        _P__,_a__,_n__,_e__,_l__,__,_COLON__,__,_S__,_G__,_5__,_4__,_6__,_1__,_D__,_1__,_8__,_SLINE__,_1__
@@ -169,4 +169,4 @@
 //--------------------------------------------------
 #include "./RTDColorDefaultTable/ColorTableInclude.h"
 
-#endif // End of #if(_PANEL_TYPE == _CTOT_SG5461D18_1_VBY_UHD_60HZ)
+#endif // End of #if(_PANEL_TYPE == _CSOT_SG5461D18_1_VBY_UHD_60HZ)

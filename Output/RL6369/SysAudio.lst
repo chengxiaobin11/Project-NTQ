@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 1   
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SYSAUDIO
@@ -33,88 +33,73 @@ line level    source
   17          #define __SYSTEM_AUDIO__
   18          
   19          #include "SysInclude.h"
-*** WARNING C318 IN LINE 21 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Project\Header\RL6369
-             -_Project.h: can't open file 'SG_ProjectDefine.h'
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 364 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Option.h: unknown identifier
-*** WARNING C322 IN LINE 22 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Pre_Check.h: unknown identifier
-*** WARNING C320 IN LINE 79 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Pre_Check.h: "_PANEL_PIXEL_TYPE should be defined at Panel.h"
-*** WARNING C322 IN LINE 75 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_D
-             -efault.h: unknown identifier
-*** WARNING C317 IN LINE 715 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD0_CONNECT'
-*** WARNING C317 IN LINE 716 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD1_CONNECT'
-*** WARNING C317 IN LINE 717 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 2   
-
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'bD2_CONNECT'
-*** WARNING C317 IN LINE 732 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D0_DP_SOURCE_POWER'
-*** WARNING C317 IN LINE 733 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D1_DP_SOURCE_POWER'
-*** WARNING C317 IN LINE 734 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Pcb\./RL6369/LQFP_12
-             -8/RL6369_PCB_EXAMPLE_128_PIN.h: attempt to redefine macro 'GET_PCB_D2_DP_SOURCE_POWER'
+*** WARNING C318 IN LINE 21 OF \Workdir\workdir\NTQ\Project-NTQ\Project\Header\RL6369_Project.h: can't open file 'SG_Pro
+             -jectDefine.h'
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 364 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Option.h: unknown identifier
+*** WARNING C322 IN LINE 22 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Pre_Check.h: unknown identifi
+             -er
+*** WARNING C320 IN LINE 79 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Pre_Check.h: "_PANEL_PIXEL_TY
+             -PE should be defined at Panel.h"
+*** WARNING C322 IN LINE 75 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Default.h: unknown identifier
+*** WARNING C317 IN LINE 715 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD0_CONNECT'
+*** WARNING C317 IN LINE 716 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD1_CONNECT'
+*** WARNING C317 IN LINE 717 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'bD2_CONNECT'
+*** WARNING C317 IN LINE 732 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D0_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 733 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D1_DP_SOURCE_POWER'
+*** WARNING C317 IN LINE 734 OF \Workdir\workdir\NTQ\Project-NTQ\Pcb\./RL6369/LQFP_128/RL6369_PCB_EXAMPLE_128_PIN.h: att
+             -empt to redefine macro 'GET_PCB_D2_DP_SOURCE_POWER'
 *** WARNING C322 IN LINE 55 OF .\User\RTD Series\RTD2014Osd\Header\RTD2014TimerEventIDUser.h: unknown identifier
-*** WARNING C320 IN LINE 113 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_FRC_SUPPORT Should Be _ON!!!"
-*** WARNING C320 IN LINE 256 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_YPEAKING_SUPPORT and _ULTRA_VIVID_SUPPORT Should Same Setting!!!"
-*** WARNING C320 IN LINE 994 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_DVI_DE_ONLY_SUPPORT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 998 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Projec
-             -t_Config_Check.h: "_HDMI_FROM_DVI_CONNECT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 1002 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "_HDMI_FREESYNC_SUPPORT Should Be _OFF!!!"
-*** WARNING C320 IN LINE 1358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "Type-C Can't Work Under DP OFF Case ~ !!"
-*** WARNING C320 IN LINE 1592 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Proje
-             -ct_Config_Check.h: "INPUTCLOCK_RANGE_DP and _INPUTCLOCK_RANG_HDMI Should <= 225M when _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPO
-             -RT is _OFF!!!"
-*** WARNING C320 IN LINE 34 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_C
-             -onfig_Check.h: "_PANEL_PIXEL_CLOCK_MAX_KHZ Should Be Under 225M When _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF"
-*** WARNING C320 IN LINE 537 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Panel_
-             -Config_Check.h: "_PANEL_DV_TOTAL_MAX Should Be Larger than (DVTotal * FreeSync Vfreq Ratio)!"
-*** WARNING C320 IN LINE 244 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D0 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
-             -OT_EXIST"
-*** WARNING C320 IN LINE 270 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D1 Discrete Port Controller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_N
-             -OT_EXIST"
-*** WARNING C320 IN LINE 343 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D0 SMBUS IIC Not Defined When D0 Port Controller = 5400"
-*** WARNING C320 IN LINE 347 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "D1 SMBUS IIC Not Defined When D1 Port Controller = 5400"
-*** WARNING C320 IN LINE 358 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "'_D0_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D0_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
-             -OLLER_NONE' !!!"
-*** WARNING C320 IN LINE 362 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_Co
-             -nfig_Check.h: "'_D1_DP_CONNECTOR_TYPE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D1_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTR
-             -OLLER_NONE' !!!"
-*** WARNING C320 IN LINE 1004 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio HPOUT R/L When _DAC_HP_OUTPUT_SUPPORT Support _ON"
-*** WARNING C320 IN LINE 1014 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio LINE_IN R/L When _LINE_IN_SUPPORT Support _ON"
-*** WARNING C320 IN LINE 1025 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Pcb_C
-             -onfig_Check.h: "Pinshare Setting Should be Set to Audio SPEAKER_OUTPUT R/L When _DAC_SPEAKER_OUTPUT_SUPPORT Support _ON"
-*** WARNING C322 IN LINE 54 OF \opengork\opengrok\opengrok-1.14.11\source\RTD_HEIHONG_OSD_20260316\Kernel\Common\Debug.h
-             -: unknown identifier
+*** WARNING C320 IN LINE 113 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_FRC_SUPPORT Sho
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 2   
+
+             -uld Be _ON!!!"
+*** WARNING C320 IN LINE 256 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_YPEAKING_SUPPOR
+             -T and _ULTRA_VIVID_SUPPORT Should Same Setting!!!"
+*** WARNING C320 IN LINE 994 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_DVI_DE_ONLY_SUP
+             -PORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 998 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_HDMI_FROM_DVI_C
+             -ONNECT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1002 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "_HDMI_FREESYNC_
+             -SUPPORT Should Be _OFF!!!"
+*** WARNING C320 IN LINE 1358 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "Type-C Can't Wo
+             -rk Under DP OFF Case ~ !!"
+*** WARNING C320 IN LINE 1592 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Project_Config_Check.h: "INPUTCLOCK_RANG
+             -E_DP and _INPUTCLOCK_RANG_HDMI Should <= 225M when _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF!!!"
+*** WARNING C320 IN LINE 34 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Check.h: "_PANEL_PIXEL_CLOCK_
+             -MAX_KHZ Should Be Under 225M When _IMD_DOMAIN_ULTRA_HIGH_SPEED_SUPPORT is _OFF"
+*** WARNING C320 IN LINE 537 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Panel_Config_Check.h: "_PANEL_DV_TOTAL_MA
+             -X Should Be Larger than (DVTotal * FreeSync Vfreq Ratio)!"
+*** WARNING C320 IN LINE 244 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D0 Discrete Port Con
+             -troller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_NOT_EXIST"
+*** WARNING C320 IN LINE 270 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D1 Discrete Port Con
+             -troller Link For _PORT_CONTROLLER_RTS5400_SERIES Should NOT Use _DISCRETE_PORT_CTRL_NOT_EXIST"
+*** WARNING C320 IN LINE 343 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D0 SMBUS IIC Not Def
+             -ined When D0 Port Controller = 5400"
+*** WARNING C320 IN LINE 347 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "D1 SMBUS IIC Not Def
+             -ined When D1 Port Controller = 5400"
+*** WARNING C320 IN LINE 358 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "'_D0_DP_CONNECTOR_TY
+             -PE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D0_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTROLLER_NONE' !!!"
+*** WARNING C320 IN LINE 362 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "'_D1_DP_CONNECTOR_TY
+             -PE' Shall be '_DP_CONNECTOR_TYPE_C'' if '_D1_DP_TYPE_C_PORT_CTRL_TYPE' != _PORT_CONTROLLER_NONE' !!!"
+*** WARNING C320 IN LINE 1004 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio HPOUT R/L When _DAC_HP_OUTPUT_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1014 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio LINE_IN R/L When _LINE_IN_SUPPORT Support _ON"
+*** WARNING C320 IN LINE 1025 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Pcb_Config_Check.h: "Pinshare Setting Sh
+             -ould be Set to Audio SPEAKER_OUTPUT R/L When _DAC_SPEAKER_OUTPUT_SUPPORT Support _ON"
+*** WARNING C322 IN LINE 54 OF \Workdir\workdir\NTQ\Project-NTQ\Kernel\Common\Debug.h: unknown identifier
 *** ERROR C136 IN LINE 563 OF .\Kernel\System\Header\SysInclude.h: invalid dimension size: [0]
   20          
   21          #if(_AUDIO_SUPPORT == _ON)
@@ -126,8 +111,6 @@ line level    source
   27          #define _DAC_VCM_INITIAL_TIME                       SEC(0.1)
   28          #define _DAC_VCM_CHARGE_TIME                        SEC(0.5)
   29          #endif
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 3   
-
   30          
   31          //****************************************************************************
   32          // STRUCT / TYPE / ENUM DEFINITTIONS
@@ -143,6 +126,8 @@ line level    source
   42          // VARIABLE DECLARATIONS
   43          //****************************************************************************
   44          StructAudioInfoType g_stAudioInfo;
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 3   
+
   45          
   46          //****************************************************************************
   47          // FUNCTION DECLARATIONS
@@ -190,8 +175,6 @@ line level    source
   88          //--------------------------------------------------
   89          // Description  : Audio handler. Main audio control flow
   90          // Input Value  : None
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 4   
-
   91          // Output Value : None
   92          //--------------------------------------------------
   93          void SysAudioHandler(void)
@@ -207,6 +190,8 @@ line level    source
  103   1      
  104   1      #if(_AUDIO_FW_TRACKING_MODE_SUPPORT == _ON)
                   SysAudioFwTrackingHandler();
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 4   
+
               #endif
  107   1      
  108   1          SysAudioDigitalAudioHandler();
@@ -254,8 +239,6 @@ line level    source
  149   2              case _AUDIO_STATUS_PLAYBACK:
  150   2      
  151   2                  if(GET_AUDIO_STATE_CHANGE() == _TRUE)
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 5   
-
  152   2                  {
  153   3                      CLR_AUDIO_STATE_CHANGE();
  154   3                      SET_AUDIO_PLAYBACK_SEARCH_INDEX(g_ucSearchIndex);
@@ -271,6 +254,8 @@ line level    source
                               {
                                   ScalerAudioHdmiI2sSpdifChannelOutputSelect(_AUDIO_DEFAULT_MODE, ScalerAudioGetDigitalA
              -udioPortMapping());
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 5   
+
                               }
               #endif
  168   3      
@@ -318,8 +303,6 @@ line level    source
                               if(UserCommonInterfaceGetAudioReadyToPlayStatus() == _TRUE)
                               {
                                   DebugMessageAudio("TTS End and Back to Audio Playback", _AUDIO_STATUS_PLAYBACK);
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 6   
-
                                   SysAudioChangeAudioState(_AUDIO_STATUS_PLAYBACK);
                               }
                               else
@@ -335,6 +318,8 @@ line level    source
               
                                   DebugMessageAudio("TTS End and Back to Audio Preparing", _AUDIO_STATUS_PREPARING);
                                   SysAudioChangeAudioState(_AUDIO_STATUS_PREPARING);
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 6   
+
                               }
                           }
               
@@ -382,8 +367,6 @@ line level    source
  272   2      
  273   2                  // Add User interface function
  274   2                  UserInterfaceAdjustAudioPowerProc(_POWER_STATUS_NORMAL);
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 7   
-
  275   2      
  276   2      #if((_LINE_IN_SUPPORT == _ON) && (_HW_AUDIO_LINE_IN_TO_DIGITAL_LR_SWAP == _ON))
                           UserInterfaceSwapExternalAudioCodecInput(ScalerAudioGetI2sOutputNeedToSwap(UserInterfaceGetAud
@@ -399,6 +382,8 @@ line level    source
  286   2              case _POWER_ACTION_NORMAL_TO_FAKE_OFF:
  287   2      
  288   2                  // Mute Audio
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 7   
+
  289   2                  SysAudioOutputProc(_DISABLE);
  290   2      
  291   2                  // Reset Digital Audio
@@ -446,8 +431,6 @@ line level    source
  333          void SysAudioMuteProc(bit bMute)
  334          {
  335   1          if(bMute == _ON)
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 8   
-
  336   1          {
  337   2              if(ScalerAudioDVCGetVolumeMuteStatus() == _OFF)
  338   2              {
@@ -463,6 +446,8 @@ line level    source
  348   2      #if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
                       bResult |= ((ScalerAudioDVCGetVolumeMuteStatus() == _ON) && (UserInterfaceGetAudioMuteStatus() == 
              -_OFF));
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 8   
+
               #else
  351   2              bResult |= (ScalerAudioDVCGetVolumeMuteStatus() == _ON);
  352   2      #endif // End of #if(_AUDIO_OSD_MUTE_SEPARATE_CONTROL_SUPPORT == _ON)
@@ -510,8 +495,6 @@ line level    source
  394          // Input Value  : None
  395          // Output Value : None
  396          //--------------------------------------------------
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 9   
-
  397          void SysAudioAnalogAudioHandler(void)
  398          {
  399   1      #if(_EMBEDDED_DAC_SUPPORT == _ON)
@@ -527,6 +510,8 @@ line level    source
  407   3      #if((_SLEEP_AUDIO_SUPPORT == _ON) && (_LINE_IN_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || 
              -(_PS_AUDIO_INPUT == _PS_AUDIO_LINE_IN)))
                           if(SysAudioGetSleepAudioStatusForLineIn() == _FALSE)
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 9   
+
               #endif
  410   3                  {
  411   4                      SysAudioOutputProc(_DISABLE);
@@ -574,8 +559,6 @@ line level    source
                                      ((UserInterfaceGetAudioStandAloneStatus() == _TRUE) &&
                                       (UserInterfaceGetAudioSource() == _LINE_IN_AUDIO) &&
                                       (GET_MODE_STATE() == _MODE_STATUS_POWER_SAVING)))
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 10  
-
               #else
  452   5                          if((GET_SOURCE_JUDGE(g_ucSearchIndex) == _TRUE) || (GET_SOURCE_SCAN_TYPE() == _SOURCE_
              -SWITCH_FIXED_PORT))
@@ -591,6 +574,8 @@ line level    source
                                       UserInterfaceSwapExternalAudioCodecInput(ScalerAudioGetI2sOutputNeedToSwap(UserInt
              -erfaceGetAudioSource()));
               #endif
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 10  
+
  463   6                          }
  464   5                      }
  465   4                  }
@@ -638,8 +623,6 @@ line level    source
  506   3      
  507   3                      ScalerTimerActiveTimerEvent(_DAC_VCM_CHARGE_TIME, _SYSTEM_TIMER_EVENT_AUDIO_DAC_WAIT_VCM_C
              -HARGE);
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 11  
-
  508   3                  }
  509   2      
  510   2                  break;
@@ -655,6 +638,8 @@ line level    source
  520   4                          ScalerAudioDACClrStateChange();
  521   4      
  522   4                          ScalerAudioDACOutputEnable();
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 11  
+
  523   4      
  524   4                          ScalerTimerActiveTimerEvent(_DAC_DEPOP_TO_NORMAL_WAIT_TIME, _SYSTEM_TIMER_EVENT_AUDIO_
              -DAC_WAIT_DEPOP_TO_NORMAL);
@@ -702,8 +687,6 @@ line level    source
               #endif // End of #if(_EMBEDDED_DAC_SUPPORT == _ON)
  565   1      }
  566          
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 12  
-
  567          //--------------------------------------------------
  568          // Description  : Digital Audio Handler
  569          // Input Value  : None
@@ -719,6 +702,8 @@ line level    source
  579   1          {
  580   2              ScalerAudioDigitalOutputMute(_OFF);
  581   2          }
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 12  
+
  582   1      
  583   1          ScalerAudioDigitalDetect();
  584   1      
@@ -766,8 +751,6 @@ line level    source
  626          {
  627   1          // get freq from userinterface
  628   1          EnumAudioSamplingFreqType enumAudioFreq = UserCommonInterfaceAudioUpdateUserSamplingFreq();
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 13  
-
  629   1      
  630   1          ScalerAudioSetUserDefineAudioFrequency(enumAudioFreq);
  631   1      }
@@ -783,6 +766,8 @@ line level    source
                   if(ScalerAudioDPGetMuteProc(ucInputPort) == _TRUE)
                   {
                       SysAudioOutputProc(_DISABLE);
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 13  
+
                       ScalerAudioDigitalReset(ScalerAudioGetDigitalAudioPortMapping());
               
               #if(_EMBEDDED_DAC_SUPPORT == _ON)
@@ -830,8 +815,6 @@ line level    source
                               ScalerAudioDpAudioEnable(_ENABLE, SysSourceGetInputPort());
               
                               DebugMessageAudio("Sleep Audio Playback Index", GET_AUDIO_PLAYBACK_SEARCH_INDEX());
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 14  
-
                           }
               #endif
               
@@ -847,6 +830,8 @@ line level    source
               #if((_LINE_IN_SUPPORT == _ON) && ((_PS_AUDIO_INPUT == _PS_AUDIO_BOTH) || (_PS_AUDIO_INPUT == _PS_AUDIO_LIN
              -E_IN)))
                           if(UserInterfaceGetAudioSource() == _LINE_IN_AUDIO)
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 14  
+
                           {
                               SET_AUDIO_PLAYING_ALONE();
               
@@ -894,8 +879,6 @@ line level    source
               {
                   EnumSourceSearchPort enumInputPort = SysSourceGetInputPort();
               
-C51 COMPILER V9.60.0.0   SYSAUDIO                                                          04/23/2026 10:22:04 PAGE 15  
-
                   SysAudioOutputProc(_DISABLE);
               
                   if(bOn == _ON)
@@ -911,6 +894,8 @@ line level    source
                       ScalerAudioDigitalVolumeMute(_OFF, UserInterfaceGetAudioVolume());
                   }
                   else
+C51 COMPILER V9.60.0.0   SYSAUDIO                                                          07/13/2026 16:00:55 PAGE 15  
+
                   {
                       EnumSourceSearchPort enumGenPort = ScalerAudioGetInternalGenInputPort();
               
