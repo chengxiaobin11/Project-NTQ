@@ -113,7 +113,7 @@
 #define _DEF_HUIXIONG_GCCD                                      0
 
 /*********************************** ***********************************************************/
-#define Project_ID                                              ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ
+#define Project_ID                                              ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ
 
 /**********************************************************************************************/
 #define _DEF_PROJECT_TEST                                       _OFF
@@ -548,7 +548,7 @@
 #define _DAC_SPEAKER_OUTPUT_SWAP                                _ON
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
-#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
+#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_90
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 
@@ -564,7 +564,7 @@
 #define _DAC_SPEAKER_OUTPUT_SWAP                                _ON
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
-#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
+#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_90
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 
@@ -580,7 +580,7 @@
 #define _DAC_SPEAKER_OUTPUT_SWAP                                _ON
 #define _DAC_HP_OUTPUT_SWAP                                     _ON
 #define _OD_SUPPORT                                             _ON
-#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_270
+#define _DEF_OSDROTATE										    _OSD_ROTATE_DEGREE_90
 #define _ENABLE_WRITE_EDID_CTX									_ON	
 #define _DEF_DDCCI_EDID_TOOL									_ON  // ����edid
 

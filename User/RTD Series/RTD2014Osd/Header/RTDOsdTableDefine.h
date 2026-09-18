@@ -5676,6 +5676,21 @@ BYTE code tsOSD_MODEL_VER[] =
 };
 
 #endif
+#elif(Project_ID == ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_3_,_0_,_T_,_F_,_x44_,_V_,_0_,_1_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO49AFL_HK2775E01_1P1H_LD490EQY_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_4_,_9_,_0_,_T_,_F_,_x44_,_V_,_0_,_1_,_END_,
+};
+#elif(Project_ID == ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ)
+BYTE code tsOSD_MODEL_VER[] =
+{
+	_Q_,_X_,_T_,_5_,_5_,_0_,_T_,_F_,_x44_,_V_,_0_,_1_,_END_,
+};
 #else
 BYTE code tsOSD_MODEL_VER[] =
 {

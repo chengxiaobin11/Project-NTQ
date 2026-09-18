@@ -110,7 +110,7 @@
 #define _PANEL_POWER_ON_T2                      50
 #define _PANEL_POWER_ON_T3                      2000
 
-#define _PANEL_POWER_OFF_T4                     100
+#define _PANEL_POWER_OFF_T4                     120  //100
 #define _PANEL_POWER_OFF_T5                     20
 #define _PANEL_POWER_OFF_T6                     1100
 
