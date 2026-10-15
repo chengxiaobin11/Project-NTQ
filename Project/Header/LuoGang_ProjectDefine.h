@@ -113,7 +113,7 @@
 #define _DEF_HUIXIONG_GCCD                                      0
 
 /*********************************** ***********************************************************/
-#define Project_ID                                              ID_NTQ_CO55AFL_HK2775E01_1P1H_SG5461D18_1_UHD60HZ
+#define Project_ID                                              ID_NTQ_CO43AF_HK2775E01_1P1H_SG4251D02_1_UHD60HZ
 
 /**********************************************************************************************/
 #define _DEF_PROJECT_TEST                                       _OFF
